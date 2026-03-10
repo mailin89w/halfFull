@@ -64,3 +64,12 @@ python3 -m venv .venv
 source .venv/bin/activate
 pip install pandas pyreadstat jupyter ipykernel
 ```
+
+## Frontend Setup
+
+cd frontend
+npm install
+npm run dev
+
+and then open:
+http://localhost:3000
