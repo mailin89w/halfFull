@@ -48,3 +48,19 @@ I decided to go with a hybrid approach for HalfFull to keep things medically acc
 - AI/ML: Medical-Llama3-8B, RAG (Retrieval-Augmented Generation)
 - Data: NHANES (National Health and Nutrition Examination Survey)
 - Deployment: Vercel
+
+## Python Environment Setup
+
+### Windows (PowerShell)
+```bash
+python -m venv .venv
+.\.venv\Scripts\Activate.ps1
+pip install pandas pyreadstat jupyter ipykernel
+```
+
+### macOS / Linux
+```bash
+python3 -m venv .venv
+source .venv/bin/activate
+pip install pandas pyreadstat jupyter ipykernel
+```
