@@ -62,6 +62,9 @@ def main() -> None:
     dfs = [bmx, bpxo, lux, ohxref, ohxden]
     exam_df = reduce(lambda left, right: pd.merge(left, right, on="SEQN", how="outer"), dfs)
 
+    # Transform SEQN into integers
+    exam_df["SEQN"] = exam_df["SEQN"].astype("Int64")
+
     # Rename columns to readable names
     exam_df = exam_df.rename(
         columns={
@@ -98,6 +101,9 @@ def main() -> None:
 
     # Keep one row per participant
     exam_df = exam_df.drop_duplicates(subset="SEQN")
+
+    # Sort and reset row index
+    exam_df = exam_df.sort_values("SEQN").reset_index(drop=True)
 
     # Quality checks
     print("Shape:", exam_df.shape)
