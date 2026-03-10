@@ -13,3 +13,14 @@ df["SEQN"] = df["SEQN"].astype("Int64")
 df.to_csv("data/processed/merged_questionnaire.csv", index=False)
 
 print("SEQN column standardized.")
+
+# ---- Fix Nils' examination dataset ----
+examination = pd.read_csv("data/processed/examination_clean.csv")
+
+# convert SEQN to integer
+examination["SEQN"] = examination["SEQN"].astype("Int64")
+
+# save
+examination.to_csv("data/processed/examination_clean.csv", index=False)
+
+print("Examination SEQN standardized.")
