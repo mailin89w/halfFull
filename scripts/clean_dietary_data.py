@@ -47,6 +47,8 @@ def main() -> None:
         }
     )
 
+    diet_df["SEQN"] = diet_df["SEQN"].astype("Int64")
+
     # Keep one row per participant
     diet_df = diet_df.drop_duplicates(subset="SEQN")
 
