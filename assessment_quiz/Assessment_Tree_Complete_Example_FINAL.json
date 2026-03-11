@@ -1,0 +1,1371 @@
+{
+  "assessment": {
+    "metadata": {
+      "version": "1.1.0",
+      "total_questions": 24,
+      "estimated_time_full_path_minutes": 12,
+      "estimated_time_hybrid_path_minutes": 8,
+      "has_lab_gate": true,
+      "last_updated": "2026-03-09T00:00:00Z",
+      "description": "Hybrid assessment with lab gate. Q0.0 determines path: has labs (hybrid) or no labs (full)"
+    },
+    "modules": [
+      {
+        "id": "pre_assessment",
+        "title": "Pre-Assessment",
+        "description": "Lab status gate - determines which assessment path you take",
+        "icon": "\ud83e\uddea",
+        "order": 0,
+        "shown_in_paths": [
+          "full",
+          "hybrid"
+        ],
+        "questions": [
+          {
+            "id": "q0.0",
+            "text": "Do you have recent lab results (from the last 6 months)?",
+            "help_text": "If you've had blood work done recently, you can upload it and we'll analyze it immediately. This speeds up your assessment and gives us more precise results. If not, no worries\u2014we'll guide you on which tests you need.",
+            "type": "binary",
+            "feature_name": "has_recent_labs",
+            "options": [
+              {
+                "value": "lab_yes",
+                "label": "Yes, I have recent labs"
+              },
+              {
+                "value": "lab_no",
+                "label": "No, I don't have recent labs"
+              }
+            ],
+            "validation": {
+              "required": true
+            },
+            "routing": {
+              "path_determination": [
+                {
+                  "answer_value": "lab_yes",
+                  "determines_path": "hybrid",
+                  "next_step": "q0.1"
+                },
+                {
+                  "answer_value": "lab_no",
+                  "determines_path": "full",
+                  "next_step": "q1.1"
+                }
+              ]
+            }
+          },
+          {
+            "id": "q0.1",
+            "text": "Upload your lab results (PDF, JPG, or PNG)",
+            "help_text": "Upload any recent blood work. We'll extract values for ferritin, TSH, B12, hemoglobin, and other relevant markers. You can also manually enter values if OCR doesn't work perfectly.",
+            "type": "file_upload",
+            "feature_name": "uploaded_lab_values",
+            "options": [
+              {
+                "value": "file_upload",
+                "label": "Upload file or enter manually"
+              }
+            ],
+            "conditional": {
+              "parent_id": "q0.0",
+              "parent_values": [
+                "lab_yes"
+              ],
+              "condition_type": "equals"
+            },
+            "validation": {
+              "required": true,
+              "accepted_formats": [
+                "application/pdf",
+                "image/jpeg",
+                "image/png"
+              ],
+              "max_file_size_mb": 10
+            },
+            "processing": {
+              "method": "ocr_extraction_fallback_to_manual",
+              "extracts": [
+                "ferritin",
+                "tsh",
+                "free_t4",
+                "hemoglobin",
+                "hematocrit",
+                "vitamin_b12",
+                "folate",
+                "vitamin_d",
+                "serum_iron",
+                "tibc"
+              ]
+            },
+            "routing": {
+              "triggers_pathway": [
+                {
+                  "lab_value": "ferritin",
+                  "if_below": 30,
+                  "pathway_id": "iron_deficiency",
+                  "priority": "high"
+                },
+                {
+                  "lab_value": "tsh",
+                  "if_above": 4.5,
+                  "pathway_id": "thyroid_dysfunction",
+                  "priority": "high"
+                },
+                {
+                  "lab_value": "vitamin_b12",
+                  "if_below": 200,
+                  "pathway_id": "b12_deficiency",
+                  "priority": "high"
+                }
+              ],
+              "skips_questions": [
+                "q2.1",
+                "q2.2",
+                "q2.3",
+                "q2.4",
+                "q2.5",
+                "q3.1",
+                "q3.2",
+                "q3.3",
+                "q3.4",
+                "q3.5",
+                "q3.6"
+              ],
+              "next_questions": [
+                "q1.1",
+                "q1.2",
+                "q1.3",
+                "q1.4",
+                "q1.5",
+                "q4.1",
+                "q4.2",
+                "q4.3",
+                "q4.4",
+                "q4.5",
+                "q5.1",
+                "q5.2",
+                "q5.3",
+                "q5.4",
+                "q5.5"
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "id": "sleep",
+        "title": "Sleep Patterns",
+        "description": "Understanding your sleep quality and any sleep disorders",
+        "icon": "\ud83d\ude34",
+        "order": 1,
+        "shown_in_paths": [
+          "full",
+          "hybrid"
+        ],
+        "questions": [
+          {
+            "id": "q1.1",
+            "text": "How many hours did you sleep last night?",
+            "type": "categorical",
+            "feature_name": "sleep_hours_category",
+            "options": [
+              {
+                "value": "sleep_<4h",
+                "label": "<4 hours",
+                "encoded_value": 0
+              },
+              {
+                "value": "sleep_4-6h",
+                "label": "4-6 hours",
+                "encoded_value": 1
+              },
+              {
+                "value": "sleep_6-8h",
+                "label": "6-8 hours",
+                "encoded_value": 2
+              },
+              {
+                "value": "sleep_>8h",
+                "label": "More than 8 hours",
+                "encoded_value": 3
+              }
+            ],
+            "validation": {
+              "required": true
+            }
+          },
+          {
+            "id": "q1.2",
+            "text": "How would you rate your sleep quality on a scale of 1-10?",
+            "help_text": "1 = terrible, hard to fall asleep, wake up many times | 10 = excellent, fall asleep easily, sleep through night",
+            "type": "numeric",
+            "feature_name": "sleep_quality_score",
+            "options": [
+              {
+                "value": "quality_1",
+                "label": "1 - Poor",
+                "encoded_value": 1
+              },
+              {
+                "value": "quality_10",
+                "label": "10 - Excellent",
+                "encoded_value": 10
+              }
+            ],
+            "validation": {
+              "required": true,
+              "min": 1,
+              "max": 10
+            },
+            "routing": {
+              "triggers_pathway": [
+                {
+                  "answer_value": "quality_<5",
+                  "pathway_id": "sleep_disorder",
+                  "priority": "high"
+                }
+              ]
+            }
+          },
+          {
+            "id": "q1.3",
+            "text": "How often do you wake up during the night?",
+            "type": "ordinal",
+            "feature_name": "sleep_disruption_freq",
+            "options": [
+              {
+                "value": "disruption_never",
+                "label": "Never",
+                "encoded_value": 0
+              },
+              {
+                "value": "disruption_rarely",
+                "label": "Rarely",
+                "encoded_value": 1
+              },
+              {
+                "value": "disruption_sometimes",
+                "label": "Sometimes",
+                "encoded_value": 2
+              },
+              {
+                "value": "disruption_often",
+                "label": "Often",
+                "encoded_value": 3
+              },
+              {
+                "value": "disruption_very_often",
+                "label": "Very Often",
+                "encoded_value": 4
+              }
+            ],
+            "conditional": {
+              "parent_id": "q1.2",
+              "parent_values": [
+                "quality_1",
+                "quality_2",
+                "quality_3",
+                "quality_4"
+              ],
+              "condition_type": "contains"
+            },
+            "validation": {
+              "required": true
+            }
+          },
+          {
+            "id": "q1.4",
+            "text": "Do you experience any of the following sleep issues? (Select all that apply)",
+            "type": "multi_select",
+            "feature_name": "sleep_issues_flags",
+            "options": [
+              {
+                "value": "issue_restless_legs",
+                "label": "Restless legs syndrome"
+              },
+              {
+                "value": "issue_vivid_nightmares",
+                "label": "Vivid nightmares or night sweats"
+              },
+              {
+                "value": "issue_teeth_grinding",
+                "label": "Teeth grinding (bruxism)"
+              },
+              {
+                "value": "issue_sleep_paralysis",
+                "label": "Sleep paralysis"
+              },
+              {
+                "value": "issue_none",
+                "label": "None of the above"
+              }
+            ],
+            "validation": {
+              "required": true
+            },
+            "routing": {
+              "triggers_pathway": [
+                {
+                  "answer_value": "issue_restless_legs",
+                  "pathway_id": "iron_deficiency",
+                  "priority": "high"
+                }
+              ]
+            }
+          },
+          {
+            "id": "q1.5",
+            "text": "You mentioned restless legs. How long have you had this symptom?",
+            "type": "categorical",
+            "feature_name": "restless_legs_duration",
+            "options": [
+              {
+                "value": "rls_<1month",
+                "label": "Less than 1 month",
+                "encoded_value": 0
+              },
+              {
+                "value": "rls_1-3months",
+                "label": "1-3 months",
+                "encoded_value": 1
+              },
+              {
+                "value": "rls_3-6months",
+                "label": "3-6 months",
+                "encoded_value": 2
+              },
+              {
+                "value": "rls_>6months",
+                "label": "More than 6 months",
+                "encoded_value": 3
+              }
+            ],
+            "conditional": {
+              "parent_id": "q1.4",
+              "parent_values": [
+                "issue_restless_legs"
+              ],
+              "condition_type": "contains"
+            },
+            "validation": {
+              "required": true
+            }
+          }
+        ]
+      },
+      {
+        "id": "nutrition",
+        "title": "Nutrition & Digestion",
+        "description": "Dietary patterns and nutritional deficiency risks",
+        "icon": "\ud83c\udf4e",
+        "order": 2,
+        "shown_in_paths": [
+          "full"
+        ],
+        "note": "Skipped in hybrid path if lab values available (ferritin, B12, folate)",
+        "questions": [
+          {
+            "id": "q2.1",
+            "text": "Which of the following dietary patterns apply to you? (Select all that apply)",
+            "type": "multi_select",
+            "feature_name": "dietary_restrictions",
+            "options": [
+              {
+                "value": "diet_vegetarian",
+                "label": "Vegetarian"
+              },
+              {
+                "value": "diet_vegan",
+                "label": "Vegan"
+              },
+              {
+                "value": "diet_pescatarian",
+                "label": "Pescatarian (fish but not meat)"
+              },
+              {
+                "value": "diet_gluten_free",
+                "label": "Gluten-free"
+              },
+              {
+                "value": "diet_none",
+                "label": "None of the above"
+              }
+            ],
+            "validation": {
+              "required": true
+            },
+            "routing": {
+              "triggers_pathway": [
+                {
+                  "answer_value": "diet_vegan",
+                  "pathway_id": "iron_deficiency",
+                  "priority": "high"
+                },
+                {
+                  "answer_value": "diet_vegan",
+                  "pathway_id": "b12_deficiency",
+                  "priority": "high"
+                }
+              ]
+            }
+          },
+          {
+            "id": "q2.2",
+            "text": "Have you ever been diagnosed with iron deficiency anemia?",
+            "type": "categorical",
+            "feature_name": "iron_history",
+            "options": [
+              {
+                "value": "iron_yes",
+                "label": "Yes"
+              },
+              {
+                "value": "iron_no",
+                "label": "No"
+              },
+              {
+                "value": "iron_unsure",
+                "label": "Not sure"
+              }
+            ],
+            "validation": {
+              "required": true
+            }
+          },
+          {
+            "id": "q2.3",
+            "text": "Do you have heavy menstrual bleeding?",
+            "help_text": "Heavy = requiring more frequent changes, lasting >7 days, or passing clots",
+            "type": "categorical",
+            "feature_name": "heavy_menstrual_bleeding",
+            "options": [
+              {
+                "value": "menstrual_heavy_yes",
+                "label": "Yes"
+              },
+              {
+                "value": "menstrual_heavy_no",
+                "label": "No"
+              },
+              {
+                "value": "menstrual_na",
+                "label": "Not applicable"
+              }
+            ],
+            "conditional": {
+              "parent_id": "q2.2",
+              "parent_values": [
+                "iron_yes"
+              ],
+              "condition_type": "equals"
+            },
+            "validation": {
+              "required": true
+            }
+          },
+          {
+            "id": "q2.4",
+            "text": "How often do you eat iron-rich foods (red meat, seafood, fortified grains)?",
+            "type": "ordinal",
+            "feature_name": "iron_food_frequency",
+            "options": [
+              {
+                "value": "iron_freq_daily",
+                "label": "Daily",
+                "encoded_value": 4
+              },
+              {
+                "value": "iron_freq_3-4x_week",
+                "label": "3-4 times per week",
+                "encoded_value": 3
+              },
+              {
+                "value": "iron_freq_1-2x_week",
+                "label": "1-2 times per week",
+                "encoded_value": 2
+              },
+              {
+                "value": "iron_freq_rarely",
+                "label": "Rarely",
+                "encoded_value": 1
+              },
+              {
+                "value": "iron_freq_never",
+                "label": "Never",
+                "encoded_value": 0
+              }
+            ],
+            "validation": {
+              "required": true
+            }
+          },
+          {
+            "id": "q2.5",
+            "text": "Have you experienced digestive issues such as IBS, Crohn's disease, or celiac disease?",
+            "type": "binary",
+            "feature_name": "gut_absorption_issues",
+            "options": [
+              {
+                "value": "gut_yes",
+                "label": "Yes"
+              },
+              {
+                "value": "gut_no",
+                "label": "No"
+              }
+            ],
+            "validation": {
+              "required": true
+            }
+          }
+        ]
+      },
+      {
+        "id": "hormonal",
+        "title": "Hormones & Stress",
+        "description": "Thyroid function, menstrual patterns, and stress levels",
+        "icon": "\ud83d\udd2c",
+        "order": 3,
+        "shown_in_paths": [
+          "full"
+        ],
+        "note": "Skipped in hybrid path if lab values available (TSH, free T4)",
+        "questions": [
+          {
+            "id": "q3.1",
+            "text": "What is your biological sex?",
+            "type": "categorical",
+            "feature_name": "biological_sex",
+            "options": [
+              {
+                "value": "sex_female",
+                "label": "Female"
+              },
+              {
+                "value": "sex_male",
+                "label": "Male"
+              },
+              {
+                "value": "sex_other",
+                "label": "Other / Prefer not to say"
+              }
+            ],
+            "validation": {
+              "required": true
+            }
+          },
+          {
+            "id": "q3.2",
+            "text": "Are you currently menstruating regularly?",
+            "type": "categorical",
+            "feature_name": "menstrual_status",
+            "options": [
+              {
+                "value": "menst_regular",
+                "label": "Yes, regularly"
+              },
+              {
+                "value": "menst_irregular",
+                "label": "Yes, but irregular"
+              },
+              {
+                "value": "menst_pregnant",
+                "label": "No, I'm pregnant"
+              },
+              {
+                "value": "menst_no",
+                "label": "No (not menstruating)"
+              },
+              {
+                "value": "menst_unsure",
+                "label": "Not sure"
+              }
+            ],
+            "conditional": {
+              "parent_id": "q3.1",
+              "parent_values": [
+                "sex_female"
+              ],
+              "condition_type": "equals"
+            },
+            "validation": {
+              "required": true
+            }
+          },
+          {
+            "id": "q3.3",
+            "text": "When was your last menstrual period?",
+            "help_text": "This helps us understand where you are in your cycle",
+            "type": "date",
+            "feature_name": "last_menstrual_date",
+            "options": [
+              {
+                "value": "lmp_date",
+                "label": "Select date"
+              }
+            ],
+            "conditional": {
+              "parent_id": "q3.2",
+              "parent_values": [
+                "menst_regular",
+                "menst_irregular"
+              ],
+              "condition_type": "contains"
+            },
+            "validation": {
+              "required": true,
+              "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+            }
+          },
+          {
+            "id": "q3.4",
+            "text": "Have you been diagnosed with thyroid disease?",
+            "type": "categorical",
+            "feature_name": "thyroid_history",
+            "options": [
+              {
+                "value": "thyroid_hypo",
+                "label": "Hypothyroidism (underactive)"
+              },
+              {
+                "value": "thyroid_hyper",
+                "label": "Hyperthyroidism (overactive)"
+              },
+              {
+                "value": "thyroid_none",
+                "label": "No thyroid disease"
+              },
+              {
+                "value": "thyroid_unsure",
+                "label": "Not sure"
+              }
+            ],
+            "validation": {
+              "required": true
+            }
+          },
+          {
+            "id": "q3.5",
+            "text": "Are you currently taking thyroid medication?",
+            "type": "categorical",
+            "feature_name": "thyroid_medication_adherence",
+            "options": [
+              {
+                "value": "thyroid_med_consistent",
+                "label": "Yes, I take it consistently"
+              },
+              {
+                "value": "thyroid_med_inconsistent",
+                "label": "Yes, but I miss doses"
+              },
+              {
+                "value": "thyroid_med_no",
+                "label": "No"
+              }
+            ],
+            "conditional": {
+              "parent_id": "q3.4",
+              "parent_values": [
+                "thyroid_hypo",
+                "thyroid_hyper"
+              ],
+              "condition_type": "contains"
+            },
+            "validation": {
+              "required": true
+            }
+          },
+          {
+            "id": "q3.6",
+            "text": "Have you experienced recent major life stress (last 6 months)?",
+            "help_text": "Examples: job loss, relationship changes, health crisis, financial strain, major move",
+            "type": "binary",
+            "feature_name": "recent_stress",
+            "options": [
+              {
+                "value": "stress_yes",
+                "label": "Yes"
+              },
+              {
+                "value": "stress_no",
+                "label": "No"
+              }
+            ],
+            "validation": {
+              "required": true
+            }
+          }
+        ]
+      },
+      {
+        "id": "activity",
+        "title": "Exercise & Physical Activity",
+        "description": "Activity levels and exercise-related fatigue patterns",
+        "icon": "\ud83d\udcaa",
+        "order": 4,
+        "shown_in_paths": [
+          "full",
+          "hybrid"
+        ],
+        "note": "ALWAYS shown - post-exertional malaise NOT visible in blood work",
+        "questions": [
+          {
+            "id": "q4.1",
+            "text": "How would you describe your current activity level?",
+            "type": "ordinal",
+            "feature_name": "activity_level",
+            "options": [
+              {
+                "value": "activity_sedentary",
+                "label": "Sedentary (mostly sitting, little exercise)",
+                "encoded_value": 0
+              },
+              {
+                "value": "activity_lightly_active",
+                "label": "Lightly active (light exercise 1-3 days/week)",
+                "encoded_value": 1
+              },
+              {
+                "value": "activity_moderate",
+                "label": "Moderately active (moderate exercise 3-5 days/week)",
+                "encoded_value": 2
+              },
+              {
+                "value": "activity_very_active",
+                "label": "Very active (intense exercise 5-7 days/week)",
+                "encoded_value": 3
+              },
+              {
+                "value": "activity_athlete",
+                "label": "Athlete (competitive or professional)",
+                "encoded_value": 4
+              }
+            ],
+            "validation": {
+              "required": true
+            }
+          },
+          {
+            "id": "q4.2",
+            "text": "How many days per week do you exercise?",
+            "type": "ordinal",
+            "feature_name": "exercise_frequency",
+            "options": [
+              {
+                "value": "exercise_never",
+                "label": "Never",
+                "encoded_value": 0
+              },
+              {
+                "value": "exercise_1-2d",
+                "label": "1-2 days per week",
+                "encoded_value": 1
+              },
+              {
+                "value": "exercise_3-4d",
+                "label": "3-4 days per week",
+                "encoded_value": 2
+              },
+              {
+                "value": "exercise_5-6d",
+                "label": "5-6 days per week",
+                "encoded_value": 3
+              },
+              {
+                "value": "exercise_daily",
+                "label": "Daily (7 days/week)",
+                "encoded_value": 4
+              }
+            ],
+            "validation": {
+              "required": true
+            }
+          },
+          {
+            "id": "q4.3",
+            "text": "Do you experience post-exertional malaise (feeling significantly worse after exercise)?",
+            "help_text": "This means your fatigue gets worse for hours or days after physical activity, even mild activity",
+            "type": "categorical",
+            "feature_name": "post_exertional_malaise",
+            "options": [
+              {
+                "value": "pem_yes",
+                "label": "Yes"
+              },
+              {
+                "value": "pem_no",
+                "label": "No"
+              },
+              {
+                "value": "pem_unsure",
+                "label": "Not sure"
+              }
+            ],
+            "validation": {
+              "required": true
+            },
+            "routing": {
+              "triggers_pathway": [
+                {
+                  "answer_value": "pem_yes",
+                  "pathway_id": "me_cfs",
+                  "priority": "high"
+                }
+              ]
+            }
+          },
+          {
+            "id": "q4.4",
+            "text": "If you experience fatigue after activity, how quickly does it set in?",
+            "type": "categorical",
+            "feature_name": "fatigue_onset_timing",
+            "options": [
+              {
+                "value": "onset_immediate",
+                "label": "Immediately (during or right after exercise)"
+              },
+              {
+                "value": "onset_1-2h",
+                "label": "Within 1-2 hours"
+              },
+              {
+                "value": "onset_same_day",
+                "label": "Later that same day"
+              },
+              {
+                "value": "onset_next_day",
+                "label": "The next day or later"
+              },
+              {
+                "value": "onset_no_pattern",
+                "label": "I don't notice a clear pattern"
+              }
+            ],
+            "validation": {
+              "required": true
+            }
+          },
+          {
+            "id": "q4.5",
+            "text": "Have you had a recent illness or infection in the last 3 months?",
+            "help_text": "Examples: flu, COVID-19, mono, respiratory infection, urinary tract infection",
+            "type": "categorical",
+            "feature_name": "recent_infection",
+            "options": [
+              {
+                "value": "infection_yes",
+                "label": "Yes, I had an infection"
+              },
+              {
+                "value": "infection_currently",
+                "label": "I'm currently sick"
+              },
+              {
+                "value": "infection_no",
+                "label": "No"
+              }
+            ],
+            "validation": {
+              "required": true
+            },
+            "routing": {
+              "triggers_pathway": [
+                {
+                  "answer_value": "infection_yes|infection_currently",
+                  "pathway_id": "post_viral_fatigue",
+                  "priority": "high"
+                }
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "id": "mental_health",
+        "title": "Mental Health & Impact",
+        "description": "Mood, anxiety, and how fatigue affects your life",
+        "icon": "\ud83e\udde0",
+        "order": 5,
+        "shown_in_paths": [
+          "full",
+          "hybrid"
+        ],
+        "note": "ALWAYS shown - depression/anxiety NOT visible in blood work",
+        "questions": [
+          {
+            "id": "q5.1",
+            "text": "Little interest or pleasure in activities?",
+            "help_text": "This is question DPQ010 from the Patient Health Questionnaire",
+            "type": "ordinal",
+            "feature_name": "anhedonia_frequency",
+            "dpq_item": "DPQ010",
+            "options": [
+              {
+                "value": "not_at_all",
+                "label": "Not at all",
+                "encoded_value": 0
+              },
+              {
+                "value": "few_days",
+                "label": "Few days",
+                "encoded_value": 1
+              },
+              {
+                "value": "several_days",
+                "label": "Several days",
+                "encoded_value": 2
+              },
+              {
+                "value": "nearly_every_day",
+                "label": "Nearly every day",
+                "encoded_value": 3
+              }
+            ],
+            "epidemiology": {
+              "data_source": "NHANES PHQ-9 (n=8,965)",
+              "any_symptoms_percent": 25.8,
+              "any_symptoms_count": 2142,
+              "few_days_count": 1372,
+              "few_days_percent": 16.5,
+              "several_days_count": 450,
+              "several_days_percent": 5.4,
+              "nearly_every_day_count": 310,
+              "nearly_every_day_percent": 3.7,
+              "combined_significant_count": 760,
+              "combined_significant_percent": 9.1
+            },
+            "validation": {
+              "required": true
+            },
+            "shown_in_paths": [
+              "full",
+              "hybrid"
+            ]
+          },
+          {
+            "id": "q5.2",
+            "text": "Feeling down, depressed, or hopeless?",
+            "help_text": "This is question DPQ020 from the Patient Health Questionnaire",
+            "type": "ordinal",
+            "feature_name": "depressed_mood_frequency",
+            "dpq_item": "DPQ020",
+            "options": [
+              {
+                "value": "not_at_all",
+                "label": "Not at all",
+                "encoded_value": 0
+              },
+              {
+                "value": "few_days",
+                "label": "Few days",
+                "encoded_value": 1
+              },
+              {
+                "value": "several_days",
+                "label": "Several days",
+                "encoded_value": 2
+              },
+              {
+                "value": "nearly_every_day",
+                "label": "Nearly every day",
+                "encoded_value": 3
+              }
+            ],
+            "epidemiology": {
+              "data_source": "NHANES PHQ-9 (n=8,965)",
+              "any_symptoms_percent": 25.5,
+              "any_symptoms_count": 2119,
+              "few_days_count": 1456,
+              "few_days_percent": 17.5,
+              "several_days_count": 387,
+              "several_days_percent": 4.7,
+              "nearly_every_day_count": 269,
+              "nearly_every_day_percent": 3.2,
+              "combined_significant_count": 656,
+              "combined_significant_percent": 7.9
+            },
+            "validation": {
+              "required": true
+            },
+            "shown_in_paths": [
+              "full",
+              "hybrid"
+            ]
+          },
+          {
+            "id": "q5.3",
+            "text": "Trouble sleeping or sleeping too much?",
+            "help_text": "This is question DPQ030 from the Patient Health Questionnaire",
+            "type": "ordinal",
+            "feature_name": "sleep_disturbance_frequency",
+            "dpq_item": "DPQ030",
+            "options": [
+              {
+                "value": "not_at_all",
+                "label": "Not at all",
+                "encoded_value": 0
+              },
+              {
+                "value": "few_days",
+                "label": "Few days",
+                "encoded_value": 1
+              },
+              {
+                "value": "several_days",
+                "label": "Several days",
+                "encoded_value": 2
+              },
+              {
+                "value": "nearly_every_day",
+                "label": "Nearly every day",
+                "encoded_value": 3
+              }
+            ],
+            "epidemiology": {
+              "data_source": "NHANES PHQ-9 (n=8,965)",
+              "any_symptoms_percent": 39.5,
+              "any_symptoms_count": 3283,
+              "few_days_count": 1890,
+              "few_days_percent": 22.8,
+              "several_days_count": 621,
+              "several_days_percent": 7.5,
+              "nearly_every_day_count": 764,
+              "nearly_every_day_percent": 9.2,
+              "combined_significant_count": 1385,
+              "combined_significant_percent": 21.0
+            },
+            "validation": {
+              "required": true
+            },
+            "shown_in_paths": [
+              "full",
+              "hybrid"
+            ]
+          },
+          {
+            "id": "q5.4",
+            "text": "Feeling tired or low energy? (KEY QUESTION - DPQ040)",
+            "help_text": "This is the critical fatigue question DPQ040. Nearly 50% of people report this symptom.",
+            "type": "ordinal",
+            "feature_name": "fatigue_frequency_dpq",
+            "dpq_item": "DPQ040",
+            "critical": true,
+            "options": [
+              {
+                "value": "not_at_all",
+                "label": "Not at all",
+                "encoded_value": 0
+              },
+              {
+                "value": "few_days",
+                "label": "Few days",
+                "encoded_value": 1
+              },
+              {
+                "value": "several_days",
+                "label": "Several days",
+                "encoded_value": 2
+              },
+              {
+                "value": "nearly_every_day",
+                "label": "Nearly every day",
+                "encoded_value": 3
+              }
+            ],
+            "epidemiology": {
+              "data_source": "NHANES PHQ-9 (n=8,965) - YOUR KEY DATA",
+              "any_symptoms_percent": 49.9,
+              "any_symptoms_count": 4141,
+              "few_days_count": 2682,
+              "few_days_percent": 32.3,
+              "several_days_count": 754,
+              "several_days_percent": 9.1,
+              "nearly_every_day_count": 697,
+              "nearly_every_day_percent": 8.4,
+              "combined_significant_count": 1451,
+              "combined_significant_percent": 17.5,
+              "significance": "\u2605 NEARLY HALF THE POPULATION reports tiredness. 17.5% report significant, regular fatigue. This is THE gateway question for depression screening."
+            },
+            "validation": {
+              "required": true
+            },
+            "shown_in_paths": [
+              "full",
+              "hybrid"
+            ]
+          },
+          {
+            "id": "q5.5",
+            "text": "Impact on work/home activities? (DPQ100 - Functional Impairment)",
+            "help_text": "This determines the severity and urgency of the fatigue.",
+            "type": "ordinal",
+            "feature_name": "functional_impairment_dpq",
+            "dpq_item": "DPQ100",
+            "options": [
+              {
+                "value": "not_at_all",
+                "label": "Not at all",
+                "encoded_value": 0
+              },
+              {
+                "value": "several_days",
+                "label": "Several days",
+                "encoded_value": 1
+              },
+              {
+                "value": "most_days",
+                "label": "Most days",
+                "encoded_value": 2
+              },
+              {
+                "value": "nearly_every_day",
+                "label": "Nearly every day",
+                "encoded_value": 3
+              }
+            ],
+            "epidemiology": {
+              "data_source": "NHANES PHQ-9 (n=8,965)",
+              "any_symptoms_percent": 26.5,
+              "any_symptoms_count": 1466,
+              "several_days_count": 1181,
+              "several_days_percent": 21.3,
+              "most_days_count": 209,
+              "most_days_percent": 3.8,
+              "nearly_every_day_count": 71,
+              "nearly_every_day_percent": 1.3,
+              "combined_significant_count": 280,
+              "combined_significant_percent": 5.1
+            },
+            "conditional": {
+              "parent_id": "q5.4",
+              "parent_values": [
+                "several_days",
+                "nearly_every_day"
+              ],
+              "condition_type": "contains"
+            },
+            "validation": {
+              "required": true
+            },
+            "shown_in_paths": [
+              "full",
+              "hybrid"
+            ]
+          }
+        ],
+        "data_source": "NHANES Patient Health Questionnaire (PHQ-9 items: DPQ010-DPQ100) - 8,965 respondents"
+      }
+    ]
+  },
+  "lab_biomarkers": {
+    "ferritin": {
+      "name": "Ferritin",
+      "unit": "ng/mL",
+      "normal_range_min": 30,
+      "normal_range_max": 400,
+      "gender_specific": false,
+      "critical_low": 15,
+      "ocr_patterns": [
+        "ferritin[:\\s]+([0-9.]+)",
+        "iron\\s+stores?[:\\s]+([0-9.]+)"
+      ]
+    },
+    "tsh": {
+      "name": "TSH (Thyroid Stimulating Hormone)",
+      "unit": "mIU/L",
+      "normal_range_min": 0.4,
+      "normal_range_max": 4.5,
+      "gender_specific": false,
+      "ocr_patterns": [
+        "tsh[:\\s]+([0-9.]+)",
+        "thyroid\\s+stimulating[:\\s]+([0-9.]+)"
+      ]
+    },
+    "free_t4": {
+      "name": "Free T4",
+      "unit": "pg/mL",
+      "normal_range_min": 0.8,
+      "normal_range_max": 1.8,
+      "gender_specific": false,
+      "ocr_patterns": [
+        "free\\s+t4[:\\s]+([0-9.]+)",
+        "t4\\s+free[:\\s]+([0-9.]+)"
+      ]
+    },
+    "hemoglobin": {
+      "name": "Hemoglobin",
+      "unit": "g/dL",
+      "normal_range_min": 12.0,
+      "normal_range_max": 16.0,
+      "gender_specific": true,
+      "gender_specific_ranges": {
+        "female": {
+          "min": 12.0,
+          "max": 16.0
+        },
+        "male": {
+          "min": 13.5,
+          "max": 17.5
+        }
+      },
+      "critical_low": 10.0,
+      "ocr_patterns": [
+        "hemoglobin|hgb[:\\s]+([0-9.]+)"
+      ]
+    },
+    "vitamin_b12": {
+      "name": "Vitamin B12",
+      "unit": "pg/mL",
+      "normal_range_min": 200,
+      "normal_range_max": 900,
+      "gender_specific": false,
+      "ocr_patterns": [
+        "vitamin\\s+b12|b12[:\\s]+([0-9.]+)"
+      ]
+    },
+    "folate": {
+      "name": "Folate",
+      "unit": "ng/mL",
+      "normal_range_min": 5.4,
+      "normal_range_max": 16.0,
+      "gender_specific": false,
+      "ocr_patterns": [
+        "folate[:\\s]+([0-9.]+)"
+      ]
+    }
+  },
+  "feature_definitions": {
+    "has_recent_labs": {
+      "type": "binary",
+      "source_question": "q0.0",
+      "derivation": "Direct from user answer",
+      "shown_in_paths": [
+        "full",
+        "hybrid"
+      ],
+      "determines_assessment_path": true
+    },
+    "sleep_quality_score": {
+      "type": "numeric",
+      "source_question": "q1.2",
+      "derivation": "Direct 1-10 scale",
+      "scale": {
+        "min": 1,
+        "max": 10
+      },
+      "ml_pathway": "sleep_disorder",
+      "shown_in_paths": [
+        "full",
+        "hybrid"
+      ]
+    },
+    "post_exertional_malaise": {
+      "type": "binary",
+      "source_question": "q4.3",
+      "derivation": "Binary flag - NOT in blood work",
+      "ml_pathway": "me_cfs",
+      "shown_in_paths": [
+        "full",
+        "hybrid"
+      ],
+      "note": "This is the hallmark of ME/CFS and MUST always be asked"
+    },
+    "fatigue_functional_impairment": {
+      "type": "ordinal",
+      "source_question": "q5.4",
+      "derivation": "CRITICAL SEVERITY PROXY - indicates urgency",
+      "encoder": {
+        "impact_none": 0,
+        "impact_mild": 1,
+        "impact_moderate": 2,
+        "impact_severe": 3
+      },
+      "ml_pathway": "urgency_assessment",
+      "shown_in_paths": [
+        "full",
+        "hybrid"
+      ],
+      "note": "Single most important question in assessment"
+    },
+    "iron_deficiency_risk": {
+      "type": "derived",
+      "source_question": "multiple",
+      "source_lab": "ferritin",
+      "derivation": "Lab value OR combination of q2.2, q2.3, q2.4, dietary_vegan_flag",
+      "ml_pathway": "iron_deficiency",
+      "shown_in_paths": [
+        "full",
+        "hybrid"
+      ]
+    }
+  },
+  "diagnostic_pathways": {
+    "iron_deficiency": {
+      "name": "Iron Deficiency Anemia",
+      "contributing_features": [
+        "iron_deficiency_risk",
+        "restless_legs_duration",
+        "heavy_menstrual_bleeding"
+      ],
+      "lab_markers": [
+        "ferritin",
+        "hemoglobin"
+      ],
+      "test_recommendations": [
+        "Serum ferritin",
+        "Complete Blood Count (CBC)",
+        "Iron studies (TIBC, serum iron)"
+      ],
+      "priority": "high"
+    },
+    "thyroid_dysfunction": {
+      "name": "Thyroid Dysfunction",
+      "contributing_features": [
+        "thyroid_history",
+        "thyroid_medication_adherence"
+      ],
+      "lab_markers": [
+        "tsh",
+        "free_t4"
+      ],
+      "test_recommendations": [
+        "TSH",
+        "Free T4",
+        "Free T3 (if borderline TSH)"
+      ],
+      "priority": "high"
+    },
+    "me_cfs": {
+      "name": "Possible ME/CFS (Post-Exertional Malaise)",
+      "contributing_features": [
+        "post_exertional_malaise",
+        "fatigue_onset_timing",
+        "recent_infection"
+      ],
+      "lab_markers": [],
+      "note": "No lab markers exist for ME/CFS - symptom-based diagnosis only",
+      "test_recommendations": [
+        "CBC to rule out infection",
+        "Metabolic panel",
+        "EBV/CMV serology"
+      ],
+      "priority": "high"
+    },
+    "depression_anxiety": {
+      "name": "Depression / Anxiety",
+      "contributing_features": [
+        "mood_state",
+        "anhedonia_flag",
+        "anxiety_frequency"
+      ],
+      "lab_markers": [],
+      "note": "Not measurable in standard blood work",
+      "test_recommendations": [
+        "Mental health evaluation",
+        "Thyroid panel (rule out medical causes)"
+      ],
+      "priority": "high"
+    }
+  }
+}

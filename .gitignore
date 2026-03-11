@@ -219,3 +219,5 @@ data/raw/
 # Node / Next.js
 node_modules/
 .next/
+
+.claude/

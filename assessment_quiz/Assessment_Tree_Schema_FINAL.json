@@ -1,0 +1,450 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "HalfFull Assessment Tree Schema (v1.1 - Hybrid Lab Path)",
+  "description": "Complete assessment flow with lab gate, conditional routing, feature mapping, and hybrid scoring",
+  "type": "object",
+  "required": ["assessment"],
+  "properties": {
+    "assessment": {
+      "type": "object",
+      "required": ["metadata", "modules"],
+      "properties": {
+        "metadata": {
+          "type": "object",
+          "properties": {
+            "version": {
+              "type": "string",
+              "description": "Assessment tree version (v1.1, v1.2, etc.)"
+            },
+            "total_questions": {
+              "type": "integer",
+              "description": "Total number of questions including Q0 pre-assessment"
+            },
+            "estimated_time_full_path": {
+              "type": "integer",
+              "description": "Estimated completion time for full path (no labs) in minutes"
+            },
+            "estimated_time_hybrid_path": {
+              "type": "integer",
+              "description": "Estimated completion time for hybrid path (with labs) in minutes"
+            },
+            "last_updated": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "has_lab_gate": {
+              "type": "boolean",
+              "description": "Whether assessment includes Q0.0 lab status gate"
+            }
+          }
+        },
+        "modules": {
+          "type": "array",
+          "minItems": 6,
+          "maxItems": 6,
+          "items": {
+            "type": "object",
+            "required": ["id", "title", "description", "questions"],
+            "properties": {
+              "id": {
+                "type": "string",
+                "enum": ["pre_assessment", "sleep", "nutrition", "hormonal", "activity", "mental_health"],
+                "description": "Module identifier"
+              },
+              "title": {
+                "type": "string",
+                "description": "Display title of module"
+              },
+              "description": {
+                "type": "string",
+                "description": "Explanation of what this module assesses"
+              },
+              "icon": {
+                "type": "string",
+                "description": "Emoji or icon for module"
+              },
+              "order": {
+                "type": "integer",
+                "description": "Display order (0-5)"
+              },
+              "shown_in_paths": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "enum": ["full", "hybrid"]
+                },
+                "description": "Which paths show this module (full=no labs, hybrid=has labs)"
+              },
+              "questions": {
+                "type": "array",
+                "minItems": 1,
+                "items": {
+                  "type": "object",
+                  "required": ["id", "text", "type", "feature_name", "options"],
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "pattern": "^q[0-5]\\.[0-9]$",
+                      "description": "Question ID (e.g., q0.0, q1.1, q5.5)"
+                    },
+                    "text": {
+                      "type": "string",
+                      "description": "Question text shown to user"
+                    },
+                    "help_text": {
+                      "type": "string",
+                      "description": "Optional additional context/clarification"
+                    },
+                    "type": {
+                      "type": "string",
+                      "enum": ["categorical", "ordinal", "numeric", "binary", "multi_select", "date", "file_upload"],
+                      "description": "Question data type"
+                    },
+                    "feature_name": {
+                      "type": "string",
+                      "pattern": "^[a-z_]+$",
+                      "description": "ML feature name derived from this question"
+                    },
+                    "options": {
+                      "type": "array",
+                      "minItems": 2,
+                      "items": {
+                        "type": "object",
+                        "required": ["value", "label"],
+                        "properties": {
+                          "value": {
+                            "type": "string",
+                            "description": "Internal value (no spaces)"
+                          },
+                          "label": {
+                            "type": "string",
+                            "description": "Display label for user"
+                          },
+                          "encoded_value": {
+                            "oneOf": [
+                              { "type": "number" },
+                              { "type": "integer" }
+                            ],
+                            "description": "Numeric value for ML (for ordinal questions)"
+                          }
+                        }
+                      }
+                    },
+                    "conditional": {
+                      "type": "object",
+                      "description": "Conditional display logic",
+                      "properties": {
+                        "parent_id": {
+                          "type": "string",
+                          "pattern": "^q[0-5]\\.[0-9]$",
+                          "description": "Parent question ID"
+                        },
+                        "parent_values": {
+                          "type": "array",
+                          "items": {
+                            "type": "string"
+                          },
+                          "description": "Values of parent that trigger this question"
+                        },
+                        "condition_type": {
+                          "type": "string",
+                          "enum": ["equals", "contains", "range"],
+                          "description": "How to evaluate parent_values"
+                        }
+                      },
+                      "required": ["parent_id", "parent_values"]
+                    },
+                    "validation": {
+                      "type": "object",
+                      "properties": {
+                        "required": {
+                          "type": "boolean",
+                          "description": "Is this question required?"
+                        },
+                        "min": {
+                          "type": "number",
+                          "description": "Minimum value (for numeric)"
+                        },
+                        "max": {
+                          "type": "number",
+                          "description": "Maximum value (for numeric)"
+                        },
+                        "pattern": {
+                          "type": "string",
+                          "description": "Regex pattern (for string validation)"
+                        }
+                      }
+                    },
+                    "routing": {
+                      "type": "object",
+                      "description": "How this question routes downstream",
+                      "properties": {
+                        "triggers_pathway": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "answer_value": {
+                                "type": "string"
+                              },
+                              "pathway_id": {
+                                "type": "string",
+                                "description": "Diagnostic pathway (e.g., 'iron_deficiency', 'me_cfs')"
+                              },
+                              "priority": {
+                                "type": "string",
+                                "enum": ["low", "medium", "high"],
+                                "description": "Priority of this pathway"
+                              }
+                            }
+                          }
+                        },
+                        "path_determination": {
+                          "type": "object",
+                          "description": "Determines which assessment path user takes",
+                          "properties": {
+                            "answer_value": {
+                              "type": "string"
+                            },
+                            "determines_path": {
+                              "type": "string",
+                              "enum": ["full", "hybrid"],
+                              "description": "Which path does this answer route to?"
+                            }
+                          }
+                        },
+                        "skips_questions": {
+                          "type": "array",
+                          "items": {
+                            "type": "string",
+                            "pattern": "^q[0-5]\\.[0-9]$"
+                          },
+                          "description": "Questions to skip if certain answer given"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "lab_biomarkers": {
+      "type": "object",
+      "description": "Lab biomarkers extracted from Q0.1 upload",
+      "patternProperties": {
+        "^[a-z_]+$": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string",
+              "description": "Display name (e.g., 'Ferritin')"
+            },
+            "unit": {
+              "type": "string",
+              "description": "Unit of measurement (e.g., 'ng/mL')"
+            },
+            "normal_range_min": {
+              "type": "number"
+            },
+            "normal_range_max": {
+              "type": "number"
+            },
+            "gender_specific": {
+              "type": "boolean",
+              "description": "Does normal range vary by gender?"
+            },
+            "ocr_patterns": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "description": "Regex patterns for OCR extraction"
+            }
+          }
+        }
+      }
+    },
+    "feature_definitions": {
+      "type": "object",
+      "description": "Mapping of features to their engineering rules",
+      "patternProperties": {
+        "^[a-z_]+$": {
+          "type": "object",
+          "required": ["type", "source_question", "derivation"],
+          "properties": {
+            "type": {
+              "type": "string",
+              "enum": ["categorical", "ordinal", "numeric", "binary", "derived", "lab"],
+              "description": "Feature type"
+            },
+            "source_question": {
+              "type": "string",
+              "pattern": "^q[0-5]\\.[0-9]$",
+              "description": "Source question ID"
+            },
+            "source_lab": {
+              "type": "string",
+              "description": "Source biomarker (if lab-derived)"
+            },
+            "derivation": {
+              "type": "string",
+              "description": "How feature is derived"
+            },
+            "encoder": {
+              "type": "object",
+              "description": "Value-to-numeric encoder for ML",
+              "additionalProperties": {
+                "type": "number"
+              }
+            },
+            "scale": {
+              "type": "object",
+              "properties": {
+                "min": {
+                  "type": "number"
+                },
+                "max": {
+                  "type": "number"
+                },
+                "unit": {
+                  "type": "string"
+                }
+              }
+            },
+            "ml_pathway": {
+              "type": "string",
+              "description": "Diagnostic pathway this feeds"
+            },
+            "shown_in_paths": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "enum": ["full", "hybrid", "both"]
+              },
+              "description": "Which assessment paths use this feature"
+            }
+          }
+        }
+      }
+    },
+    "scoring_algorithms": {
+      "type": "object",
+      "description": "Scoring algorithms for different paths",
+      "properties": {
+        "nhanes_rule_based": {
+          "type": "object",
+          "description": "Rule-based scoring for full (no labs) path",
+          "properties": {
+            "algorithm": {
+              "type": "string",
+              "description": "Decision tree or rule-based logic"
+            },
+            "input_features": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "hybrid_lab_symptom": {
+          "type": "object",
+          "description": "Hybrid scoring for paths with labs",
+          "properties": {
+            "algorithm": {
+              "type": "string",
+              "description": "Lab value + symptom feature combination"
+            },
+            "lab_features": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "description": "Lab-derived features (if available)"
+            },
+            "symptom_features": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "description": "Symptom-derived features (always needed)"
+            },
+            "weighting": {
+              "type": "object",
+              "description": "How to weight lab vs. symptom features"
+            }
+          }
+        }
+      }
+    },
+    "diagnostic_pathways": {
+      "type": "object",
+      "description": "Diagnostic reasoning pathways",
+      "properties": {
+        "iron_deficiency": {
+          "type": "object",
+          "properties": {
+            "contributing_features": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "lab_markers": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "description": "Lab values that confirm this pathway"
+            },
+            "test_recommendations": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "me_cfs": {
+          "type": "object",
+          "properties": {
+            "contributing_features": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "description": "NOTE: No lab markers for ME/CFS - symptom-based only"
+            },
+            "test_recommendations": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "depression_anxiety": {
+          "type": "object",
+          "properties": {
+            "contributing_features": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "description": "NOTE: No lab markers - symptom-based only"
+            },
+            "test_recommendations": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
