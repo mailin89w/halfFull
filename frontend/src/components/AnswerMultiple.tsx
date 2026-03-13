@@ -34,24 +34,25 @@ export function AnswerMultiple({ options, value = [], onChange }: Props) {
             key={option.value}
             onClick={() => toggle(option.value)}
             className={[
-              'w-full px-5 py-4 rounded-2xl text-left text-base font-medium',
-              'border-2 transition-all duration-150 flex items-center gap-3 active:scale-[0.98]',
+              'flex w-full items-center gap-3 rounded-[1.35rem] border px-5 py-4 text-left text-base transition-all duration-150 active:scale-[0.98]',
               selected
-                ? 'border-[#EFB973] bg-[#EFB973]/15 text-[#254662]'
-                : 'border-[#A2B6CB]/40 bg-white text-[#254662] hover:border-[#EFB973]/60 hover:bg-[#EFB973]/5',
+                ? 'border-[rgba(119,101,244,0.2)] bg-[var(--color-accent-soft)] text-[var(--color-ink)] shadow-[0_10px_18px_rgba(119,101,244,0.16)]'
+                : 'border-[rgba(151,166,210,0.28)] bg-white text-[var(--color-ink)]',
             ].join(' ')}
           >
             <span
               className={[
-                'w-5 h-5 rounded flex-shrink-0 border-2 flex items-center justify-center transition-colors',
-                selected ? 'bg-[#EFB973] border-[#EFB973]' : 'border-[#A2B6CB] bg-white',
+                'flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-md border transition-colors',
+                selected
+                  ? 'border-[var(--color-accent)] bg-[var(--color-accent)]'
+                  : 'border-[rgba(9,9,15,0.18)] bg-white',
               ].join(' ')}
             >
               {selected && (
                 <svg width="11" height="9" viewBox="0 0 11 9" fill="none">
                   <path
                     d="M1 4L4 7L10 1"
-                    stroke="#254662"
+                    stroke="#fff"
                     strokeWidth="2"
                     strokeLinecap="round"
                     strokeLinejoin="round"
@@ -64,7 +65,7 @@ export function AnswerMultiple({ options, value = [], onChange }: Props) {
         );
       })}
       {value.length > 1 && (
-        <p className="text-xs text-[#A2B6CB] text-center mt-1">
+        <p className="mt-1 text-center text-xs text-[var(--color-ink-soft)]">
           {value.length} selected
         </p>
       )}

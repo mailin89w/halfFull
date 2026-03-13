@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import { resolveQuestionPath, getQuestion } from '@/src/lib/questions';
+import { clearStoredMedGemmaResult } from '@/src/lib/medgemma';
 import type { Question } from '@/src/lib/questions';
 
 const STORAGE_KEY = 'halffull_assessment_v1';
@@ -17,20 +18,26 @@ const DEFAULT_STATE: AssessmentState = {
 };
 
 export function useAssessment() {
-  const [state, setState] = useState<AssessmentState>(DEFAULT_STATE);
+  const [state, setState] = useState<AssessmentState>(() => {
+    if (typeof window === 'undefined') {
+      return DEFAULT_STATE;
+    }
+
+    try {
+      const saved = window.localStorage.getItem(STORAGE_KEY);
+      return saved ? (JSON.parse(saved) as AssessmentState) : DEFAULT_STATE;
+    } catch {
+      return DEFAULT_STATE;
+    }
+  });
   const [hydrated, setHydrated] = useState(false);
 
-  // Restore from localStorage on mount
   useEffect(() => {
-    try {
-      const saved = localStorage.getItem(STORAGE_KEY);
-      if (saved) {
-        setState(JSON.parse(saved) as AssessmentState);
-      }
-    } catch {
-      // ignore parse errors
-    }
-    setHydrated(true);
+    const frame = window.requestAnimationFrame(() => {
+      setHydrated(true);
+    });
+
+    return () => window.cancelAnimationFrame(frame);
   }, []);
 
   // Persist to localStorage on every change
@@ -95,6 +102,7 @@ export function useAssessment() {
   const reset = useCallback(() => {
     setState(DEFAULT_STATE);
     localStorage.removeItem(STORAGE_KEY);
+    clearStoredMedGemmaResult();
   }, []);
 
   return {

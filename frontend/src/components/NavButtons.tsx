@@ -13,13 +13,13 @@ export function NavButtons({ isFirst, isLast, canAdvance, onBack, onNext }: Prop
         <button
           onClick={onBack}
           className={[
-            'flex-1 py-4 rounded-2xl',
-            'border-2 border-[#A2B6CB]/40',
-            'text-[#254662] font-semibold text-base',
-            'hover:border-[#254662]/30 transition-all active:scale-[0.98]',
+            'flex-1 rounded-full border px-5 py-4',
+            'border-[rgba(9,9,15,0.16)] bg-white/75',
+            'text-[var(--color-ink)] font-bold text-base',
+            'transition-all active:scale-[0.98]',
           ].join(' ')}
         >
-          ← Back
+          Back
         </button>
       )}
 
@@ -27,13 +27,13 @@ export function NavButtons({ isFirst, isLast, canAdvance, onBack, onNext }: Prop
         onClick={onNext}
         disabled={!canAdvance}
         className={[
-          'flex-1 py-4 rounded-2xl font-semibold text-base transition-all',
+          'flex-1 rounded-full px-5 py-4 font-bold text-base transition-all',
           canAdvance
-            ? 'bg-[#EFB973] text-[#254662] hover:bg-[#e8ae62] active:scale-[0.98] shadow-sm'
-            : 'bg-[#A2B6CB]/20 text-[#A2B6CB] cursor-not-allowed',
+            ? 'bg-[#09090f] text-white active:scale-[0.98] shadow-[0_10px_24px_rgba(9,9,15,0.22)]'
+            : 'bg-white/50 text-[rgba(9,9,15,0.34)] cursor-not-allowed',
         ].join(' ')}
       >
-        {isLast ? 'See my results →' : 'Next →'}
+        {isLast ? 'See my results' : 'Next'}
       </button>
     </div>
   );

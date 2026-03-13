@@ -142,7 +142,7 @@ export default function DesignV2() {
       {/* Closing quote block */}
       <div style={{ margin: '0 24px 52px', backgroundColor: '#6B6BDC', borderRadius: 24, padding: '28px 24px', textAlign: 'center' }}>
         <p style={{ fontSize: 24, fontWeight: 900, color: '#FFFFFF', lineHeight: 1.25, letterSpacing: -0.8 }}>
-          "These patterns<br />are recoverable."
+          &quot;These patterns<br />are recoverable.&quot;
         </p>
         <p style={{ fontSize: 13, color: 'rgba(255,255,255,0.55)', marginTop: 10, fontWeight: 500 }}>
           Based on your assessment responses

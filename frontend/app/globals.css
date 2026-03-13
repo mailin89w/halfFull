@@ -1,18 +1,22 @@
 @import "tailwindcss";
 
 @theme {
-  /* Brand palette */
-  --color-cream: #FAF7F2;
-  --color-navy: #254662;
-  --color-brand-orange: #EFB973;
-  --color-brand-pink: #EBC7BB;
-  --color-brand-green: #C7D9A7;
-  --color-brand-blue: #A2B6CB;
-  --color-brand-yellow: #EFD17B;
+  /* Editorial lavender system */
+  --color-page: #d8d8e3;
+  --color-shell: #b7c2e4;
+  --color-shell-border: #97a6d2;
+  --color-card: #f8f8fb;
+  --color-card-muted: #eaedf8;
+  --color-ink: #09090f;
+  --color-ink-soft: #5f6783;
+  --color-accent: #7765f4;
+  --color-accent-soft: #dcd7ff;
+  --color-lime: #d7f068;
+  --color-stroke: #c7cedf;
 
   /* Typography */
-  --font-display: "Fraunces", Georgia, serif;
-  --font-body: "DM Sans", ui-sans-serif, system-ui, -apple-system, sans-serif;
+  --font-display: "Archivo", "Arial Narrow", sans-serif;
+  --font-body: "Space Grotesk", ui-sans-serif, system-ui, -apple-system, sans-serif;
 }
 
 *,
@@ -23,8 +27,47 @@
 
 body {
   font-family: var(--font-body);
-  background-color: #FAF7F2;
-  color: #254662;
+  background:
+    radial-gradient(circle at top, rgba(255, 255, 255, 0.45), transparent 30%),
+    var(--color-page);
+  color: var(--color-ink);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+a {
+  color: inherit;
+}
+
+.editorial-display {
+  font-family: var(--font-display);
+  font-weight: 900;
+  letter-spacing: -0.06em;
+}
+
+.phone-frame {
+  width: min(100%, 27rem);
+  min-height: 100vh;
+  margin: 0 auto;
+  background: linear-gradient(180deg, #bcc8e8 0%, #b4bfe1 100%);
+  border-left: 1px solid rgba(151, 166, 210, 0.6);
+  border-right: 1px solid rgba(151, 166, 210, 0.6);
+}
+
+.section-card {
+  background: var(--color-card);
+  border: 1px solid rgba(151, 166, 210, 0.28);
+  border-radius: 1.75rem;
+  box-shadow: 0 12px 30px rgba(86, 98, 145, 0.1);
+}
+
+.pill-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  border-radius: 999px;
+  padding: 0.38rem 0.8rem;
+  font-size: 0.72rem;
+  font-weight: 700;
+  line-height: 1;
 }

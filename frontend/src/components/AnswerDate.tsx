@@ -15,10 +15,9 @@ export function AnswerDate({ value = '', onChange }: Props) {
       onChange={(e) => onChange(e.target.value)}
       max={today}
       className={[
-        'w-full px-4 py-4 rounded-2xl',
-        'border-2 border-[#A2B6CB]/40 bg-white',
-        'text-[#254662] text-base',
-        'focus:outline-none focus:border-[#EFB973] transition-colors',
+        'w-full rounded-[1.35rem] border bg-white px-4 py-4',
+        'border-[rgba(151,166,210,0.28)] text-[var(--color-ink)] text-base',
+        'focus:border-[var(--color-accent)] focus:outline-none transition-colors',
       ].join(' ')}
     />
   );
