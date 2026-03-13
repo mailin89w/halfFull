@@ -1045,8 +1045,8 @@
           },
           {
             "id": "q5.4",
-            "text": "Feeling tired or low energy? (KEY QUESTION - DPQ040)",
-            "help_text": "This is the critical fatigue question DPQ040. Nearly 50% of people report this symptom.",
+            "text": "Feeling tired or low energy?",
+            "help_text": "",
             "type": "ordinal",
             "feature_name": "fatigue_frequency_dpq",
             "dpq_item": "DPQ040",
@@ -1097,8 +1097,8 @@
           },
           {
             "id": "q5.5",
-            "text": "Impact on work/home activities? (DPQ100 - Functional Impairment)",
-            "help_text": "This determines the severity and urgency of the fatigue.",
+            "text": "Impact on work/home activities?",
+            "help_text": "",
             "type": "ordinal",
             "feature_name": "functional_impairment_dpq",
             "dpq_item": "DPQ100",
