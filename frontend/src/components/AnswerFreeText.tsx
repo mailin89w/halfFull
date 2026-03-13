@@ -20,10 +20,9 @@ export function AnswerFreeText({
       placeholder={placeholder}
       rows={rows}
       className={[
-        'w-full px-4 py-3 rounded-2xl',
-        'border-2 border-[#A2B6CB]/40 bg-white',
-        'text-[#254662] text-base placeholder-[#A2B6CB]',
-        'focus:outline-none focus:border-[#EFB973] transition-colors',
+        'w-full rounded-[1.35rem] border bg-white px-4 py-3',
+        'border-[rgba(151,166,210,0.28)] text-[var(--color-ink)] text-base placeholder-[var(--color-ink-soft)]',
+        'focus:border-[var(--color-accent)] focus:outline-none transition-colors',
         'resize-none',
       ].join(' ')}
     />

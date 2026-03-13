@@ -30,7 +30,7 @@ export default function DesignV3() {
       <div style={{ padding: '4px 28px 0' }}>
         <p style={{ fontSize: 14, color: '#A0A0B8', marginBottom: 5, fontWeight: 500 }}>Your results are ready</p>
         <h1 style={{ fontSize: 30, fontWeight: 700, color: '#2D2D3A', lineHeight: 1.2, letterSpacing: -0.8 }}>
-          Here's your<br />energy picture
+          Here&apos;s your<br />energy picture
         </h1>
       </div>
 

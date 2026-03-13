@@ -18,14 +18,25 @@ export function AnswerSingle({ options, value, onChange }: Props) {
             key={option.value}
             onClick={() => onChange(option.value)}
             className={[
-              'w-full px-5 py-4 rounded-2xl text-left text-base font-medium',
-              'border-2 transition-all duration-150 active:scale-[0.98]',
+              'w-full rounded-[1.35rem] border px-5 py-4 text-left text-base transition-all duration-150 active:scale-[0.98]',
               selected
-                ? 'border-[#EFB973] bg-[#EFB973]/15 text-[#254662]'
-                : 'border-[#A2B6CB]/40 bg-white text-[#254662] hover:border-[#EFB973]/60 hover:bg-[#EFB973]/5',
+                ? 'border-[rgba(119,101,244,0.2)] bg-[var(--color-accent-soft)] text-[var(--color-ink)] shadow-[0_10px_18px_rgba(119,101,244,0.16)]'
+                : 'border-[rgba(151,166,210,0.28)] bg-white text-[var(--color-ink)]',
             ].join(' ')}
           >
-            {option.label}
+            <div className="flex items-center justify-between gap-4">
+              <span className="font-medium">{option.label}</span>
+              <span
+                className={[
+                  'flex h-6 w-6 shrink-0 items-center justify-center rounded-full border text-xs font-bold',
+                  selected
+                    ? 'border-[var(--color-accent)] bg-[var(--color-accent)] text-white'
+                    : 'border-[rgba(9,9,15,0.15)] text-transparent',
+                ].join(' ')}
+              >
+                ✓
+              </span>
+            </div>
           </button>
         );
       })}

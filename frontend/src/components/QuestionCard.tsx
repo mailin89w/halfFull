@@ -2,6 +2,7 @@
 
 import type { Question } from '@/src/lib/questions';
 import { MODULE_COLORS, MODULE_LABELS } from '@/src/lib/questions';
+import type { LabUploadAnswer } from '@/src/lib/types';
 import { AnswerSingle } from './AnswerSingle';
 import { AnswerMultiple } from './AnswerMultiple';
 import { AnswerScale } from './AnswerScale';
@@ -68,8 +69,18 @@ export function QuestionCard({ question, value, onChange }: Props) {
       case 'file_upload':
         return (
           <AnswerFileUpload
+            value={value as LabUploadAnswer | undefined}
+            onChange={(v) => onChange(v)}
+          />
+        );
+
+      case 'free_text':
+        return (
+          <AnswerFreeText
             value={value as string | undefined}
             onChange={(v) => onChange(v)}
+            placeholder="Describe any other symptoms — brain fog, palpitations, hair loss, temperature sensitivity…"
+            rows={5}
           />
         );
 
@@ -84,29 +95,29 @@ export function QuestionCard({ question, value, onChange }: Props) {
   };
 
   return (
-    <div className="bg-white rounded-3xl p-6 shadow-[0_4px_24px_rgba(37,70,98,0.08)] flex flex-col gap-5">
-      {/* Module badge + question id label */}
-      <div className="flex items-center gap-2 flex-wrap">
+    <div className="section-card flex flex-col gap-6 p-6">
+      <div className="flex items-center justify-between gap-3">
         <span
-          className="px-3 py-1 rounded-full text-xs font-semibold text-[#254662]"
-          style={{ backgroundColor: `${accentColor}33` }}
+          className="pill-tag text-[var(--color-ink)]"
+          style={{ backgroundColor: `${accentColor}44` }}
         >
           {moduleLabel}
         </span>
-        <span className="text-xs text-[#A2B6CB] font-medium">{idToLabel(question.id)}</span>
+        <span className="text-[11px] font-bold uppercase tracking-[0.16em] text-[var(--color-ink-soft)]">
+          {idToLabel(question.id)}
+        </span>
       </div>
 
-      {/* Question text */}
-      <h2 className="text-xl font-semibold text-[#254662] leading-snug">
+      <h2 className="text-[1.9rem] font-bold leading-[1] tracking-[-0.05em] text-[var(--color-ink)] sm:text-[2.2rem]">
         {question.text}
       </h2>
 
-      {/* Help text */}
       {question.help_text && (
-        <p className="text-sm text-[#A2B6CB] -mt-2 leading-relaxed">{question.help_text}</p>
+        <p className="-mt-3 max-w-[30rem] text-sm leading-6 text-[var(--color-ink-soft)]">
+          {question.help_text}
+        </p>
       )}
 
-      {/* Answer input */}
       {renderInput()}
     </div>
   );

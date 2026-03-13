@@ -29,11 +29,11 @@ export function AnswerScale({
               key={n}
               onClick={() => onChange(n)}
               className={[
-                'aspect-square rounded-xl text-sm font-semibold',
-                'border-2 transition-all duration-150 active:scale-[0.92]',
+                'aspect-square rounded-2xl text-sm font-bold',
+                'border transition-all duration-150 active:scale-[0.92]',
                 selected
-                  ? 'border-[#EFB973] bg-[#EFB973] text-[#254662]'
-                  : 'border-[#A2B6CB]/40 bg-white text-[#254662] hover:border-[#EFB973]/60 hover:bg-[#EFB973]/5',
+                  ? 'border-[var(--color-accent)] bg-[var(--color-accent)] text-white shadow-[0_10px_18px_rgba(119,101,244,0.2)]'
+                  : 'border-[rgba(151,166,210,0.28)] bg-white text-[var(--color-ink)]',
               ].join(' ')}
             >
               {n}
@@ -41,7 +41,7 @@ export function AnswerScale({
           );
         })}
       </div>
-      <div className="flex justify-between text-xs text-[#A2B6CB] px-0.5">
+      <div className="flex justify-between px-0.5 text-xs text-[var(--color-ink-soft)]">
         <span>{lowLabel}</span>
         <span>{highLabel}</span>
       </div>
