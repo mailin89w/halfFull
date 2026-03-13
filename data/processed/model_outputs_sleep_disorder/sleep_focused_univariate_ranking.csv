@@ -1,0 +1,17 @@
+feature,feature_type,missing_pct_train,n_unique_train,association_metric,association_value,abs_association,p_value,n_train_non_null
+dpq040___feeling_tired_or_having_little_energy,categorical,12.81,6,cramers_v,0.29106292670571104,0.29106292670571104,9.354725352211087e-93,5187
+cdq010___shortness_of_breath_on_stairs/inclines,categorical,43.69,3,cramers_v,0.2711296375045243,0.2711296375045243,3.3474553605803726e-54,3350
+bpq020___ever_told_you_had_high_blood_pressure,categorical,0.0,3,cramers_v,0.22652849257350555,0.22652849257350555,5.135945296773546e-67,5949
+slq030___how_often_do_you_snore?,categorical,0.0,6,cramers_v,0.21531423295785115,0.21531423295785115,1.5917444055577264e-57,5949
+mcq160p___ever_told_you_had_copd_emphysema,categorical,6.44,3,cramers_v,0.18173427620923738,0.18173427620923738,1.2071915192099055e-40,5566
+slq300___usual_sleep_time_on_weekdays_or_workdays,categorical,0.62,64,cramers_v,0.14584327762504606,0.14584327762504606,4.537005084452035e-06,5912
+slq310___usual_wake_time_on_weekdays_or_workdays,categorical,0.61,107,cramers_v,0.14472272978032527,0.14472272978032527,0.11349962928004133,5913
+mcq010___ever_been_told_you_have_asthma,categorical,0.0,3,cramers_v,0.14411662900262942,0.14411662900262942,1.4778881097671855e-27,5949
+slq330___usual_wake_time_on_weekends,categorical,0.59,64,cramers_v,0.13556770740972146,0.13556770740972146,0.00030985122618210916,5914
+slq320___usual_sleep_time_on_weekends,categorical,0.62,55,cramers_v,0.10284331921720068,0.10284331921720068,0.19918016283893156,5912
+alq111___ever_had_a_drink_of_any_kind_of_alcohol,categorical,12.51,2,cramers_v,0.08987892737137868,0.08987892737137868,8.909925574309917e-11,5205
+sld013___sleep_hours___weekends,numeric,0.89,24,pointbiserial,-0.08901134412572566,0.08901134412572566,7.545815854845062e-12,5896
+paq605___vigorous_work_activity,categorical,0.0,4,cramers_v,0.03592415497732087,0.03592415497732087,0.053170052536889965,5949
+sld012___sleep_hours___weekdays_or_workdays,numeric,0.76,24,pointbiserial,-0.02932336188688372,0.02932336188688372,0.024250263621315684,5904
+alq170___past_30_days_#_times_4_5_drinks_on_an_oc,numeric,35.35,21,pointbiserial,0.020462503795334208,0.020462503795334208,0.20453896459215884,3846
+paq665___moderate_recreational_activities,categorical,0.0,2,cramers_v,0.01610047440280791,0.01610047440280791,0.21430086381247154,5949
