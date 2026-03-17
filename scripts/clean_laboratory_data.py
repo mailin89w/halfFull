@@ -150,6 +150,9 @@ def main() -> None:
     # Keep one row per participant
     lab_df = lab_df.drop_duplicates(subset="SEQN")
 
+    # Sort and reset row index
+    lab_df = lab_df.sort_values("SEQN").reset_index(drop=True)
+
     # Quality checks
     print("Shape:", lab_df.shape)
     print("Unique participants:", lab_df["SEQN"].nunique())

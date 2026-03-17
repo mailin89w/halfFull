@@ -1,0 +1,113 @@
+feature,dtype,missing_pct,n_unique,example_values,is_binary_like,keep_for_model,drop_reason
+mcq149___menstrual_periods_started_yet?,float64,100.0,0,[],True,False,too_few_non_null
+mcq151___age_in_years_at_first_menstrual_period,float64,100.0,0,[],True,False,too_few_non_null
+smq621___cigarettes_smoked_in_entire_life,float64,100.0,0,[],True,False,too_few_non_null
+mcq230c___what_kind_of_cancer_third_mention,float64,99.93,4,"[np.float64(20.0), np.float64(23.0), np.float64(38.0), np.float64(15.0)]",False,False,too_few_non_null
+cdq009g___pain_in_left_arm,float64,99.85,1,[np.float64(7.0)],False,False,too_few_non_null
+cdq009c___pain_in_neck,float64,99.84,1,[np.float64(3.0)],False,False,too_few_non_null
+cdq009a___pain_in_right_arm,float64,99.81,1,[np.float64(1.0)],True,False,too_few_non_null
+mcq230b___what_kind_of_cancer_second_mention,float64,99.61,15,"[np.float64(37.0), np.float64(16.0), np.float64(39.0), np.float64(24.0), np.float64(28.0)]",False,False,too_few_non_null
+cdq009b___pain_in_right_chest,float64,99.41,1,[np.float64(2.0)],False,False,too_few_non_null
+cdq009e___pain_in_lower_sternum,float64,99.23,1,[np.float64(5.0)],False,False,too_few_non_null
+cdq009f___pain_in_left_chest,float64,98.74,1,[np.float64(6.0)],False,False,too_few_non_null
+cdq009d___pain_in_upper_sternum,float64,98.23,1,[np.float64(4.0)],False,False,too_few_non_null
+kiq025___received_dialysis_in_past_12_months?,float64,97.5,2,"[np.float64(2.0), np.float64(1.0)]",False,False,too_few_non_null
+cdq006___how_soon_is_the_pain_relieved,float64,96.18,3,"[np.float64(2.0), np.float64(1.0), np.float64(9.0)]",False,False,too_few_non_null
+cdq005___does_standing_relieve_pain/discomfort,float64,95.37,3,"[np.float64(1.0), np.float64(2.0), np.float64(9.0)]",False,False,too_few_non_null
+cdq004___if_so_does_sp_continue_or_slow_down,float64,94.82,2,"[np.float64(1.0), np.float64(2.0)]",False,False,too_few_non_null
+kiq470___how_frequently_does_this_occur?,float64,94.63,4,"[np.float64(2.0), np.float64(1.0), np.float64(3.0), np.float64(4.0)]",False,False,too_few_non_null
+cdq003___during_an_ordinary_pace_on_level_ground,float64,94.55,2,"[np.float64(2.0), np.float64(1.0)]",False,False,too_few_non_null
+mcq230a___what_kind_of_cancer_first_mention,float64,94.54,28,"[np.float64(14.0), np.float64(30.0), np.float64(16.0), np.float64(38.0), np.float64(35.0)]",False,False,too_few_non_null
+mcq570___age_when_1st_had_gallbladder_surgery?,float64,92.15,51,"[np.float64(35.0), np.float64(31.0), np.float64(37.0), np.float64(23.0), np.float64(59.0)]",False,False,too_missing
+kiq029___pass_kidney_stone_in_past_12_months?,float64,91.93,3,"[np.float64(2.0), np.float64(1.0), np.float64(9.0)]",False,False,too_missing
+mcq170m___still_have_thyroid_problem,float64,91.42,3,"[np.float64(1.0), np.float64(2.0), np.float64(9.0)]",False,False,too_missing
+mcq050___emergency_care_visit_for_asthma/past_yr,float64,90.13,2,"[np.float64(2.0), np.float64(1.0)]",False,False,too_missing
+mcq040___had_asthma_attack_in_past_year,float64,90.13,3,"[np.float64(2.0), np.float64(1.0), np.float64(9.0)]",False,False,too_missing
+alq290___#_times_12+_drinks_in_1_day/past_12_mos,float64,88.14,12,"[np.float64(0.0), np.float64(8.0), np.float64(10.0), np.float64(9.0), np.float64(7.0)]",False,False,too_missing
+smq078___how_soon_after_waking_do_you_smoke,float64,85.16,8,"[np.float64(2.0), np.float64(1.0), np.float64(4.0), np.float64(7.0), np.float64(3.0)]",False,False,too_missing
+cdq008___severe_pain_in_chest_more_than_half_hour,float64,83.81,3,"[np.float64(2.0), np.float64(1.0), np.float64(9.0)]",False,False,too_missing
+cdq002___sp_get_it_walking_uphill_or_in_a_hurry,float64,83.81,4,"[np.float64(2.0), np.float64(1.0), np.float64(3.0), np.float64(9.0)]",False,False,too_missing
+mcq035___still_have_asthma,float64,83.19,4,"[np.float64(1.0), np.float64(2.0), np.float64(9.0), np.float64(7.0)]",False,False,too_missing
+mcq025___age_when_first_had_asthma,float64,83.19,64,"[np.float64(9.0), np.float64(52.0), np.float64(63.0), np.float64(4.0), np.float64(6.0)]",False,False,too_missing
+kiq450___how_frequently_does_this_occur?,float64,82.73,5,"[np.float64(2.0), np.float64(1.0), np.float64(3.0), np.float64(4.0), np.float64(9.0)]",False,False,too_missing
+smq050u___unit_of_measure_(day/week/month/year),float64,82.37,4,"[np.float64(3.0), np.float64(4.0), np.float64(2.0), np.float64(1.0)]",False,False,too_missing
+smq050q___how_long_since_quit_smoking_cigarettes,float64,82.32,50,"[np.float64(8.0), np.float64(1.0), np.float64(3.0), np.float64(4.0), np.float64(17.0)]",False,False,too_missing
+kiq430___how_frequently_does_this_occur?,float64,81.05,5,"[np.float64(1.0), np.float64(3.0), np.float64(2.0), np.float64(4.0), np.float64(7.0)]",False,False,too_missing
+bpq100d___now_taking_prescribed_medicine,float64,80.99,3,"[np.float64(1.0), np.float64(2.0), np.float64(9.0)]",False,False,too_missing
+smq670___tried_to_quit_smoking,float64,80.26,2,"[np.float64(1.0), np.float64(2.0)]",False,False,too_missing
+mcq540___ever_seen_a_dr_about_this_pain,float64,79.39,3,"[np.float64(1.0), np.float64(2.0), np.float64(9.0)]",False,False,too_missing
+mcq530___where_was_the_most_uncomfortable_pain,float64,79.39,4,"[np.float64(3.0), np.float64(2.0), np.float64(9.0), np.float64(1.0)]",False,False,too_missing
+mcq195___which_type_of_arthritis_was_it?,float64,79.14,6,"[np.float64(3.0), np.float64(4.0), np.float64(9.0), np.float64(2.0), np.float64(1.0)]",False,False,too_missing
+kiq010___how_much_urine_lose_each_time?,float64,75.5,4,"[np.float64(1.0), np.float64(2.0), np.float64(3.0), np.float64(9.0)]",False,False,too_missing
+bpq050a___now_taking_prescribed_medicine_for_hbp,float64,74.94,2,"[np.float64(1.0), np.float64(2.0)]",False,False,too_missing
+paq640___number_of_days_walk_or_bicycle,float64,74.33,8,"[np.float64(4.0), np.float64(5.0), np.float64(7.0), np.float64(3.0), np.float64(2.0)]",False,False,too_missing
+paq610___number_of_days_vigorous_work,float64,72.0,8,"[np.float64(5.0), np.float64(3.0), np.float64(1.0), np.float64(2.0), np.float64(6.0)]",False,False,too_missing
+bpq030___told_had_high_blood_pressure___2+_times,float64,71.36,3,"[np.float64(2.0), np.float64(1.0), np.float64(9.0)]",False,False,too_missing
+bpq040a___taking_prescription_for_hypertension,float64,71.36,3,"[np.float64(2.0), np.float64(1.0), np.float64(9.0)]",False,False,too_missing
+paq655___days_vigorous_recreational_activities,float64,70.2,8,"[np.float64(5.0), np.float64(6.0), np.float64(4.0), np.float64(1.0), np.float64(7.0)]",False,False,too_missing
+kiq050___how_much_did_urine_leakage_bother_you?,float64,69.97,5,"[np.float64(3.0), np.float64(1.0), np.float64(2.0), np.float64(4.0), np.float64(5.0)]",False,False,too_missing
+kiq052___how_much_were_daily_activities_affected?,float64,69.97,5,"[np.float64(1.0), np.float64(2.0), np.float64(3.0), np.float64(5.0), np.float64(4.0)]",False,False,too_missing
+alq270___#_times_4_5_drinks_in_2hrs/past_12_mos,float64,69.32,13,"[np.float64(0.0), np.float64(10.0), np.float64(3.0), np.float64(5.0), np.float64(8.0)]",False,False,too_missing
+alq280___#_times_8+_drinks_in_1_day/past_12_mos,float64,69.32,13,"[np.float64(0.0), np.float64(10.0), np.float64(6.0), np.float64(7.0), np.float64(8.0)]",False,False,too_missing
+smq040___do_you_now_smoke_cigarettes?,float64,62.58,3,"[np.float64(1.0), np.float64(3.0), np.float64(2.0)]",False,False,too_missing
+paq670___days_moderate_recreational_activities,float64,57.7,8,"[np.float64(4.0), np.float64(5.0), np.float64(2.0), np.float64(7.0), np.float64(3.0)]",False,True,
+paq625___number_of_days_moderate_work,float64,54.2,8,"[np.float64(5.0), np.float64(2.0), np.float64(4.0), np.float64(3.0), np.float64(7.0)]",False,True,
+cdq001___sp_ever_had_pain_or_discomfort_in_chest,float64,43.83,3,"[np.float64(1.0), np.float64(2.0), np.float64(9.0)]",False,True,
+cdq010___shortness_of_breath_on_stairs/inclines,float64,43.83,3,"[np.float64(1.0), np.float64(2.0), np.float64(9.0)]",False,True,
+alq170___past_30_days_#_times_4_5_drinks_on_an_oc,float64,35.35,23,"[np.float64(0.0), np.float64(30.0), np.float64(10.0), np.float64(3.0), np.float64(1.0)]",False,True,
+alq142___#_days_have_4_or_5_drinks/past_12_mos,float64,34.89,13,"[np.float64(0.0), np.float64(4.0), np.float64(10.0), np.float64(1.0), np.float64(8.0)]",False,True,
+alq130___avg_#_alcoholic_drinks/day___past_12_mos,float64,34.89,15,"[np.float64(1.0), np.float64(6.0), np.float64(2.0), np.float64(4.0), np.float64(3.0)]",False,True,
+alq151___ever_have_4/5_or_more_drinks_every_day?,float64,21.69,3,"[np.float64(2.0), np.float64(1.0), np.float64(9.0)]",False,True,
+alq121___past_12_mo_how_often_drink_alcoholic_bev,float64,21.68,13,"[np.float64(10.0), np.float64(0.0), np.float64(4.0), np.float64(6.0), np.float64(9.0)]",False,True,
+kiq046___leak_urine_during_nonphysical_activities,float64,18.14,4,"[np.float64(2.0), np.float64(1.0), np.float64(7.0), np.float64(9.0)]",False,True,
+kiq480___how_many_times_urinate_in_night?,float64,18.14,8,"[np.float64(0.0), np.float64(2.0), np.float64(1.0), np.float64(3.0), np.float64(4.0)]",False,True,
+kiq044___urinated_before_reaching_the_toilet?,float64,18.13,4,"[np.float64(2.0), np.float64(1.0), np.float64(7.0), np.float64(9.0)]",False,True,
+kiq042___leak_urine_during_physical_activities?,float64,18.11,4,"[np.float64(2.0), np.float64(1.0), np.float64(7.0), np.float64(9.0)]",False,True,
+kiq005___how_often_have_urinary_leakage?,float64,18.1,7,"[np.float64(1.0), np.float64(2.0), np.float64(4.0), np.float64(3.0), np.float64(5.0)]",False,True,
+dpq040___feeling_tired_or_having_little_energy,float64,13.03,6,"[np.float64(0.0), np.float64(2.0), np.float64(1.0), np.float64(3.0), np.float64(9.0)]",False,True,
+alq111___ever_had_a_drink_of_any_kind_of_alcohol,float64,12.75,2,"[np.float64(1.0), np.float64(2.0)]",False,True,
+kiq022___ever_told_you_had_weak/failing_kidneys?,float64,6.2,3,"[np.float64(2.0), np.float64(1.0), np.float64(9.0)]",False,True,
+kiq026___ever_had_kidney_stones?,float64,6.2,3,"[np.float64(2.0), np.float64(1.0), np.float64(9.0)]",False,True,
+mcq160a___ever_told_you_had_arthritis,float64,6.2,3,"[np.float64(2.0), np.float64(1.0), np.float64(9.0)]",False,True,
+mcq160b___ever_told_you_had_congestive_heart_failure,float64,6.2,3,"[np.float64(2.0), np.float64(1.0), np.float64(9.0)]",False,True,
+mcq160c___ever_told_you_had_coronary_heart_disease,float64,6.2,3,"[np.float64(2.0), np.float64(1.0), np.float64(9.0)]",False,True,
+mcq160d___ever_told_you_had_angina,float64,6.2,3,"[np.float64(2.0), np.float64(1.0), np.float64(9.0)]",False,True,
+mcq160e___ever_told_you_had_heart_attack,float64,6.2,3,"[np.float64(2.0), np.float64(1.0), np.float64(9.0)]",False,True,
+mcq160f___ever_told_you_had_stroke,float64,6.2,3,"[np.float64(2.0), np.float64(1.0), np.float64(9.0)]",False,True,
+mcq160p___ever_told_you_had_copd_emphysema,float64,6.2,3,"[np.float64(2.0), np.float64(1.0), np.float64(9.0)]",False,True,
+mcq220___ever_told_you_had_cancer_or_malignancy,float64,6.2,3,"[np.float64(2.0), np.float64(1.0), np.float64(9.0)]",False,True,
+mcq300a___close_relative_had_heart_attack,float64,6.2,3,"[np.float64(2.0), np.float64(1.0), np.float64(9.0)]",False,True,
+mcq300c___close_relative_had_diabetes,float64,6.2,3,"[np.float64(1.0), np.float64(2.0), np.float64(9.0)]",False,True,
+mcq520___abdominal_pain_during_past_12_months?,float64,6.2,3,"[np.float64(2.0), np.float64(1.0), np.float64(9.0)]",False,True,
+mcq550___has_dr_ever_said_you_have_gallstones,float64,6.2,3,"[np.float64(2.0), np.float64(1.0), np.float64(9.0)]",False,True,
+mcq560___ever_had_gallbladder_surgery?,float64,6.2,3,"[np.float64(2.0), np.float64(1.0), np.float64(9.0)]",False,True,
+mcq160m___ever_told_you_had_thyroid_problem,float64,6.2,4,"[np.float64(2.0), np.float64(1.0), np.float64(9.0), np.float64(7.0)]",False,True,
+sld013___sleep_hours___weekends,float64,0.86,24,"[np.float64(8.0), np.float64(13.0), np.float64(10.0), np.float64(9.0), np.float64(4.5)]",False,True,
+sld012___sleep_hours___weekdays_or_workdays,float64,0.71,24,"[np.float64(7.5), np.float64(8.0), np.float64(8.5), np.float64(10.0), np.float64(6.5)]",False,True,
+slq300___usual_sleep_time_on_weekdays_or_workdays,str,0.65,65,"['22:00', '00:00', '23:00', '08:00', '01:00']",False,True,
+slq310___usual_wake_time_on_weekdays_or_workdays,str,0.62,113,"['05:30', '08:00', '06:30', '09:00', '14:35']",False,True,
+slq320___usual_sleep_time_on_weekends,str,0.59,59,"['23:00', '03:00', '21:00', '22:00', '00:00']",False,True,
+slq330___usual_wake_time_on_weekends,str,0.58,70,"['07:00', '11:00', '12:00', '05:00', '08:00']",False,True,
+paq650___vigorous_recreational_activities,float64,0.0,2,"[np.float64(1.0), np.float64(2.0)]",False,True,
+paq665___moderate_recreational_activities,float64,0.0,2,"[np.float64(1.0), np.float64(2.0)]",False,True,
+bpq020___ever_told_you_had_high_blood_pressure,float64,0.0,3,"[np.float64(2.0), np.float64(1.0), np.float64(9.0)]",False,True,
+huq071___overnight_hospital_patient_in_last_year,float64,0.0,3,"[np.float64(2.0), np.float64(1.0), np.float64(9.0)]",False,True,
+huq090___seen_mental_health_professional/past_yr,float64,0.0,3,"[np.float64(2.0), np.float64(1.0), np.float64(9.0)]",False,True,
+mcq010___ever_been_told_you_have_asthma,float64,0.0,3,"[np.float64(2.0), np.float64(1.0), np.float64(9.0)]",False,True,
+mcq053___taking_treatment_for_anemia/past_3_mos,float64,0.0,3,"[np.float64(2.0), np.float64(1.0), np.float64(9.0)]",False,True,
+mcq092___ever_receive_blood_transfusion,float64,0.0,3,"[np.float64(9.0), np.float64(2.0), np.float64(1.0)]",False,True,
+mcq300b___close_relative_had_asthma,float64,0.0,3,"[np.float64(2.0), np.float64(9.0), np.float64(1.0)]",False,True,
+mcq366b___doctor_told_to_increase_exercise,float64,0.0,3,"[np.float64(2.0), np.float64(1.0), np.float64(9.0)]",False,True,
+mcq366c___doctor_told_to_reduce_salt,float64,0.0,3,"[np.float64(2.0), np.float64(1.0), np.float64(9.0)]",False,True,
+mcq366d___doctor_told_to_reduce_fat_in_diet,float64,0.0,3,"[np.float64(1.0), np.float64(2.0), np.float64(9.0)]",False,True,
+mcq371b___doing_increasing_exercise,float64,0.0,3,"[np.float64(1.0), np.float64(2.0), np.float64(9.0)]",False,True,
+mcq371c___doing_reducing_salt,float64,0.0,3,"[np.float64(1.0), np.float64(2.0), np.float64(9.0)]",False,True,
+paq620___moderate_work_activity,float64,0.0,3,"[np.float64(2.0), np.float64(1.0), np.float64(9.0)]",False,True,
+paq635___walk_or_bicycle,float64,0.0,3,"[np.float64(2.0), np.float64(1.0), np.float64(9.0)]",False,True,
+mcq371d___doing_reducing_fat_in_diet,float64,0.0,4,"[np.float64(1.0), np.float64(2.0), np.float64(7.0), np.float64(9.0)]",False,True,
+paq605___vigorous_work_activity,float64,0.0,4,"[np.float64(2.0), np.float64(1.0), np.float64(9.0), np.float64(7.0)]",False,True,
+smq020___smoked_at_least_100_cigarettes_in_life,float64,0.0,4,"[np.float64(2.0), np.float64(1.0), np.float64(7.0), np.float64(9.0)]",False,True,
+huq030___routine_place_to_go_for_healthcare,float64,0.0,5,"[np.float64(1.0), np.float64(2.0), np.float64(3.0), np.float64(7.0), np.float64(9.0)]",False,True,
+slq030___how_often_do_you_snore?,float64,0.0,6,"[np.float64(1.0), np.float64(0.0), np.float64(2.0), np.float64(3.0), np.float64(9.0)]",False,True,
+huq010___general_health_condition,float64,0.0,7,"[np.float64(3.0), np.float64(1.0), np.float64(4.0), np.float64(2.0), np.float64(5.0)]",False,True,
+huq051___#times_receive_healthcare_over_past_year,float64,0.0,10,"[np.float64(1.0), np.float64(0.0), np.float64(2.0), np.float64(3.0), np.float64(5.0)]",False,True,
