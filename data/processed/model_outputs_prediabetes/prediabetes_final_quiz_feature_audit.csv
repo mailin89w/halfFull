@@ -1,0 +1,7 @@
+feature,dtype,missing_pct,n_unique,example_values,is_binary_like
+mcq300c___close_relative_had_diabetes,float64,6.2,3,"[np.float64(1.0), np.float64(2.0), np.float64(9.0)]",False
+cos_weekday_bedtime,float64,1.29,59,"[np.float64(0.8660254037844384), np.float64(1.0), np.float64(0.9659258262890683), np.float64(-0.4999999999999998), np.float64(0.7071067811865474), np.float64(-1.8369701987210297e-16), np.float64(0.9238795325112868), np.float64(0.5000000000000001), np.float64(0.9914448613738104), np.float64(-0.7071067811865475)]",False
+sleep_hours_weekend,float64,0.86,24,"[np.float64(8.0), np.float64(13.0), np.float64(10.0), np.float64(9.0), np.float64(4.5), np.float64(6.5), np.float64(7.0), np.float64(14.0), np.float64(11.0), np.float64(7.5)]",False
+paq650___vigorous_recreational_activities,float64,0.0,2,"[np.float64(1.0), np.float64(2.0)]",False
+"whq040___like_to_weigh_more,_less_or_same",float64,0.0,4,"[np.float64(2.0), np.float64(1.0), np.float64(3.0), np.float64(9.0)]",False
+slq030___how_often_do_you_snore?,float64,0.0,6,"[np.float64(1.0), np.float64(0.0), np.float64(2.0), np.float64(3.0), np.float64(9.0), np.float64(7.0)]",False
