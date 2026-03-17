@@ -1,0 +1,22 @@
+{
+  "model_name": "electrolyte_imbalance_logreg_final_quiz",
+  "target": "electrolyte_imbalance",
+  "features": [
+    "bpq020___ever_told_you_had_high_blood_pressure",
+    "kiq480___how_many_times_urinate_in_night?",
+    "paq650___vigorous_recreational_activities",
+    "med_count",
+    "dpq040___feeling_tired_or_having_little_energy",
+    "kiq026___ever_had_kidney_stones?",
+    "mcq160a___ever_told_you_had_arthritis",
+    "kiq022___ever_told_you_had_weak/failing_kidneys?"
+  ],
+  "threshold": 0.5,
+  "metrics": {
+    "roc_auc": 0.672059,
+    "avg_precision": 0.157008,
+    "precision": 0.136538,
+    "recall": 0.612069,
+    "f1": 0.22327
+  }
+}
