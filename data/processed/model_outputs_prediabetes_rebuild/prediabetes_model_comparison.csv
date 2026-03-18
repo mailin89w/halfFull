@@ -1,0 +1,6 @@
+run,n_features,cv_best_score_avg_precision,roc_auc,avg_precision,precision,recall,f1,best_params
+broad_quiz_demo_med,74,0.2038,0.7265,0.2053,0.1576,0.6397,0.2529,"{""model__C"": 0.1, ""model__penalty"": ""l1"", ""model__solver"": ""saga""}"
+broad_quiz_only,71,0.1914,0.7282,0.2023,0.1616,0.6618,0.2597,"{""model__C"": 0.1, ""model__penalty"": ""l1"", ""model__solver"": ""saga""}"
+focused_quiz_demo_med_screening_labs,11,0.1507,0.6704,0.1531,0.1414,0.6985,0.2351,"{""model__C"": 0.1, ""model__penalty"": ""l1"", ""model__solver"": ""liblinear""}"
+focused_quiz_demo_med_augmented_labs,12,0.1521,0.6666,0.1463,0.139,0.6765,0.2306,"{""model__C"": 10, ""model__penalty"": ""l2"", ""model__solver"": ""liblinear""}"
+focused_quiz_demo_med,7,0.1496,0.6569,0.1438,0.1361,0.6765,0.2266,"{""model__C"": 3, ""model__penalty"": ""l2"", ""model__solver"": ""saga""}"
