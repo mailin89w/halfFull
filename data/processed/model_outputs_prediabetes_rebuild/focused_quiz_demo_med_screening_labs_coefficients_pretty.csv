@@ -1,0 +1,24 @@
+pretty_feature,coefficient,abs_coefficient,transformed_feature
+Weight preference / perception: Would like to weigh less,-0.45517200749002973,0.45517200749002973,"cat__whq040___like_to_weigh_more,_less_or_same_1.0"
+Weight preference / perception: Would like to weigh more,0.4418030479433207,0.4418030479433207,"cat__whq040___like_to_weigh_more,_less_or_same_2.0"
+Close relative had diabetes: No,-0.43524626497536784,0.43524626497536784,cat__mcq300c___close_relative_had_diabetes_2.0
+Age (years),0.38380363158176645,0.38380363158176645,num__age_years
+How often do you snore?: Never,-0.30829565078612686,0.30829565078612686,cat__slq030___how_often_do_you_snore?_0.0
+Gender: Male,-0.26021987827373927,0.26021987827373927,cat__gender_Male
+Urine albumin-creatinine ratio (UACR),-0.17259774933813862,0.17259774933813862,num__uacr_mg_g
+How often do you snore?: Often,0.1620302788462268,0.1620302788462268,cat__slq030___how_often_do_you_snore?_3.0
+HDL cholesterol,-0.13595491088695932,0.13595491088695932,num__hdl_cholesterol_mg_dl
+Total cholesterol,0.0742763993439495,0.0742763993439495,num__total_cholesterol_mg_dl
+Total cholesterol missing,-0.04713820879497216,0.04713820879497216,num__missingindicator_total_cholesterol_mg_dl
+How often do you snore?: Rarely,-0.02562666290151437,0.02562666290151437,cat__slq030___how_often_do_you_snore?_1.0
+Urine albumin-creatinine ratio (UACR) missing,-0.025449868117370798,0.025449868117370798,num__missingindicator_uacr_mg_g
+Triglycerides,0.020287774633891094,0.020287774633891094,num__triglycerides_mg_dl
+HDL cholesterol missing,-0.0112504691599194,0.0112504691599194,num__missingindicator_hdl_cholesterol_mg_dl
+Triglycerides missing,0.0,0.0,num__missingindicator_triglycerides_mg_dl
+Medication count,0.0,0.0,num__med_count
+Close relative had diabetes: Yes,0.0,0.0,cat__mcq300c___close_relative_had_diabetes_1.0
+How often do you snore?: Sometimes,0.0,0.0,cat__slq030___how_often_do_you_snore?_2.0
+Vigorous recreational activities: No,0.0,0.0,cat__paq650___vigorous_recreational_activities_2.0
+Vigorous recreational activities: Yes,0.0,0.0,cat__paq650___vigorous_recreational_activities_1.0
+Weight preference / perception: Would like to stay the same,0.0,0.0,"cat__whq040___like_to_weigh_more,_less_or_same_3.0"
+Gender: Female,0.0,0.0,cat__gender_Female

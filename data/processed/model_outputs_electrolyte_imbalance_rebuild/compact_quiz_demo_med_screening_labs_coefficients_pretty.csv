@@ -1,0 +1,40 @@
+pretty_feature,coefficient,abs_coefficient,transformed_feature
+Total cholesterol missing,-0.5587022499210736,0.5587022499210736,num__missingindicator_total_cholesterol_mg_dl
+HDL cholesterol missing,-0.5587022499210736,0.5587022499210736,num__missingindicator_hdl_cholesterol_mg_dl
+Ever told had high blood pressure: No,-0.24077267045528644,0.24077267045528644,cat__bpq020___ever_told_you_had_high_blood_pressure_2.0
+Ever told had high blood pressure: Yes,0.1997496336140152,0.1997496336140152,cat__bpq020___ever_told_you_had_high_blood_pressure_1.0
+Urinate at night: 1.0,-0.18299043176697996,0.18299043176697996,cat__kiq480___how_many_times_urinate_in_night?_1.0
+Tired / little energy: 2.0,-0.17921968754928375,0.17921968754928375,cat__dpq040___feeling_tired_or_having_little_energy_2.0
+Medication count,0.17815414777647495,0.17815414777647495,num__med_count
+Vigorous recreational activities: Yes,-0.16306281031559902,0.16306281031559902,cat__paq650___vigorous_recreational_activities_1.0
+Urinate at night: 0.0,-0.1566190375939741,0.1566190375939741,cat__kiq480___how_many_times_urinate_in_night?_0.0
+Triglycerides missing,0.14793859599351386,0.14793859599351386,num__missingindicator_triglycerides_mg_dl
+Alcohol risk signal: Any risk signal,-0.12947176391640958,0.12947176391640958,cat__alcohol_any_risk_signal_1.0
+Vigorous recreational activities: No,0.12203977347432544,0.12203977347432544,cat__paq650___vigorous_recreational_activities_2.0
+Urinate at night: 5.0,0.11457218019464081,0.11457218019464081,cat__kiq480___how_many_times_urinate_in_night?_5.0
+HDL cholesterol,0.10781998519191337,0.10781998519191337,num__hdl_cholesterol_mg_dl
+How often urinary leakage: 3.0,-0.10764908493963747,0.10764908493963747,cat__kiq005___how_often_have_urinary_leakage?_3.0
+Ever had kidney stones: No,-0.10480528598313481,0.10480528598313481,cat__kiq026___ever_had_kidney_stones?_2.0
+UACR,0.09860552324670199,0.09860552324670199,num__uacr_mg_g
+Ever told had weak/failing kidneys: No,-0.09588654804332149,0.09588654804332149,cat__kiq022___ever_told_you_had_weak/failing_kidneys?_2.0
+Alcohol risk signal: No risk signal,0.08844872707514494,0.08844872707514494,cat__alcohol_any_risk_signal_0.0
+Gender: Male,-0.0853259644510392,0.0853259644510392,cat__gender_Male
+Triglycerides,0.084992903262913,0.084992903262913,num__triglycerides_mg_dl
+Ever told had arthritis: No,-0.0821625258061845,0.0821625258061845,cat__mcq160a___ever_told_you_had_arthritis_2.0
+Tired / little energy: 1.0,0.07917381351560157,0.07917381351560157,cat__dpq040___feeling_tired_or_having_little_energy_1.0
+Urinate at night: 2.0,0.07592282341049564,0.07592282341049564,cat__kiq480___how_many_times_urinate_in_night?_2.0
+Urinate at night: 3.0,0.06945407511323828,0.06945407511323828,cat__kiq480___how_many_times_urinate_in_night?_3.0
+Ever had kidney stones: Yes,0.06378224914183649,0.06378224914183649,cat__kiq026___ever_had_kidney_stones?_1.0
+Total cholesterol,-0.06199222779148348,0.06199222779148348,num__total_cholesterol_mg_dl
+How often urinary leakage: 2.0,0.06065082006624181,0.06065082006624181,cat__kiq005___how_often_have_urinary_leakage?_2.0
+Ever told had weak/failing kidneys: Yes,0.054863511202038535,0.054863511202038535,cat__kiq022___ever_told_you_had_weak/failing_kidneys?_1.0
+How often urinary leakage: 4.0,-0.05481785424334452,0.05481785424334452,cat__kiq005___how_often_have_urinary_leakage?_4.0
+Age (years),0.052254217870553406,0.052254217870553406,num__age_years
+Gender: Female,0.04430292760977481,0.04430292760977481,cat__gender_Female
+How often urinary leakage: 1.0,0.04426413180742268,0.04426413180742268,cat__kiq005___how_often_have_urinary_leakage?_1.0
+Ever told had arthritis: Yes,0.041139488964906205,0.041139488964906205,cat__mcq160a___ever_told_you_had_arthritis_1.0
+Urinate at night: 4.0,0.03863735380130289,0.03863735380130289,cat__kiq480___how_many_times_urinate_in_night?_4.0
+Tired / little energy: 3.0,0.03518296051947667,0.03518296051947667,cat__dpq040___feeling_tired_or_having_little_energy_3.0
+Tired / little energy: 0.0,0.02383987667292981,0.02383987667292981,cat__dpq040___feeling_tired_or_having_little_energy_0.0
+How often urinary leakage: 5.0,0.016528950468043868,0.016528950468043868,cat__kiq005___how_often_have_urinary_leakage?_5.0
+UACR missing,0.00744433755992362,0.00744433755992362,num__missingindicator_uacr_mg_g

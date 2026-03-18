@@ -1,0 +1,37 @@
+pretty_feature,coefficient,abs_coefficient,transformed_feature
+Feeling tired / little energy: 0.0,-0.7868730921736384,0.7868730921736384,cat__dpq040___feeling_tired_or_having_little_energy_0.0
+Feeling tired / little energy: 3.0,0.6874370921449874,0.6874370921449874,cat__dpq040___feeling_tired_or_having_little_energy_3.0
+Medication count,0.5637056703923019,0.5637056703923019,num__med_count
+How often do you snore?: 3.0,0.49842065792289164,0.49842065792289164,cat__slq030___how_often_do_you_snore?_3.0
+Shortness of breath on stairs: Yes,0.3412312781191971,0.3412312781191971,cat__cdq010___shortness_of_breath_on_stairs/inclines_1.0
+Ever had any alcohol: Yes,0.3092076179827335,0.3092076179827335,cat__alq111___ever_had_a_drink_of_any_kind_of_alcohol_1.0
+Feeling tired / little energy: 2.0,0.3056233024209239,0.3056233024209239,cat__dpq040___feeling_tired_or_having_little_energy_2.0
+Ever told you had asthma: Yes,0.29981898330975904,0.29981898330975904,cat__mcq010___ever_been_told_you_have_asthma_1.0
+How often do you snore?: 0.0,-0.2885465484689644,0.2885465484689644,cat__slq030___how_often_do_you_snore?_0.0
+Ever told you had high blood pressure: Yes,0.2379301328806058,0.2379301328806058,cat__bpq020___ever_told_you_had_high_blood_pressure_1.0
+Shortness of breath on stairs: No,-0.21973324483712892,0.21973324483712892,cat__cdq010___shortness_of_breath_on_stairs/inclines_2.0
+Ever had any alcohol: No,-0.18770774654269132,0.18770774654269132,cat__alq111___ever_had_a_drink_of_any_kind_of_alcohol_2.0
+Ever told you had asthma: No,-0.17832255841662512,0.17832255841662512,cat__mcq010___ever_been_told_you_have_asthma_2.0
+Moderate recreational activities: Yes,0.15680088055796418,0.15680088055796418,cat__paq665___moderate_recreational_activities_1.0
+How often do you snore?: 1.0,-0.14515216669830294,0.14515216669830294,cat__slq030___how_often_do_you_snore?_1.0
+Sleep hours on weekends,-0.12389297709235686,0.12389297709235686,num__sld013___sleep_hours___weekends
+Ever told you had high blood pressure: No,-0.11646564599957242,0.11646564599957242,cat__bpq020___ever_told_you_had_high_blood_pressure_2.0
+Feeling tired / little energy: 1.0,-0.10116934187538007,0.10116934187538007,cat__dpq040___feeling_tired_or_having_little_energy_1.0
+Urine albumin-creatinine ratio (UACR),-0.08783362731183296,0.08783362731183296,num__uacr_mg_g
+Total cholesterol,0.077006869036989,0.077006869036989,num__total_cholesterol_mg_dl
+Triglycerides missing,-0.06637104678884219,0.06637104678884219,num__missingindicator_triglycerides_mg_dl
+Fasting glucose,-0.05759097712211185,0.05759097712211185,num__fasting_glucose_mg_dl
+How often do you snore?: 2.0,0.057573621512128074,0.057573621512128074,cat__slq030___how_often_do_you_snore?_2.0
+Sleep hours on weekends missing,-0.0506171367295661,0.0506171367295661,num__missingindicator_sld013___sleep_hours___weekends
+Moderate recreational activities: No,-0.03773565968811513,0.03773565968811513,cat__paq665___moderate_recreational_activities_2.0
+Urine albumin-creatinine ratio (UACR) missing,0.032362698671499046,0.032362698671499046,num__missingindicator_uacr_mg_g
+Sleep hours on weekdays,0.03072709753065416,0.03072709753065416,num__sld012___sleep_hours___weekdays_or_workdays
+HDL cholesterol,-0.02612157484253311,0.02612157484253311,num__hdl_cholesterol_mg_dl
+Age (years),0.023961295448618677,0.023961295448618677,num__age_years
+HDL cholesterol missing,0.02072579241000158,0.02072579241000158,num__missingindicator_hdl_cholesterol_mg_dl
+Total cholesterol missing,0.02072579241000158,0.02072579241000158,num__missingindicator_total_cholesterol_mg_dl
+Sleep hours on weekdays missing,-0.017282691613169955,0.017282691613169955,num__missingindicator_sld012___sleep_hours___weekdays_or_workdays
+Gender: Female,0.015697920158541344,0.015697920158541344,cat__gender_Female
+Triglycerides,0.013190920611914111,0.013190920611914111,num__triglycerides_mg_dl
+Gender: Male,-7.914400826687445e-08,7.914400826687445e-08,cat__gender_Male
+Fasting glucose missing,0.0,0.0,num__missingindicator_fasting_glucose_mg_dl

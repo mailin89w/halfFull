@@ -1,0 +1,40 @@
+{
+  "model_name": "compact_quiz_demo_med_screening_labs",
+  "target": "sleep_disorder",
+  "disease": "sleep_disorder",
+  "threshold": 0.4,
+  "features": [
+    "slq030___how_often_do_you_snore?",
+    "sld012___sleep_hours___weekdays_or_workdays",
+    "sld013___sleep_hours___weekends",
+    "dpq040___feeling_tired_or_having_little_energy",
+    "bpq020___ever_told_you_had_high_blood_pressure",
+    "cdq010___shortness_of_breath_on_stairs/inclines",
+    "paq665___moderate_recreational_activities",
+    "alq111___ever_had_a_drink_of_any_kind_of_alcohol",
+    "mcq010___ever_been_told_you_have_asthma",
+    "age_years",
+    "gender",
+    "med_count",
+    "fasting_glucose_mg_dl",
+    "hdl_cholesterol_mg_dl",
+    "total_cholesterol_mg_dl",
+    "triglycerides_mg_dl",
+    "uacr_mg_g"
+  ],
+  "n_features": 17,
+  "metrics": {
+    "roc_auc": 0.7774435500354071,
+    "avg_precision": 0.6531372905770674,
+    "precision": 0.5675675675675675,
+    "recall": 0.6548856548856549,
+    "f1": 0.6081081081081081
+  },
+  "best_params": {
+    "model__C": 1,
+    "model__penalty": "l1",
+    "model__solver": "saga"
+  },
+  "created_at": "2026-03-18T15:40:44.681715+00:00",
+  "notes": "Compact sleep disorder model using quiz, demographics, medication count, and optional standard screening labs."
+}
