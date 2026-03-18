@@ -1,0 +1,104 @@
+{
+  "model_name": "liver_lr_l2_13feat",
+  "model_version": "1.0.0",
+  "description": "Liver disease screening \u2014 LR L2, 13 STRONG questionnaire features (no labs)",
+  "target": "liver",
+  "n_train_total": 7437,
+  "n_positive": 302,
+  "prevalence_pct": 4.06,
+  "base_features": [
+    "avg_drinks_per_day",
+    "trouble_sleeping",
+    "takes_diabetes_pills",
+    "ever_heavy_drinker_daily",
+    "dr_said_reduce_fat",
+    "doctor_said_overweight",
+    "saw_dr_for_pain",
+    "abdominal_pain",
+    "moderate_recreational",
+    "overnight_hospital",
+    "ever_hepatitis_c",
+    "heart_failure",
+    "general_health"
+  ],
+  "miss_flag_features": [
+    "avg_drinks_per_day_miss",
+    "takes_diabetes_pills_miss",
+    "ever_heavy_drinker_daily_miss",
+    "saw_dr_for_pain_miss",
+    "abdominal_pain_miss",
+    "heart_failure_miss"
+  ],
+  "all_features": [
+    "avg_drinks_per_day",
+    "trouble_sleeping",
+    "takes_diabetes_pills",
+    "ever_heavy_drinker_daily",
+    "dr_said_reduce_fat",
+    "doctor_said_overweight",
+    "saw_dr_for_pain",
+    "abdominal_pain",
+    "moderate_recreational",
+    "overnight_hospital",
+    "ever_hepatitis_c",
+    "heart_failure",
+    "general_health",
+    "avg_drinks_per_day_miss",
+    "takes_diabetes_pills_miss",
+    "ever_heavy_drinker_daily_miss",
+    "saw_dr_for_pain_miss",
+    "abdominal_pain_miss",
+    "heart_failure_miss"
+  ],
+  "n_features_total": 19,
+  "threshold_default": 0.3,
+  "threshold_screening": 0.33,
+  "holdout_eval": {
+    "roc_auc": 0.7327,
+    "avg_precision": 0.1245,
+    "recall_at_default_thr": 0.8833,
+    "precision_at_default_thr": 0.055,
+    "recall_at_screening_thr": 0.85,
+    "precision_at_screening_thr": 0.0593,
+    "confusion_matrix_default": [
+      [
+        518,
+        910
+      ],
+      [
+        7,
+        53
+      ]
+    ]
+  },
+  "cv_5fold": {
+    "roc_auc_mean": 0.7407,
+    "roc_auc_std": 0.0158,
+    "recall_mean": 0.6423,
+    "recall_std": 0.0457
+  },
+  "coefficients": {
+    "avg_drinks_per_day": -0.1572,
+    "trouble_sleeping": -0.28,
+    "takes_diabetes_pills": -0.1249,
+    "ever_heavy_drinker_daily": -0.2322,
+    "dr_said_reduce_fat": -0.2013,
+    "doctor_said_overweight": -0.1425,
+    "saw_dr_for_pain": -0.248,
+    "abdominal_pain": 0.1157,
+    "moderate_recreational": -0.0533,
+    "overnight_hospital": -0.1052,
+    "ever_hepatitis_c": -0.0524,
+    "heart_failure": 0.0725,
+    "general_health": 0.3078,
+    "avg_drinks_per_day_miss": 0.0746,
+    "takes_diabetes_pills_miss": -0.1626,
+    "ever_heavy_drinker_daily_miss": -0.0887,
+    "saw_dr_for_pain_miss": -0.3579,
+    "abdominal_pain_miss": -0.1397,
+    "heart_failure_miss": -0.1397
+  },
+  "intercept": -0.4308,
+  "sklearn_version": "1.8.0",
+  "trained_on": "NHANES merged adults \u2014 full dataset"
+}
