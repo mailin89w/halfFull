@@ -4,7 +4,7 @@
     "best_test_model": "SoftVote",
     "best_test_roc_auc": 0.7902,
     "model_version": "1.0.0",
-    "created_at": "2026-03-17T14:09:58.682536",
+    "created_at": "2026-03-17T19:41:46.893206",
     "description": "LR L2 inflammation/infection screening model trained on all 32 features (LAB+QUEST). Best test model: SoftVote.",
     "target": "infection_inflammation",
     "n_train_total": 7428,
