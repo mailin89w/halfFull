@@ -1,0 +1,29 @@
+{
+  "model_name": "anemia_checkup_v2_lr",
+  "version": "v2",
+  "feature_names": [
+    "total_cholesterol_mg_dl",
+    "hdl_cholesterol_mg_dl",
+    "ldl_cholesterol_mg_dl",
+    "triglycerides_mg_dl",
+    "fasting_glucose_mg_dl",
+    "age_years",
+    "gender_female",
+    "bmi"
+  ],
+  "n_features": 8,
+  "target": "anemia",
+  "feature_scope": "German checkup (\u00a725 SGB V) \u2014 lipid panel, fasting glucose, age, gender, BMI",
+  "removed_vs_v1": "Hepatitis B/C features \u2014 one-time screening, not reliably available at every checkup",
+  "excluded_from_dataset": "Urine dipstick \u2014 NHANES P_UA.xpt not ingested",
+  "metrics": {
+    "model": "LR v2",
+    "threshold": 0.3,
+    "accuracy": 0.5175,
+    "precision": 0.0816,
+    "recall": 0.875,
+    "f1": 0.1493,
+    "roc_auc": 0.7341
+  },
+  "trained_at": "2026-03-18T10:52:35.459191"
+}
