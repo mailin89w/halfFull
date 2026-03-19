@@ -1,0 +1,37 @@
+{
+  "model_name": "Gradient Boosting",
+  "target": "perimenopause_proxy",
+  "features": [
+    "bpq050a___now_taking_prescribed_medicine_for_hbp",
+    "rhq131___ever_been_pregnant?",
+    "kiq005___how_often_have_urinary_leakage?",
+    "mcq040___had_asthma_attack_in_past_year",
+    "bpq040a___taking_prescription_for_hypertension",
+    "kiq430___how_frequently_does_this_occur?",
+    "kiq042___leak_urine_during_physical_activities?",
+    "kiq010___how_much_urine_lose_each_time?",
+    "diq070___take_diabetic_pills_to_lower_blood_sugar",
+    "smq078___how_soon_after_waking_do_you_smoke",
+    "mcq195___which_type_of_arthritis_was_it?",
+    "paq620___moderate_work_activity",
+    "bpq030___told_had_high_blood_pressure___2+_times",
+    "rhq160___how_many_times_have_been_pregnant?",
+    "kiq052___how_much_were_daily_activities_affected?",
+    "waist_cm",
+    "kiq044___urinated_before_reaching_the_toilet?",
+    "paq650___vigorous_recreational_activities",
+    "kiq450___how_frequently_does_this_occur?",
+    "slq030___how_often_do_you_snore?"
+  ],
+  "optimal_threshold": 0.32,
+  "best_scores": {
+    "f1": 0.6,
+    "precision": 0.435,
+    "recall": 0.9664,
+    "accuracy": 0.5666,
+    "roc_auc": 0.7377
+  },
+  "trained_on": "NHANES 2017-2019 pre-pandemic dataset (nhanes_merged_adults_final.csv)",
+  "n_samples": 1769,
+  "timestamp": "2026-03-19T15:23:35.505902"
+}
