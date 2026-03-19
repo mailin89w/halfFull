@@ -1,0 +1,70 @@
+{
+  "model_name": "anemia_combined_lr",
+  "version": "combined",
+  "feature_names": [
+    "total_cholesterol_mg_dl",
+    "hdl_cholesterol_mg_dl",
+    "ldl_cholesterol_mg_dl",
+    "triglycerides_mg_dl",
+    "fasting_glucose_mg_dl",
+    "age_years",
+    "gender_female",
+    "bmi",
+    "dpq040_tired_little_energy",
+    "huq010_general_health",
+    "cdq010_sob_stairs",
+    "sld012_sleep_hours_weekday",
+    "sld013_sleep_hours_weekend",
+    "slq050_told_trouble_sleeping",
+    "pad680_sedentary_minutes",
+    "rhq031_regular_periods",
+    "rhq060_age_last_period",
+    "rhq540_ever_hormones"
+  ],
+  "n_features": 18,
+  "target": "anemia",
+  "feature_groups": {
+    "checkup_labs": [
+      "total_cholesterol_mg_dl",
+      "hdl_cholesterol_mg_dl",
+      "ldl_cholesterol_mg_dl",
+      "triglycerides_mg_dl",
+      "fasting_glucose_mg_dl",
+      "age_years",
+      "gender_female",
+      "bmi"
+    ],
+    "questionnaire": [
+      "dpq040_tired_little_energy",
+      "huq010_general_health",
+      "cdq010_sob_stairs",
+      "sld012_sleep_hours_weekday",
+      "sld013_sleep_hours_weekend",
+      "slq050_told_trouble_sleeping",
+      "pad680_sedentary_minutes"
+    ],
+    "female_reproductive": [
+      "rhq031_regular_periods",
+      "rhq060_age_last_period",
+      "rhq540_ever_hormones"
+    ]
+  },
+  "excluded_requested_features": [
+    "dpq010___little_interest_in_doing_things",
+    "dpq020___feeling_down,_depressed,_or_hopeless",
+    "dpq030___trouble_falling_or_staying_asleep,_or_sleeping_too_much",
+    "dpq070___trouble_concentrating_on_things",
+    "dpq100___difficulty_these_problems_have_caused"
+  ],
+  "exclusion_reason": "Not present in nhanes_merged_adults_final.csv \u2014 dropped during merge pipeline",
+  "metrics": {
+    "model": "LR Combined",
+    "threshold": 0.3,
+    "accuracy": 0.5121,
+    "precision": 0.0818,
+    "recall": 0.8889,
+    "f1": 0.1499,
+    "roc_auc": 0.759
+  },
+  "trained_at": "2026-03-19T16:31:07.101599"
+}
