@@ -1,0 +1,4 @@
+model,n_test,prevalence_pct,mean_predicted_prob,bias,brier_score,calibration_r2,brier_pass,r2_pass
+thyroid_lr_l2_18feat,1488,6.18,0.3931,0.3313,0.19082,0.89751,False,True
+inflammation_lr_l2_32feat,1486,32.37,0.4515,0.1278,0.18869,0.95756,False,True
+electrolyte_imbalance_logreg_final_quiz,1488,7.8,0.4611,0.3832,0.2219,0.35559,False,False
