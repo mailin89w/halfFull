@@ -6,37 +6,15 @@ import { useAssessment } from '@/src/hooks/useAssessment';
 import { computeResults } from '@/src/lib/mockResults';
 import {
   fetchFollowUpQuestions,
+  fetchMLScores,
   readStoredFollowUp,
+  readStoredMLScores,
   storeFollowUp,
+  storeMLScores,
 } from '@/src/lib/medgemma';
 import type { FollowUpResult } from '@/src/lib/medgemma';
-import { BlobCharacter } from '@/src/components/ui/BlobCharacter';
 
-/** Fallback questions used when MedGemma is unavailable */
-function buildFallbackQuestions(
-  answers: Record<string, unknown>,
-  topDiagnosisTitles: string[]
-): string[] {
-  const questions = [
-    'When your energy drops, what does it feel like in your body and mind?',
-  ];
-  if (topDiagnosisTitles.length > 0) {
-    questions.push(
-      `Which of these feels most disruptive right now: ${topDiagnosisTitles.join(', ')}?`
-    );
-  } else {
-    questions.push('What pattern feels most important for a doctor to understand quickly?');
-  }
-  const additionalSymptoms = String(answers['q6.0'] ?? '').trim();
-  questions.push(
-    additionalSymptoms
-      ? `You mentioned "${additionalSymptoms}". When does that show up most?`
-      : 'Is there anything that makes your symptoms better, worse, or more predictable?'
-  );
-  return questions.slice(0, 3);
-}
-
-type LoadPhase = 'loading' | 'ready';
+type LoadPhase = 'loading' | 'ready' | 'error';
 
 export default function ClarifyPage() {
   const router = useRouter();
@@ -45,8 +23,30 @@ export default function ClarifyPage() {
   const [phase, setPhase] = useState<LoadPhase>('loading');
   const [followUp, setFollowUp] = useState<FollowUpResult | null>(null);
 
-  const { diagnoses, summaryLine } = computeResults(answers);
-  const topDiagnosisTitles = diagnoses.slice(0, 3).map((d) => d.title);
+  const { summaryLine } = computeResults(answers);
+
+  const runLoad = (cancelled: { current: boolean }) => {
+    const load = async () => {
+      try {
+        // Use cached ML scores or fetch fresh ones
+        let mlScores = readStoredMLScores() ?? {};
+        if (Object.keys(mlScores).length === 0) {
+          mlScores = await fetchMLScores(answers);
+          storeMLScores(mlScores);
+        }
+        if (cancelled.current) return;
+        const result = await fetchFollowUpQuestions(answers, mlScores);
+        if (cancelled.current) return;
+        storeFollowUp(result);
+        setFollowUp(result);
+        setPhase('ready');
+      } catch {
+        if (cancelled.current) return;
+        setPhase('error');
+      }
+    };
+    void load();
+  };
 
   // Load MedGemma follow-up questions once assessment is hydrated
   useEffect(() => {
@@ -60,35 +60,15 @@ export default function ClarifyPage() {
       return;
     }
 
-    let cancelled = false;
-
-    const load = async () => {
-      try {
-        const result = await fetchFollowUpQuestions(answers, diagnoses);
-        if (cancelled) return;
-        storeFollowUp(result);
-        setFollowUp(result);
-      } catch {
-        if (cancelled) return;
-        // Fall back to rule-based questions when MedGemma is unavailable
-        const fallback: FollowUpResult = {
-          hypotheses: [],
-          questions: buildFallbackQuestions(answers, topDiagnosisTitles),
-        };
-        setFollowUp(fallback);
-      } finally {
-        if (!cancelled) setPhase('ready');
-      }
-    };
-
-    void load();
-    return () => { cancelled = true; };
+    const cancelled = { current: false };
+    runLoad(cancelled);
+    return () => { cancelled.current = true; };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [hydrated]);
 
   const questions = followUp?.questions ?? [];
 
-  const allAnswered = questions.every((_, index) => {
+  const allAnswered = questions.length > 0 && questions.every((_, index) => {
     const key = `clarify_${index + 1}`;
     const value = drafts[key] ?? String(answers[key] ?? '');
     return value.trim().length > 0;
@@ -98,16 +78,32 @@ export default function ClarifyPage() {
     return (
       <div className="phone-frame flex items-center justify-center">
         <div className="flex flex-col items-center gap-4 px-8 text-center">
-          <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-full bg-[rgba(119,101,244,0.08)]">
-            <BlobCharacter
-              className="h-14 w-14 animate-[pulse_2.4s_ease-in-out_infinite]"
-              accent="lime"
-              mood="gentle"
-            />
-          </div>
           <p className="text-sm font-medium text-[var(--color-ink-soft)]">
             Generating personalised questions…
           </p>
+        </div>
+      </div>
+    );
+  }
+
+  if (phase === 'error') {
+    return (
+      <div className="phone-frame flex items-center justify-center">
+        <div className="flex flex-col items-center gap-4 px-8 text-center">
+          <p className="text-sm font-medium text-[var(--color-ink-soft)]">
+            Could not reach the AI — please try again.
+          </p>
+          <button
+            type="button"
+            onClick={() => {
+              setPhase('loading');
+              const cancelled = { current: false };
+              runLoad(cancelled);
+            }}
+            className="rounded-full bg-[#09090f] px-6 py-3 text-sm font-bold text-white"
+          >
+            Retry
+          </button>
         </div>
       </div>
     );
@@ -125,9 +121,6 @@ export default function ClarifyPage() {
 
           {/* Hero card */}
           <section className="relative overflow-hidden rounded-[2rem] bg-[var(--color-card)] px-5 py-6 shadow-[0_14px_30px_rgba(86,98,145,0.14)]">
-            <div className="absolute right-5 top-5">
-              <BlobCharacter className="h-16 w-16" accent="lime" mood="gentle" />
-            </div>
             <p className="mb-2 text-[11px] font-bold uppercase tracking-[0.18em] text-[var(--color-ink-soft)]">
               Final touch
             </p>

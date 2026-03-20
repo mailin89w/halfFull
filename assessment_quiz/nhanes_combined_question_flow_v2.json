@@ -1,0 +1,2436 @@
+{
+  "metadata": {
+    "name": "NHANES Combined Question Flow v2",
+    "version": "2.0.0",
+    "generated_on": "2026-03-19",
+    "description": "Branching questionnaire aligned to the current HalfFull screening feature summary and model-runner contract.",
+    "frontend_answer_contract": "Submit a flat dictionary keyed by field_id. Values should be the NHANES numeric codes for coded questions, or numbers for numeric entry questions.",
+    "conditions_covered": [
+      "thyroid",
+      "kidney",
+      "sleep_disorder",
+      "anemia",
+      "liver",
+      "prediabetes",
+      "inflammation",
+      "electrolytes",
+      "hepatitis",
+      "perimenopause",
+      "iron_deficiency"
+    ],
+    "sources": {
+      "DEMO": "https://wwwn.cdc.gov/Nchs/Data/Nhanes/Public/2017/DataFiles/P_DEMO.htm",
+      "HUQ": "https://wwwn.cdc.gov/Nchs/Data/Nhanes/Public/2017/DataFiles/P_HUQ.htm",
+      "DPQ": "https://wwwn.cdc.gov/Nchs/Data/Nhanes/Public/2017/DataFiles/P_DPQ.htm",
+      "SLQ": "https://wwwn.cdc.gov/Nchs/Data/Nhanes/Public/2017/DataFiles/P_SLQ.htm",
+      "ALQ": "https://wwwn.cdc.gov/Nchs/Data/Nhanes/Public/2017/DataFiles/P_ALQ.htm",
+      "BPQ": "https://wwwn.cdc.gov/Nchs/Data/Nhanes/Public/2017/DataFiles/P_BPQ.htm",
+      "DIQ": "https://wwwn.cdc.gov/Nchs/Data/Nhanes/Public/2017/DataFiles/P_DIQ.htm",
+      "KIQ": "https://wwwn.cdc.gov/Nchs/Data/Nhanes/Public/2017/DataFiles/P_KIQ_U.htm",
+      "MCQ": "https://wwwn.cdc.gov/Nchs/Data/Nhanes/Public/2017/DataFiles/P_MCQ.htm",
+      "RHQ": "https://wwwn.cdc.gov/Nchs/Data/Nhanes/Public/2017/DataFiles/P_RHQ.htm",
+      "SMQ": "https://wwwn.cdc.gov/Nchs/Data/Nhanes/Public/2017/DataFiles/P_SMQ.htm",
+      "OCQ": "https://wwwn.cdc.gov/Nchs/Data/Nhanes/Public/2017/DataFiles/OCQ_J.htm",
+      "WHQ": "https://wwwn.cdc.gov/Nchs/Data/Nhanes/Public/2001/DataFiles/WHQ_B.htm",
+      "CDQ": "https://wwwn.cdc.gov/Nchs/Data/Nhanes/Public/2017/DataFiles/P_CDQ.htm",
+      "HEQ": "https://wwwn.cdc.gov/Nchs/Data/Nhanes/Public/2017/DataFiles/P_HEQ.htm"
+    },
+    "notes": [
+      "The questionnaire uses NHANES-coded answers where official categories exist; optional checkup fields are included for model-required numeric inputs that are not NHANES questionnaire variables.",
+      "The frontend should send a flat dictionary keyed by field_id.",
+      "The transformer script should create all alias columns and *_miss flags automatically.",
+      "Perimenopause replaces the older menopause label."
+    ]
+  },
+  "question_groups": [
+    {
+      "id": "core_profile",
+      "title": "Core profile and general health",
+      "questions": [
+        {
+          "id": "q_core_demo",
+          "title": "Demographics and overall health",
+          "fields": [
+            {
+              "field_id": "age_years",
+              "label": "Age in years",
+              "input_type": "integer",
+              "nhanes_code": "RIDAGEYR",
+              "source_url": "https://wwwn.cdc.gov/Nchs/Data/Nhanes/Public/2017/DataFiles/P_DEMO.htm"
+            },
+            {
+              "field_id": "gender",
+              "label": "Sex",
+              "input_type": "coded_single_select",
+              "nhanes_code": "RIAGENDR",
+              "options": [
+                {
+                  "value": 1,
+                  "label": "Male"
+                },
+                {
+                  "value": 2,
+                  "label": "Female"
+                }
+              ],
+              "source_url": "https://wwwn.cdc.gov/Nchs/Data/Nhanes/Public/2017/DataFiles/P_DEMO.htm"
+            },
+            {
+              "field_id": "education",
+              "label": "Education level",
+              "input_type": "coded_single_select",
+              "nhanes_code": "DMDEDUC2",
+              "options": [
+                {
+                  "value": 1,
+                  "label": "Less than 9th grade"
+                },
+                {
+                  "value": 2,
+                  "label": "9-11th grade / includes 12th with no diploma"
+                },
+                {
+                  "value": 3,
+                  "label": "High school graduate / GED or equivalent"
+                },
+                {
+                  "value": 4,
+                  "label": "Some college or AA degree"
+                },
+                {
+                  "value": 5,
+                  "label": "College graduate or above"
+                },
+                {
+                  "value": 7,
+                  "label": "Refused"
+                },
+                {
+                  "value": 9,
+                  "label": "Don't know"
+                }
+              ],
+              "source_url": "https://wwwn.cdc.gov/Nchs/Data/Nhanes/Public/2017/DataFiles/P_DEMO.htm",
+              "branch_if": {
+                "age_years_min": 20
+              }
+            },
+            {
+              "field_id": "pregnancy_status",
+              "label": "Pregnancy status",
+              "input_type": "coded_single_select",
+              "nhanes_code": "RIDEXPRG",
+              "options": [
+                {
+                  "value": 1,
+                  "label": "Pregnant"
+                },
+                {
+                  "value": 2,
+                  "label": "Not pregnant"
+                },
+                {
+                  "value": 3,
+                  "label": "Cannot ascertain"
+                }
+              ],
+              "source_url": "https://wwwn.cdc.gov/Nchs/Data/Nhanes/Public/2017/DataFiles/P_DEMO.htm",
+              "branch_if": {
+                "gender_equals": 2,
+                "age_years_min": 20,
+                "age_years_max": 44
+              }
+            },
+            {
+              "field_id": "huq010___general_health_condition",
+              "label": "General health condition",
+              "input_type": "coded_single_select",
+              "nhanes_code": "HUQ010",
+              "options": [
+                {
+                  "value": 1,
+                  "label": "Excellent"
+                },
+                {
+                  "value": 2,
+                  "label": "Very good"
+                },
+                {
+                  "value": 3,
+                  "label": "Good"
+                },
+                {
+                  "value": 4,
+                  "label": "Fair"
+                },
+                {
+                  "value": 5,
+                  "label": "Poor"
+                },
+                {
+                  "value": 7,
+                  "label": "Refused"
+                },
+                {
+                  "value": 9,
+                  "label": "Don't know"
+                }
+              ],
+              "source_url": "https://wwwn.cdc.gov/Nchs/Data/Nhanes/Public/2017/DataFiles/P_HUQ.htm",
+              "derives": [
+                "general_health_condition",
+                "general_health"
+              ]
+            },
+            {
+              "field_id": "huq051___#times_receive_healthcare_over_past_year",
+              "label": "Number of healthcare visits in the past year",
+              "input_type": "integer",
+              "nhanes_code": "HUQ051",
+              "source_url": "https://wwwn.cdc.gov/Nchs/Data/Nhanes/Public/2017/DataFiles/P_HUQ.htm"
+            },
+            {
+              "field_id": "huq071___overnight_hospital_patient_in_last_year",
+              "label": "Overnight hospital patient in the last year",
+              "input_type": "coded_single_select",
+              "nhanes_code": "HUQ071",
+              "options": [
+                {
+                  "value": 1,
+                  "label": "Yes"
+                },
+                {
+                  "value": 2,
+                  "label": "No"
+                },
+                {
+                  "value": 7,
+                  "label": "Refused"
+                },
+                {
+                  "value": 9,
+                  "label": "Don't know"
+                }
+              ],
+              "source_url": "https://wwwn.cdc.gov/Nchs/Data/Nhanes/Public/2017/DataFiles/P_HUQ.htm",
+              "derives": [
+                "overnight_hospital",
+                "hospitalized_lastyear"
+              ]
+            },
+            {
+              "field_id": "med_count",
+              "label": "Number of prescription medicines currently taken",
+              "input_type": "integer",
+              "nhanes_code": "RXDCOUNT",
+              "helper_only": true
+            }
+          ]
+        },
+        {
+          "id": "q_body_measures",
+          "title": "Body measurements and optional checkup values",
+          "fields": [
+            {
+              "field_id": "weight_kg",
+              "label": "Current weight (kg)",
+              "input_type": "number",
+              "nhanes_code": "BMXWT"
+            },
+            {
+              "field_id": "waist_cm",
+              "label": "Waist circumference (cm)",
+              "input_type": "number",
+              "nhanes_code": "BMXWAIST"
+            },
+            {
+              "field_id": "bmi",
+              "label": "BMI",
+              "input_type": "number",
+              "nhanes_code": "BMXBMI"
+            },
+            {
+              "field_id": "sbp_mean",
+              "label": "Average systolic blood pressure",
+              "input_type": "number",
+              "nhanes_code": "BPXSY1-3",
+              "helper_only": true
+            },
+            {
+              "field_id": "dbp_mean",
+              "label": "Average diastolic blood pressure",
+              "input_type": "number",
+              "nhanes_code": "BPXDI1-3",
+              "helper_only": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "sleep_and_work",
+      "title": "Sleep, fatigue, work schedule, and activity",
+      "questions": [
+        {
+          "id": "q_sleep",
+          "title": "Sleep symptoms and duration",
+          "fields": [
+            {
+              "field_id": "slq030___how_often_do_you_snore?",
+              "label": "How often do you snore?",
+              "input_type": "coded_single_select",
+              "nhanes_code": "SLQ030",
+              "options": [
+                {
+                  "value": 0,
+                  "label": "Never"
+                },
+                {
+                  "value": 1,
+                  "label": "Rarely (1-2 nights/week)"
+                },
+                {
+                  "value": 2,
+                  "label": "Occasionally (3-4 nights/week)"
+                },
+                {
+                  "value": 3,
+                  "label": "Frequently (5 or more nights/week)"
+                },
+                {
+                  "value": 7,
+                  "label": "Refused"
+                },
+                {
+                  "value": 9,
+                  "label": "Don't know"
+                }
+              ],
+              "source_url": "https://wwwn.cdc.gov/Nchs/Data/Nhanes/Public/2017/DataFiles/P_SLQ.htm"
+            },
+            {
+              "field_id": "slq050___ever_told_doctor_had_trouble_sleeping?",
+              "label": "Ever told doctor you had trouble sleeping?",
+              "input_type": "coded_single_select",
+              "nhanes_code": "SLQ050",
+              "options": [
+                {
+                  "value": 1,
+                  "label": "Yes"
+                },
+                {
+                  "value": 2,
+                  "label": "No"
+                },
+                {
+                  "value": 7,
+                  "label": "Refused"
+                },
+                {
+                  "value": 9,
+                  "label": "Don't know"
+                }
+              ],
+              "source_url": "https://wwwn.cdc.gov/Nchs/Data/Nhanes/Public/2017/DataFiles/P_SLQ.htm",
+              "derives": [
+                "told_dr_trouble_sleeping"
+              ]
+            },
+            {
+              "field_id": "sld012___sleep_hours___weekdays_or_workdays",
+              "label": "Sleep hours on weekdays / workdays",
+              "input_type": "number",
+              "nhanes_code": "SLD012",
+              "source_url": "https://wwwn.cdc.gov/Nchs/Data/Nhanes/Public/2017/DataFiles/P_SLQ.htm",
+              "derives": [
+                "sleep_hours_weekdays"
+              ]
+            },
+            {
+              "field_id": "sld013___sleep_hours___weekends",
+              "label": "Sleep hours on weekends",
+              "input_type": "number",
+              "nhanes_code": "SLD013",
+              "source_url": "https://wwwn.cdc.gov/Nchs/Data/Nhanes/Public/2017/DataFiles/P_SLQ.htm"
+            },
+            {
+              "field_id": "dpq040___feeling_tired_or_having_little_energy",
+              "label": "Feeling tired or having little energy",
+              "input_type": "coded_single_select",
+              "nhanes_code": "DPQ040",
+              "options": [
+                {
+                  "value": 0,
+                  "label": "Not at all"
+                },
+                {
+                  "value": 1,
+                  "label": "Several days"
+                },
+                {
+                  "value": 2,
+                  "label": "More than half the days"
+                },
+                {
+                  "value": 3,
+                  "label": "Nearly every day"
+                },
+                {
+                  "value": 7,
+                  "label": "Refused"
+                },
+                {
+                  "value": 9,
+                  "label": "Don't know"
+                }
+              ],
+              "source_url": "https://wwwn.cdc.gov/Nchs/Data/Nhanes/Public/2017/DataFiles/P_DPQ.htm",
+              "derives": [
+                "feeling_tired_little_energy"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "q_work_activity",
+          "title": "Work schedule and activity",
+          "fields": [
+            {
+              "field_id": "ocq670___overall_work_schedule_past_3_months",
+              "label": "Overall work schedule in the past 3 months",
+              "input_type": "coded_single_select",
+              "nhanes_code": "OCQ670",
+              "options": [
+                {
+                  "value": 1,
+                  "label": "A regular daytime schedule"
+                },
+                {
+                  "value": 2,
+                  "label": "A regular evening shift"
+                },
+                {
+                  "value": 3,
+                  "label": "A regular night shift"
+                },
+                {
+                  "value": 4,
+                  "label": "A rotating shift"
+                },
+                {
+                  "value": 5,
+                  "label": "Some other schedule"
+                },
+                {
+                  "value": 7,
+                  "label": "Refused"
+                },
+                {
+                  "value": 9,
+                  "label": "Don't know"
+                }
+              ],
+              "source_url": "https://wwwn.cdc.gov/Nchs/Data/Nhanes/Public/2017/DataFiles/OCQ_J.htm",
+              "branch_if": {
+                "age_years_min": 16
+              },
+              "derives": [
+                "overall_work_schedule",
+                "work_schedule"
+              ]
+            },
+            {
+              "field_id": "ocq180___hours_worked_last_week_in_total_all_jobs",
+              "label": "Hours worked last week across all jobs",
+              "input_type": "integer",
+              "nhanes_code": "OCQ180",
+              "source_url": "https://wwwn.cdc.gov/Nchs/Data/Nhanes/Public/2017/DataFiles/OCQ_J.htm",
+              "branch_if": {
+                "age_years_min": 16
+              },
+              "derives": [
+                "hours_worked_per_week"
+              ]
+            },
+            {
+              "field_id": "pad680___minutes_sedentary_activity",
+              "label": "Minutes of sedentary activity per day",
+              "input_type": "integer",
+              "nhanes_code": "PAD680",
+              "source_url": "https://wwwn.cdc.gov/Nchs/Data/Nhanes/Public/2017/DataFiles/OCQ_J.htm",
+              "derives": [
+                "sedentary_minutes"
+              ]
+            },
+            {
+              "field_id": "paq620___moderate_work_activity",
+              "label": "Moderate work activity",
+              "input_type": "coded_single_select",
+              "nhanes_code": "PAQ620",
+              "options": [
+                {
+                  "value": 1,
+                  "label": "Yes"
+                },
+                {
+                  "value": 2,
+                  "label": "No"
+                },
+                {
+                  "value": 7,
+                  "label": "Refused"
+                },
+                {
+                  "value": 9,
+                  "label": "Don't know"
+                }
+              ],
+              "source_url": "https://wwwn.cdc.gov/Nchs/Data/Nhanes/Public/2017/DataFiles/OCQ_J.htm"
+            },
+            {
+              "field_id": "paq665___moderate_recreational_activities",
+              "label": "Moderate recreational activities",
+              "input_type": "coded_single_select",
+              "nhanes_code": "PAQ665",
+              "options": [
+                {
+                  "value": 1,
+                  "label": "Yes"
+                },
+                {
+                  "value": 2,
+                  "label": "No"
+                },
+                {
+                  "value": 7,
+                  "label": "Refused"
+                },
+                {
+                  "value": 9,
+                  "label": "Don't know"
+                }
+              ],
+              "source_url": "https://wwwn.cdc.gov/Nchs/Data/Nhanes/Public/2017/DataFiles/OCQ_J.htm",
+              "derives": [
+                "moderate_recreational"
+              ]
+            },
+            {
+              "field_id": "paq650___vigorous_recreational_activities",
+              "label": "Vigorous recreational activities",
+              "input_type": "coded_single_select",
+              "nhanes_code": "PAQ650",
+              "options": [
+                {
+                  "value": 1,
+                  "label": "Yes"
+                },
+                {
+                  "value": 2,
+                  "label": "No"
+                },
+                {
+                  "value": 7,
+                  "label": "Refused"
+                },
+                {
+                  "value": 9,
+                  "label": "Don't know"
+                }
+              ],
+              "source_url": "https://wwwn.cdc.gov/Nchs/Data/Nhanes/Public/2017/DataFiles/OCQ_J.htm"
+            },
+            {
+              "field_id": "paq605___vigorous_work_activity",
+              "label": "Vigorous work activity",
+              "input_type": "coded_single_select",
+              "nhanes_code": "PAQ605",
+              "options": [
+                {
+                  "value": 1,
+                  "label": "Yes"
+                },
+                {
+                  "value": 2,
+                  "label": "No"
+                },
+                {
+                  "value": 7,
+                  "label": "Refused"
+                },
+                {
+                  "value": 9,
+                  "label": "Don't know"
+                }
+              ],
+              "source_url": "https://wwwn.cdc.gov/Nchs/Data/Nhanes/Public/2017/DataFiles/OCQ_J.htm",
+              "helper_only": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "alcohol_smoking",
+      "title": "Alcohol and smoking",
+      "questions": [
+        {
+          "id": "q_alcohol",
+          "title": "Alcohol use",
+          "fields": [
+            {
+              "field_id": "alq111___ever_had_a_drink_of_any_kind_of_alcohol",
+              "label": "Ever had a drink of any kind of alcohol",
+              "input_type": "coded_single_select",
+              "nhanes_code": "ALQ111",
+              "options": [
+                {
+                  "value": 1,
+                  "label": "Yes"
+                },
+                {
+                  "value": 2,
+                  "label": "No"
+                },
+                {
+                  "value": 7,
+                  "label": "Refused"
+                },
+                {
+                  "value": 9,
+                  "label": "Don't know"
+                }
+              ],
+              "source_url": "https://wwwn.cdc.gov/Nchs/Data/Nhanes/Public/2017/DataFiles/P_ALQ.htm"
+            },
+            {
+              "field_id": "alq130___avg_#_alcoholic_drinks/day___past_12_mos",
+              "label": "Average number of alcoholic drinks per day in past 12 months",
+              "input_type": "number",
+              "nhanes_code": "ALQ130",
+              "source_url": "https://wwwn.cdc.gov/Nchs/Data/Nhanes/Public/2017/DataFiles/P_ALQ.htm",
+              "derives": [
+                "avg_drinks_per_day"
+              ]
+            },
+            {
+              "field_id": "alq151___ever_have_4/5_or_more_drinks_every_day?",
+              "label": "Ever have 4/5 or more drinks almost every day",
+              "input_type": "coded_single_select",
+              "nhanes_code": "ALQ151",
+              "options": [
+                {
+                  "value": 1,
+                  "label": "Yes"
+                },
+                {
+                  "value": 2,
+                  "label": "No"
+                },
+                {
+                  "value": 7,
+                  "label": "Refused"
+                },
+                {
+                  "value": 9,
+                  "label": "Don't know"
+                }
+              ],
+              "source_url": "https://wwwn.cdc.gov/Nchs/Data/Nhanes/Public/2017/DataFiles/P_ALQ.htm"
+            },
+            {
+              "field_id": "alq170_helper_times_4_5_drinks_one_occasion_30d",
+              "label": "Past 30 days: number of times 4/5+ drinks on one occasion",
+              "input_type": "integer",
+              "nhanes_code": "ALQ170",
+              "source_url": "https://wwwn.cdc.gov/Nchs/Data/Nhanes/Public/2017/DataFiles/P_ALQ.htm",
+              "helper_only": true,
+              "derives": [
+                "ever_heavy_drinker",
+                "alcohol_any_risk_signal"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "q_smoking",
+          "title": "Smoking",
+          "fields": [
+            {
+              "field_id": "smq020___smoked_at_least_100_cigarettes_in_life",
+              "label": "Smoked at least 100 cigarettes in life",
+              "input_type": "coded_single_select",
+              "nhanes_code": "SMQ020",
+              "options": [
+                {
+                  "value": 1,
+                  "label": "Yes"
+                },
+                {
+                  "value": 2,
+                  "label": "No"
+                },
+                {
+                  "value": 7,
+                  "label": "Refused"
+                },
+                {
+                  "value": 9,
+                  "label": "Don't know"
+                }
+              ],
+              "source_url": "https://wwwn.cdc.gov/Nchs/Data/Nhanes/Public/2017/DataFiles/P_SMQ.htm"
+            },
+            {
+              "field_id": "smq040___do_you_now_smoke_cigarettes?",
+              "label": "Do you now smoke cigarettes?",
+              "input_type": "coded_single_select",
+              "nhanes_code": "SMQ040",
+              "options": [
+                {
+                  "value": 1,
+                  "label": "Every day"
+                },
+                {
+                  "value": 2,
+                  "label": "Some days"
+                },
+                {
+                  "value": 3,
+                  "label": "Not at all"
+                },
+                {
+                  "value": 7,
+                  "label": "Refused"
+                },
+                {
+                  "value": 9,
+                  "label": "Don't know"
+                }
+              ],
+              "source_url": "https://wwwn.cdc.gov/Nchs/Data/Nhanes/Public/2017/DataFiles/P_SMQ.htm",
+              "branch_if": {
+                "depends_on": "smq020___smoked_at_least_100_cigarettes_in_life",
+                "show_if_values": [
+                  1
+                ]
+              },
+              "derives": [
+                "smoking_now"
+              ]
+            },
+            {
+              "field_id": "smd650___avg_#_cigarettes/day_during_past_30_days",
+              "label": "Average cigarettes per day during past 30 days",
+              "input_type": "integer",
+              "nhanes_code": "SMD650",
+              "source_url": "https://wwwn.cdc.gov/Nchs/Data/Nhanes/Public/2017/DataFiles/P_SMQ.htm",
+              "branch_if": {
+                "depends_on": "smq040___do_you_now_smoke_cigarettes?",
+                "show_if_values": [
+                  1,
+                  2
+                ]
+              },
+              "derives": [
+                "avg_cigarettes_per_day",
+                "cigarettes_per_day"
+              ]
+            },
+            {
+              "field_id": "smq078___how_soon_after_waking_do_you_smoke",
+              "label": "How soon after waking do you smoke?",
+              "input_type": "coded_single_select",
+              "nhanes_code": "SMQ078",
+              "options": [
+                {
+                  "value": 1,
+                  "label": "Within 5 minutes"
+                },
+                {
+                  "value": 2,
+                  "label": "6 to 30 minutes"
+                },
+                {
+                  "value": 3,
+                  "label": "31 to 60 minutes"
+                },
+                {
+                  "value": 4,
+                  "label": "After 60 minutes"
+                },
+                {
+                  "value": 5,
+                  "label": "Varies / not usually in the morning"
+                },
+                {
+                  "value": 6,
+                  "label": "Do not smoke in the morning"
+                },
+                {
+                  "value": 7,
+                  "label": "Refused"
+                },
+                {
+                  "value": 9,
+                  "label": "Don't know"
+                }
+              ],
+              "source_url": "https://wwwn.cdc.gov/Nchs/Data/Nhanes/Public/2017/DataFiles/P_SMQ.htm",
+              "branch_if": {
+                "depends_on": "smq040___do_you_now_smoke_cigarettes?",
+                "show_if_values": [
+                  1,
+                  2
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "cardiometabolic_history",
+      "title": "Cardiometabolic history and medications",
+      "questions": [
+        {
+          "id": "q_bp",
+          "title": "Blood pressure and cholesterol",
+          "fields": [
+            {
+              "field_id": "bpq020___ever_told_you_had_high_blood_pressure",
+              "label": "Ever told you had high blood pressure",
+              "input_type": "coded_single_select",
+              "nhanes_code": "BPQ020",
+              "options": [
+                {
+                  "value": 1,
+                  "label": "Yes"
+                },
+                {
+                  "value": 2,
+                  "label": "No"
+                },
+                {
+                  "value": 7,
+                  "label": "Refused"
+                },
+                {
+                  "value": 9,
+                  "label": "Don't know"
+                }
+              ],
+              "source_url": "https://wwwn.cdc.gov/Nchs/Data/Nhanes/Public/2017/DataFiles/P_BPQ.htm",
+              "derives": [
+                "ever_told_high_bp"
+              ]
+            },
+            {
+              "field_id": "bpq030___told_had_high_blood_pressure___2+_times",
+              "label": "Told had high blood pressure 2 or more times",
+              "input_type": "coded_single_select",
+              "nhanes_code": "BPQ030",
+              "options": [
+                {
+                  "value": 1,
+                  "label": "Yes"
+                },
+                {
+                  "value": 2,
+                  "label": "No"
+                },
+                {
+                  "value": 7,
+                  "label": "Refused"
+                },
+                {
+                  "value": 9,
+                  "label": "Don't know"
+                }
+              ],
+              "source_url": "https://wwwn.cdc.gov/Nchs/Data/Nhanes/Public/2017/DataFiles/P_BPQ.htm",
+              "branch_if": {
+                "depends_on": "bpq020___ever_told_you_had_high_blood_pressure",
+                "show_if_values": [
+                  1
+                ]
+              }
+            },
+            {
+              "field_id": "bpq040a___taking_prescription_for_hypertension",
+              "label": "Taking prescription for hypertension",
+              "input_type": "coded_single_select",
+              "nhanes_code": "BPQ040A",
+              "options": [
+                {
+                  "value": 1,
+                  "label": "Yes"
+                },
+                {
+                  "value": 2,
+                  "label": "No"
+                },
+                {
+                  "value": 7,
+                  "label": "Refused"
+                },
+                {
+                  "value": 9,
+                  "label": "Don't know"
+                }
+              ],
+              "source_url": "https://wwwn.cdc.gov/Nchs/Data/Nhanes/Public/2017/DataFiles/P_BPQ.htm",
+              "branch_if": {
+                "depends_on": "bpq020___ever_told_you_had_high_blood_pressure",
+                "show_if_values": [
+                  1
+                ]
+              },
+              "derives": [
+                "taking_bp_prescription"
+              ]
+            },
+            {
+              "field_id": "bpq050a___now_taking_prescribed_medicine_for_hbp",
+              "label": "Now taking prescribed medicine for high blood pressure",
+              "input_type": "coded_single_select",
+              "nhanes_code": "BPQ050A",
+              "options": [
+                {
+                  "value": 1,
+                  "label": "Yes"
+                },
+                {
+                  "value": 2,
+                  "label": "No"
+                },
+                {
+                  "value": 7,
+                  "label": "Refused"
+                },
+                {
+                  "value": 9,
+                  "label": "Don't know"
+                }
+              ],
+              "source_url": "https://wwwn.cdc.gov/Nchs/Data/Nhanes/Public/2017/DataFiles/P_BPQ.htm",
+              "branch_if": {
+                "depends_on": "bpq020___ever_told_you_had_high_blood_pressure",
+                "show_if_values": [
+                  1
+                ]
+              }
+            },
+            {
+              "field_id": "bpq080___doctor_told_you___high_cholesterol_level",
+              "label": "Doctor told you high cholesterol level",
+              "input_type": "coded_single_select",
+              "nhanes_code": "BPQ080",
+              "options": [
+                {
+                  "value": 1,
+                  "label": "Yes"
+                },
+                {
+                  "value": 2,
+                  "label": "No"
+                },
+                {
+                  "value": 7,
+                  "label": "Refused"
+                },
+                {
+                  "value": 9,
+                  "label": "Don't know"
+                }
+              ],
+              "source_url": "https://wwwn.cdc.gov/Nchs/Data/Nhanes/Public/2017/DataFiles/P_BPQ.htm",
+              "derives": [
+                "ever_told_high_cholesterol",
+                "told_high_cholesterol"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "q_diabetes",
+          "title": "Diabetes and related risk",
+          "fields": [
+            {
+              "field_id": "diq010___doctor_told_you_have_diabetes",
+              "label": "Doctor told you have diabetes",
+              "input_type": "coded_single_select",
+              "nhanes_code": "DIQ010",
+              "options": [
+                {
+                  "value": 1,
+                  "label": "Yes"
+                },
+                {
+                  "value": 2,
+                  "label": "No"
+                },
+                {
+                  "value": 3,
+                  "label": "Borderline"
+                },
+                {
+                  "value": 7,
+                  "label": "Refused"
+                },
+                {
+                  "value": 9,
+                  "label": "Don't know"
+                }
+              ],
+              "source_url": "https://wwwn.cdc.gov/Nchs/Data/Nhanes/Public/2017/DataFiles/P_DIQ.htm",
+              "derives": [
+                "ever_told_diabetes",
+                "diabetes"
+              ]
+            },
+            {
+              "field_id": "diq050___taking_insulin_now",
+              "label": "Taking insulin now",
+              "input_type": "coded_single_select",
+              "nhanes_code": "DIQ050",
+              "options": [
+                {
+                  "value": 1,
+                  "label": "Yes"
+                },
+                {
+                  "value": 2,
+                  "label": "No"
+                },
+                {
+                  "value": 7,
+                  "label": "Refused"
+                },
+                {
+                  "value": 9,
+                  "label": "Don't know"
+                }
+              ],
+              "source_url": "https://wwwn.cdc.gov/Nchs/Data/Nhanes/Public/2017/DataFiles/P_DIQ.htm",
+              "branch_if": {
+                "depends_on": "diq010___doctor_told_you_have_diabetes",
+                "show_if_values": [
+                  1,
+                  3
+                ]
+              },
+              "derives": [
+                "taking_insulin"
+              ]
+            },
+            {
+              "field_id": "diq070___take_diabetic_pills_to_lower_blood_sugar",
+              "label": "Take diabetic pills to lower blood sugar",
+              "input_type": "coded_single_select",
+              "nhanes_code": "DIQ070",
+              "options": [
+                {
+                  "value": 1,
+                  "label": "Yes"
+                },
+                {
+                  "value": 2,
+                  "label": "No"
+                },
+                {
+                  "value": 7,
+                  "label": "Refused"
+                },
+                {
+                  "value": 9,
+                  "label": "Don't know"
+                }
+              ],
+              "source_url": "https://wwwn.cdc.gov/Nchs/Data/Nhanes/Public/2017/DataFiles/P_DIQ.htm",
+              "branch_if": {
+                "depends_on": "diq010___doctor_told_you_have_diabetes",
+                "show_if_values": [
+                  1,
+                  3
+                ]
+              },
+              "derives": [
+                "taking_diabetic_pills",
+                "takes_diabetes_pills"
+              ]
+            },
+            {
+              "field_id": "mcq300c___close_relative_had_diabetes",
+              "label": "Close relative had diabetes",
+              "input_type": "coded_single_select",
+              "nhanes_code": "MCQ300C",
+              "options": [
+                {
+                  "value": 1,
+                  "label": "Yes"
+                },
+                {
+                  "value": 2,
+                  "label": "No"
+                },
+                {
+                  "value": 7,
+                  "label": "Refused"
+                },
+                {
+                  "value": 9,
+                  "label": "Don't know"
+                }
+              ],
+              "source_url": "https://wwwn.cdc.gov/Nchs/Data/Nhanes/Public/2017/DataFiles/P_MCQ.htm"
+            }
+          ]
+        },
+        {
+          "id": "q_conditions",
+          "title": "Other medical conditions",
+          "fields": [
+            {
+              "field_id": "mcq053___taking_treatment_for_anemia/past_3_mos",
+              "label": "Taking treatment for anemia in past 3 months",
+              "input_type": "coded_single_select",
+              "nhanes_code": "MCQ053",
+              "options": [
+                {
+                  "value": 1,
+                  "label": "Yes"
+                },
+                {
+                  "value": 2,
+                  "label": "No"
+                },
+                {
+                  "value": 7,
+                  "label": "Refused"
+                },
+                {
+                  "value": 9,
+                  "label": "Don't know"
+                }
+              ],
+              "source_url": "https://wwwn.cdc.gov/Nchs/Data/Nhanes/Public/2017/DataFiles/P_MCQ.htm",
+              "derives": [
+                "taking_anemia_treatment"
+              ]
+            },
+            {
+              "field_id": "mcq092___ever_receive_blood_transfusion",
+              "label": "Ever received blood transfusion",
+              "input_type": "coded_single_select",
+              "nhanes_code": "MCQ092",
+              "options": [
+                {
+                  "value": 1,
+                  "label": "Yes"
+                },
+                {
+                  "value": 2,
+                  "label": "No"
+                },
+                {
+                  "value": 7,
+                  "label": "Refused"
+                },
+                {
+                  "value": 9,
+                  "label": "Don't know"
+                }
+              ],
+              "source_url": "https://wwwn.cdc.gov/Nchs/Data/Nhanes/Public/2017/DataFiles/P_MCQ.htm",
+              "derives": [
+                "ever_had_blood_transfusion",
+                "blood_transfusion"
+              ]
+            },
+            {
+              "field_id": "mcq160a___ever_told_you_had_arthritis",
+              "label": "Ever told you had arthritis",
+              "input_type": "coded_single_select",
+              "nhanes_code": "MCQ160A",
+              "options": [
+                {
+                  "value": 1,
+                  "label": "Yes"
+                },
+                {
+                  "value": 2,
+                  "label": "No"
+                },
+                {
+                  "value": 7,
+                  "label": "Refused"
+                },
+                {
+                  "value": 9,
+                  "label": "Don't know"
+                }
+              ],
+              "source_url": "https://wwwn.cdc.gov/Nchs/Data/Nhanes/Public/2017/DataFiles/P_MCQ.htm",
+              "derives": [
+                "ever_told_arthritis"
+              ]
+            },
+            {
+              "field_id": "mcq195___which_type_of_arthritis_was_it?",
+              "label": "Which type of arthritis was it?",
+              "input_type": "coded_single_select",
+              "nhanes_code": "MCQ195",
+              "options": [
+                {
+                  "value": 1,
+                  "label": "Rheumatoid arthritis"
+                },
+                {
+                  "value": 2,
+                  "label": "Osteoarthritis"
+                },
+                {
+                  "value": 3,
+                  "label": "Psoriatic arthritis"
+                },
+                {
+                  "value": 4,
+                  "label": "Other"
+                },
+                {
+                  "value": 7,
+                  "label": "Refused"
+                },
+                {
+                  "value": 9,
+                  "label": "Don't know"
+                }
+              ],
+              "source_url": "https://wwwn.cdc.gov/Nchs/Data/Nhanes/Public/2017/DataFiles/P_MCQ.htm",
+              "branch_if": {
+                "depends_on": "mcq160a___ever_told_you_had_arthritis",
+                "show_if_values": [
+                  1
+                ]
+              }
+            },
+            {
+              "field_id": "mcq160b___ever_told_you_had_congestive_heart_failure",
+              "label": "Ever told you had congestive heart failure",
+              "input_type": "coded_single_select",
+              "nhanes_code": "MCQ160B",
+              "options": [
+                {
+                  "value": 1,
+                  "label": "Yes"
+                },
+                {
+                  "value": 2,
+                  "label": "No"
+                },
+                {
+                  "value": 7,
+                  "label": "Refused"
+                },
+                {
+                  "value": 9,
+                  "label": "Don't know"
+                }
+              ],
+              "source_url": "https://wwwn.cdc.gov/Nchs/Data/Nhanes/Public/2017/DataFiles/P_MCQ.htm",
+              "derives": [
+                "ever_told_heart_failure",
+                "heart_failure"
+              ]
+            },
+            {
+              "field_id": "mcq160e___ever_told_you_had_heart_attack",
+              "label": "Ever told you had heart attack",
+              "input_type": "coded_single_select",
+              "nhanes_code": "MCQ160E",
+              "options": [
+                {
+                  "value": 1,
+                  "label": "Yes"
+                },
+                {
+                  "value": 2,
+                  "label": "No"
+                },
+                {
+                  "value": 7,
+                  "label": "Refused"
+                },
+                {
+                  "value": 9,
+                  "label": "Don't know"
+                }
+              ],
+              "source_url": "https://wwwn.cdc.gov/Nchs/Data/Nhanes/Public/2017/DataFiles/P_MCQ.htm",
+              "derives": [
+                "ever_told_heart_attack"
+              ]
+            },
+            {
+              "field_id": "mcq160f___ever_told_you_had_stroke",
+              "label": "Ever told you had stroke",
+              "input_type": "coded_single_select",
+              "nhanes_code": "MCQ160F",
+              "options": [
+                {
+                  "value": 1,
+                  "label": "Yes"
+                },
+                {
+                  "value": 2,
+                  "label": "No"
+                },
+                {
+                  "value": 7,
+                  "label": "Refused"
+                },
+                {
+                  "value": 9,
+                  "label": "Don't know"
+                }
+              ],
+              "source_url": "https://wwwn.cdc.gov/Nchs/Data/Nhanes/Public/2017/DataFiles/P_MCQ.htm",
+              "derives": [
+                "ever_told_stroke"
+              ]
+            },
+            {
+              "field_id": "mcq160l___ever_told_you_had_any_liver_condition",
+              "label": "Ever told you had any liver condition",
+              "input_type": "coded_single_select",
+              "nhanes_code": "MCQ160L",
+              "options": [
+                {
+                  "value": 1,
+                  "label": "Yes"
+                },
+                {
+                  "value": 2,
+                  "label": "No"
+                },
+                {
+                  "value": 7,
+                  "label": "Refused"
+                },
+                {
+                  "value": 9,
+                  "label": "Don't know"
+                }
+              ],
+              "source_url": "https://wwwn.cdc.gov/Nchs/Data/Nhanes/Public/2017/DataFiles/P_MCQ.htm",
+              "derives": [
+                "liver_condition"
+              ]
+            },
+            {
+              "field_id": "heq030___ever_told_you_have_hepatitis_c?",
+              "label": "Ever told you have hepatitis C",
+              "input_type": "coded_single_select",
+              "nhanes_code": "HEQ030",
+              "options": [
+                {
+                  "value": 1,
+                  "label": "Yes"
+                },
+                {
+                  "value": 2,
+                  "label": "No"
+                },
+                {
+                  "value": 7,
+                  "label": "Refused"
+                },
+                {
+                  "value": 9,
+                  "label": "Don't know"
+                }
+              ],
+              "source_url": "https://wwwn.cdc.gov/Nchs/Data/Nhanes/Public/2017/DataFiles/P_HEQ.htm",
+              "derives": [
+                "ever_hepatitis_c"
+              ]
+            },
+            {
+              "field_id": "mcq080___doctor_ever_said_you_were_overweight",
+              "label": "Doctor ever said you were overweight",
+              "input_type": "coded_single_select",
+              "nhanes_code": "MCQ080",
+              "options": [
+                {
+                  "value": 1,
+                  "label": "Yes"
+                },
+                {
+                  "value": 2,
+                  "label": "No"
+                },
+                {
+                  "value": 7,
+                  "label": "Refused"
+                },
+                {
+                  "value": 9,
+                  "label": "Don't know"
+                }
+              ],
+              "source_url": "https://wwwn.cdc.gov/Nchs/Data/Nhanes/Public/2017/DataFiles/P_MCQ.htm",
+              "derives": [
+                "doctor_said_overweight"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "urinary_kidney",
+      "title": "Urinary and kidney symptoms",
+      "questions": [
+        {
+          "id": "q_kidney_history",
+          "title": "Kidney history",
+          "fields": [
+            {
+              "field_id": "kiq022___ever_told_you_had_weak/failing_kidneys?",
+              "label": "Ever told you had weak or failing kidneys",
+              "input_type": "coded_single_select",
+              "nhanes_code": "KIQ022",
+              "options": [
+                {
+                  "value": 1,
+                  "label": "Yes"
+                },
+                {
+                  "value": 2,
+                  "label": "No"
+                },
+                {
+                  "value": 7,
+                  "label": "Refused"
+                },
+                {
+                  "value": 9,
+                  "label": "Don't know"
+                }
+              ],
+              "source_url": "https://wwwn.cdc.gov/Nchs/Data/Nhanes/Public/2017/DataFiles/P_KIQ_U.htm",
+              "derives": [
+                "kidney_disease"
+              ]
+            },
+            {
+              "field_id": "kiq026___ever_had_kidney_stones?",
+              "label": "Ever had kidney stones",
+              "input_type": "coded_single_select",
+              "nhanes_code": "KIQ026",
+              "options": [
+                {
+                  "value": 1,
+                  "label": "Yes"
+                },
+                {
+                  "value": 2,
+                  "label": "No"
+                },
+                {
+                  "value": 7,
+                  "label": "Refused"
+                },
+                {
+                  "value": 9,
+                  "label": "Don't know"
+                }
+              ],
+              "source_url": "https://wwwn.cdc.gov/Nchs/Data/Nhanes/Public/2017/DataFiles/P_KIQ_U.htm",
+              "derives": [
+                "ever_had_kidney_stones"
+              ]
+            },
+            {
+              "field_id": "kiq480___how_many_times_urinate_in_night?",
+              "label": "How many times do you urinate at night?",
+              "input_type": "coded_single_select",
+              "nhanes_code": "KIQ480",
+              "options": [
+                {
+                  "value": 0,
+                  "label": "None"
+                },
+                {
+                  "value": 1,
+                  "label": "1 time"
+                },
+                {
+                  "value": 2,
+                  "label": "2 times"
+                },
+                {
+                  "value": 3,
+                  "label": "3 times"
+                },
+                {
+                  "value": 4,
+                  "label": "4 times"
+                },
+                {
+                  "value": 5,
+                  "label": "5 or more times"
+                },
+                {
+                  "value": 7,
+                  "label": "Refused"
+                },
+                {
+                  "value": 9,
+                  "label": "Don't know"
+                }
+              ],
+              "source_url": "https://wwwn.cdc.gov/Nchs/Data/Nhanes/Public/2017/DataFiles/P_KIQ_U.htm",
+              "derives": [
+                "times_urinate_in_night"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "q_leakage",
+          "title": "Urinary leakage",
+          "fields": [
+            {
+              "field_id": "kiq005___how_often_have_urinary_leakage?",
+              "label": "How often have urinary leakage?",
+              "input_type": "coded_single_select",
+              "nhanes_code": "KIQ005",
+              "options": [
+                {
+                  "value": 1,
+                  "label": "Every day"
+                },
+                {
+                  "value": 2,
+                  "label": "A few times a week"
+                },
+                {
+                  "value": 3,
+                  "label": "A few times a month"
+                },
+                {
+                  "value": 4,
+                  "label": "A few times a year"
+                },
+                {
+                  "value": 5,
+                  "label": "Never"
+                },
+                {
+                  "value": 7,
+                  "label": "Refused"
+                },
+                {
+                  "value": 9,
+                  "label": "Don't know"
+                }
+              ],
+              "source_url": "https://wwwn.cdc.gov/Nchs/Data/Nhanes/Public/2017/DataFiles/P_KIQ_U.htm",
+              "derives": [
+                "how_often_urinary_leakage"
+              ]
+            },
+            {
+              "field_id": "kiq010___how_much_urine_lose_each_time?",
+              "label": "How much urine do you lose each time?",
+              "input_type": "coded_single_select",
+              "nhanes_code": "KIQ010",
+              "options": [
+                {
+                  "value": 1,
+                  "label": "Drops"
+                },
+                {
+                  "value": 2,
+                  "label": "Small splashes"
+                },
+                {
+                  "value": 3,
+                  "label": "More"
+                },
+                {
+                  "value": 7,
+                  "label": "Refused"
+                },
+                {
+                  "value": 9,
+                  "label": "Don't know"
+                }
+              ],
+              "source_url": "https://wwwn.cdc.gov/Nchs/Data/Nhanes/Public/2017/DataFiles/P_KIQ_U.htm",
+              "branch_if": {
+                "depends_on": "kiq005___how_often_have_urinary_leakage?",
+                "show_if_values": [
+                  1,
+                  2,
+                  3,
+                  4
+                ]
+              }
+            },
+            {
+              "field_id": "kiq042___leak_urine_during_physical_activities?",
+              "label": "Leak urine during physical activities?",
+              "input_type": "coded_single_select",
+              "nhanes_code": "KIQ042",
+              "options": [
+                {
+                  "value": 1,
+                  "label": "Yes"
+                },
+                {
+                  "value": 2,
+                  "label": "No"
+                },
+                {
+                  "value": 7,
+                  "label": "Refused"
+                },
+                {
+                  "value": 9,
+                  "label": "Don't know"
+                }
+              ],
+              "source_url": "https://wwwn.cdc.gov/Nchs/Data/Nhanes/Public/2017/DataFiles/P_KIQ_U.htm",
+              "branch_if": {
+                "depends_on": "kiq005___how_often_have_urinary_leakage?",
+                "show_if_values": [
+                  1,
+                  2,
+                  3,
+                  4
+                ]
+              }
+            },
+            {
+              "field_id": "kiq430___how_frequently_does_this_occur?",
+              "label": "How frequently does leakage during physical activities occur?",
+              "input_type": "coded_single_select",
+              "nhanes_code": "KIQ430",
+              "options": [
+                {
+                  "value": 1,
+                  "label": "Often"
+                },
+                {
+                  "value": 2,
+                  "label": "Sometimes"
+                },
+                {
+                  "value": 3,
+                  "label": "Rarely"
+                },
+                {
+                  "value": 4,
+                  "label": "Never"
+                },
+                {
+                  "value": 7,
+                  "label": "Refused"
+                },
+                {
+                  "value": 9,
+                  "label": "Don't know"
+                }
+              ],
+              "source_url": "https://wwwn.cdc.gov/Nchs/Data/Nhanes/Public/2017/DataFiles/P_KIQ_U.htm",
+              "branch_if": {
+                "depends_on": "kiq042___leak_urine_during_physical_activities?",
+                "show_if_values": [
+                  1
+                ]
+              }
+            },
+            {
+              "field_id": "kiq044___urinated_before_reaching_the_toilet?",
+              "label": "Urinated before reaching the toilet?",
+              "input_type": "coded_single_select",
+              "nhanes_code": "KIQ044",
+              "options": [
+                {
+                  "value": 1,
+                  "label": "Yes"
+                },
+                {
+                  "value": 2,
+                  "label": "No"
+                },
+                {
+                  "value": 7,
+                  "label": "Refused"
+                },
+                {
+                  "value": 9,
+                  "label": "Don't know"
+                }
+              ],
+              "source_url": "https://wwwn.cdc.gov/Nchs/Data/Nhanes/Public/2017/DataFiles/P_KIQ_U.htm",
+              "branch_if": {
+                "depends_on": "kiq005___how_often_have_urinary_leakage?",
+                "show_if_values": [
+                  1,
+                  2,
+                  3,
+                  4
+                ]
+              },
+              "derives": [
+                "urinated_before_toilet"
+              ]
+            },
+            {
+              "field_id": "kiq450___how_frequently_does_this_occur?",
+              "label": "How frequently does this occur before reaching the toilet?",
+              "input_type": "coded_single_select",
+              "nhanes_code": "KIQ450",
+              "options": [
+                {
+                  "value": 1,
+                  "label": "Often"
+                },
+                {
+                  "value": 2,
+                  "label": "Sometimes"
+                },
+                {
+                  "value": 3,
+                  "label": "Rarely"
+                },
+                {
+                  "value": 4,
+                  "label": "Never"
+                },
+                {
+                  "value": 7,
+                  "label": "Refused"
+                },
+                {
+                  "value": 9,
+                  "label": "Don't know"
+                }
+              ],
+              "source_url": "https://wwwn.cdc.gov/Nchs/Data/Nhanes/Public/2017/DataFiles/P_KIQ_U.htm",
+              "branch_if": {
+                "depends_on": "kiq044___urinated_before_reaching_the_toilet?",
+                "show_if_values": [
+                  1
+                ]
+              }
+            },
+            {
+              "field_id": "kiq052___how_much_were_daily_activities_affected?",
+              "label": "How much were daily activities affected?",
+              "input_type": "coded_single_select",
+              "nhanes_code": "KIQ052",
+              "options": [
+                {
+                  "value": 1,
+                  "label": "Not at all"
+                },
+                {
+                  "value": 2,
+                  "label": "Slightly"
+                },
+                {
+                  "value": 3,
+                  "label": "Moderately"
+                },
+                {
+                  "value": 4,
+                  "label": "Quite a bit"
+                },
+                {
+                  "value": 5,
+                  "label": "Extremely"
+                },
+                {
+                  "value": 7,
+                  "label": "Refused"
+                },
+                {
+                  "value": 9,
+                  "label": "Don't know"
+                }
+              ],
+              "source_url": "https://wwwn.cdc.gov/Nchs/Data/Nhanes/Public/2017/DataFiles/P_KIQ_U.htm",
+              "branch_if": {
+                "depends_on": "kiq005___how_often_have_urinary_leakage?",
+                "show_if_values": [
+                  1,
+                  2,
+                  3,
+                  4
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "respiratory_pain",
+      "title": "Breathing, asthma, and abdominal pain",
+      "questions": [
+        {
+          "id": "q_breathing_asthma",
+          "title": "Breathing and asthma",
+          "fields": [
+            {
+              "field_id": "cdq010___shortness_of_breath_on_stairs/inclines",
+              "label": "Shortness of breath on stairs or inclines",
+              "input_type": "coded_single_select",
+              "nhanes_code": "CDQ010",
+              "options": [
+                {
+                  "value": 1,
+                  "label": "Yes"
+                },
+                {
+                  "value": 2,
+                  "label": "No"
+                },
+                {
+                  "value": 7,
+                  "label": "Refused"
+                },
+                {
+                  "value": 9,
+                  "label": "Don't know"
+                }
+              ],
+              "source_url": "https://wwwn.cdc.gov/Nchs/Data/Nhanes/Public/2017/DataFiles/P_CDQ.htm",
+              "branch_if": {
+                "age_years_min": 40
+              },
+              "derives": [
+                "cdq010_sob_stairs"
+              ]
+            },
+            {
+              "field_id": "mcq010___ever_been_told_you_have_asthma",
+              "label": "Ever been told you have asthma",
+              "input_type": "coded_single_select",
+              "nhanes_code": "MCQ010",
+              "options": [
+                {
+                  "value": 1,
+                  "label": "Yes"
+                },
+                {
+                  "value": 2,
+                  "label": "No"
+                },
+                {
+                  "value": 7,
+                  "label": "Refused"
+                },
+                {
+                  "value": 9,
+                  "label": "Don't know"
+                }
+              ],
+              "source_url": "https://wwwn.cdc.gov/Nchs/Data/Nhanes/Public/2017/DataFiles/P_MCQ.htm"
+            },
+            {
+              "field_id": "mcq040___had_asthma_attack_in_past_year",
+              "label": "Had asthma attack in past year",
+              "input_type": "coded_single_select",
+              "nhanes_code": "MCQ040",
+              "options": [
+                {
+                  "value": 1,
+                  "label": "Yes"
+                },
+                {
+                  "value": 2,
+                  "label": "No"
+                },
+                {
+                  "value": 7,
+                  "label": "Refused"
+                },
+                {
+                  "value": 9,
+                  "label": "Don't know"
+                }
+              ],
+              "source_url": "https://wwwn.cdc.gov/Nchs/Data/Nhanes/Public/2017/DataFiles/P_MCQ.htm",
+              "branch_if": {
+                "depends_on": "mcq010___ever_been_told_you_have_asthma",
+                "show_if_values": [
+                  1
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "id": "q_pain",
+          "title": "Abdominal pain",
+          "fields": [
+            {
+              "field_id": "mcq520___abdominal_pain_during_past_12_months?",
+              "label": "Abdominal pain during past 12 months",
+              "input_type": "coded_single_select",
+              "nhanes_code": "MCQ520",
+              "options": [
+                {
+                  "value": 1,
+                  "label": "Yes"
+                },
+                {
+                  "value": 2,
+                  "label": "No"
+                },
+                {
+                  "value": 7,
+                  "label": "Refused"
+                },
+                {
+                  "value": 9,
+                  "label": "Don't know"
+                }
+              ],
+              "source_url": "https://wwwn.cdc.gov/Nchs/Data/Nhanes/Public/2017/DataFiles/P_MCQ.htm",
+              "derives": [
+                "abdominal_pain"
+              ]
+            },
+            {
+              "field_id": "mcq540___ever_seen_a_dr_about_this_pain",
+              "label": "Ever seen a doctor about this pain",
+              "input_type": "coded_single_select",
+              "nhanes_code": "MCQ540",
+              "options": [
+                {
+                  "value": 1,
+                  "label": "Yes"
+                },
+                {
+                  "value": 2,
+                  "label": "No"
+                },
+                {
+                  "value": 7,
+                  "label": "Refused"
+                },
+                {
+                  "value": 9,
+                  "label": "Don't know"
+                }
+              ],
+              "source_url": "https://wwwn.cdc.gov/Nchs/Data/Nhanes/Public/2017/DataFiles/P_MCQ.htm",
+              "branch_if": {
+                "depends_on": "mcq520___abdominal_pain_during_past_12_months?",
+                "show_if_values": [
+                  1
+                ]
+              },
+              "derives": [
+                "saw_dr_for_pain"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "female_reproductive",
+      "title": "Female reproductive and hormone questions",
+      "branch_if": {
+        "gender_equals": 2
+      },
+      "questions": [
+        {
+          "id": "q_reproductive_history",
+          "title": "Periods, pregnancy, hormones",
+          "fields": [
+            {
+              "field_id": "rhq031___had_regular_periods_in_past_12_months",
+              "label": "Had regular periods in the past 12 months",
+              "input_type": "coded_single_select",
+              "nhanes_code": "RHQ031",
+              "options": [
+                {
+                  "value": 1,
+                  "label": "Yes"
+                },
+                {
+                  "value": 2,
+                  "label": "No"
+                },
+                {
+                  "value": 7,
+                  "label": "Refused"
+                },
+                {
+                  "value": 9,
+                  "label": "Don't know"
+                }
+              ],
+              "source_url": "https://wwwn.cdc.gov/Nchs/Data/Nhanes/Public/2017/DataFiles/P_RHQ.htm",
+              "branch_if": {
+                "age_years_min": 20,
+                "age_years_max": 59
+              },
+              "derives": [
+                "regular_periods"
+              ]
+            },
+            {
+              "field_id": "rhq060___age_at_last_menstrual_period",
+              "label": "Age at last menstrual period",
+              "input_type": "integer",
+              "nhanes_code": "RHQ060",
+              "source_url": "https://wwwn.cdc.gov/Nchs/Data/Nhanes/Public/2017/DataFiles/P_RHQ.htm",
+              "branch_if": {
+                "age_years_min": 20,
+                "age_years_max": 59
+              }
+            },
+            {
+              "field_id": "rhq540___ever_use_female_hormones?",
+              "label": "Ever use female hormones",
+              "input_type": "coded_single_select",
+              "nhanes_code": "RHQ540",
+              "options": [
+                {
+                  "value": 1,
+                  "label": "Yes"
+                },
+                {
+                  "value": 2,
+                  "label": "No"
+                },
+                {
+                  "value": 7,
+                  "label": "Refused"
+                },
+                {
+                  "value": 9,
+                  "label": "Don't know"
+                }
+              ],
+              "source_url": "https://wwwn.cdc.gov/Nchs/Data/Nhanes/Public/2017/DataFiles/P_RHQ.htm",
+              "branch_if": {
+                "age_years_min": 20
+              },
+              "derives": [
+                "rhq540_ever_hormones"
+              ]
+            },
+            {
+              "field_id": "rhq131___ever_been_pregnant?",
+              "label": "Ever been pregnant",
+              "input_type": "coded_single_select",
+              "nhanes_code": "RHQ131",
+              "options": [
+                {
+                  "value": 1,
+                  "label": "Yes"
+                },
+                {
+                  "value": 2,
+                  "label": "No"
+                },
+                {
+                  "value": 7,
+                  "label": "Refused"
+                },
+                {
+                  "value": 9,
+                  "label": "Don't know"
+                }
+              ],
+              "source_url": "https://wwwn.cdc.gov/Nchs/Data/Nhanes/Public/2017/DataFiles/P_RHQ.htm",
+              "branch_if": {
+                "age_years_min": 20,
+                "age_years_max": 59
+              }
+            },
+            {
+              "field_id": "rhq160___how_many_times_have_been_pregnant?",
+              "label": "How many times have been pregnant",
+              "input_type": "integer",
+              "nhanes_code": "RHQ160",
+              "source_url": "https://wwwn.cdc.gov/Nchs/Data/Nhanes/Public/2017/DataFiles/P_RHQ.htm",
+              "branch_if": {
+                "depends_on": "rhq131___ever_been_pregnant?",
+                "show_if_values": [
+                  1
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "weight_and_prevention",
+      "title": "Weight preference and preventive advice",
+      "questions": [
+        {
+          "id": "q_weight_preference",
+          "title": "Weight preference",
+          "fields": [
+            {
+              "field_id": "whq040___like_to_weigh_more,_less_or_same",
+              "label": "Would like to weigh more, less, or stay about the same",
+              "input_type": "coded_single_select",
+              "nhanes_code": "WHQ040",
+              "options": [
+                {
+                  "value": 1,
+                  "label": "More"
+                },
+                {
+                  "value": 2,
+                  "label": "Less"
+                },
+                {
+                  "value": 3,
+                  "label": "Stay about the same"
+                },
+                {
+                  "value": 7,
+                  "label": "Refused"
+                },
+                {
+                  "value": 9,
+                  "label": "Don't know"
+                }
+              ],
+              "source_url": "https://wwwn.cdc.gov/Nchs/Data/Nhanes/Public/2001/DataFiles/WHQ_B.htm"
+            },
+            {
+              "field_id": "whq070___tried_to_lose_weight_in_past_year",
+              "label": "Tried to lose weight in past year",
+              "input_type": "coded_single_select",
+              "nhanes_code": "WHQ070",
+              "options": [
+                {
+                  "value": 1,
+                  "label": "Yes"
+                },
+                {
+                  "value": 2,
+                  "label": "No"
+                },
+                {
+                  "value": 7,
+                  "label": "Refused"
+                },
+                {
+                  "value": 9,
+                  "label": "Don't know"
+                }
+              ],
+              "source_url": "https://wwwn.cdc.gov/Nchs/Data/Nhanes/Public/2001/DataFiles/WHQ_B.htm",
+              "derives": [
+                "tried_to_lose_weight"
+              ]
+            },
+            {
+              "field_id": "mcq366d___doctor_told_to_reduce_fat_in_diet",
+              "label": "Doctor told to reduce fat in diet",
+              "input_type": "coded_single_select",
+              "nhanes_code": "MCQ366D",
+              "options": [
+                {
+                  "value": 1,
+                  "label": "Yes"
+                },
+                {
+                  "value": 2,
+                  "label": "No"
+                },
+                {
+                  "value": 7,
+                  "label": "Refused"
+                },
+                {
+                  "value": 9,
+                  "label": "Don't know"
+                }
+              ],
+              "source_url": "https://wwwn.cdc.gov/Nchs/Data/Nhanes/Public/2017/DataFiles/P_MCQ.htm"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "optional_labs",
+      "title": "Optional recent checkup and lab values",
+      "questions": [
+        {
+          "id": "q_checkup_values",
+          "title": "Optional values from recent labs or checkup",
+          "help_text": "These are not NHANES questionnaire questions, but they are needed to populate some production model columns. Leave blank if unknown; the mapper will create missingness flags automatically.",
+          "fields": [
+            {
+              "field_id": "total_cholesterol_mg_dl",
+              "label": "Total cholesterol (mg/dL)",
+              "input_type": "number",
+              "helper_only": true
+            },
+            {
+              "field_id": "hdl_cholesterol_mg_dl",
+              "label": "HDL cholesterol (mg/dL)",
+              "input_type": "number",
+              "helper_only": true
+            },
+            {
+              "field_id": "ldl_cholesterol_mg_dl",
+              "label": "LDL cholesterol (mg/dL)",
+              "input_type": "number",
+              "helper_only": true
+            },
+            {
+              "field_id": "triglycerides_mg_dl",
+              "label": "Triglycerides (mg/dL)",
+              "input_type": "number",
+              "helper_only": true
+            },
+            {
+              "field_id": "fasting_glucose_mg_dl",
+              "label": "Fasting glucose (mg/dL)",
+              "input_type": "number",
+              "helper_only": true
+            },
+            {
+              "field_id": "glucose_mg_dl",
+              "label": "Glucose (mg/dL)",
+              "input_type": "number",
+              "helper_only": true
+            },
+            {
+              "field_id": "uacr_mg_g",
+              "label": "Urine albumin-creatinine ratio (mg/g)",
+              "input_type": "number",
+              "helper_only": true
+            },
+            {
+              "field_id": "total_protein_g_dl",
+              "label": "Total protein (g/dL)",
+              "input_type": "number",
+              "helper_only": true
+            },
+            {
+              "field_id": "wbc_1000_cells_ul",
+              "label": "White blood cell count (1000 cells/uL)",
+              "input_type": "number",
+              "helper_only": true
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "derived_features": [
+    {
+      "feature": "gender_female",
+      "rule": "1 if gender == 2 else 0 if gender is known else null"
+    },
+    {
+      "feature": "general_health_condition",
+      "rule": "Alias of HUQ010"
+    },
+    {
+      "feature": "general_health",
+      "rule": "Alias of HUQ010"
+    },
+    {
+      "feature": "told_dr_trouble_sleeping",
+      "rule": "Alias of SLQ050"
+    },
+    {
+      "feature": "sleep_hours_weekdays",
+      "rule": "Alias of SLD012"
+    },
+    {
+      "feature": "avg_drinks_per_day",
+      "rule": "Alias of ALQ130"
+    },
+    {
+      "feature": "ever_heavy_drinker",
+      "rule": "1 if ALQ151 == 1 or ALQ170 helper > 0; 0 if both available and negative; null otherwise"
+    },
+    {
+      "feature": "alcohol_any_risk_signal",
+      "rule": "1 if any alcohol-risk signal is present from ALQ111/130/151/170 helper; 0 if all known and negative; null otherwise"
+    },
+    {
+      "feature": "smoking_now",
+      "rule": "1 if SMQ040 in {1,2}; 0 if SMQ040 == 3; null otherwise"
+    },
+    {
+      "feature": "cigarettes_per_day",
+      "rule": "Alias of SMD650"
+    },
+    {
+      "feature": "avg_cigarettes_per_day",
+      "rule": "Alias of SMD650"
+    },
+    {
+      "feature": "moderate_recreational",
+      "rule": "Alias of PAQ665"
+    },
+    {
+      "feature": "moderate_exercise",
+      "rule": "1 if PAQ620 == 1 or PAQ665 == 1; 0 if both known and neither yes; null otherwise"
+    },
+    {
+      "feature": "vigorous_exercise",
+      "rule": "1 if PAQ605 helper == 1 or PAQ650 == 1; 0 if both known and neither yes; null otherwise"
+    },
+    {
+      "feature": "work_schedule",
+      "rule": "Alias of OCQ670"
+    },
+    {
+      "feature": "overall_work_schedule",
+      "rule": "Alias of OCQ670"
+    },
+    {
+      "feature": "hours_worked_per_week",
+      "rule": "Alias of OCQ180"
+    },
+    {
+      "feature": "doctor_said_overweight",
+      "rule": "Alias of MCQ080"
+    },
+    {
+      "feature": "ever_told_high_cholesterol",
+      "rule": "Alias of BPQ080"
+    },
+    {
+      "feature": "told_high_cholesterol",
+      "rule": "Alias of BPQ080"
+    },
+    {
+      "feature": "ever_told_diabetes",
+      "rule": "Alias of DIQ010"
+    },
+    {
+      "feature": "diabetes",
+      "rule": "Alias of DIQ010"
+    },
+    {
+      "feature": "taking_insulin",
+      "rule": "Alias of DIQ050"
+    },
+    {
+      "feature": "taking_diabetic_pills",
+      "rule": "Alias of DIQ070"
+    },
+    {
+      "feature": "takes_diabetes_pills",
+      "rule": "Alias of DIQ070"
+    },
+    {
+      "feature": "taking_bp_prescription",
+      "rule": "Alias of BPQ040A"
+    },
+    {
+      "feature": "ever_told_high_bp",
+      "rule": "Alias of BPQ020"
+    },
+    {
+      "feature": "times_urinate_in_night",
+      "rule": "Alias of KIQ480"
+    },
+    {
+      "feature": "how_often_urinary_leakage",
+      "rule": "Alias of KIQ005"
+    },
+    {
+      "feature": "urinated_before_toilet",
+      "rule": "Alias of KIQ044"
+    },
+    {
+      "feature": "ever_had_kidney_stones",
+      "rule": "Alias of KIQ026"
+    },
+    {
+      "feature": "kidney_disease",
+      "rule": "Alias of KIQ022"
+    },
+    {
+      "feature": "taking_anemia_treatment",
+      "rule": "Alias of MCQ053"
+    },
+    {
+      "feature": "ever_had_blood_transfusion",
+      "rule": "Alias of MCQ092"
+    },
+    {
+      "feature": "blood_transfusion",
+      "rule": "Alias of MCQ092"
+    },
+    {
+      "feature": "ever_told_arthritis",
+      "rule": "Alias of MCQ160A"
+    },
+    {
+      "feature": "ever_told_heart_failure",
+      "rule": "Alias of MCQ160B"
+    },
+    {
+      "feature": "heart_failure",
+      "rule": "Alias of MCQ160B"
+    },
+    {
+      "feature": "ever_told_heart_attack",
+      "rule": "Alias of MCQ160E"
+    },
+    {
+      "feature": "ever_told_stroke",
+      "rule": "Alias of MCQ160F"
+    },
+    {
+      "feature": "liver_condition",
+      "rule": "Alias of MCQ160L"
+    },
+    {
+      "feature": "regular_periods",
+      "rule": "Alias of RHQ031"
+    },
+    {
+      "feature": "overnight_hospital",
+      "rule": "Alias of HUQ071"
+    },
+    {
+      "feature": "hospitalized_lastyear",
+      "rule": "Alias of HUQ071"
+    },
+    {
+      "feature": "cdq010_sob_stairs",
+      "rule": "Alias of CDQ010"
+    },
+    {
+      "feature": "abdominal_pain",
+      "rule": "Alias of MCQ520"
+    },
+    {
+      "feature": "saw_dr_for_pain",
+      "rule": "Alias of MCQ540"
+    },
+    {
+      "feature": "*_miss",
+      "rule": "Auto-generated as 1 when the corresponding base feature is null/blank, else 0"
+    }
+  ]
+}

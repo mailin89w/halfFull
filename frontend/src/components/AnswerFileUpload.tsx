@@ -65,8 +65,13 @@ export function AnswerFileUpload({ value, onChange }: Props) {
         return;
       }
 
-      const { extractedText } = await res.json() as { extractedText: string };
-      onChange({ filename: file.name, extractedText: extractedText ?? '', status: 'done' });
+      const data = await res.json() as { extractedText: string; structuredValues?: Record<string, number> };
+      onChange({
+        filename: file.name,
+        extractedText: data.extractedText ?? '',
+        status: 'done',
+        structuredValues: data.structuredValues,
+      });
     } catch (err) {
       onChange({
         filename: file.name,

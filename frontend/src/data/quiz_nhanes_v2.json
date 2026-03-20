@@ -1,0 +1,1075 @@
+{
+  "assessment": {
+    "modules": [
+      {
+        "id": "profile",
+        "title": "About You",
+        "order": 1,
+        "shown_in_paths": [
+          "full"
+        ],
+        "questions": [
+          {
+            "id": "dpq040___feeling_tired_or_having_little_energy",
+            "text": "Over the past 2 weeks, how often have you felt tired or had very little energy?",
+            "type": "ordinal",
+            "feature_name": "dpq040___feeling_tired_or_having_little_energy",
+            "options": [
+              {
+                "value": "0",
+                "label": "Not at all",
+                "encoded_value": 0
+              },
+              {
+                "value": "1",
+                "label": "Several days",
+                "encoded_value": 1
+              },
+              {
+                "value": "2",
+                "label": "More than half the days",
+                "encoded_value": 2
+              },
+              {
+                "value": "3",
+                "label": "Nearly every day",
+                "encoded_value": 3
+              }
+            ],
+            "shown_in_paths": [
+              "full"
+            ],
+            "validation": {
+              "required": true
+            }
+          },
+          {
+            "id": "age_years",
+            "text": "How old are you?",
+            "type": "numeric",
+            "feature_name": "age_years",
+            "options": [
+              {
+                "value": "",
+                "label": "Years"
+              }
+            ],
+            "shown_in_paths": [
+              "full"
+            ],
+            "validation": {
+              "required": true
+            }
+          },
+          {
+            "id": "gender",
+            "text": "What is your biological sex?",
+            "help_text": "This determines which reference ranges and conditions apply to you.",
+            "type": "categorical",
+            "feature_name": "gender",
+            "options": [
+              {
+                "value": "1",
+                "label": "Male",
+                "encoded_value": 1
+              },
+              {
+                "value": "2",
+                "label": "Female",
+                "encoded_value": 2
+              }
+            ],
+            "shown_in_paths": [
+              "full"
+            ],
+            "validation": {
+              "required": true
+            }
+          },
+          {
+            "id": "huq010___general_health_condition",
+            "text": "How would you describe your overall health?",
+            "type": "ordinal",
+            "feature_name": "huq010___general_health_condition",
+            "options": [
+              {
+                "value": "1",
+                "label": "Excellent",
+                "encoded_value": 1
+              },
+              {
+                "value": "2",
+                "label": "Very good",
+                "encoded_value": 2
+              },
+              {
+                "value": "3",
+                "label": "Good",
+                "encoded_value": 3
+              },
+              {
+                "value": "4",
+                "label": "Fair",
+                "encoded_value": 4
+              },
+              {
+                "value": "5",
+                "label": "Poor",
+                "encoded_value": 5
+              }
+            ],
+            "shown_in_paths": [
+              "full"
+            ],
+            "validation": {
+              "required": true
+            }
+          },
+          {
+            "id": "height_weight",
+            "text": "What is your height and weight?",
+            "help_text": "Used to calculate BMI for the health models. Leave blank if unsure.",
+            "type": "dual_numeric",
+            "feature_name": "height_weight",
+            "options": [
+              {
+                "value": "height_cm",
+                "label": "Height (cm)"
+              },
+              {
+                "value": "weight_kg",
+                "label": "Weight (kg)"
+              }
+            ],
+            "shown_in_paths": [
+              "full"
+            ],
+            "validation": {
+              "required": false
+            }
+          },
+          {
+            "id": "huq071___overnight_hospital_patient_in_last_year",
+            "text": "Were you admitted to a hospital overnight in the past year?",
+            "type": "binary",
+            "feature_name": "huq071___overnight_hospital_patient_in_last_year",
+            "options": [
+              {
+                "value": "1",
+                "label": "Yes",
+                "encoded_value": 1
+              },
+              {
+                "value": "2",
+                "label": "No",
+                "encoded_value": 2
+              }
+            ],
+            "shown_in_paths": [
+              "full"
+            ],
+            "validation": {
+              "required": true
+            }
+          },
+          {
+            "id": "med_count",
+            "text": "How many prescription medications do you currently take?",
+            "help_text": "Include pills, patches, injections, and inhalers prescribed by a doctor.",
+            "type": "numeric",
+            "feature_name": "med_count",
+            "options": [
+              {
+                "value": "",
+                "label": "Number of medications"
+              }
+            ],
+            "shown_in_paths": [
+              "full"
+            ],
+            "validation": {
+              "required": false
+            }
+          }
+        ]
+      },
+      {
+        "id": "sleep",
+        "title": "Sleep",
+        "order": 2,
+        "shown_in_paths": [
+          "full"
+        ],
+        "questions": [
+          {
+            "id": "sleep_hours",
+            "text": "How many hours do you usually sleep?",
+            "help_text": "Count from when you fall asleep to when you wake up.",
+            "type": "dual_numeric",
+            "feature_name": "sleep_hours",
+            "options": [
+              {
+                "value": "sld012___sleep_hours___weekdays_or_workdays",
+                "label": "Weeknights"
+              },
+              {
+                "value": "sld013___sleep_hours___weekends",
+                "label": "Weekends"
+              }
+            ],
+            "shown_in_paths": [
+              "full"
+            ],
+            "validation": {
+              "required": true
+            }
+          },
+          {
+            "id": "slq030___how_often_do_you_snore?",
+            "text": "How often do you snore while sleeping?",
+            "help_text": "Based on what you've been told or noticed yourself.",
+            "type": "ordinal",
+            "feature_name": "slq030___how_often_do_you_snore?",
+            "options": [
+              {
+                "value": "0",
+                "label": "Never",
+                "encoded_value": 0
+              },
+              {
+                "value": "1",
+                "label": "Rarely (1\u20132 nights a week)",
+                "encoded_value": 1
+              },
+              {
+                "value": "2",
+                "label": "Sometimes (3\u20134 nights a week)",
+                "encoded_value": 2
+              },
+              {
+                "value": "3",
+                "label": "Often (5+ nights a week)",
+                "encoded_value": 3
+              },
+              {
+                "value": "4",
+                "label": "Almost every night",
+                "encoded_value": 4
+              }
+            ],
+            "shown_in_paths": [
+              "full"
+            ],
+            "validation": {
+              "required": true
+            }
+          }
+        ]
+      },
+      {
+        "id": "activity",
+        "title": "Activity & Work",
+        "order": 3,
+        "shown_in_paths": [
+          "full"
+        ],
+        "questions": [
+          {
+            "id": "ocq670___overall_work_schedule_past_3_months",
+            "text": "In the past 3 months, what best describes your work schedule?",
+            "type": "categorical",
+            "feature_name": "ocq670___overall_work_schedule_past_3_months",
+            "options": [
+              {
+                "value": "1",
+                "label": "Standard hours (e.g. 9\u20135)",
+                "encoded_value": 1
+              },
+              {
+                "value": "2",
+                "label": "Early morning shift",
+                "encoded_value": 2
+              },
+              {
+                "value": "3",
+                "label": "Late afternoon / evening shift",
+                "encoded_value": 3
+              },
+              {
+                "value": "4",
+                "label": "Night shift",
+                "encoded_value": 4
+              },
+              {
+                "value": "5",
+                "label": "Rotating shifts",
+                "encoded_value": 5
+              },
+              {
+                "value": "6",
+                "label": "Split shift",
+                "encoded_value": 6
+              },
+              {
+                "value": "7",
+                "label": "Irregular / variable hours",
+                "encoded_value": 7
+              },
+              {
+                "value": "8",
+                "label": "Not currently working",
+                "encoded_value": 8
+              }
+            ],
+            "shown_in_paths": [
+              "full"
+            ],
+            "validation": {
+              "required": true
+            }
+          },
+          {
+            "id": "paq620___moderate_work_activity",
+            "text": "Does your job involve moderate physical activity?",
+            "help_text": "For example: walking, carrying light loads, cleaning, or cooking.",
+            "type": "binary",
+            "feature_name": "paq620___moderate_work_activity",
+            "options": [
+              {
+                "value": "1",
+                "label": "Yes",
+                "encoded_value": 1
+              },
+              {
+                "value": "2",
+                "label": "No",
+                "encoded_value": 2
+              }
+            ],
+            "shown_in_paths": [
+              "full"
+            ],
+            "validation": {
+              "required": true
+            }
+          },
+          {
+            "id": "free_time_activity",
+            "text": "In your free time",
+            "type": "dual_numeric",
+            "feature_name": "free_time_activity",
+            "options": [
+              {
+                "value": "paq665___moderate_recreational_activities",
+                "label": "Moderate activity",
+                "help_text": "Brisk walking, dancing, gardening, light cycling",
+                "sub_type": "binary"
+              },
+              {
+                "value": "paq650___vigorous_recreational_activities",
+                "label": "Vigorous activity",
+                "help_text": "Running, swimming, intense cycling, aerobics",
+                "sub_type": "binary"
+              },
+              {
+                "value": "pad680___minutes_sedentary_activity",
+                "label": "Daily sitting / lying time",
+                "help_text": "Not including sleep",
+                "unit": "min",
+                "sub_type": "numeric"
+              }
+            ],
+            "shown_in_paths": [
+              "full"
+            ],
+            "validation": {
+              "required": true
+            }
+          }
+        ]
+      },
+      {
+        "id": "lifestyle",
+        "title": "Lifestyle",
+        "order": 4,
+        "shown_in_paths": [
+          "full"
+        ],
+        "questions": [
+          {
+            "id": "alq130___avg_#_alcoholic_drinks/day___past_12_mos",
+            "text": "On days when you drink alcohol, how many drinks on average?",
+            "help_text": "Enter 0 if you don't drink. One drink = one beer, glass of wine, or single shot of spirits.",
+            "type": "numeric",
+            "feature_name": "alq130___avg_#_alcoholic_drinks/day___past_12_mos",
+            "options": [
+              {
+                "value": "",
+                "label": "Drinks per occasion"
+              }
+            ],
+            "shown_in_paths": [
+              "full"
+            ],
+            "validation": {
+              "required": false
+            }
+          },
+          {
+            "id": "alq151___ever_have_4/5_or_more_drinks_every_day?",
+            "text": "Have you ever had 4 or more drinks (if female) / 5 or more drinks (if male) on almost every day?",
+            "type": "binary",
+            "feature_name": "alq151___ever_have_4/5_or_more_drinks_every_day?",
+            "options": [
+              {
+                "value": "1",
+                "label": "Yes",
+                "encoded_value": 1
+              },
+              {
+                "value": "2",
+                "label": "No",
+                "encoded_value": 2
+              }
+            ],
+            "shown_in_paths": [
+              "full"
+            ],
+            "validation": {
+              "required": true
+            }
+          },
+          {
+            "id": "smq040___do_you_now_smoke_cigarettes?",
+            "text": "Do you currently smoke cigarettes?",
+            "type": "categorical",
+            "feature_name": "smq040___do_you_now_smoke_cigarettes?",
+            "options": [
+              {
+                "value": "1",
+                "label": "Yes, every day",
+                "encoded_value": 1
+              },
+              {
+                "value": "2",
+                "label": "Yes, some days",
+                "encoded_value": 2
+              },
+              {
+                "value": "3",
+                "label": "No, not at all",
+                "encoded_value": 3
+              }
+            ],
+            "shown_in_paths": [
+              "full"
+            ],
+            "validation": {
+              "required": true
+            }
+          },
+          {
+            "id": "smd650___avg_#_cigarettes/day_during_past_30_days",
+            "text": "In the past 30 days, how many cigarettes did you smoke on an average day?",
+            "type": "numeric",
+            "feature_name": "smd650___avg_#_cigarettes/day_during_past_30_days",
+            "options": [
+              {
+                "value": "",
+                "label": "Cigarettes per day"
+              }
+            ],
+            "conditional": {
+              "parent_id": "smq040___do_you_now_smoke_cigarettes?",
+              "parent_values": [
+                "1",
+                "2"
+              ],
+              "condition_type": "equals"
+            },
+            "shown_in_paths": [
+              "full"
+            ],
+            "validation": {
+              "required": false
+            }
+          }
+        ]
+      },
+      {
+        "id": "health_history",
+        "title": "Medical History",
+        "order": 5,
+        "shown_in_paths": [
+          "full"
+        ],
+        "questions": [
+          {
+            "id": "conditions_diagnosed",
+            "text": "Have any of the following ever been confirmed by a doctor?",
+            "help_text": "Select all that apply \u2014 leave blank if none.",
+            "type": "multi_select",
+            "feature_name": "conditions_diagnosed",
+            "options": [
+              {
+                "value": "bpq020___ever_told_you_had_high_blood_pressure",
+                "label": "High blood pressure"
+              },
+              {
+                "value": "bpq080___doctor_told_you___high_cholesterol_level",
+                "label": "High cholesterol"
+              },
+              {
+                "value": "diq010___doctor_told_you_have_diabetes",
+                "label": "Diabetes"
+              },
+              {
+                "value": "mcq010___ever_been_told_you_have_asthma",
+                "label": "Asthma"
+              },
+              {
+                "value": "mcq160a___ever_told_you_had_arthritis",
+                "label": "Arthritis"
+              },
+              {
+                "value": "kiq022___ever_told_you_had_weak/failing_kidneys?",
+                "label": "Kidney disease or failure"
+              },
+              {
+                "value": "mcq160l___ever_told_you_had_any_liver_condition",
+                "label": "Liver condition"
+              },
+              {
+                "value": "heq030___ever_told_you_have_hepatitis_c?",
+                "label": "Hepatitis C"
+              },
+              {
+                "value": "mcq160b___ever_told_you_had_congestive_heart_failure",
+                "label": "Heart failure"
+              },
+              {
+                "value": "mcq160e___ever_told_you_had_heart_attack",
+                "label": "Heart attack"
+              },
+              {
+                "value": "mcq160f___ever_told_you_had_stroke",
+                "label": "Stroke"
+              },
+              {
+                "value": "mcq053___taking_treatment_for_anemia/past_3_mos",
+                "label": "Anaemia (currently receiving treatment)"
+              },
+              {
+                "value": "mcq092___ever_receive_blood_transfusion",
+                "label": "Blood transfusion (ever)"
+              },
+              {
+                "value": "slq060___ever_told_by_doctor_have_sleep_disorder",
+                "label": "Sleep disorder"
+              },
+              {
+                "value": "mcq080___doctor_ever_said_you_were_overweight",
+                "label": "Overweight (told by doctor)"
+              }
+            ],
+            "shown_in_paths": [
+              "full"
+            ],
+            "validation": {
+              "required": false
+            }
+          },
+          {
+            "id": "bpq040a___taking_prescription_for_hypertension",
+            "text": "Are you currently taking prescribed medication for high blood pressure?",
+            "type": "binary",
+            "feature_name": "bpq040a___taking_prescription_for_hypertension",
+            "options": [
+              {
+                "value": "1",
+                "label": "Yes",
+                "encoded_value": 1
+              },
+              {
+                "value": "2",
+                "label": "No",
+                "encoded_value": 2
+              }
+            ],
+            "conditional": {
+              "parent_id": "conditions_diagnosed",
+              "parent_values": [
+                "bpq020___ever_told_you_had_high_blood_pressure"
+              ],
+              "condition_type": "contains"
+            },
+            "shown_in_paths": [
+              "full"
+            ],
+            "validation": {
+              "required": true
+            }
+          },
+          {
+            "id": "diq050___taking_insulin_now",
+            "text": "Are you currently taking insulin?",
+            "type": "binary",
+            "feature_name": "diq050___taking_insulin_now",
+            "options": [
+              {
+                "value": "1",
+                "label": "Yes",
+                "encoded_value": 1
+              },
+              {
+                "value": "2",
+                "label": "No",
+                "encoded_value": 2
+              }
+            ],
+            "conditional": {
+              "parent_id": "conditions_diagnosed",
+              "parent_values": [
+                "diq010___doctor_told_you_have_diabetes"
+              ],
+              "condition_type": "contains"
+            },
+            "shown_in_paths": [
+              "full"
+            ],
+            "validation": {
+              "required": true
+            }
+          },
+          {
+            "id": "diq070___take_diabetic_pills_to_lower_blood_sugar",
+            "text": "Do you take pills or tablets to lower your blood sugar?",
+            "type": "binary",
+            "feature_name": "diq070___take_diabetic_pills_to_lower_blood_sugar",
+            "options": [
+              {
+                "value": "1",
+                "label": "Yes",
+                "encoded_value": 1
+              },
+              {
+                "value": "2",
+                "label": "No",
+                "encoded_value": 2
+              }
+            ],
+            "conditional": {
+              "parent_id": "conditions_diagnosed",
+              "parent_values": [
+                "diq010___doctor_told_you_have_diabetes"
+              ],
+              "condition_type": "contains"
+            },
+            "shown_in_paths": [
+              "full"
+            ],
+            "validation": {
+              "required": true
+            }
+          },
+          {
+            "id": "whq070___tried_to_lose_weight_in_past_year",
+            "text": "Have you actively tried to lose weight in the past year?",
+            "type": "binary",
+            "feature_name": "whq070___tried_to_lose_weight_in_past_year",
+            "options": [
+              {
+                "value": "1",
+                "label": "Yes",
+                "encoded_value": 1
+              },
+              {
+                "value": "2",
+                "label": "No",
+                "encoded_value": 2
+              }
+            ],
+            "shown_in_paths": [
+              "full"
+            ],
+            "validation": {
+              "required": true
+            }
+          },
+          {
+            "id": "mcq300c___close_relative_had_diabetes",
+            "text": "Has a close family member (parent, sibling, or child) been diagnosed with diabetes?",
+            "type": "binary",
+            "feature_name": "mcq300c___close_relative_had_diabetes",
+            "options": [
+              {
+                "value": "1",
+                "label": "Yes",
+                "encoded_value": 1
+              },
+              {
+                "value": "2",
+                "label": "No",
+                "encoded_value": 2
+              }
+            ],
+            "shown_in_paths": [
+              "full"
+            ],
+            "validation": {
+              "required": true
+            }
+          }
+        ]
+      },
+      {
+        "id": "symptoms",
+        "title": "Your Symptoms",
+        "order": 6,
+        "shown_in_paths": [
+          "full"
+        ],
+        "questions": [
+          {
+            "id": "kiq480___how_many_times_urinate_in_night?",
+            "text": "On a typical night, how many times do you wake up to urinate?",
+            "type": "ordinal",
+            "feature_name": "kiq480___how_many_times_urinate_in_night?",
+            "options": [
+              {
+                "value": "0",
+                "label": "None",
+                "encoded_value": 0
+              },
+              {
+                "value": "1",
+                "label": "Once",
+                "encoded_value": 1
+              },
+              {
+                "value": "2",
+                "label": "Twice",
+                "encoded_value": 2
+              },
+              {
+                "value": "3",
+                "label": "3 times",
+                "encoded_value": 3
+              },
+              {
+                "value": "4",
+                "label": "4 times",
+                "encoded_value": 4
+              },
+              {
+                "value": "5",
+                "label": "5 or more times",
+                "encoded_value": 5
+              }
+            ],
+            "shown_in_paths": [
+              "full"
+            ],
+            "validation": {
+              "required": true
+            }
+          },
+          {
+            "id": "kiq005___how_often_have_urinary_leakage?",
+            "text": "How often do you experience any urinary leakage \u2014 even just a small amount?",
+            "type": "ordinal",
+            "feature_name": "kiq005___how_often_have_urinary_leakage?",
+            "options": [
+              {
+                "value": "0",
+                "label": "Never",
+                "encoded_value": 0
+              },
+              {
+                "value": "1",
+                "label": "Less than once a month",
+                "encoded_value": 1
+              },
+              {
+                "value": "2",
+                "label": "A few times a month",
+                "encoded_value": 2
+              },
+              {
+                "value": "3",
+                "label": "A few times a week",
+                "encoded_value": 3
+              },
+              {
+                "value": "4",
+                "label": "Every day or almost every day",
+                "encoded_value": 4
+              }
+            ],
+            "shown_in_paths": [
+              "full"
+            ],
+            "validation": {
+              "required": true
+            }
+          },
+          {
+            "id": "kiq044___urinated_before_reaching_the_toilet?",
+            "text": "Have you had urgent episodes where you couldn't reach the toilet in time?",
+            "type": "binary",
+            "feature_name": "kiq044___urinated_before_reaching_the_toilet?",
+            "options": [
+              {
+                "value": "1",
+                "label": "Yes",
+                "encoded_value": 1
+              },
+              {
+                "value": "2",
+                "label": "No",
+                "encoded_value": 2
+              }
+            ],
+            "conditional": {
+              "parent_id": "kiq005___how_often_have_urinary_leakage?",
+              "parent_values": [
+                "1",
+                "2",
+                "3",
+                "4"
+              ],
+              "condition_type": "equals"
+            },
+            "shown_in_paths": [
+              "full"
+            ],
+            "validation": {
+              "required": true
+            }
+          },
+          {
+            "id": "symptoms_physical",
+            "text": "Physical symptoms",
+            "type": "dual_numeric",
+            "feature_name": "symptoms_physical",
+            "options": [
+              {
+                "value": "kiq026___ever_had_kidney_stones?",
+                "label": "Kidney stones (ever)",
+                "sub_type": "binary"
+              },
+              {
+                "value": "cdq010___shortness_of_breath_on_stairs/inclines",
+                "label": "Short of breath on stairs or uphill",
+                "sub_type": "binary"
+              },
+              {
+                "value": "mcq520___abdominal_pain_during_past_12_months?",
+                "label": "Recurring abdominal pain (past year)",
+                "help_text": "More than one episode",
+                "sub_type": "binary"
+              }
+            ],
+            "shown_in_paths": [
+              "full"
+            ],
+            "validation": {
+              "required": true
+            }
+          },
+          {
+            "id": "mcq540___ever_seen_a_dr_about_this_pain",
+            "text": "Have you seen a doctor about this abdominal pain?",
+            "type": "binary",
+            "feature_name": "mcq540___ever_seen_a_dr_about_this_pain",
+            "options": [
+              {
+                "value": "1",
+                "label": "Yes",
+                "encoded_value": 1
+              },
+              {
+                "value": "2",
+                "label": "No",
+                "encoded_value": 2
+              }
+            ],
+            "conditional": {
+              "parent_id": "mcq520___abdominal_pain_during_past_12_months?",
+              "parent_values": [
+                "1"
+              ],
+              "condition_type": "equals"
+            },
+            "shown_in_paths": [
+              "full"
+            ],
+            "validation": {
+              "required": true
+            }
+          }
+        ]
+      },
+      {
+        "id": "womens_health",
+        "title": "Women's Health",
+        "order": 7,
+        "shown_in_paths": [
+          "full"
+        ],
+        "questions": [
+          {
+            "id": "pregnancy_status",
+            "text": "Are you currently pregnant?",
+            "type": "categorical",
+            "feature_name": "pregnancy_status",
+            "options": [
+              {
+                "value": "1",
+                "label": "Yes",
+                "encoded_value": 1
+              },
+              {
+                "value": "3",
+                "label": "Not sure",
+                "encoded_value": 3
+              },
+              {
+                "value": "2",
+                "label": "No",
+                "encoded_value": 2
+              }
+            ],
+            "conditional": {
+              "parent_id": "gender",
+              "parent_values": [
+                "2"
+              ],
+              "condition_type": "equals"
+            },
+            "shown_in_paths": [
+              "full"
+            ],
+            "validation": {
+              "required": true
+            }
+          },
+          {
+            "id": "rhq031___had_regular_periods_in_past_12_months",
+            "text": "Have your periods been regular in the past year?",
+            "help_text": "Regular means roughly the same cycle length each month.",
+            "type": "binary",
+            "feature_name": "rhq031___had_regular_periods_in_past_12_months",
+            "options": [
+              {
+                "value": "1",
+                "label": "Yes",
+                "encoded_value": 1
+              },
+              {
+                "value": "2",
+                "label": "No",
+                "encoded_value": 2
+              }
+            ],
+            "conditional": {
+              "parent_id": "gender",
+              "parent_values": [
+                "2"
+              ],
+              "condition_type": "equals"
+            },
+            "shown_in_paths": [
+              "full"
+            ],
+            "validation": {
+              "required": true
+            }
+          },
+          {
+            "id": "rhq060___age_at_last_menstrual_period",
+            "text": "At what age did you have your last menstrual period?",
+            "help_text": "Leave blank if your periods are ongoing.",
+            "type": "numeric",
+            "feature_name": "rhq060___age_at_last_menstrual_period",
+            "options": [
+              {
+                "value": "",
+                "label": "Age in years"
+              }
+            ],
+            "conditional": {
+              "parent_id": "rhq031___had_regular_periods_in_past_12_months",
+              "parent_values": [
+                "2"
+              ],
+              "condition_type": "equals"
+            },
+            "shown_in_paths": [
+              "full"
+            ],
+            "validation": {
+              "required": false
+            }
+          },
+          {
+            "id": "rhq540___ever_use_female_hormones?",
+            "text": "Have you ever used female hormones?",
+            "help_text": "For example: HRT (hormone replacement therapy) or the contraceptive pill.",
+            "type": "binary",
+            "feature_name": "rhq540___ever_use_female_hormones?",
+            "options": [
+              {
+                "value": "1",
+                "label": "Yes",
+                "encoded_value": 1
+              },
+              {
+                "value": "2",
+                "label": "No",
+                "encoded_value": 2
+              }
+            ],
+            "conditional": {
+              "parent_id": "gender",
+              "parent_values": [
+                "2"
+              ],
+              "condition_type": "equals"
+            },
+            "shown_in_paths": [
+              "full"
+            ],
+            "validation": {
+              "required": true
+            }
+          }
+        ]
+      },
+      {
+        "id": "labs",
+        "title": "Recent Lab Results",
+        "order": 8,
+        "shown_in_paths": [
+          "full"
+        ],
+        "questions": [
+          {
+            "id": "lab_upload",
+            "text": "Upload your lab results",
+            "help_text": "Upload a PDF or photo of your blood test. Values are extracted automatically and included in your report.",
+            "type": "file_upload",
+            "feature_name": "lab_upload",
+            "options": [],
+            "shown_in_paths": [
+              "full"
+            ],
+            "validation": {
+              "required": false
+            }
+          }
+        ]
+      }
+    ]
+  }
+}
