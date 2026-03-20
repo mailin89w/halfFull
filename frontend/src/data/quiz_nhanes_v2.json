@@ -149,6 +149,87 @@
             }
           },
           {
+            "id": "blood_pressure",
+            "text": "What is your usual blood pressure?",
+            "help_text": "Enter your most recent reading if you know it. Systolic is the top number, diastolic is the bottom.",
+            "type": "dual_numeric",
+            "feature_name": "blood_pressure",
+            "options": [
+              {
+                "value": "sbp_mean",
+                "label": "Systolic (top, mmHg)"
+              },
+              {
+                "value": "dbp_mean",
+                "label": "Diastolic (bottom, mmHg)"
+              }
+            ],
+            "shown_in_paths": [
+              "full"
+            ],
+            "validation": {
+              "required": false
+            }
+          },
+          {
+            "id": "waist_cm",
+            "text": "What is your waist circumference?",
+            "help_text": "Measure around your waist at the level of your belly button. Leave blank if unsure.",
+            "type": "numeric",
+            "feature_name": "waist_cm",
+            "options": [
+              {
+                "value": "",
+                "label": "Waist (cm)"
+              }
+            ],
+            "shown_in_paths": [
+              "full"
+            ],
+            "validation": {
+              "required": false
+            }
+          },
+          {
+            "id": "dmdeduc2",
+            "text": "What is the highest level of education you have completed?",
+            "type": "ordinal",
+            "feature_name": "dmdeduc2",
+            "options": [
+              {
+                "value": "1",
+                "label": "Less than secondary school",
+                "encoded_value": 1
+              },
+              {
+                "value": "2",
+                "label": "Secondary school, no diploma",
+                "encoded_value": 2
+              },
+              {
+                "value": "3",
+                "label": "High school graduate or GED",
+                "encoded_value": 3
+              },
+              {
+                "value": "4",
+                "label": "Some college or associate degree",
+                "encoded_value": 4
+              },
+              {
+                "value": "5",
+                "label": "College graduate or higher",
+                "encoded_value": 5
+              }
+            ],
+            "shown_in_paths": [
+              "full"
+            ],
+            "validation": {
+              "required": false
+            }
+          },
+          {
             "id": "huq071___overnight_hospital_patient_in_last_year",
             "text": "Were you admitted to a hospital overnight in the past year?",
             "type": "binary",
@@ -263,6 +344,30 @@
             "validation": {
               "required": true
             }
+          },
+          {
+            "id": "slq050___ever_told_doctor_had_trouble_sleeping?",
+            "text": "Has a doctor or other health professional ever told you that you have trouble sleeping?",
+            "type": "binary",
+            "feature_name": "slq050___ever_told_doctor_had_trouble_sleeping?",
+            "options": [
+              {
+                "value": "1",
+                "label": "Yes",
+                "encoded_value": 1
+              },
+              {
+                "value": "2",
+                "label": "No",
+                "encoded_value": 2
+              }
+            ],
+            "shown_in_paths": [
+              "full"
+            ],
+            "validation": {
+              "required": true
+            }
           }
         ]
       },
@@ -326,6 +431,37 @@
             ],
             "validation": {
               "required": true
+            }
+          },
+          {
+            "id": "ocq180___hours_worked_last_week_in_total_all_jobs",
+            "text": "How many hours did you work in total last week (all jobs combined)?",
+            "type": "numeric",
+            "feature_name": "ocq180___hours_worked_last_week_in_total_all_jobs",
+            "options": [
+              {
+                "value": "",
+                "label": "Hours per week"
+              }
+            ],
+            "conditional": {
+              "parent_id": "ocq670___overall_work_schedule_past_3_months",
+              "parent_values": [
+                "1",
+                "2",
+                "3",
+                "4",
+                "5",
+                "6",
+                "7"
+              ],
+              "condition_type": "equals"
+            },
+            "shown_in_paths": [
+              "full"
+            ],
+            "validation": {
+              "required": false
             }
           },
           {
@@ -440,6 +576,30 @@
             }
           },
           {
+            "id": "smq020___smoked_at_least_100_cigarettes_in_life",
+            "text": "Have you smoked at least 100 cigarettes in your entire life?",
+            "type": "binary",
+            "feature_name": "smq020___smoked_at_least_100_cigarettes_in_life",
+            "options": [
+              {
+                "value": "1",
+                "label": "Yes",
+                "encoded_value": 1
+              },
+              {
+                "value": "2",
+                "label": "No",
+                "encoded_value": 2
+              }
+            ],
+            "shown_in_paths": [
+              "full"
+            ],
+            "validation": {
+              "required": true
+            }
+          },
+          {
             "id": "smq040___do_you_now_smoke_cigarettes?",
             "text": "Do you currently smoke cigarettes?",
             "type": "categorical",
@@ -461,6 +621,13 @@
                 "encoded_value": 3
               }
             ],
+            "conditional": {
+              "parent_id": "smq020___smoked_at_least_100_cigarettes_in_life",
+              "parent_values": [
+                "1"
+              ],
+              "condition_type": "equals"
+            },
             "shown_in_paths": [
               "full"
             ],
@@ -492,6 +659,48 @@
             ],
             "validation": {
               "required": false
+            }
+          },
+          {
+            "id": "smq078___how_soon_after_waking_do_you_smoke",
+            "text": "How soon after waking up do you smoke your first cigarette?",
+            "type": "ordinal",
+            "feature_name": "smq078___how_soon_after_waking_do_you_smoke",
+            "options": [
+              {
+                "value": "1",
+                "label": "Within 5 minutes",
+                "encoded_value": 1
+              },
+              {
+                "value": "2",
+                "label": "6–30 minutes",
+                "encoded_value": 2
+              },
+              {
+                "value": "3",
+                "label": "31–60 minutes",
+                "encoded_value": 3
+              },
+              {
+                "value": "4",
+                "label": "More than 60 minutes",
+                "encoded_value": 4
+              }
+            ],
+            "conditional": {
+              "parent_id": "smq040___do_you_now_smoke_cigarettes?",
+              "parent_values": [
+                "1",
+                "2"
+              ],
+              "condition_type": "equals"
+            },
+            "shown_in_paths": [
+              "full"
+            ],
+            "validation": {
+              "required": true
             }
           }
         ]
@@ -719,6 +928,207 @@
             "validation": {
               "required": true
             }
+          },
+          {
+            "id": "huq051___#times_receive_healthcare_over_past_year",
+            "text": "How many times did you receive any healthcare in the past year?",
+            "help_text": "Include doctor visits, urgent care, telehealth, and other appointments.",
+            "type": "ordinal",
+            "feature_name": "huq051___#times_receive_healthcare_over_past_year",
+            "options": [
+              {
+                "value": "0",
+                "label": "None",
+                "encoded_value": 0
+              },
+              {
+                "value": "1",
+                "label": "1 time",
+                "encoded_value": 1
+              },
+              {
+                "value": "2",
+                "label": "2–3 times",
+                "encoded_value": 2
+              },
+              {
+                "value": "3",
+                "label": "4–9 times",
+                "encoded_value": 3
+              },
+              {
+                "value": "4",
+                "label": "10–12 times",
+                "encoded_value": 4
+              },
+              {
+                "value": "5",
+                "label": "13 or more times",
+                "encoded_value": 5
+              }
+            ],
+            "shown_in_paths": [
+              "full"
+            ],
+            "validation": {
+              "required": false
+            }
+          },
+          {
+            "id": "bpq030___told_had_high_blood_pressure___2+_times",
+            "text": "Were you told you had high blood pressure on two or more visits?",
+            "type": "binary",
+            "feature_name": "bpq030___told_had_high_blood_pressure___2+_times",
+            "options": [
+              {
+                "value": "1",
+                "label": "Yes",
+                "encoded_value": 1
+              },
+              {
+                "value": "2",
+                "label": "No",
+                "encoded_value": 2
+              }
+            ],
+            "conditional": {
+              "parent_id": "conditions_diagnosed",
+              "parent_values": [
+                "bpq020___ever_told_you_had_high_blood_pressure"
+              ],
+              "condition_type": "contains"
+            },
+            "shown_in_paths": [
+              "full"
+            ],
+            "validation": {
+              "required": true
+            }
+          },
+          {
+            "id": "mcq040___had_asthma_attack_in_past_year",
+            "text": "Have you had an asthma attack in the past 12 months?",
+            "type": "binary",
+            "feature_name": "mcq040___had_asthma_attack_in_past_year",
+            "options": [
+              {
+                "value": "1",
+                "label": "Yes",
+                "encoded_value": 1
+              },
+              {
+                "value": "2",
+                "label": "No",
+                "encoded_value": 2
+              }
+            ],
+            "conditional": {
+              "parent_id": "conditions_diagnosed",
+              "parent_values": [
+                "mcq010___ever_been_told_you_have_asthma"
+              ],
+              "condition_type": "contains"
+            },
+            "shown_in_paths": [
+              "full"
+            ],
+            "validation": {
+              "required": true
+            }
+          },
+          {
+            "id": "mcq195___which_type_of_arthritis_was_it?",
+            "text": "Which type of arthritis were you diagnosed with?",
+            "type": "categorical",
+            "feature_name": "mcq195___which_type_of_arthritis_was_it?",
+            "options": [
+              {
+                "value": "1",
+                "label": "Rheumatoid arthritis",
+                "encoded_value": 1
+              },
+              {
+                "value": "2",
+                "label": "Osteoarthritis",
+                "encoded_value": 2
+              },
+              {
+                "value": "4",
+                "label": "Psoriatic arthritis",
+                "encoded_value": 4
+              },
+              {
+                "value": "3",
+                "label": "Other / not sure",
+                "encoded_value": 3
+              }
+            ],
+            "conditional": {
+              "parent_id": "conditions_diagnosed",
+              "parent_values": [
+                "mcq160a___ever_told_you_had_arthritis"
+              ],
+              "condition_type": "contains"
+            },
+            "shown_in_paths": [
+              "full"
+            ],
+            "validation": {
+              "required": true
+            }
+          },
+          {
+            "id": "mcq366d___doctor_told_to_reduce_fat_in_diet",
+            "text": "Has a doctor ever advised you to reduce fat or calories in your diet?",
+            "type": "binary",
+            "feature_name": "mcq366d___doctor_told_to_reduce_fat_in_diet",
+            "options": [
+              {
+                "value": "1",
+                "label": "Yes",
+                "encoded_value": 1
+              },
+              {
+                "value": "2",
+                "label": "No",
+                "encoded_value": 2
+              }
+            ],
+            "shown_in_paths": [
+              "full"
+            ],
+            "validation": {
+              "required": true
+            }
+          },
+          {
+            "id": "whq040___like_to_weigh_more,_less_or_same",
+            "text": "Would you like to weigh more, less, or about the same as you do now?",
+            "type": "categorical",
+            "feature_name": "whq040___like_to_weigh_more,_less_or_same",
+            "options": [
+              {
+                "value": "2",
+                "label": "Less",
+                "encoded_value": 2
+              },
+              {
+                "value": "3",
+                "label": "About the same",
+                "encoded_value": 3
+              },
+              {
+                "value": "1",
+                "label": "More",
+                "encoded_value": 1
+              }
+            ],
+            "shown_in_paths": [
+              "full"
+            ],
+            "validation": {
+              "required": true
+            }
           }
         ]
       },
@@ -848,6 +1258,47 @@
             }
           },
           {
+            "id": "kiq450___how_frequently_does_this_occur?",
+            "text": "How often do you leak urine before reaching the toilet?",
+            "type": "ordinal",
+            "feature_name": "kiq450___how_frequently_does_this_occur?",
+            "options": [
+              {
+                "value": "1",
+                "label": "Less than once a month",
+                "encoded_value": 1
+              },
+              {
+                "value": "2",
+                "label": "A few times a month",
+                "encoded_value": 2
+              },
+              {
+                "value": "3",
+                "label": "A few times a week",
+                "encoded_value": 3
+              },
+              {
+                "value": "4",
+                "label": "Every day or almost every day",
+                "encoded_value": 4
+              }
+            ],
+            "conditional": {
+              "parent_id": "kiq044___urinated_before_reaching_the_toilet?",
+              "parent_values": [
+                "1"
+              ],
+              "condition_type": "equals"
+            },
+            "shown_in_paths": [
+              "full"
+            ],
+            "validation": {
+              "required": true
+            }
+          },
+          {
             "id": "symptoms_physical",
             "text": "Physical symptoms",
             "type": "dual_numeric",
@@ -907,6 +1358,169 @@
             "validation": {
               "required": true
             }
+          },
+          {
+            "id": "kiq010___how_much_urine_lose_each_time?",
+            "text": "How much urine do you usually lose each time?",
+            "type": "ordinal",
+            "feature_name": "kiq010___how_much_urine_lose_each_time?",
+            "options": [
+              {
+                "value": "1",
+                "label": "Drops",
+                "encoded_value": 1
+              },
+              {
+                "value": "2",
+                "label": "Small splashes",
+                "encoded_value": 2
+              },
+              {
+                "value": "3",
+                "label": "More than small splashes",
+                "encoded_value": 3
+              }
+            ],
+            "conditional": {
+              "parent_id": "kiq005___how_often_have_urinary_leakage?",
+              "parent_values": [
+                "1",
+                "2",
+                "3",
+                "4"
+              ],
+              "condition_type": "equals"
+            },
+            "shown_in_paths": [
+              "full"
+            ],
+            "validation": {
+              "required": true
+            }
+          },
+          {
+            "id": "kiq042___leak_urine_during_physical_activities?",
+            "text": "Does urinary leakage happen during physical activities like coughing, sneezing, or exercise?",
+            "type": "binary",
+            "feature_name": "kiq042___leak_urine_during_physical_activities?",
+            "options": [
+              {
+                "value": "1",
+                "label": "Yes",
+                "encoded_value": 1
+              },
+              {
+                "value": "2",
+                "label": "No",
+                "encoded_value": 2
+              }
+            ],
+            "conditional": {
+              "parent_id": "kiq005___how_often_have_urinary_leakage?",
+              "parent_values": [
+                "1",
+                "2",
+                "3",
+                "4"
+              ],
+              "condition_type": "equals"
+            },
+            "shown_in_paths": [
+              "full"
+            ],
+            "validation": {
+              "required": true
+            }
+          },
+          {
+            "id": "kiq052___how_much_were_daily_activities_affected?",
+            "text": "How much does urinary leakage affect your daily activities?",
+            "type": "ordinal",
+            "feature_name": "kiq052___how_much_were_daily_activities_affected?",
+            "options": [
+              {
+                "value": "1",
+                "label": "Not at all",
+                "encoded_value": 1
+              },
+              {
+                "value": "2",
+                "label": "Only a little",
+                "encoded_value": 2
+              },
+              {
+                "value": "3",
+                "label": "Somewhat",
+                "encoded_value": 3
+              },
+              {
+                "value": "4",
+                "label": "Very much",
+                "encoded_value": 4
+              },
+              {
+                "value": "5",
+                "label": "Greatly",
+                "encoded_value": 5
+              }
+            ],
+            "conditional": {
+              "parent_id": "kiq005___how_often_have_urinary_leakage?",
+              "parent_values": [
+                "1",
+                "2",
+                "3",
+                "4"
+              ],
+              "condition_type": "equals"
+            },
+            "shown_in_paths": [
+              "full"
+            ],
+            "validation": {
+              "required": true
+            }
+          },
+          {
+            "id": "kiq430___how_frequently_does_this_occur?",
+            "text": "How often does urinary leakage happen during physical activities?",
+            "type": "ordinal",
+            "feature_name": "kiq430___how_frequently_does_this_occur?",
+            "options": [
+              {
+                "value": "1",
+                "label": "Less than once a month",
+                "encoded_value": 1
+              },
+              {
+                "value": "2",
+                "label": "A few times a month",
+                "encoded_value": 2
+              },
+              {
+                "value": "3",
+                "label": "A few times a week",
+                "encoded_value": 3
+              },
+              {
+                "value": "4",
+                "label": "Every day or almost every day",
+                "encoded_value": 4
+              }
+            ],
+            "conditional": {
+              "parent_id": "kiq042___leak_urine_during_physical_activities?",
+              "parent_values": [
+                "1"
+              ],
+              "condition_type": "equals"
+            },
+            "shown_in_paths": [
+              "full"
+            ],
+            "validation": {
+              "required": true
+            }
           }
         ]
       },
@@ -952,6 +1566,62 @@
             ],
             "validation": {
               "required": true
+            }
+          },
+          {
+            "id": "rhq131___ever_been_pregnant?",
+            "text": "Have you ever been pregnant?",
+            "type": "binary",
+            "feature_name": "rhq131___ever_been_pregnant?",
+            "options": [
+              {
+                "value": "1",
+                "label": "Yes",
+                "encoded_value": 1
+              },
+              {
+                "value": "2",
+                "label": "No",
+                "encoded_value": 2
+              }
+            ],
+            "conditional": {
+              "parent_id": "gender",
+              "parent_values": [
+                "2"
+              ],
+              "condition_type": "equals"
+            },
+            "shown_in_paths": [
+              "full"
+            ],
+            "validation": {
+              "required": true
+            }
+          },
+          {
+            "id": "rhq160___how_many_times_have_been_pregnant?",
+            "text": "How many times have you been pregnant?",
+            "type": "numeric",
+            "feature_name": "rhq160___how_many_times_have_been_pregnant?",
+            "options": [
+              {
+                "value": "",
+                "label": "Number of pregnancies"
+              }
+            ],
+            "conditional": {
+              "parent_id": "rhq131___ever_been_pregnant?",
+              "parent_values": [
+                "1"
+              ],
+              "condition_type": "equals"
+            },
+            "shown_in_paths": [
+              "full"
+            ],
+            "validation": {
+              "required": false
             }
           },
           {

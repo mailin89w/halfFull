@@ -75,6 +75,8 @@ HELPER_ALIAS_MAP = {
     "taking_anemia_treatment": "mcq053___taking_treatment_for_anemia/past_3_mos",
     "ever_told_high_bp": "bpq020___ever_told_you_had_high_blood_pressure",
     "taking_bp_prescription": "bpq040a___taking_prescription_for_hypertension",
+    "bpq050a___now_taking_prescribed_medicine_for_hbp": "bpq040a___taking_prescription_for_hypertension",
+    "education": "dmdeduc2",
     "taking_insulin": "diq050___taking_insulin_now",
     "taking_diabetic_pills": "diq070___take_diabetic_pills_to_lower_blood_sugar",
     "takes_diabetes_pills": "diq070___take_diabetic_pills_to_lower_blood_sugar",
