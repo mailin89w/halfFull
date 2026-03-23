@@ -14,7 +14,7 @@ dist/
 downloads/
 eggs/
 .eggs/
-lib/
+/lib/
 lib64/
 parts/
 sdist/
@@ -143,6 +143,8 @@ venv/
 ENV/
 env.bak/
 venv.bak/
+ml_project_env/lib/
+ml_project_env_win/Lib/
 
 # Spyder project settings
 .spyderproject
@@ -219,6 +221,8 @@ data/raw/
 # Node / Next.js
 node_modules/
 .next/
+*.log
+*.log.*
 
 .claude/
 
