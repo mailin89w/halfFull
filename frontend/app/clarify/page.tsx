@@ -149,7 +149,7 @@ export default function ClarifyPage() {
                          : answers.gender === '1' ? 'male'
                          : undefined;
 
-        const data = await fetchBayesianQuestions(mlScores, patientSex as string | undefined);
+        const data = await fetchBayesianQuestions(mlScores, patientSex as string | undefined, answers);
         if (cancelled.current) return;
 
         // No conditions cleared the threshold — skip straight to processing
@@ -216,6 +216,7 @@ export default function ClarifyPage() {
         confounderAnswers,
         answersByCondition,
         patientSex as string | undefined,
+        answers,
       );
 
       // Build human-readable Q&A record for MedGemma prompt

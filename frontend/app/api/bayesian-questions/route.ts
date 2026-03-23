@@ -9,7 +9,7 @@ import { writeLog } from '@/src/lib/logger';
  * Returns structured follow-up questions for conditions that cleared the
  * ML trigger threshold (default 0.40), plus PHQ-2 / GAD-2 confounder questions.
  *
- * Body: { mlScores: Record<string, number>, patientSex?: string }
+ * Body: { mlScores: Record<string, number>, patientSex?: string, existingAnswers?: Record<string, unknown> }
  *
  * Response:
  * {
@@ -57,16 +57,18 @@ function runPython(input: object): Promise<Record<string, unknown>> {
 export async function POST(req: NextRequest) {
   let mlScores: Record<string, number>;
   let patientSex: string | undefined;
+  let existingAnswers: Record<string, unknown>;
 
   try {
-    const body = await req.json() as { mlScores?: unknown; patientSex?: unknown };
+    const body = await req.json() as { mlScores?: unknown; patientSex?: unknown; existingAnswers?: unknown };
     mlScores   = (body.mlScores ?? {}) as Record<string, number>;
     patientSex = typeof body.patientSex === 'string' ? body.patientSex : undefined;
+    existingAnswers = (body.existingAnswers ?? {}) as Record<string, unknown>;
   } catch {
     return NextResponse.json({ error: 'Invalid JSON body' }, { status: 400 });
   }
 
-  const result = await runPython({ mode: 'questions', ml_scores: mlScores, patient_sex: patientSex });
+  const result = await runPython({ mode: 'questions', ml_scores: mlScores, patient_sex: patientSex, existing_answers: existingAnswers });
 
   if (result.error) {
     writeLog('bayesian_questions_error', { mlScores, error: result.error });

@@ -2,6 +2,8 @@ import { NextRequest, NextResponse } from 'next/server';
 import { formatAnswersV2 } from '@/src/lib/formatAnswers';
 import { writeLog } from '@/src/lib/logger';
 import { ML_THRESHOLD, selectTopConditions } from '@/src/lib/mlConfig';
+// [ADDED] Schema validation and hard safety rules
+import { validateDeepAnalyzeSchema, applyHardSafetyRules } from '@/lib/medgemma-safety';
 
 export const maxDuration = 60;
 
@@ -74,15 +76,19 @@ export async function POST(req: NextRequest) {
 
   const flaggedAreasText = topConditions.length > 0
     ? topConditions
-        .map(([condition, prob]) => `- ${condition}: ${(prob * 100).toFixed(1)}%`)
-        .join('\n')
+      .map(([condition, prob]) => `- ${condition}: ${(prob * 100).toFixed(1)}%`)
+      .join('\n')
     : '- None';
 
   const clarificationText = clarificationQA && clarificationQA.length > 0
     ? clarificationQA
-        .map((qa) => `- [${qa.group}] ${qa.question} → ${qa.answer}`)
-        .join('\n')
+      .map((qa) => `- [${qa.group}] ${qa.question} → ${qa.answer}`)
+      .join('\n')
     : null;
+
+  // [ADDED] Healthy user path: no scores or everything below 0.35
+  const isAllClear =
+    !mlScores || Object.values(mlScores).every((p) => p < 0.35);
 
   const prompt = `You are a medical AI generating a personalised fatigue report. Reference the patient's actual symptoms — never give generic advice.
 
@@ -92,6 +98,12 @@ ${symptomsText}
 TOP-3 FLAGGED CONDITIONS (posterior probabilities after Bayesian update):
 ${flaggedAreasText}
 ${clarificationText ? `\nCLARIFICATION ANSWERS (patient answered these follow-up questions — treat as confirmed findings):\n${clarificationText}` : ''}
+
+Before generating the JSON, reason through these steps internally:
+1. What is the patient's most prominent symptom?
+2. Which flagged condition best explains it and why?
+3. What specific tests would confirm or rule it out?
+Then generate the JSON based on your reasoning. Do not include the reasoning in the output.
 
 Respond with valid JSON only — no markdown, no preamble:
 {
@@ -116,7 +128,52 @@ Rules:
 - doctorKitQuestions: exactly 2 items.
 - doctorKitArguments: exactly 2 items.
 - Every string must reference THIS patient's data — no generic filler.
-- Complete the full JSON without truncating.`;
+- Complete the full JSON without truncating.
+- You are a screening tool, not a doctor. Never state or imply a diagnosis.
+- Always frame findings as 'may suggest', 'could indicate', or 'worth discussing with your GP'.
+- Never use alarming language. Never tell the patient they are seriously ill.
+- This report is not medical advice. Always include a disclaimer in personalizedSummary.`;
+
+  // [ADDED] Healthy user path — separate prompt when no condition clears 0.35
+  const activePrompt = isAllClear
+    ? `You are a warm, supportive wellness AI. The patient completed a fatigue screening and no significant risk areas were flagged.
+
+PATIENT DATA:
+${symptomsText}
+
+The screening found no conditions above the risk threshold. Generate a reassuring, positive response.
+
+Before generating the JSON, reason through these steps internally:
+1. What positive patterns appear in the patient's data?
+2. What general wellness habits are worth encouraging?
+3. Are there any very minor areas to keep an eye on?
+Then generate the JSON based on your reasoning. Do not include the reasoning in the output.
+
+Respond with valid JSON only — no markdown, no preamble:
+{
+  "personalizedSummary": "2 warm sentences. Acknowledge the patient's efforts, confirm the results look reassuring, and include a brief disclaimer that this is a screening tool.",
+  "insights": [],
+  "nextSteps": "2 sentences with practical general-wellness suggestions (sleep, nutrition, activity) based on what this patient reported.",
+  "doctorKitSummary": "2 sentences in first person. The patient can share this if they want their GP to know they completed a screening and no red flags were found.",
+  "doctorKitQuestions": [
+    "Is there anything in my results I should keep an eye on in future screenings?",
+    "Are there general wellness checks you recommend given my age and lifestyle?"
+  ],
+  "doctorKitArguments": [
+    "I completed an evidence-based fatigue screening and no specific risk areas were flagged.",
+    "I would like to maintain this baseline and understand any preventive steps I can take."
+  ],
+  "allClear": true
+}
+
+Rules:
+- Warm, positive tone throughout — never create concern where none exists.
+- nextSteps must be constructive general wellness advice, not diagnostic suggestions.
+- doctorKitQuestions and doctorKitArguments: exactly 2 items each.
+- Always include "allClear": true in the output.
+- This report is not medical advice. Always include a disclaimer in personalizedSummary.
+- Complete the full JSON without truncating.`
+    : prompt;
 
   try {
     const controller = new AbortController();
@@ -131,7 +188,8 @@ Rules:
         model: HF_MODEL,
         messages: [
           { role: 'system', content: 'You output valid JSON only. No markdown, no thinking, no explanations, no preamble. Start your response immediately with { and end with }.' },
-          { role: 'user', content: prompt },
+          // [ADDED] activePrompt switches between main prompt and all-clear prompt
+          { role: 'user', content: activePrompt },
         ],
         max_tokens: 1500,
         temperature: 0.3,
@@ -165,8 +223,28 @@ Rules:
         { status: 500 }
       );
     }
-    writeLog('deep_analyze', { answers, mlScores, clarificationQA, topConditions, result: parsed });
-    return NextResponse.json(parsed);
+
+    // [ADDED] Schema validation — return 422 if MedGemma output doesn't match contract
+    const validation = validateDeepAnalyzeSchema(parsed);
+    if (!validation.ok) {
+      writeLog('deep_analyze_schema_error', {
+        answers, mlScores, reason: validation.reason, raw: content,
+      });
+      return NextResponse.json(
+        { error: 'schema_validation_failed', detail: validation.reason, raw: content },
+        { status: 422 },
+      );
+    }
+
+    // [ADDED] Hard safety rules — scan for forbidden phrases and replace if found
+    const { data: safeData, warnings: safetyWarnings } = applyHardSafetyRules(validation.data);
+    if (safetyWarnings.length > 0) {
+      writeLog('deep_analyze_safety_replacements', { answers, mlScores, warnings: safetyWarnings });
+      for (const w of safetyWarnings) console.warn(w);
+    }
+
+    writeLog('deep_analyze', { answers, mlScores, clarificationQA, topConditions, result: safeData });
+    return NextResponse.json(safeData);
   } catch (err) {
     writeLog('deep_analyze_error', { answers, mlScores, error: String(err) });
     return NextResponse.json({ error: String(err) }, { status: 500 });

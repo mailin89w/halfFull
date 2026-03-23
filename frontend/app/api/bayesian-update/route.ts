@@ -14,6 +14,7 @@ import { writeLog } from '@/src/lib/logger';
  *   confounderAnswers:   Record<string, number>,   // PHQ-2 / GAD-2 ordinal values
  *   answersByCondition:  Record<string, Record<string, string>>,
  *   patientSex?:         string,
+ *   existingAnswers?:    Record<string, unknown>,  // raw quiz answers for silent prefill
  * }
  *
  * Response:
@@ -64,6 +65,7 @@ export async function POST(req: NextRequest) {
   let confounderAnswers: Record<string, number>;
   let answersByCondition: Record<string, Record<string, string>>;
   let patientSex: string | undefined;
+  let existingAnswers: Record<string, unknown>;
 
   try {
     const body = await req.json() as {
@@ -71,11 +73,13 @@ export async function POST(req: NextRequest) {
       confounderAnswers?: unknown;
       answersByCondition?: unknown;
       patientSex?: unknown;
+      existingAnswers?: unknown;
     };
     mlScores           = (body.mlScores ?? {}) as Record<string, number>;
     confounderAnswers  = (body.confounderAnswers ?? {}) as Record<string, number>;
     answersByCondition = (body.answersByCondition ?? {}) as Record<string, Record<string, string>>;
     patientSex         = typeof body.patientSex === 'string' ? body.patientSex : undefined;
+    existingAnswers    = (body.existingAnswers ?? {}) as Record<string, unknown>;
   } catch {
     return NextResponse.json({ error: 'Invalid JSON body' }, { status: 400 });
   }
@@ -86,6 +90,7 @@ export async function POST(req: NextRequest) {
     confounder_answers:   confounderAnswers,
     answers_by_condition: answersByCondition,
     patient_sex:          patientSex,
+    existing_answers:     existingAnswers,
   });
 
   if (result.error) {

@@ -44,6 +44,7 @@ PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, PROJECT_ROOT)
 
 from bayesian.bayesian_updater import BayesianUpdater  # noqa: E402
+from bayesian.quiz_to_bayesian_map import get_prefilled_answers  # noqa: E402
 
 TRIGGER_THRESHOLD = 0.40
 MAX_CONDITIONS    = 3   # max conditions to surface questions for
@@ -63,8 +64,12 @@ def _best_question(questions: list[dict]) -> dict:
 
 
 def handle_questions(payload: dict, updater: BayesianUpdater) -> dict:
-    ml_scores  = payload.get("ml_scores", {})
+    ml_scores   = payload.get("ml_scores", {})
     patient_sex = payload.get("patient_sex")
+    existing_answers = payload.get("existing_answers", {})
+
+    # Translate quiz answers that overlap with Bayesian questions
+    prefilled = get_prefilled_answers(existing_answers)
 
     # Condition questions: top MAX_CONDITIONS triggered, one best question each
     triggered = sorted(
@@ -98,6 +103,10 @@ def handle_questions(payload: dict, updater: BayesianUpdater) -> dict:
         )
         if not questions:
             continue
+        # Skip questions whose answer was already prefilled from the quiz
+        questions = [q for q in questions if q["id"] not in prefilled]
+        if not questions:
+            continue
         best = _best_question(questions)
         condition_questions.append({
             "condition":   condition,
@@ -120,10 +129,30 @@ def handle_questions(payload: dict, updater: BayesianUpdater) -> dict:
 
 
 def handle_update(payload: dict, updater: BayesianUpdater) -> dict:
-    ml_scores           = payload.get("ml_scores", {})
-    confounder_answers  = payload.get("confounder_answers", {})
+    ml_scores            = payload.get("ml_scores", {})
+    confounder_answers   = payload.get("confounder_answers", {})
     answers_by_condition = payload.get("answers_by_condition", {})
-    patient_sex         = payload.get("patient_sex")
+    patient_sex          = payload.get("patient_sex")
+    existing_answers     = payload.get("existing_answers", {})
+
+    # Translate quiz answers into Bayesian answers and merge into answers_by_condition.
+    # Build a reverse map: {bayesian_question_id: condition} from the updater's conditions.
+    prefilled = get_prefilled_answers(existing_answers)
+    if prefilled:
+        # Map each Bayesian question ID back to its condition
+        q_to_condition: dict[str, str] = {}
+        for condition in updater._conditions:
+            for q in updater.get_questions(condition, prior_prob=0.5, patient_sex=patient_sex, max_questions=50):
+                q_to_condition[q["id"]] = condition
+
+        for q_id, answer in prefilled.items():
+            condition = q_to_condition.get(q_id)
+            if condition is None:
+                continue
+            # User-supplied answers take priority — only fill if not already answered
+            cond_answers = answers_by_condition.setdefault(condition, {})
+            if q_id not in cond_answers:
+                cond_answers[q_id] = answer
 
     # Build shortlist from all conditions (not just triggered ones, so
     # non-triggered conditions pass through unchanged)
