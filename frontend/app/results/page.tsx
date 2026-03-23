@@ -4,24 +4,30 @@ import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import type { jsPDF as JsPDFType } from 'jspdf';
 import { useAssessment } from '@/src/hooks/useAssessment';
-import { computeResults } from '@/src/lib/mockResults';
+import { computeResults, buildDiagnosesFromML } from '@/src/lib/mockResults';
 import {
   getInsightForDiagnosis,
   readStoredDeepResult,
+  readStoredMLScores,
 } from '@/src/lib/medgemma';
 import type { DeepMedGemmaResult } from '@/src/lib/medgemma';
 import { EnergySpectrum } from '@/src/components/results/EnergySpectrum';
 import { DiagnosisCard } from '@/src/components/results/DiagnosisCard';
 import { DoctorPriority } from '@/src/components/results/DoctorPriority';
-import { BlobCharacter } from '@/src/components/ui/BlobCharacter';
 
 export default function ResultsPage() {
   const { answers, hydrated, reset } = useAssessment();
   const [deep, setDeep] = useState<DeepMedGemmaResult | null>(null);
   const [doctorKitOpen, setDoctorKitOpen] = useState(false);
 
-  const { currentPct, projectedPct, summaryLine, diagnoses, doctors } =
-    computeResults(answers);
+  const { currentPct, projectedPct, summaryLine, doctors } = computeResults(answers);
+
+  // Use ML diagnoses when available (from /api/score run on /processing page),
+  // falling back to rule-based diagnoses from computeResults.
+  const mlScores = hydrated ? readStoredMLScores() : null;
+  const diagnoses = mlScores
+    ? buildDiagnosesFromML(mlScores)
+    : computeResults(answers).diagnoses;
 
   // Load deep analysis result from session storage (written by /processing)
   useEffect(() => {
@@ -249,10 +255,7 @@ export default function ResultsPage() {
 
           {/* ── Hero ──────────────────────────────────────────────────────── */}
           <section className="relative overflow-hidden rounded-[2rem] bg-[var(--color-card)] px-5 py-6 shadow-[0_14px_30px_rgba(86,98,145,0.14)]">
-            <div className="mb-3 flex items-start justify-between gap-4">
-              <div className="pointer-events-none absolute right-8 top-[5.4rem] z-10">
-                <BlobCharacter className="h-14 w-14" accent="lime" mood="gentle" />
-              </div>
+            <div className="mb-3">
               <div>
                 <p className="mb-2 text-[11px] font-bold uppercase tracking-[0.18em] text-[var(--color-ink-soft)]">
                   Assessment complete

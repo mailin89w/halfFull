@@ -6,17 +6,16 @@ interface Props {
   options: QuestionOption[];
   value: string[] | undefined;
   onChange: (val: string[]) => void;
+  layout?: 'list' | 'pills';
 }
 
-export function AnswerMultiple({ options, value = [], onChange }: Props) {
+export function AnswerMultiple({ options, value = [], onChange, layout = 'list' }: Props) {
   const toggle = (optionValue: string) => {
-    // Values ending in "_none" act as the exclusive "None of the above" option
     const isNoneOption = optionValue.endsWith('_none');
     if (isNoneOption) {
       onChange(value.includes(optionValue) ? [] : [optionValue]);
       return;
     }
-    // Remove any existing none-selections when picking a real option
     const withoutNone = value.filter((v) => !v.endsWith('_none'));
     if (withoutNone.includes(optionValue)) {
       onChange(withoutNone.filter((v) => v !== optionValue));
@@ -24,6 +23,40 @@ export function AnswerMultiple({ options, value = [], onChange }: Props) {
       onChange([...withoutNone, optionValue]);
     }
   };
+
+  if (layout === 'pills') {
+    return (
+      <div>
+        <div className="flex flex-wrap gap-2">
+          {options.map((option) => {
+            const selected = value.includes(option.value);
+            return (
+              <button
+                key={option.value}
+                onClick={() => toggle(option.value)}
+                className={[
+                  'rounded-full border px-4 py-2 text-sm font-medium transition-all duration-150 active:scale-[0.97]',
+                  selected
+                    ? 'border-[var(--color-accent)] bg-[var(--color-accent)] text-white shadow-[0_4px_12px_rgba(119,101,244,0.28)]'
+                    : 'border-[rgba(151,166,210,0.4)] bg-white text-[var(--color-ink)] hover:border-[var(--color-accent)] hover:bg-[var(--color-accent-soft)]',
+                ].join(' ')}
+              >
+                {selected && (
+                  <span className="mr-1.5 text-xs">✓</span>
+                )}
+                {option.label}
+              </button>
+            );
+          })}
+        </div>
+        {value.length > 0 && (
+          <p className="mt-3 text-center text-xs text-[var(--color-ink-soft)]">
+            {value.length} selected
+          </p>
+        )}
+      </div>
+    );
+  }
 
   return (
     <div className="flex flex-col gap-3">

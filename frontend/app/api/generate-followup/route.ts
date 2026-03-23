@@ -1,5 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { formatAnswers } from '@/src/lib/formatAnswers';
+import { formatAnswersV2 } from '@/src/lib/formatAnswers';
+import { writeLog } from '@/src/lib/logger';
+import { ML_THRESHOLD, selectTopConditions } from '@/src/lib/mlConfig';
+
+export const maxDuration = 180; // seconds — HF cold-start can take 2+ min
 
 const HF_MODEL = 'google/medgemma-1.5-4b-it';
 const HF_API_URL = process.env.HF_ENDPOINT_URL
@@ -14,18 +18,22 @@ export async function POST(req: NextRequest) {
 
   const body = await req.json();
   const answers: Record<string, unknown> = body.answers ?? {};
-  const diagnoses: Array<{ id: string; title: string; signal: string }> = body.diagnoses ?? [];
+  const mlScores: Record<string, number> = body.mlScores ?? {};
 
-  const symptomsText = formatAnswers(answers);
-  const diagnosisText = diagnoses.map((d) => `- ${d.title} (${d.signal} signal)`).join('\n');
+  const symptomsText = formatAnswersV2(answers);
+
+  const topConditions = selectTopConditions(mlScores);
+  const diagnosisText = topConditions
+    .map(([condition, prob]) => `- ${condition}: ${(prob * 100).toFixed(1)}%${prob >= ML_THRESHOLD ? ' [flagged]' : ''}`)
+    .join('\n');
 
   const prompt = `You are a medical AI assistant. A patient completed a fatigue assessment. Your job is to identify the most likely diagnoses and ask exactly 3 targeted questions to confirm or rule them out.
 
 ══ WHAT WE ALREADY KNOW (DO NOT ask about these) ══
 ${symptomsText}
 
-══ CLINICAL AREAS FLAGGED ══
-${diagnosisText || '- No specific areas flagged yet'}
+══ ML MODEL PROBABILITIES (11-condition screening) ══
+${diagnosisText || '- No scores available'}
 
 ══ YOUR TASK ══
 Step 1 — Name 2–3 specific medical hypotheses (e.g. "Perimenopause", "Iron-deficiency anaemia", "Hypothyroidism", "Long COVID / ME-CFS", "Major depressive episode", "Sleep apnoea", "Adrenal fatigue / HPA dysregulation").
@@ -62,6 +70,8 @@ Respond with valid JSON only — no markdown, no preamble, no extra text:
 }`;
 
   try {
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 150_000);
     const hfResponse = await fetch(HF_API_URL, {
       method: 'POST',
       headers: {
@@ -74,7 +84,8 @@ Respond with valid JSON only — no markdown, no preamble, no extra text:
         max_tokens: 700,
         temperature: 0.4,
       }),
-    });
+      signal: controller.signal,
+    }).finally(() => clearTimeout(timeout));
 
     if (!hfResponse.ok) {
       const errText = await hfResponse.text();
@@ -118,8 +129,10 @@ Respond with valid JSON only — no markdown, no preamble, no extra text:
       questionTargets.push('');
     }
 
+    writeLog('followup', { answers, mlScores, hypotheses, questions, questionTargets });
     return NextResponse.json({ hypotheses, questions, questionTargets });
   } catch (err) {
+    writeLog('followup_error', { answers, mlScores, error: String(err) });
     return NextResponse.json({ error: String(err) }, { status: 500 });
   }
 }

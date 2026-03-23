@@ -65,7 +65,7 @@ MODEL_REGISTRY = {
     "sleep_disorder":  "sleep_disorder_compact_quiz_demo_med_screening_labs_threshold_04.joblib",
     "liver":           "liver_lr_l2_13feat.joblib",
     "prediabetes":     "prediabetes_focused_quiz_demo_med_screening_labs_threshold_045.joblib",
-    "inflammation":    "inflammation_lr_l2_32feat.joblib",
+    "inflammation":    "inflammation_lr_l1_45feat.joblib",
     "electrolytes":    "electrolyte_imbalance_compact_quiz_demo_med_screening_labs_threshold_05.joblib",
     "hepatitis":       "hepatitis_rf_cal_33feat.joblib",
     "perimenopause":   "perimenopause_gradient_boosting.joblib",
@@ -156,8 +156,13 @@ class ModelRunner:
                 return condition, None
             X = feature_vectors[condition]
             try:
+                pipeline = self._pipelines[condition]
+                # Some rebuilt models are packaged as dicts with the estimator
+                # stored under "model" plus metadata such as threshold/features.
+                if isinstance(pipeline, dict) and "model" in pipeline:
+                    pipeline = pipeline["model"]
                 prob = float(
-                    self._pipelines[condition].predict_proba(X)[:, 1][0]
+                    pipeline.predict_proba(X)[:, 1][0]
                 )
                 return condition, prob
             except Exception as exc:

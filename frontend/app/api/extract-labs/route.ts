@@ -17,10 +17,58 @@ Vitamin D (25-OH), Vitamin B12, Folate, MMA, Homocysteine,
 CRP, ESR, ANA,
 Cortisol (morning), DHEA-S, Testosterone,
 HbA1c, Fasting glucose, Insulin,
-ALT, AST, GGT, Bilirubin, Albumin, Creatinine, eGFR.
+ALT, AST, GGT, Bilirubin, Albumin, Creatinine, eGFR,
+Total Cholesterol, HDL, LDL, Triglycerides, Glucose, WBC.
 
 If a value is above or below the reference range, add [HIGH] or [LOW] at the end of the line.
 If no lab values are found in the document, output exactly: NO_LAB_VALUES_FOUND`;
+
+const STRUCTURED_PROMPT = `You are a medical data extractor. Given lab report text, output ONLY a JSON object with numeric values for any of these exact keys found in the data (omit keys not present):
+
+{
+  "total_cholesterol_mg_dl": <Total Cholesterol in mg/dL>,
+  "hdl_cholesterol_mg_dl": <HDL Cholesterol in mg/dL>,
+  "ldl_cholesterol_mg_dl": <LDL Cholesterol in mg/dL>,
+  "triglycerides_mg_dl": <Triglycerides in mg/dL>,
+  "fasting_glucose_mg_dl": <fasting glucose in mg/dL>,
+  "glucose_mg_dl": <random/non-fasting glucose in mg/dL>,
+  "uacr_mg_g": <urine albumin-to-creatinine ratio in mg/g>,
+  "wbc_1000_cells_ul": <WBC count in x10^3 cells/uL>,
+  "total_protein_g_dl": <Total Protein in g/dL>
+}
+
+Rules:
+- Output valid JSON only — no text, no markdown, no units in values.
+- Convert units if needed (e.g. mmol/L cholesterol × 38.67 = mg/dL; mmol/L glucose × 18.02 = mg/dL).
+- If a value appears as both fasting and non-fasting, use fasting for fasting_glucose_mg_dl.
+- Omit any key where the value is unclear or absent.
+- If nothing matches, output: {}`;
+
+// ── Regex-based fallback extractor ────────────────────────────────────────────
+// Used when MedGemma is unavailable. Parses common lab report patterns like:
+//   "Total Cholesterol  188  mg/dL" or "HDL: 54 mg/dL" or "Glucose 94 mg/dL"
+
+const LAB_PATTERNS: Array<{ key: string; pattern: RegExp; toMgDl?: number }> = [
+  { key: 'total_cholesterol_mg_dl', pattern: /total\s+cholesterol[^\d]*(\d+(?:\.\d+)?)/i },
+  { key: 'hdl_cholesterol_mg_dl',   pattern: /\bhdl(?:\s+cholesterol)?[^\d]*(\d+(?:\.\d+)?)/i },
+  { key: 'ldl_cholesterol_mg_dl',   pattern: /\bldl(?:\s+cholesterol)?[^\d]*(\d+(?:\.\d+)?)/i },
+  { key: 'triglycerides_mg_dl',     pattern: /triglycerides?[^\d]*(\d+(?:\.\d+)?)/i },
+  { key: 'fasting_glucose_mg_dl',   pattern: /(?:fasting\s+(?:blood\s+)?)?glucose[^\d]*(\d+(?:\.\d+)?)/i },
+  { key: 'wbc_1000_cells_ul',       pattern: /\bwbc[^\d]*(\d+(?:\.\d+)?)/i },
+  { key: 'total_protein_g_dl',      pattern: /total\s+protein[^\d]*(\d+(?:\.\d+)?)/i },
+];
+
+function extractStructuredFromText(text: string): Record<string, number> {
+  const result: Record<string, number> = {};
+  for (const { key, pattern } of LAB_PATTERNS) {
+    const match = text.match(pattern);
+    if (match) {
+      const val = parseFloat(match[1]);
+      if (!isNaN(val) && val > 0) result[key] = val;
+    }
+  }
+  return result;
+}
 
 /** Call MedGemma and return extracted text, or null if the endpoint is unavailable. */
 async function callMedGemma(
@@ -97,28 +145,43 @@ export async function POST(req: NextRequest) {
 
     // Step 2: try MedGemma for structured lab extraction (optional enrichment)
     let extractedText = rawText.slice(0, 4000);
+    let structuredValues: Record<string, number> = {};
 
     if (hfToken && hfToken !== 'hf_your_token_here') {
-      const messages = [
+      // Run both extractions in parallel
+      const textMessages = [
         {
           role: 'user',
-          content: [
-            {
-              type: 'text',
-              text: `${EXTRACTION_PROMPT}\n\nLAB DOCUMENT CONTENT:\n${rawText.slice(0, 8000)}`,
-            },
-          ],
+          content: [{ type: 'text', text: `${EXTRACTION_PROMPT}\n\nLAB DOCUMENT CONTENT:\n${rawText.slice(0, 8000)}` }],
         },
       ];
-      const gemmaResult = await callMedGemma(hfToken, messages);
-      if (gemmaResult) {
-        extractedText = gemmaResult.trim().slice(0, 4000);
+      const structuredMessages = [
+        {
+          role: 'user',
+          content: [{ type: 'text', text: `${STRUCTURED_PROMPT}\n\nLAB REPORT:\n${rawText.slice(0, 8000)}` }],
+        },
+      ];
+      const [gemmaText, gemmaStructured] = await Promise.all([
+        callMedGemma(hfToken, textMessages),
+        callMedGemma(hfToken, structuredMessages),
+      ]);
+      if (gemmaText) extractedText = gemmaText.trim().slice(0, 4000);
+      if (gemmaStructured) {
+        try {
+          const jsonMatch = gemmaStructured.match(/\{[\s\S]*\}/);
+          if (jsonMatch) structuredValues = JSON.parse(jsonMatch[0]) as Record<string, number>;
+        } catch { /* ignore parse errors */ }
       }
-      // If MedGemma is unavailable, extractedText stays as the raw PDF text
     }
 
-    console.log(`[extract-labs] ${filename}: ${extractedText.length} chars (MedGemma ${hfToken ? 'attempted' : 'skipped'})`);
-    return NextResponse.json({ extractedText });
+    // Regex fallback: fill any gaps MedGemma missed (or if MedGemma was unavailable)
+    const regexValues = extractStructuredFromText(rawText);
+    for (const [key, val] of Object.entries(regexValues)) {
+      if (!(key in structuredValues)) structuredValues[key] = val;
+    }
+
+    console.log(`[extract-labs] ${filename}: ${extractedText.length} chars, ${Object.keys(structuredValues).length} structured values`);
+    return NextResponse.json({ extractedText, structuredValues });
   }
 
   // ── Image path ────────────────────────────────────────────────────────────
@@ -131,24 +194,23 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ extractedText: '' });
     }
 
-    const messages = [
-      {
-        role: 'user',
-        content: [
-          { type: 'text', text: EXTRACTION_PROMPT },
-          {
-            type: 'image_url',
-            image_url: { url: `data:${mimeType};base64,${base64}` },
-          },
-        ],
-      },
-    ];
+    const imageContent = { type: 'image_url', image_url: { url: `data:${mimeType};base64,${base64}` } };
+    const [gemmaText, gemmaStructured] = await Promise.all([
+      callMedGemma(hfToken, [{ role: 'user', content: [{ type: 'text', text: EXTRACTION_PROMPT }, imageContent] }]),
+      callMedGemma(hfToken, [{ role: 'user', content: [{ type: 'text', text: STRUCTURED_PROMPT }, imageContent] }]),
+    ]);
 
-    const gemmaResult = await callMedGemma(hfToken, messages);
-    const extractedText = (gemmaResult ?? '').trim().slice(0, 4000);
+    const extractedText = (gemmaText ?? '').trim().slice(0, 4000);
+    let structuredValues: Record<string, number> = {};
+    if (gemmaStructured) {
+      try {
+        const jsonMatch = gemmaStructured.match(/\{[\s\S]*\}/);
+        if (jsonMatch) structuredValues = JSON.parse(jsonMatch[0]) as Record<string, number>;
+      } catch { /* ignore parse errors */ }
+    }
 
-    console.log(`[extract-labs] ${filename}: ${extractedText.length} chars from image`);
-    return NextResponse.json({ extractedText });
+    console.log(`[extract-labs] ${filename}: ${extractedText.length} chars, ${Object.keys(structuredValues).length} structured values from image`);
+    return NextResponse.json({ extractedText, structuredValues });
   }
 
   // ── Unsupported type ──────────────────────────────────────────────────────

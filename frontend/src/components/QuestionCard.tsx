@@ -5,10 +5,11 @@ import { MODULE_COLORS, MODULE_LABELS } from '@/src/lib/questions';
 import type { LabUploadAnswer } from '@/src/lib/types';
 import { AnswerSingle } from './AnswerSingle';
 import { AnswerMultiple } from './AnswerMultiple';
-import { AnswerScale } from './AnswerScale';
+import { AnswerNumeric } from './AnswerNumeric';
 import { AnswerFreeText } from './AnswerFreeText';
 import { AnswerDate } from './AnswerDate';
 import { AnswerFileUpload } from './AnswerFileUpload';
+import { AnswerDualNumeric } from './AnswerDualNumeric';
 
 interface Props {
   question: Question;
@@ -16,9 +17,11 @@ interface Props {
   onChange: (val: unknown) => void;
 }
 
-// Derive a display label from the question id, e.g. "q0.0" → "Q0.0"
+// Derive a short display label from the question id.
+// Old-style: "q0.0" → "Q0.0". NHANES-style: show nothing (module tag is enough).
 function idToLabel(id: string): string {
-  return id.replace(/^q/, 'Q');
+  if (/^q\d/.test(id)) return id.replace(/^q/, 'Q');
+  return '';
 }
 
 export function QuestionCard({ question, value, onChange }: Props) {
@@ -39,21 +42,30 @@ export function QuestionCard({ question, value, onChange }: Props) {
           />
         );
 
-      // Multi-select checkboxes
+      // Multi-select (pills layout for large option sets)
       case 'multi_select':
         return (
           <AnswerMultiple
             options={question.options}
             value={value as string[] | undefined}
             onChange={(v) => onChange(v)}
+            layout={question.options.length > 5 ? 'pills' : 'list'}
           />
         );
 
-      // 1–10 numeric scale
       case 'numeric':
         return (
-          <AnswerScale
-            value={value as number | undefined}
+          <AnswerNumeric
+            value={value as string | undefined}
+            onChange={(v) => onChange(v)}
+          />
+        );
+
+      case 'dual_numeric':
+        return (
+          <AnswerDualNumeric
+            fields={question.options}
+            value={value as Record<string, string> | undefined}
             onChange={(v) => onChange(v)}
           />
         );
@@ -103,9 +115,11 @@ export function QuestionCard({ question, value, onChange }: Props) {
         >
           {moduleLabel}
         </span>
-        <span className="text-[11px] font-bold uppercase tracking-[0.16em] text-[var(--color-ink-soft)]">
-          {idToLabel(question.id)}
-        </span>
+        {idToLabel(question.id) && (
+          <span className="text-[11px] font-bold uppercase tracking-[0.16em] text-[var(--color-ink-soft)]">
+            {idToLabel(question.id)}
+          </span>
+        )}
       </div>
 
       <h2 className="text-[1.9rem] font-bold leading-[1] tracking-[-0.05em] text-[var(--color-ink)] sm:text-[2.2rem]">

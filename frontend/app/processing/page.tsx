@@ -3,12 +3,13 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAssessment } from '@/src/hooks/useAssessment';
-import { computeResults } from '@/src/lib/mockResults';
 import {
   fetchDeepAnalysis,
   fetchMedGemmaInsights,
+  fetchMLScores,
   storeDeepResult,
   storeMedGemmaResult,
+  storeMLScores,
   readStoredDeepResult,
 } from '@/src/lib/medgemma';
 import { BlobCharacter } from '@/src/components/ui/BlobCharacter';
@@ -25,8 +26,6 @@ export default function ProcessingPage() {
   const { answers, hydrated } = useAssessment();
   const [stepIndex, setStepIndex] = useState(0);
   const [error, setError] = useState<string | null>(null);
-
-  const { diagnoses } = computeResults(answers);
 
   // Cycle through loading messages
   useEffect(() => {
@@ -51,9 +50,18 @@ export default function ProcessingPage() {
 
     const run = async () => {
       try {
+        // Run ML scoring and deep analysis in parallel (ML scores feed into the deep analysis prompt)
+        let mlScores: Record<string, number> | undefined;
+        try {
+          mlScores = await fetchMLScores(answers);
+          storeMLScores(mlScores);
+        } catch {
+          // ML scoring is best-effort — proceed without it if it fails
+        }
+
         // Primary: deep analysis (comprehensive report with doctor kit + coaching tips)
         const [result] = await Promise.all([
-          fetchDeepAnalysis(answers, diagnoses),
+          fetchDeepAnalysis(answers, mlScores),
           new Promise((resolve) => window.setTimeout(resolve, 2600)),
         ]);
 
@@ -63,7 +71,7 @@ export default function ProcessingPage() {
       } catch {
         // Graceful fallback: try the simpler basic-insights endpoint
         try {
-          const basicResult = await fetchMedGemmaInsights(answers, diagnoses);
+          const basicResult = await fetchMedGemmaInsights(answers, mlScores);
           if (cancelled) return;
           storeMedGemmaResult(basicResult);
           // Wrap into DeepMedGemmaResult shape so the results page can read it

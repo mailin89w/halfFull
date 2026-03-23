@@ -5,7 +5,7 @@ import { resolveQuestionPath, getQuestion } from '@/src/lib/questions';
 import { clearStoredMedGemmaResult } from '@/src/lib/medgemma';
 import type { Question } from '@/src/lib/questions';
 
-const STORAGE_KEY = 'halffull_assessment_v1';
+const STORAGE_KEY = 'halffull_assessment_v2';
 
 interface AssessmentState {
   answers: Record<string, unknown>;
@@ -66,6 +66,15 @@ export function useAssessment() {
     const val = state.answers[currentId];
     if (val === undefined || val === null || val === '') return false;
     if (Array.isArray(val) && val.length === 0) return false;
+    // dual_numeric: all required sub-fields must be filled (binary required, numeric optional)
+    if (currentQuestion.type === 'dual_numeric') {
+      const obj = val as Record<string, string>;
+      return currentQuestion.options.every((opt) => {
+        if ((opt as { sub_type?: string }).sub_type === 'numeric') return true; // optional
+        const v = obj[opt.value];
+        return v !== undefined && v !== '';
+      });
+    }
     return true;
   }, [currentQuestion, state.answers, currentId]);
 

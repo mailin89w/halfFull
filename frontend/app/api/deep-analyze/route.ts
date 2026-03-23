@@ -1,5 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { formatAnswers } from '@/src/lib/formatAnswers';
+import { formatAnswersV2 } from '@/src/lib/formatAnswers';
+import { writeLog } from '@/src/lib/logger';
+import { ML_THRESHOLD, selectTopConditions } from '@/src/lib/mlConfig';
+
+export const maxDuration = 60;
 
 const HF_MODEL = 'google/medgemma-1.5-4b-it';
 const HF_API_URL = process.env.HF_ENDPOINT_URL
@@ -56,24 +60,34 @@ export async function POST(req: NextRequest) {
 
   const body = await req.json();
   const answers: Record<string, unknown> = body.answers ?? {};
-  const diagnoses: Array<{ id: string; title: string; signal: string }> = body.diagnoses ?? [];
+  const mlScores: Record<string, number> | undefined = body.mlScores;
 
-  const symptomsText = formatAnswers(answers);
-  const diagnosisText = diagnoses.map((d) => `- ${d.title} (${d.signal} signal)`).join('\n');
+  const symptomsText = formatAnswersV2(answers);
+
+  const topConditions = mlScores ? selectTopConditions(mlScores) : [];
+  const flaggedConditions = topConditions
+    .filter(([, p]) => p >= ML_THRESHOLD)
+    .map(([c]) => c);
+
+  const flaggedAreasText = topConditions.length > 0
+    ? topConditions
+        .map(([condition, prob]) => `- ${condition}: ${(prob * 100).toFixed(1)}%`)
+        .join('\n')
+    : '- None';
 
   const prompt = `You are a medical AI generating a personalised fatigue report. Reference the patient's actual symptoms — never give generic advice.
 
 PATIENT DATA:
 ${symptomsText}
 
-FLAGGED AREAS:
-${diagnosisText || '- None'}
+TOP-3 FLAGGED CONDITIONS (ML model, P ≥ ${ML_THRESHOLD * 100}%):
+${flaggedAreasText}
 
 Respond with valid JSON only — no markdown, no preamble:
 {
-  "personalizedSummary": "2 sentences. Name the most likely driver and connect it directly to what this patient reported (e.g. hair loss, vegetarian diet, cold intolerance). Warm, direct tone.",
+  "personalizedSummary": "2 sentences. Name the most likely driver and connect it directly to what this patient reported. Warm, direct tone.",
   "insights": [
-    {"diagnosisId": "exact id from: iron|thyroid|sleep|vitamins|stress|postviral", "personalNote": "1-2 sentences explaining why THIS flagged area fits this patient's specific reported symptoms."}
+    {"diagnosisId": "exact id from: iron|thyroid|sleep|vitamins|stress|postviral|anemia|iron_deficiency|kidney|sleep_disorder|liver|prediabetes|inflammation|electrolytes|hepatitis|perimenopause", "personalNote": "1-2 sentences explaining why THIS flagged area fits this patient's specific reported symptoms."}
   ],
   "nextSteps": "2 sentences. Tell the patient exactly which tests to ask for and why, based on their specific profile.",
   "doctorKitSummary": "2 sentences in first person that the patient reads aloud to open their GP appointment. Must mention their top symptom, how it affects daily life, and what they suspect.",
@@ -88,13 +102,15 @@ Respond with valid JSON only — no markdown, no preamble:
 }
 
 Rules:
-- insights: one entry per flagged area, max 3 total. diagnosisId must be exactly one of: iron, thyroid, sleep, vitamins, stress, postviral.
+- insights: one entry per flagged area, max 4 total. Prioritise ML-flagged conditions: ${flaggedConditions.join(', ') || 'none'}.
 - doctorKitQuestions: exactly 2 items.
 - doctorKitArguments: exactly 2 items.
 - Every string must reference THIS patient's data — no generic filler.
 - Complete the full JSON without truncating.`;
 
   try {
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 90_000);
     const hfResponse = await fetch(HF_API_URL, {
       method: 'POST',
       headers: {
@@ -103,11 +119,15 @@ Rules:
       },
       body: JSON.stringify({
         model: HF_MODEL,
-        messages: [{ role: 'user', content: prompt }],
-        max_tokens: 500,
+        messages: [
+          { role: 'system', content: 'You output valid JSON only. No markdown, no thinking, no explanations, no preamble. Start your response immediately with { and end with }.' },
+          { role: 'user', content: prompt },
+        ],
+        max_tokens: 1500,
         temperature: 0.3,
       }),
-    });
+      signal: controller.signal,
+    }).finally(() => clearTimeout(timeout));
 
     if (!hfResponse.ok) {
       const errText = await hfResponse.text();
@@ -135,8 +155,10 @@ Rules:
         { status: 500 }
       );
     }
+    writeLog('deep_analyze', { answers, mlScores, topConditions, result: parsed });
     return NextResponse.json(parsed);
   } catch (err) {
+    writeLog('deep_analyze_error', { answers, mlScores, error: String(err) });
     return NextResponse.json({ error: String(err) }, { status: 500 });
   }
 }

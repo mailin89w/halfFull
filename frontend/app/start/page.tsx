@@ -9,27 +9,6 @@ const journeySteps = [
   { lead: 'Improve', rest: 'your vitality' },
 ];
 
-function CareMascot() {
-  return (
-    <svg viewBox="0 0 160 150" fill="none" aria-hidden="true" className="h-full w-full">
-      <path
-        d="M82 25c9 0 16 6 19 15 9-4 19-2 26 6 7 8 8 19 2 28 10 5 16 15 15 27-2 18-17 29-36 28-6 14-15 22-27 22-11 0-21-8-27-22-18 1-34-10-35-28-1-12 5-22 15-27-6-9-5-20 2-28 7-8 17-10 26-6 3-9 10-15 20-15Z"
-        fill="#b7a4d3"
-      />
-      <path
-        d="M86 16c0-8 8-14 16-10 7 3 11 12 8 19-3 8-11 13-19 13-3-6-5-13-5-22Z"
-        fill="#d7f068"
-      />
-      <ellipse cx="59" cy="79" rx="13" ry="9" fill="#fff" />
-      <ellipse cx="101" cy="79" rx="13" ry="9" fill="#fff" />
-      <ellipse cx="63" cy="79" rx="6" ry="7" fill="#2b2d74" />
-      <ellipse cx="105" cy="79" rx="6" ry="7" fill="#2b2d74" />
-      <circle cx="38" cy="94" r="8" fill="#ea5aa6" opacity="0.95" />
-      <circle cx="122" cy="94" r="8" fill="#ea5aa6" opacity="0.95" />
-    </svg>
-  );
-}
-
 function JourneyRibbon() {
   return (
     <svg
@@ -80,7 +59,7 @@ export default function StartPage() {
 
           <section className="relative overflow-hidden rounded-[2rem] bg-[var(--color-card)] px-5 py-6 shadow-[0_14px_30px_rgba(86,98,145,0.14)]">
             <div className="mb-5">
-              <div className="relative">
+              <div>
                 <p className="mb-2 text-[11px] font-bold uppercase tracking-[0.18em] text-[var(--color-ink-soft)]">
                   Low-energy assessment
                 </p>
@@ -93,10 +72,6 @@ export default function StartPage() {
                   <br />
                   GOOD.
                 </h1>
-
-                <div className="pointer-events-none absolute left-[15.3rem] top-[8.8rem] h-[6.2rem] w-[6.2rem]">
-                  <CareMascot />
-                </div>
               </div>
             </div>
 
