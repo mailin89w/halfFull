@@ -19,9 +19,11 @@ from typing import Any
 import numpy as np
 import pandas as pd
 
+from models.inference_preprocessor import InferencePreprocessor
 
 ROOT = Path(__file__).resolve().parents[1]
 MODELS_DIR = ROOT / "models"
+PREPROCESSOR = InferencePreprocessor()
 
 
 def _load_json(path: Path) -> dict[str, Any]:
@@ -191,8 +193,16 @@ def _derive_alcohol_risk(answers: dict[str, Any], gender: Any) -> float:
     return np.nan
 
 
-def _build_feature_dict(answers: dict[str, Any]) -> dict[str, Any]:
-    raw = {k: _clean(v) for k, v in answers.items()}
+def _build_feature_dict(
+    answers: dict[str, Any],
+    *,
+    normalized_for_retrained_models: bool = False,
+) -> dict[str, Any]:
+    source_row = PREPROCESSOR.prepare_feature_source(
+        answers,
+        normalized_for_retrained_models=normalized_for_retrained_models,
+    )
+    raw = {k: _clean(v) for k, v in source_row.items()}
     feat: dict[str, Any] = dict(raw)
 
     gender = raw.get("gender")
@@ -261,7 +271,11 @@ def _build_condition_row(condition: str, feature_dict: dict[str, Any]) -> dict[s
     return row
 
 
-def build_feature_vectors(answers: dict[str, Any]) -> dict[str, pd.DataFrame]:
+def build_feature_vectors(
+    answers: dict[str, Any],
+    *,
+    normalized_for_retrained_models: bool = False,
+) -> dict[str, pd.DataFrame]:
     """
     Convert frontend questionnaire answers into per-condition feature vectors.
 
@@ -275,18 +289,28 @@ def build_feature_vectors(answers: dict[str, Any]) -> dict[str, pd.DataFrame]:
     dict[str, pd.DataFrame]
         One single-row DataFrame per condition, ready for ModelRunner.
     """
-    features = _build_feature_dict(answers)
+    features = _build_feature_dict(
+        answers,
+        normalized_for_retrained_models=normalized_for_retrained_models,
+    )
     return {
         condition: pd.DataFrame([_build_condition_row(condition, features)])
         for condition in MODEL_FEATURES
     }
 
 
-def build_engineered_feature_dict(answers: dict[str, Any]) -> dict[str, Any]:
+def build_engineered_feature_dict(
+    answers: dict[str, Any],
+    *,
+    normalized_for_retrained_models: bool = False,
+) -> dict[str, Any]:
     """
     Return the flat engineered feature dictionary before condition-specific slicing.
     """
-    features = _build_feature_dict(answers)
+    features = _build_feature_dict(
+        answers,
+        normalized_for_retrained_models=normalized_for_retrained_models,
+    )
     all_expected = sorted({c for cols in MODEL_FEATURES.values() for c in cols})
     return _add_miss_flags(features, all_expected)
 

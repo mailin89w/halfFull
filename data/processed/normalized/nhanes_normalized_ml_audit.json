@@ -1,0 +1,21 @@
+{
+  "data_file": "data/processed/nhanes_merged_adults_final_normalized.csv",
+  "rows": 7437,
+  "columns": 868,
+  "action_counts": {
+    "untouched": 475,
+    "zscore_normalize": 338,
+    "reference_normalize": 55
+  },
+  "likely_sentinel_flags": 162,
+  "outlier_columns": 254,
+  "duplicate_pairs": 48,
+  "high_missingness_columns": 110,
+  "output_files": {
+    "sentinel_flags": "data/processed/nhanes_normalized_sentinel_flags.csv",
+    "outlier_flags": "data/processed/nhanes_normalized_outlier_flags.csv",
+    "duplicate_columns": "data/processed/nhanes_normalized_duplicate_columns.csv",
+    "missingness_flags": "data/processed/nhanes_normalized_missingness_flags.csv",
+    "markdown_report": "data/processed/nhanes_normalized_ml_audit.md"
+  }
+}

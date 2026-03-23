@@ -22,6 +22,13 @@ import os
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, ROOT)
 
+USE_NORMALIZED_INFERENCE = os.getenv("HALFFULL_USE_NORMALIZED_INFERENCE", "0").lower() in {
+    "1",
+    "true",
+    "yes",
+    "on",
+}
+
 # Suppress model-loading log noise on stderr
 import logging
 logging.disable(logging.CRITICAL)
@@ -162,7 +169,10 @@ def main() -> None:
         from models.questionnaire_to_model_features import build_feature_vectors
         from models.model_runner import ModelRunner
 
-        feature_vectors = build_feature_vectors(answers)
+        feature_vectors = build_feature_vectors(
+            answers,
+            normalized_for_retrained_models=USE_NORMALIZED_INFERENCE,
+        )
         runner = ModelRunner()
         scores = runner.run_all(feature_vectors)
         print(json.dumps(scores))

@@ -1,0 +1,1196 @@
+{
+  "input_file": "data/processed/nhanes_merged_adults_final_normalized.csv",
+  "output_file_ml_ready": "data/processed/nhanes_merged_adults_final_ml_ready.csv",
+  "output_file_cluster_optional": "data/processed/nhanes_merged_adults_final_cluster_optional.csv",
+  "sparse_column_table": "data/processed/nhanes_ml_ready_sparse_columns.csv",
+  "sparse_drop_threshold_ml_ready": 0.95,
+  "sparse_drop_threshold_cluster_optional": 0.99,
+  "sentinel_replacement_columns": 128,
+  "sentinel_replacements": [
+    {
+      "column": "LBXHCG_hepatitis_c_genotype",
+      "sentinel_values_replaced": [
+        9
+      ],
+      "new_missing_values_created": 2
+    },
+    {
+      "column": "LBXSATSI_alanine_aminotransferase_alt_u_l",
+      "sentinel_values_replaced": [
+        7
+      ],
+      "new_missing_values_created": 1
+    },
+    {
+      "column": "LBXSGTSI_gamma_glutamyl_transferase_ggt_iu_l",
+      "sentinel_values_replaced": [
+        7
+      ],
+      "new_missing_values_created": 2
+    },
+    {
+      "column": "agq030___did_sp_have_episode_of_hay_fever/past_yr",
+      "sentinel_values_replaced": [
+        9
+      ],
+      "new_missing_values_created": 4
+    },
+    {
+      "column": "alq151___ever_have_4/5_or_more_drinks_every_day?",
+      "sentinel_values_replaced": [
+        9
+      ],
+      "new_missing_values_created": 6
+    },
+    {
+      "column": "alq290___#_times_12+_drinks_in_1_day/past_12_mos",
+      "sentinel_values_replaced": [
+        99
+      ],
+      "new_missing_values_created": 8
+    },
+    {
+      "column": "alt_u_l",
+      "sentinel_values_replaced": [
+        7
+      ],
+      "new_missing_values_created": 1
+    },
+    {
+      "column": "any_root_caries",
+      "sentinel_values_replaced": [
+        9
+      ],
+      "new_missing_values_created": 6
+    },
+    {
+      "column": "any_root_restoration_caries",
+      "sentinel_values_replaced": [
+        9
+      ],
+      "new_missing_values_created": 3
+    },
+    {
+      "column": "bpq020___ever_told_you_had_high_blood_pressure",
+      "sentinel_values_replaced": [
+        9
+      ],
+      "new_missing_values_created": 8
+    },
+    {
+      "column": "bpq030___told_had_high_blood_pressure___2+_times",
+      "sentinel_values_replaced": [
+        9
+      ],
+      "new_missing_values_created": 4
+    },
+    {
+      "column": "bpq040a___taking_prescription_for_hypertension",
+      "sentinel_values_replaced": [
+        9
+      ],
+      "new_missing_values_created": 1
+    },
+    {
+      "column": "bpq060___ever_had_blood_cholesterol_checked",
+      "sentinel_values_replaced": [
+        7,
+        9
+      ],
+      "new_missing_values_created": 251
+    },
+    {
+      "column": "bpq070___when_blood_cholesterol_last_checked",
+      "sentinel_values_replaced": [
+        9
+      ],
+      "new_missing_values_created": 16
+    },
+    {
+      "column": "bpq080___doctor_told_you___high_cholesterol_level",
+      "sentinel_values_replaced": [
+        9
+      ],
+      "new_missing_values_created": 37
+    },
+    {
+      "column": "bpq090d___told_to_take_prescriptn_for_cholesterol",
+      "sentinel_values_replaced": [
+        9
+      ],
+      "new_missing_values_created": 10
+    },
+    {
+      "column": "bpq100d___now_taking_prescribed_medicine",
+      "sentinel_values_replaced": [
+        9
+      ],
+      "new_missing_values_created": 1
+    },
+    {
+      "column": "bun_mg_dl",
+      "sentinel_values_replaced": [
+        7
+      ],
+      "new_missing_values_created": 1
+    },
+    {
+      "column": "cdq001___sp_ever_had_pain_or_discomfort_in_chest",
+      "sentinel_values_replaced": [
+        9
+      ],
+      "new_missing_values_created": 1
+    },
+    {
+      "column": "cdq002___sp_get_it_walking_uphill_or_in_a_hurry",
+      "sentinel_values_replaced": [
+        9
+      ],
+      "new_missing_values_created": 9
+    },
+    {
+      "column": "cdq005___does_standing_relieve_pain/discomfort",
+      "sentinel_values_replaced": [
+        9
+      ],
+      "new_missing_values_created": 2
+    },
+    {
+      "column": "cdq006___how_soon_is_the_pain_relieved",
+      "sentinel_values_replaced": [
+        9
+      ],
+      "new_missing_values_created": 3
+    },
+    {
+      "column": "cdq008___severe_pain_in_chest_more_than_half_hour",
+      "sentinel_values_replaced": [
+        9
+      ],
+      "new_missing_values_created": 4
+    },
+    {
+      "column": "cdq010___shortness_of_breath_on_stairs/inclines",
+      "sentinel_values_replaced": [
+        9
+      ],
+      "new_missing_values_created": 11
+    },
+    {
+      "column": "diq010___doctor_told_you_have_diabetes",
+      "sentinel_values_replaced": [
+        9
+      ],
+      "new_missing_values_created": 3
+    },
+    {
+      "column": "diq050___taking_insulin_now",
+      "sentinel_values_replaced": [
+        9
+      ],
+      "new_missing_values_created": 1
+    },
+    {
+      "column": "diq070___take_diabetic_pills_to_lower_blood_sugar",
+      "sentinel_values_replaced": [
+        9
+      ],
+      "new_missing_values_created": 1
+    },
+    {
+      "column": "diq080___diabetes_affected_eyes/had_retinopathy",
+      "sentinel_values_replaced": [
+        9
+      ],
+      "new_missing_values_created": 2
+    },
+    {
+      "column": "diq160___ever_told_you_have_prediabetes",
+      "sentinel_values_replaced": [
+        9
+      ],
+      "new_missing_values_created": 11
+    },
+    {
+      "column": "diq180___had_blood_tested_past_three_years",
+      "sentinel_values_replaced": [
+        7,
+        9
+      ],
+      "new_missing_values_created": 175
+    },
+    {
+      "column": "diq230___how_long_ago_saw_a_diabetes_specialist",
+      "sentinel_values_replaced": [
+        9
+      ],
+      "new_missing_values_created": 4
+    },
+    {
+      "column": "diq240___is_there_one_dr_you_see_for_diabetes",
+      "sentinel_values_replaced": [
+        9
+      ],
+      "new_missing_values_created": 2
+    },
+    {
+      "column": "diq275___past_year_dr_checked_for_a1c",
+      "sentinel_values_replaced": [
+        9
+      ],
+      "new_missing_values_created": 19
+    },
+    {
+      "column": "diq360___last_time_had_pupils_dilated_for_exam",
+      "sentinel_values_replaced": [
+        9
+      ],
+      "new_missing_values_created": 10
+    },
+    {
+      "column": "dpq040___feeling_tired_or_having_little_energy",
+      "sentinel_values_replaced": [
+        7,
+        9
+      ],
+      "new_missing_values_created": 5
+    },
+    {
+      "column": "ggt_u_l",
+      "sentinel_values_replaced": [
+        7
+      ],
+      "new_missing_values_created": 2
+    },
+    {
+      "column": "heq010___ever_told_you_have_hepatitis_b?",
+      "sentinel_values_replaced": [
+        7,
+        9
+      ],
+      "new_missing_values_created": 30
+    },
+    {
+      "column": "heq030___ever_told_you_have_hepatitis_c?",
+      "sentinel_values_replaced": [
+        9
+      ],
+      "new_missing_values_created": 28
+    },
+    {
+      "column": "heq040___ever_prescribed_meds_treat_hepatitis_c?",
+      "sentinel_values_replaced": [
+        9
+      ],
+      "new_missing_values_created": 3
+    },
+    {
+      "column": "hud062___how_long_since_last_healthcare_visit",
+      "sentinel_values_replaced": [
+        99
+      ],
+      "new_missing_values_created": 6
+    },
+    {
+      "column": "huq010___general_health_condition",
+      "sentinel_values_replaced": [
+        7,
+        9
+      ],
+      "new_missing_values_created": 9
+    },
+    {
+      "column": "huq030___routine_place_to_go_for_healthcare",
+      "sentinel_values_replaced": [
+        7,
+        9
+      ],
+      "new_missing_values_created": 3
+    },
+    {
+      "column": "huq051___#times_receive_healthcare_over_past_year",
+      "sentinel_values_replaced": [
+        7,
+        99
+      ],
+      "new_missing_values_created": 124
+    },
+    {
+      "column": "huq071___overnight_hospital_patient_in_last_year",
+      "sentinel_values_replaced": [
+        9
+      ],
+      "new_missing_values_created": 1
+    },
+    {
+      "column": "huq090___seen_mental_health_professional/past_yr",
+      "sentinel_values_replaced": [
+        9
+      ],
+      "new_missing_values_created": 2
+    },
+    {
+      "column": "kiq005___how_often_have_urinary_leakage?",
+      "sentinel_values_replaced": [
+        7,
+        9
+      ],
+      "new_missing_values_created": 8
+    },
+    {
+      "column": "kiq010___how_much_urine_lose_each_time?",
+      "sentinel_values_replaced": [
+        9
+      ],
+      "new_missing_values_created": 1
+    },
+    {
+      "column": "kiq022___ever_told_you_had_weak/failing_kidneys?",
+      "sentinel_values_replaced": [
+        9
+      ],
+      "new_missing_values_created": 5
+    },
+    {
+      "column": "kiq026___ever_had_kidney_stones?",
+      "sentinel_values_replaced": [
+        9
+      ],
+      "new_missing_values_created": 19
+    },
+    {
+      "column": "kiq029___pass_kidney_stone_in_past_12_months?",
+      "sentinel_values_replaced": [
+        9
+      ],
+      "new_missing_values_created": 13
+    },
+    {
+      "column": "kiq042___leak_urine_during_physical_activities?",
+      "sentinel_values_replaced": [
+        7,
+        9
+      ],
+      "new_missing_values_created": 7
+    },
+    {
+      "column": "kiq044___urinated_before_reaching_the_toilet?",
+      "sentinel_values_replaced": [
+        7,
+        9
+      ],
+      "new_missing_values_created": 8
+    },
+    {
+      "column": "kiq046___leak_urine_during_nonphysical_activities",
+      "sentinel_values_replaced": [
+        7,
+        9
+      ],
+      "new_missing_values_created": 8
+    },
+    {
+      "column": "kiq430___how_frequently_does_this_occur?",
+      "sentinel_values_replaced": [
+        7
+      ],
+      "new_missing_values_created": 1
+    },
+    {
+      "column": "kiq450___how_frequently_does_this_occur?",
+      "sentinel_values_replaced": [
+        9
+      ],
+      "new_missing_values_created": 1
+    },
+    {
+      "column": "kiq480___how_many_times_urinate_in_night?",
+      "sentinel_values_replaced": [
+        7,
+        9
+      ],
+      "new_missing_values_created": 5
+    },
+    {
+      "column": "mcd093___year_receive_blood_transfusion",
+      "sentinel_values_replaced": [
+        9
+      ],
+      "new_missing_values_created": 10
+    },
+    {
+      "column": "mcq010___ever_been_told_you_have_asthma",
+      "sentinel_values_replaced": [
+        9
+      ],
+      "new_missing_values_created": 8
+    },
+    {
+      "column": "mcq035___still_have_asthma",
+      "sentinel_values_replaced": [
+        7,
+        9
+      ],
+      "new_missing_values_created": 24
+    },
+    {
+      "column": "mcq040___had_asthma_attack_in_past_year",
+      "sentinel_values_replaced": [
+        9
+      ],
+      "new_missing_values_created": 3
+    },
+    {
+      "column": "mcq053___taking_treatment_for_anemia/past_3_mos",
+      "sentinel_values_replaced": [
+        9
+      ],
+      "new_missing_values_created": 11
+    },
+    {
+      "column": "mcq080___doctor_ever_said_you_were_overweight",
+      "sentinel_values_replaced": [
+        9
+      ],
+      "new_missing_values_created": 9
+    },
+    {
+      "column": "mcq092___ever_receive_blood_transfusion",
+      "sentinel_values_replaced": [
+        9
+      ],
+      "new_missing_values_created": 52
+    },
+    {
+      "column": "mcq160a___ever_told_you_had_arthritis",
+      "sentinel_values_replaced": [
+        9
+      ],
+      "new_missing_values_created": 13
+    },
+    {
+      "column": "mcq160b___ever_told_you_had_congestive_heart_failure",
+      "sentinel_values_replaced": [
+        9
+      ],
+      "new_missing_values_created": 11
+    },
+    {
+      "column": "mcq160c___ever_told_you_had_coronary_heart_disease",
+      "sentinel_values_replaced": [
+        9
+      ],
+      "new_missing_values_created": 11
+    },
+    {
+      "column": "mcq160d___ever_told_you_had_angina",
+      "sentinel_values_replaced": [
+        9
+      ],
+      "new_missing_values_created": 20
+    },
+    {
+      "column": "mcq160e___ever_told_you_had_heart_attack",
+      "sentinel_values_replaced": [
+        9
+      ],
+      "new_missing_values_created": 9
+    },
+    {
+      "column": "mcq160f___ever_told_you_had_stroke",
+      "sentinel_values_replaced": [
+        9
+      ],
+      "new_missing_values_created": 8
+    },
+    {
+      "column": "mcq160l___ever_told_you_had_any_liver_condition",
+      "sentinel_values_replaced": [
+        9
+      ],
+      "new_missing_values_created": 11
+    },
+    {
+      "column": "mcq160m___ever_told_you_had_thyroid_problem",
+      "sentinel_values_replaced": [
+        7,
+        9
+      ],
+      "new_missing_values_created": 12
+    },
+    {
+      "column": "mcq160p___ever_told_you_had_copd_emphysema",
+      "sentinel_values_replaced": [
+        9
+      ],
+      "new_missing_values_created": 8
+    },
+    {
+      "column": "mcq170m___still_have_thyroid_problem",
+      "sentinel_values_replaced": [
+        9
+      ],
+      "new_missing_values_created": 27
+    },
+    {
+      "column": "mcq220___ever_told_you_had_cancer_or_malignancy",
+      "sentinel_values_replaced": [
+        9
+      ],
+      "new_missing_values_created": 4
+    },
+    {
+      "column": "mcq300a___close_relative_had_heart_attack",
+      "sentinel_values_replaced": [
+        9
+      ],
+      "new_missing_values_created": 162
+    },
+    {
+      "column": "mcq300b___close_relative_had_asthma",
+      "sentinel_values_replaced": [
+        9
+      ],
+      "new_missing_values_created": 133
+    },
+    {
+      "column": "mcq300c___close_relative_had_diabetes",
+      "sentinel_values_replaced": [
+        9
+      ],
+      "new_missing_values_created": 90
+    },
+    {
+      "column": "mcq366a___doctor_told_to_control_weight",
+      "sentinel_values_replaced": [
+        9
+      ],
+      "new_missing_values_created": 2
+    },
+    {
+      "column": "mcq366b___doctor_told_to_increase_exercise",
+      "sentinel_values_replaced": [
+        9
+      ],
+      "new_missing_values_created": 2
+    },
+    {
+      "column": "mcq366c___doctor_told_to_reduce_salt",
+      "sentinel_values_replaced": [
+        9
+      ],
+      "new_missing_values_created": 9
+    },
+    {
+      "column": "mcq366d___doctor_told_to_reduce_fat_in_diet",
+      "sentinel_values_replaced": [
+        9
+      ],
+      "new_missing_values_created": 6
+    },
+    {
+      "column": "mcq371a___doing_controlling_weight",
+      "sentinel_values_replaced": [
+        9
+      ],
+      "new_missing_values_created": 8
+    },
+    {
+      "column": "mcq371b___doing_increasing_exercise",
+      "sentinel_values_replaced": [
+        9
+      ],
+      "new_missing_values_created": 2
+    },
+    {
+      "column": "mcq371c___doing_reducing_salt",
+      "sentinel_values_replaced": [
+        9
+      ],
+      "new_missing_values_created": 3
+    },
+    {
+      "column": "mcq371d___doing_reducing_fat_in_diet",
+      "sentinel_values_replaced": [
+        7,
+        9
+      ],
+      "new_missing_values_created": 6
+    },
+    {
+      "column": "mcq520___abdominal_pain_during_past_12_months?",
+      "sentinel_values_replaced": [
+        9
+      ],
+      "new_missing_values_created": 6
+    },
+    {
+      "column": "mcq530___where_was_the_most_uncomfortable_pain",
+      "sentinel_values_replaced": [
+        9
+      ],
+      "new_missing_values_created": 5
+    },
+    {
+      "column": "mcq540___ever_seen_a_dr_about_this_pain",
+      "sentinel_values_replaced": [
+        9
+      ],
+      "new_missing_values_created": 1
+    },
+    {
+      "column": "mcq550___has_dr_ever_said_you_have_gallstones",
+      "sentinel_values_replaced": [
+        9
+      ],
+      "new_missing_values_created": 12
+    },
+    {
+      "column": "mcq560___ever_had_gallbladder_surgery?",
+      "sentinel_values_replaced": [
+        9
+      ],
+      "new_missing_values_created": 2
+    },
+    {
+      "column": "ocd150___type_of_work_done_last_week",
+      "sentinel_values_replaced": [
+        7
+      ],
+      "new_missing_values_created": 1
+    },
+    {
+      "column": "ocd383___main_reason_did_not_work_last_week",
+      "sentinel_values_replaced": [
+        77,
+        99
+      ],
+      "new_missing_values_created": 5
+    },
+    {
+      "column": "ocq210___usually_work_35_or_more_hours_per_week",
+      "sentinel_values_replaced": [
+        9
+      ],
+      "new_missing_values_created": 2
+    },
+    {
+      "column": "ocq670___overall_work_schedule_past_3_months",
+      "sentinel_values_replaced": [
+        7,
+        9
+      ],
+      "new_missing_values_created": 3
+    },
+    {
+      "column": "osq230___any_metal_objects_inside_your_body?",
+      "sentinel_values_replaced": [
+        9
+      ],
+      "new_missing_values_created": 24
+    },
+    {
+      "column": "paq605___vigorous_work_activity",
+      "sentinel_values_replaced": [
+        7,
+        9
+      ],
+      "new_missing_values_created": 5
+    },
+    {
+      "column": "paq610___number_of_days_vigorous_work",
+      "sentinel_values_replaced": [
+        99
+      ],
+      "new_missing_values_created": 2
+    },
+    {
+      "column": "paq620___moderate_work_activity",
+      "sentinel_values_replaced": [
+        9
+      ],
+      "new_missing_values_created": 4
+    },
+    {
+      "column": "paq625___number_of_days_moderate_work",
+      "sentinel_values_replaced": [
+        99
+      ],
+      "new_missing_values_created": 7
+    },
+    {
+      "column": "paq635___walk_or_bicycle",
+      "sentinel_values_replaced": [
+        9
+      ],
+      "new_missing_values_created": 1
+    },
+    {
+      "column": "paq640___number_of_days_walk_or_bicycle",
+      "sentinel_values_replaced": [
+        99
+      ],
+      "new_missing_values_created": 4
+    },
+    {
+      "column": "paq655___days_vigorous_recreational_activities",
+      "sentinel_values_replaced": [
+        7,
+        99
+      ],
+      "new_missing_values_created": 104
+    },
+    {
+      "column": "paq670___days_moderate_recreational_activities",
+      "sentinel_values_replaced": [
+        99
+      ],
+      "new_missing_values_created": 2
+    },
+    {
+      "column": "rhd043___reason_not_having_regular_periods",
+      "sentinel_values_replaced": [
+        99
+      ],
+      "new_missing_values_created": 4
+    },
+    {
+      "column": "rhd143___are_you_pregnant_now?",
+      "sentinel_values_replaced": [
+        9
+      ],
+      "new_missing_values_created": 16
+    },
+    {
+      "column": "rhd167___total_number_of_deliveries",
+      "sentinel_values_replaced": [
+        77
+      ],
+      "new_missing_values_created": 2
+    },
+    {
+      "column": "rhd280___had_a_hysterectomy?",
+      "sentinel_values_replaced": [
+        9
+      ],
+      "new_missing_values_created": 2
+    },
+    {
+      "column": "rhq031___had_regular_periods_in_past_12_months",
+      "sentinel_values_replaced": [
+        7,
+        9
+      ],
+      "new_missing_values_created": 3
+    },
+    {
+      "column": "rhq074___tried_for_a_year_to_become_pregnant?",
+      "sentinel_values_replaced": [
+        7,
+        9
+      ],
+      "new_missing_values_created": 5
+    },
+    {
+      "column": "rhq076___seen_a_dr_b/c_unable_to_become_pregnant?",
+      "sentinel_values_replaced": [
+        7,
+        9
+      ],
+      "new_missing_values_created": 3
+    },
+    {
+      "column": "rhq078___ever_treated_for_a_pelvic_infection/pid?",
+      "sentinel_values_replaced": [
+        7,
+        9
+      ],
+      "new_missing_values_created": 23
+    },
+    {
+      "column": "rhq131___ever_been_pregnant?",
+      "sentinel_values_replaced": [
+        7,
+        9
+      ],
+      "new_missing_values_created": 3
+    },
+    {
+      "column": "rhq160___how_many_times_have_been_pregnant?",
+      "sentinel_values_replaced": [
+        9,
+        77
+      ],
+      "new_missing_values_created": 18
+    },
+    {
+      "column": "rhq162___during_pregnancy,_told_you_have_diabetes",
+      "sentinel_values_replaced": [
+        7,
+        9
+      ],
+      "new_missing_values_created": 2
+    },
+    {
+      "column": "rhq171___how_many_deliveries_live_birth_result?",
+      "sentinel_values_replaced": [
+        77
+      ],
+      "new_missing_values_created": 2
+    },
+    {
+      "column": "rhq172___any_babies_weigh_9_lbs_or_more?",
+      "sentinel_values_replaced": [
+        7,
+        9
+      ],
+      "new_missing_values_created": 9
+    },
+    {
+      "column": "rhq305___had_both_ovaries_removed?",
+      "sentinel_values_replaced": [
+        9
+      ],
+      "new_missing_values_created": 19
+    },
+    {
+      "column": "rhq540___ever_use_female_hormones?",
+      "sentinel_values_replaced": [
+        7,
+        9
+      ],
+      "new_missing_values_created": 16
+    },
+    {
+      "column": "rxduse___taken_prescription_medicine,_past_month",
+      "sentinel_values_replaced": [
+        7,
+        9
+      ],
+      "new_missing_values_created": 9
+    },
+    {
+      "column": "slq040___how_often_do_you_snort_or_stop_breathing",
+      "sentinel_values_replaced": [
+        7,
+        9
+      ],
+      "new_missing_values_created": 326
+    },
+    {
+      "column": "slq050___ever_told_doctor_had_trouble_sleeping?",
+      "sentinel_values_replaced": [
+        7,
+        9
+      ],
+      "new_missing_values_created": 6
+    },
+    {
+      "column": "smd100fl___cigarette_filter_type",
+      "sentinel_values_replaced": [
+        9
+      ],
+      "new_missing_values_created": 6
+    },
+    {
+      "column": "smd100mn___cigarette_menthol_indicator",
+      "sentinel_values_replaced": [
+        9
+      ],
+      "new_missing_values_created": 2
+    },
+    {
+      "column": "smq020___smoked_at_least_100_cigarettes_in_life",
+      "sentinel_values_replaced": [
+        7,
+        9
+      ],
+      "new_missing_values_created": 3
+    },
+    {
+      "column": "smq078___how_soon_after_waking_do_you_smoke",
+      "sentinel_values_replaced": [
+        7,
+        99
+      ],
+      "new_missing_values_created": 35
+    },
+    {
+      "column": "whq030___how_do_you_consider_your_weight",
+      "sentinel_values_replaced": [
+        7,
+        9
+      ],
+      "new_missing_values_created": 16
+    },
+    {
+      "column": "whq040___like_to_weigh_more,_less_or_same",
+      "sentinel_values_replaced": [
+        9
+      ],
+      "new_missing_values_created": 5
+    },
+    {
+      "column": "whq225___times_lost_10_lbs_or_more_to_lose_weight",
+      "sentinel_values_replaced": [
+        9
+      ],
+      "new_missing_values_created": 30
+    }
+  ],
+  "duplicate_drop_count": 48,
+  "duplicate_drop_columns": [
+    "LBDBMNLC_blood_manganese_comment_code",
+    "LBDHDD_direct_hdl_cholesterol_mg_dl",
+    "LBDPCT_transferrin_saturation",
+    "LBDSF6LC_mefox_oxidation_product_cmt",
+    "LBDTIB_total_iron_binding_capacity_tibc_ug_dl",
+    "LBDV3BLC_blood_1_3_dichlorobenzene_comment_code",
+    "LBDVDELC_blood_1_2_dibromoethane_comment_code",
+    "LBDVFTLC_blood_aaa_trifluorotoluene_comment_code",
+    "LBXFER_ferritin_ng_ml",
+    "LBXGLU_fasting_glucose_mg_dl",
+    "LBXIGGA_cytomegalovirus_cmv_igg_avidity",
+    "LBXIGG_cytomegalovirus_cmv_igg",
+    "LBXIGM_cytomegalovirus_cmv_igm",
+    "LBXIN",
+    "LBXIRN_iron_frozen_serum_ug_dl",
+    "LBXSAL_albumin_refrigerated_serum_g_dl",
+    "LBXSAPSI_alkaline_phosphatase_alp_iu_l",
+    "LBXSASSI_aspartate_aminotransferase_ast_u_l",
+    "LBXSATSI_alanine_aminotransferase_alt_u_l",
+    "LBXSCR_creatinine_refrigerated_serum_mg_dl",
+    "LBXSGTSI_gamma_glutamyl_transferase_ggt_iu_l",
+    "LBXSTB_total_bilirubin_mg_dl",
+    "LBXTC_total_cholesterol_mg_dl",
+    "LBXTFR_transferrin_receptor_mg_l",
+    "LBXTR_triglyceride_mg_dl",
+    "LBXVTFT_blood_aaa_trifluorotoluene_ng_ml",
+    "PHAFSTHR_total_length_of_food_fast_hours",
+    "PHAFSTMN_total_length_of_food_fast_minutes",
+    "URDACT_albumin_creatinine_ratio_mg_g",
+    "URDPMMLC_n_a_s_3_hydrxprpl_1_metl_l_cys_comt",
+    "URDUMOLC_urinary_molybdenum_comment_code",
+    "URXUMS_albumin_urine_mg_l",
+    "WTFOLPRP__p_folfms",
+    "WTSAFPRP__p_ins",
+    "WTSAFPRP__p_trigly",
+    "WTSAPRP__p_pernt",
+    "WTSAPRP__p_uas",
+    "WTSAPRP__p_ucm",
+    "WTSAPRP__p_uhg",
+    "WTSAPRP__p_uio",
+    "WTSAPRP__p_um",
+    "WTSAPRP__p_uni",
+    "WTSAPRP__p_utas",
+    "WTSAPRP__p_uvoc",
+    "WTSBPRP__p_opd",
+    "mcq151___age_in_years_at_first_menstrual_period",
+    "smd630___age_first_smoked_whole_cigarette",
+    "smq621___cigarettes_smoked_in_entire_life"
+  ],
+  "duplicate_keep_drop_pairs": [
+    {
+      "keep_column": "LBD4CELC_blood_1_1_1_2_tetrachloroethane_cmt_code",
+      "drop_column": "LBDV3BLC_blood_1_3_dichlorobenzene_comment_code"
+    },
+    {
+      "keep_column": "LBD4CELC_blood_1_1_1_2_tetrachloroethane_cmt_code",
+      "drop_column": "LBDVDELC_blood_1_2_dibromoethane_comment_code"
+    },
+    {
+      "keep_column": "LBD4CELC_blood_1_1_1_2_tetrachloroethane_cmt_code",
+      "drop_column": "LBDVFTLC_blood_aaa_trifluorotoluene_comment_code"
+    },
+    {
+      "keep_column": "LBDBSELC_blood_selenium_comment_code",
+      "drop_column": "LBDBMNLC_blood_manganese_comment_code"
+    },
+    {
+      "keep_column": "LBDSF1LC_5_methyl_tetrahydrofolate_cmt",
+      "drop_column": "LBDSF6LC_mefox_oxidation_product_cmt"
+    },
+    {
+      "keep_column": "LBX4CE_blood_1_1_1_2_tetrachloroethane_ng_ml",
+      "drop_column": "LBXVTFT_blood_aaa_trifluorotoluene_ng_ml"
+    },
+    {
+      "keep_column": "URDDHBLC_n_ace_s_3_4_dihidxybutl_l_cys_comt",
+      "drop_column": "URDPMMLC_n_a_s_3_hydrxprpl_1_metl_l_cys_comt"
+    },
+    {
+      "keep_column": "URDUCSLC_urinary_cesium_comment_code",
+      "drop_column": "URDUMOLC_urinary_molybdenum_comment_code"
+    },
+    {
+      "keep_column": "URXUMA_albumin_urine_ug_ml",
+      "drop_column": "URXUMS_albumin_urine_mg_l"
+    },
+    {
+      "keep_column": "WTFOLPRP_folate_folate_form_weight_pre_pandemic",
+      "drop_column": "WTFOLPRP__p_folfms"
+    },
+    {
+      "keep_column": "WTSAFPRP_fasting_subsample_weight",
+      "drop_column": "WTSAFPRP__p_ins"
+    },
+    {
+      "keep_column": "WTSAFPRP_fasting_subsample_weight",
+      "drop_column": "WTSAFPRP__p_trigly"
+    },
+    {
+      "keep_column": "WTSAPRP_subsample_a_weights_pre_pandemic",
+      "drop_column": "WTSAPRP__p_pernt"
+    },
+    {
+      "keep_column": "WTSAPRP_subsample_a_weights_pre_pandemic",
+      "drop_column": "WTSAPRP__p_uas"
+    },
+    {
+      "keep_column": "WTSAPRP_subsample_a_weights_pre_pandemic",
+      "drop_column": "WTSAPRP__p_ucm"
+    },
+    {
+      "keep_column": "WTSAPRP_subsample_a_weights_pre_pandemic",
+      "drop_column": "WTSAPRP__p_uhg"
+    },
+    {
+      "keep_column": "WTSAPRP_subsample_a_weights_pre_pandemic",
+      "drop_column": "WTSAPRP__p_uio"
+    },
+    {
+      "keep_column": "WTSAPRP_subsample_a_weights_pre_pandemic",
+      "drop_column": "WTSAPRP__p_um"
+    },
+    {
+      "keep_column": "WTSAPRP_subsample_a_weights_pre_pandemic",
+      "drop_column": "WTSAPRP__p_uni"
+    },
+    {
+      "keep_column": "WTSAPRP_subsample_a_weights_pre_pandemic",
+      "drop_column": "WTSAPRP__p_utas"
+    },
+    {
+      "keep_column": "WTSAPRP_subsample_a_weights_pre_pandemic",
+      "drop_column": "WTSAPRP__p_uvoc"
+    },
+    {
+      "keep_column": "WTSBPRP_subsample_b_weights_pre_pandemic",
+      "drop_column": "WTSBPRP__p_opd"
+    },
+    {
+      "keep_column": "alp_u_l",
+      "drop_column": "LBXSAPSI_alkaline_phosphatase_alp_iu_l"
+    },
+    {
+      "keep_column": "alt_u_l",
+      "drop_column": "LBXSATSI_alanine_aminotransferase_alt_u_l"
+    },
+    {
+      "keep_column": "ast_u_l",
+      "drop_column": "LBXSASSI_aspartate_aminotransferase_ast_u_l"
+    },
+    {
+      "keep_column": "fasting_glucose_mg_dl",
+      "drop_column": "LBXGLU_fasting_glucose_mg_dl"
+    },
+    {
+      "keep_column": "fasting_hours_part",
+      "drop_column": "PHAFSTHR_total_length_of_food_fast_hours"
+    },
+    {
+      "keep_column": "fasting_minutes_part",
+      "drop_column": "PHAFSTMN_total_length_of_food_fast_minutes"
+    },
+    {
+      "keep_column": "ferritin_ng_ml",
+      "drop_column": "LBXFER_ferritin_ng_ml"
+    },
+    {
+      "keep_column": "ggt_u_l",
+      "drop_column": "LBXSGTSI_gamma_glutamyl_transferase_ggt_iu_l"
+    },
+    {
+      "keep_column": "hdl_cholesterol_mg_dl",
+      "drop_column": "LBDHDD_direct_hdl_cholesterol_mg_dl"
+    },
+    {
+      "keep_column": "insulin_uU_ml",
+      "drop_column": "LBXIN"
+    },
+    {
+      "keep_column": "mcq149___menstrual_periods_started_yet?",
+      "drop_column": "LBXIGGA_cytomegalovirus_cmv_igg_avidity"
+    },
+    {
+      "keep_column": "mcq149___menstrual_periods_started_yet?",
+      "drop_column": "LBXIGG_cytomegalovirus_cmv_igg"
+    },
+    {
+      "keep_column": "mcq149___menstrual_periods_started_yet?",
+      "drop_column": "LBXIGM_cytomegalovirus_cmv_igm"
+    },
+    {
+      "keep_column": "mcq149___menstrual_periods_started_yet?",
+      "drop_column": "mcq151___age_in_years_at_first_menstrual_period"
+    },
+    {
+      "keep_column": "mcq149___menstrual_periods_started_yet?",
+      "drop_column": "smd630___age_first_smoked_whole_cigarette"
+    },
+    {
+      "keep_column": "mcq149___menstrual_periods_started_yet?",
+      "drop_column": "smq621___cigarettes_smoked_in_entire_life"
+    },
+    {
+      "keep_column": "serum_albumin_g_dl",
+      "drop_column": "LBXSAL_albumin_refrigerated_serum_g_dl"
+    },
+    {
+      "keep_column": "serum_creatinine_mg_dl",
+      "drop_column": "LBXSCR_creatinine_refrigerated_serum_mg_dl"
+    },
+    {
+      "keep_column": "serum_iron_ug_dl",
+      "drop_column": "LBXIRN_iron_frozen_serum_ug_dl"
+    },
+    {
+      "keep_column": "tibc_ug_dl",
+      "drop_column": "LBDTIB_total_iron_binding_capacity_tibc_ug_dl"
+    },
+    {
+      "keep_column": "total_bilirubin_mg_dl",
+      "drop_column": "LBXSTB_total_bilirubin_mg_dl"
+    },
+    {
+      "keep_column": "total_cholesterol_mg_dl",
+      "drop_column": "LBXTC_total_cholesterol_mg_dl"
+    },
+    {
+      "keep_column": "transferrin_receptor_mg_l",
+      "drop_column": "LBXTFR_transferrin_receptor_mg_l"
+    },
+    {
+      "keep_column": "transferrin_saturation_pct",
+      "drop_column": "LBDPCT_transferrin_saturation"
+    },
+    {
+      "keep_column": "triglycerides_mg_dl",
+      "drop_column": "LBXTR_triglyceride_mg_dl"
+    },
+    {
+      "keep_column": "uacr_mg_g",
+      "drop_column": "URDACT_albumin_creatinine_ratio_mg_g"
+    }
+  ],
+  "ml_ready_shape": [
+    7437,
+    736
+  ],
+  "cluster_optional_shape": [
+    7437,
+    779
+  ],
+  "ml_ready_sparse_dropped_count": 84,
+  "cluster_optional_sparse_dropped_count": 41
+}
