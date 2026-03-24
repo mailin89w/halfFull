@@ -13,6 +13,7 @@ assessment_quiz/nhanes_combined_question_flow_v2.json.
 from __future__ import annotations
 
 import json
+import sys
 from pathlib import Path
 from typing import Any
 
@@ -26,37 +27,61 @@ MODELS_DIR = ROOT / "models"
 PREPROCESSOR = InferencePreprocessor()
 
 
-def _load_json(path: Path) -> dict[str, Any]:
-    with path.open() as f:
-        return json.load(f)
+def _warn_skip(condition: str, reason: str) -> None:
+    print(f"[score] Skipping {condition}: {reason}", file=sys.stderr)
 
 
-THYROID_META = _load_json(MODELS_DIR / "thyroid_lr_l2_18feat_metadata.json")
-KIDNEY_META = _load_json(MODELS_DIR / "kidney_lr_l2_routine_30feat_metadata.json")
-LIVER_META = _load_json(MODELS_DIR / "liver_lr_l2_13feat_metadata.json")
-ANEMIA_META = _load_json(MODELS_DIR / "anemia_combined_lr_metadata.json")
-IRON_META = _load_json(MODELS_DIR / "iron_deficiency_checkup_lr_metadata.json")
-PREDIABETES_META = _load_json(MODELS_DIR / "prediabetes_focused_quiz_demo_med_screening_labs_threshold_045.metadata.json")
-SLEEP_META = _load_json(MODELS_DIR / "sleep_disorder_compact_quiz_demo_med_screening_labs_threshold_04.metadata.json")
-ELECTROLYTES_META = _load_json(MODELS_DIR / "electrolyte_imbalance_compact_quiz_demo_med_screening_labs_threshold_05.metadata.json")
-HEPATITIS_META = _load_json(MODELS_DIR / "hepatitis_rf_cal_33feat_metadata.json")
-PERIMENO_META = _load_json(MODELS_DIR / "perimenopause_gradient_boosting_metadata.json")
-INFLAMMATION_META = _load_json(MODELS_DIR / "inflammation_lr_l1_45feat_metadata.json")
+def _load_json(path: Path, condition: str) -> dict[str, Any] | None:
+    try:
+        with path.open() as f:
+            return json.load(f)
+    except FileNotFoundError:
+        _warn_skip(condition, f"metadata not found ({path.name})")
+    except Exception as exc:
+        _warn_skip(condition, f"metadata load error: {exc}")
+    return None
 
 
-MODEL_FEATURES = {
-    "anemia": list(ANEMIA_META["feature_names"]),
-    "iron_deficiency": list(IRON_META["feature_names"]),
-    "thyroid": list(THYROID_META["all_features"]),
-    "kidney": list(KIDNEY_META["all_features"]),
-    "sleep_disorder": list(SLEEP_META["features"]),
-    "liver": list(LIVER_META["all_features"]),
-    "prediabetes": list(PREDIABETES_META["features"]),
-    "inflammation": list(INFLAMMATION_META["feature_names"]),
-    "electrolytes": list(ELECTROLYTES_META["features"]),
-    "hepatitis": list(HEPATITIS_META["feature_names"]),
-    "perimenopause": list(PERIMENO_META["features"]),
-}
+def _feature_names(meta: dict[str, Any] | None, key: str, condition: str) -> list[str] | None:
+    if meta is None:
+        return None
+    raw = meta.get(key)
+    if not isinstance(raw, list):
+        _warn_skip(condition, f"metadata missing expected '{key}' list")
+        return None
+    return list(raw)
+
+
+THYROID_META = _load_json(MODELS_DIR / "thyroid_lr_l2_18feat_metadata.json", "thyroid")
+KIDNEY_META = _load_json(MODELS_DIR / "kidney_lr_l2_routine_30feat_metadata.json", "kidney")
+LIVER_META = _load_json(MODELS_DIR / "liver_lr_l2_13feat_metadata.json", "liver")
+ANEMIA_META = _load_json(MODELS_DIR / "anemia_combined_lr_metadata.json", "anemia")
+IRON_META = _load_json(MODELS_DIR / "iron_deficiency_checkup_lr_metadata.json", "iron_deficiency")
+PREDIABETES_META = _load_json(MODELS_DIR / "prediabetes_focused_quiz_demo_med_screening_labs_threshold_045.metadata.json", "prediabetes")
+SLEEP_META = _load_json(MODELS_DIR / "sleep_disorder_compact_quiz_demo_med_screening_labs_threshold_04.metadata.json", "sleep_disorder")
+ELECTROLYTES_META = _load_json(MODELS_DIR / "electrolyte_imbalance_compact_quiz_demo_med_screening_labs_threshold_05.metadata.json", "electrolytes")
+HEPATITIS_META = _load_json(MODELS_DIR / "hepatitis_rf_cal_33feat_metadata.json", "hepatitis")
+PERIMENO_META = _load_json(MODELS_DIR / "perimenopause_gradient_boosting_metadata.json", "perimenopause")
+INFLAMMATION_META = _load_json(MODELS_DIR / "inflammation_lr_l1_45feat_metadata.json", "inflammation")
+
+
+MODEL_FEATURES: dict[str, list[str]] = {}
+
+for condition, features in [
+    ("anemia", _feature_names(ANEMIA_META, "feature_names", "anemia")),
+    ("iron_deficiency", _feature_names(IRON_META, "feature_names", "iron_deficiency")),
+    ("thyroid", _feature_names(THYROID_META, "all_features", "thyroid")),
+    ("kidney", _feature_names(KIDNEY_META, "all_features", "kidney")),
+    ("sleep_disorder", _feature_names(SLEEP_META, "features", "sleep_disorder")),
+    ("liver", _feature_names(LIVER_META, "all_features", "liver")),
+    ("prediabetes", _feature_names(PREDIABETES_META, "features", "prediabetes")),
+    ("inflammation", _feature_names(INFLAMMATION_META, "feature_names", "inflammation")),
+    ("electrolytes", _feature_names(ELECTROLYTES_META, "features", "electrolytes")),
+    ("hepatitis", _feature_names(HEPATITIS_META, "feature_names", "hepatitis")),
+    ("perimenopause", _feature_names(PERIMENO_META, "features", "perimenopause")),
+]:
+    if features:
+        MODEL_FEATURES[condition] = features
 
 
 HELPER_ALIAS_MAP = {

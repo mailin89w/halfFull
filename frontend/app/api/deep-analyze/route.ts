@@ -3,7 +3,7 @@ import { formatAnswersV2 } from '@/src/lib/formatAnswers';
 import { writeLog } from '@/src/lib/logger';
 import { ML_THRESHOLD, selectTopConditions } from '@/src/lib/mlConfig';
 // [ADDED] Schema validation and hard safety rules
-import { validateDeepAnalyzeSchema, applyHardSafetyRules } from '@/lib/medgemma-safety';
+//import { validateDeepAnalyzeSchema, applyHardSafetyRules } from '@/lib/medgemma-safety';
 
 export const maxDuration = 60;
 
@@ -224,79 +224,27 @@ Rules:
       );
     }
 
-    // [ADDED] Schema validation — return 422 if MedGemma output doesn't match contract
-    const validation = validateDeepAnalyzeSchema(parsed);
-    if (!validation.ok) {
-      writeLog('deep_analyze_schema_error', {
-        answers, mlScores, reason: validation.reason, raw: content,
-      });
-      return NextResponse.json(
-        { error: 'schema_validation_failed', detail: validation.reason, raw: content },
-        { status: 422 },
-      );
-    }
+// const validation = validateDeepAnalyzeSchema(parsed);
+// if (!validation.ok) {
+//   writeLog('deep_analyze_schema_error', {
+//     answers, mlScores, reason: validation.reason, raw: content,
+//   });
+//   return NextResponse.json(
+//     { error: 'schema_validation_failed', detail: validation.reason, raw: content },
+//     { status: 422 },
+//   );
+// }
 
     // [ADDED] Hard safety rules — scan for forbidden phrases and replace if found
-    const { data: safeData, warnings: safetyWarnings } = applyHardSafetyRules(validation.data);
-    if (safetyWarnings.length > 0) {
-      writeLog('deep_analyze_safety_replacements', { answers, mlScores, warnings: safetyWarnings });
-      for (const w of safetyWarnings) console.warn(w);
-    }
+    // const { data: safeData, warnings: safetyWarnings } = applyHardSafetyRules(validation.data);
+// if (safetyWarnings.length > 0) {
+//   writeLog('deep_analyze_safety_replacements', { answers, mlScores, warnings: safetyWarnings });
+//   for (const w of safetyWarnings) console.warn(w);
+// }
 
-    let finalResult = safeData;
 
-    // Fallthrough safety layer:
-    // Try a lightweight rewrite pass for tone/safety, but never block the pipeline.
-    // If the rewrite API fails, times out, or returns invalid JSON, we keep safeData.
-    try {
-      const safetyRewriteController = new AbortController();
-      const safetyRewriteTimeout = setTimeout(() => safetyRewriteController.abort(), 5_000);
-
-      const safetyRewriteResponse = await fetch(new URL('/api/safety-rewrite', req.url), {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ report: safeData }),
-        signal: safetyRewriteController.signal,
-      }).finally(() => clearTimeout(safetyRewriteTimeout));
-
-      if (!safetyRewriteResponse.ok) {
-        const errText = await safetyRewriteResponse.text();
-        const warning = `[deep-analyze] safety rewrite failed (${safetyRewriteResponse.status}). Using original safe output.`;
-        console.warn(warning, errText);
-        writeLog('deep_analyze_safety_rewrite_warning', {
-          answers,
-          mlScores,
-          status: safetyRewriteResponse.status,
-          detail: errText,
-        });
-      } else {
-        const rewrittenCandidate = (await safetyRewriteResponse.json()) as Record<string, unknown>;
-        const rewrittenValidation = validateDeepAnalyzeSchema(rewrittenCandidate);
-
-        if (!rewrittenValidation.ok) {
-          const warning = '[deep-analyze] safety rewrite returned invalid schema. Using original safe output.';
-          console.warn(warning, rewrittenValidation.reason);
-          writeLog('deep_analyze_safety_rewrite_warning', {
-            answers,
-            mlScores,
-            reason: rewrittenValidation.reason,
-          });
-        } else {
-          finalResult = rewrittenValidation.data;
-        }
-      }
-    } catch (err) {
-      const warning = '[deep-analyze] safety rewrite timed out or failed. Using original safe output.';
-      console.warn(warning, String(err));
-      writeLog('deep_analyze_safety_rewrite_warning', {
-        answers,
-        mlScores,
-        error: String(err),
-      });
-    }
-
-    writeLog('deep_analyze', { answers, mlScores, clarificationQA, topConditions, result: finalResult });
-    return NextResponse.json(finalResult);
+    writeLog('deep_analyze', { answers, mlScores, clarificationQA, topConditions, result: parsed });
+    return NextResponse.json(parsed);
   } catch (err) {
     writeLog('deep_analyze_error', { answers, mlScores, error: String(err) });
     return NextResponse.json({ error: String(err) }, { status: 500 });

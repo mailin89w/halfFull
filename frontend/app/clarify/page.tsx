@@ -4,9 +4,9 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAssessment } from '@/src/hooks/useAssessment';
 import {
-  fetchBayesianQuestions,
-  fetchBayesianUpdate,
-  fetchMLScores,
+  fetchBayesianQuestionsWithTimeout,
+  fetchBayesianUpdateWithTimeout,
+  fetchMLScoresWithTimeout,
   readStoredMLScores,
   storeBayesianAnswers,
   storeBayesianScores,
@@ -128,6 +128,7 @@ export default function ClarifyPage() {
   const [phase,           setPhase]           = useState<LoadPhase>('loading');
   const [bayesianData,    setBayesianData]    = useState<BayesianQuestionsResult | null>(null);
   const [selectedAnswers, setSelectedAnswers] = useState<Record<string, string>>({});
+  const [retryKey,        setRetryKey]        = useState(0);
 
   // ── Load ML scores → Bayesian questions ──────────────────────────────────
   useEffect(() => {
@@ -140,7 +141,7 @@ export default function ClarifyPage() {
         // ML scoring happens here — after quiz+labs are submitted
         let mlScores = readStoredMLScores() ?? {};
         if (Object.keys(mlScores).length === 0) {
-          mlScores = await fetchMLScores(answers);
+          mlScores = await fetchMLScoresWithTimeout(answers);
           storeMLScores(mlScores);
         }
         if (cancelled.current) return;
@@ -149,7 +150,7 @@ export default function ClarifyPage() {
                          : answers.gender === '1' ? 'male'
                          : undefined;
 
-        const data = await fetchBayesianQuestions(mlScores, patientSex as string | undefined, answers);
+        const data = await fetchBayesianQuestionsWithTimeout(mlScores, patientSex as string | undefined);
         if (cancelled.current) return;
 
         // No conditions cleared the threshold — skip straight to processing
@@ -168,7 +169,7 @@ export default function ClarifyPage() {
     void load();
     return () => { cancelled.current = true; };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [hydrated]);
+  }, [hydrated, retryKey]);
 
   // ── Derived state ─────────────────────────────────────────────────────────
   const confounderQs: ConfounderQuestion[] = bayesianData?.confounder_questions ?? [];
@@ -211,12 +212,11 @@ export default function ClarifyPage() {
         }
       }
 
-      const result = await fetchBayesianUpdate(
+      const result = await fetchBayesianUpdateWithTimeout(
         mlScores,
         confounderAnswers,
         answersByCondition,
         patientSex as string | undefined,
-        answers,
       );
 
       // Build human-readable Q&A record for MedGemma prompt
@@ -267,7 +267,12 @@ export default function ClarifyPage() {
           </p>
           <button
             type="button"
-            onClick={() => setPhase('loading')}
+            onClick={() => {
+              setBayesianData(null);
+              setSelectedAnswers({});
+              setPhase('loading');
+              setRetryKey((current) => current + 1);
+            }}
             className="rounded-full bg-[#09090f] px-6 py-3 text-sm font-bold text-white"
           >
             Retry

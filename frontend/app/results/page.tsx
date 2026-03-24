@@ -70,6 +70,8 @@ export default function ResultsPage() {
       );
 
   const coachingTips = deep?.coachingTips ?? [];
+  const aiLabel = deep?.meta?.label ?? 'Structured local report';
+  const isFallbackContent = deep?.meta?.fallback ?? true;
 
   // ── Export helpers ───────────────────────────────────────────────────────
   const downloadDoctorKit = async () => {
@@ -276,6 +278,19 @@ export default function ResultsPage() {
               Scroll for the flagged patterns
             </div>
           </section>
+
+          {isFallbackContent && (
+            <div className="section-card border-[var(--color-lime)] px-5 py-4">
+              <div className="flex items-center gap-2 mb-2">
+                <span className="pill-tag bg-[var(--color-lime)] text-[var(--color-ink)]">
+                  {aiLabel}
+                </span>
+              </div>
+              <p className="text-sm leading-6 text-[var(--color-ink-soft)]">
+                This report text was generated from demo or local fallback logic so the app stays usable even when live MedGemma is unavailable.
+              </p>
+            </div>
+          )}
 
           {/* ── MedGemma personalised summary ─────────────────────────────── */}
           {deep?.personalizedSummary ? (

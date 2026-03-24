@@ -1,4 +1,4 @@
-
+import { buildMockDeepResult, buildOfflineDeepResult } from '@/src/lib/mockResults';
 // ─── Storage keys ─────────────────────────────────────────────────────────────
 
 export const MEDGEMMA_STORAGE_KEY  = 'halffull_medgemma_v1';
@@ -7,6 +7,9 @@ export const FOLLOWUP_STORAGE_KEY  = 'halffull_followup_v1';
 export const ML_SCORES_KEY         = 'halffull_ml_scores_v1';
 export const BAYESIAN_SCORES_KEY   = 'halffull_bayesian_scores_v1';
 export const BAYESIAN_ANSWERS_KEY  = 'halffull_bayesian_answers_v1';
+
+export type AiMode = 'live' | 'mock' | 'offline';
+export type AiResultSource = 'live' | 'mock' | 'offline';
 
 // ─── Basic result (from /api/analyze) ─────────────────────────────────────────
 
@@ -38,6 +41,12 @@ export interface DeepMedGemmaResult extends MedGemmaResult {
   doctorKitArguments?: string[];
   /** Energy-saving and lifestyle coaching tips */
   coachingTips?: CoachingTip[];
+  /** Source metadata used to label fallback content honestly in the UI */
+  meta?: {
+    mode: AiResultSource;
+    label: string;
+    fallback: boolean;
+  };
 }
 
 // ─── Bayesian clarification Q&A (stored after /clarify, passed to MedGemma) ───
@@ -195,6 +204,30 @@ export async function fetchMLScores(
   return data.scores ?? {};
 }
 
+export function getConfiguredAiMode(): AiMode {
+  const raw = process.env.NEXT_PUBLIC_AI_MODE?.trim().toLowerCase();
+  return raw === 'mock' || raw === 'offline' ? raw : 'live';
+}
+
+async function withTimeout<T>(
+  promise: Promise<T>,
+  timeoutMs: number,
+  label: string
+): Promise<T> {
+  let timer: ReturnType<typeof setTimeout> | undefined;
+
+  try {
+    return await Promise.race([
+      promise,
+      new Promise<T>((_, reject) => {
+        timer = setTimeout(() => reject(new Error(`${label} timed out after ${timeoutMs}ms`)), timeoutMs);
+      }),
+    ]);
+  } finally {
+    if (timer) clearTimeout(timer);
+  }
+}
+
 /** Basic insights — called as fallback if deep-analyze fails */
 export async function fetchMedGemmaInsights(
   answers: Record<string, unknown>,
@@ -271,6 +304,96 @@ export async function fetchBayesianUpdate(
 }
 
 // ─── Utility ──────────────────────────────────────────────────────────────────
+
+export async function fetchMLScoresWithTimeout(
+  answers: Record<string, unknown>,
+  timeoutMs = 15000
+): Promise<Record<string, number>> {
+  return withTimeout(fetchMLScores(answers), timeoutMs, 'Assessment scoring');
+}
+
+export async function fetchBayesianQuestionsWithTimeout(
+  mlScores: Record<string, number>,
+  patientSex?: string,
+  timeoutMs = 15000,
+): Promise<BayesianQuestionsResult> {
+  return withTimeout(fetchBayesianQuestions(mlScores, patientSex), timeoutMs, 'Clarify questions');
+}
+
+export async function fetchBayesianUpdateWithTimeout(
+  mlScores: Record<string, number>,
+  confounderAnswers: Record<string, number>,
+  answersByCondition: Record<string, Record<string, string>>,
+  patientSex?: string,
+  timeoutMs = 15000,
+): Promise<BayesianUpdateResult> {
+  return withTimeout(
+    fetchBayesianUpdate(mlScores, confounderAnswers, answersByCondition, patientSex),
+    timeoutMs,
+    'Clarify update'
+  );
+}
+
+function buildStoredDeepResult(
+  source: AiResultSource,
+  base: DeepMedGemmaResult
+): DeepMedGemmaResult {
+  const label =
+    source === 'live'
+      ? 'Live MedGemma'
+      : source === 'mock'
+        ? 'Demo fallback'
+        : 'Offline fallback';
+
+  return {
+    ...base,
+    meta: {
+      mode: source,
+      label,
+      fallback: source !== 'live',
+    },
+  };
+}
+
+export function createMockDeepResult(answers: Record<string, unknown>): DeepMedGemmaResult {
+  return buildStoredDeepResult('mock', buildMockDeepResult(answers));
+}
+
+export function createOfflineDeepResult(answers: Record<string, unknown>): DeepMedGemmaResult {
+  return buildStoredDeepResult('offline', buildOfflineDeepResult(answers));
+}
+
+export async function getDeepAnalysisWithFallback(
+  answers: Record<string, unknown>,
+  mlScores?: Record<string, number>,
+  clarificationQA?: BayesianClarificationRecord,
+  timeoutMs = 20000
+): Promise<DeepMedGemmaResult> {
+  const mode = getConfiguredAiMode();
+
+  if (mode === 'offline') {
+    return createOfflineDeepResult(answers);
+  }
+
+  if (mode === 'mock') {
+    return createMockDeepResult(answers);
+  }
+
+  try {
+    const liveResult = await withTimeout(
+      fetchDeepAnalysis(answers, mlScores, clarificationQA),
+      timeoutMs,
+      'Live AI analysis'
+    );
+    return buildStoredDeepResult('live', liveResult);
+  } catch {
+    try {
+      return createMockDeepResult(answers);
+    } catch {
+      return createOfflineDeepResult(answers);
+    }
+  }
+}
 
 /** Returns the personalNote for a given diagnosis id, if one exists */
 export function getInsightForDiagnosis(
