@@ -26,7 +26,9 @@ import { writeLog } from '@/src/lib/logger';
 
 const PROJECT_ROOT = path.resolve(process.cwd(), '..');
 const PYTHON = process.env.PYTHON_BIN
-  ?? path.join(PROJECT_ROOT, 'ml_project_env', 'bin', 'python3');
+  ?? (process.platform === 'win32'
+    ? path.join(PROJECT_ROOT, 'ml_project_env_win', 'Scripts', 'python.exe')
+    : path.join(PROJECT_ROOT, 'ml_project_env', 'bin', 'python3'));
 const SCRIPT = path.join(PROJECT_ROOT, 'bayesian', 'run_bayesian.py');
 
 function runPython(input: object): Promise<Record<string, unknown>> {
@@ -75,22 +77,22 @@ export async function POST(req: NextRequest) {
       patientSex?: unknown;
       existingAnswers?: unknown;
     };
-    mlScores           = (body.mlScores ?? {}) as Record<string, number>;
-    confounderAnswers  = (body.confounderAnswers ?? {}) as Record<string, number>;
+    mlScores = (body.mlScores ?? {}) as Record<string, number>;
+    confounderAnswers = (body.confounderAnswers ?? {}) as Record<string, number>;
     answersByCondition = (body.answersByCondition ?? {}) as Record<string, Record<string, string>>;
-    patientSex         = typeof body.patientSex === 'string' ? body.patientSex : undefined;
-    existingAnswers    = (body.existingAnswers ?? {}) as Record<string, unknown>;
+    patientSex = typeof body.patientSex === 'string' ? body.patientSex : undefined;
+    existingAnswers = (body.existingAnswers ?? {}) as Record<string, unknown>;
   } catch {
     return NextResponse.json({ error: 'Invalid JSON body' }, { status: 400 });
   }
 
   const result = await runPython({
-    mode:                 'update',
-    ml_scores:            mlScores,
-    confounder_answers:   confounderAnswers,
+    mode: 'update',
+    ml_scores: mlScores,
+    confounder_answers: confounderAnswers,
     answers_by_condition: answersByCondition,
-    patient_sex:          patientSex,
-    existing_answers:     existingAnswers,
+    patient_sex: patientSex,
+    existing_answers: existingAnswers,
   });
 
   if (result.error) {

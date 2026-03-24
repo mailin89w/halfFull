@@ -1,0 +1,22 @@
+{
+  "name": "perimenopause_proxy",
+  "eligibility": [
+    "female",
+    "35 <= age_years <= 55",
+    "menopause == 0",
+    "rhd280 != 1",
+    "rhq305 != 1",
+    "rhd143 != 1",
+    "rhq200 != 1"
+  ],
+  "major_transition_evidence": [
+    "rhq031 == 2",
+    "0 <= age_years - rhq060 <= 1.5",
+    "LBXFSH >= 25",
+    "(10 <= LBXFSH < 25) and (LBXAMH < 1)"
+  ],
+  "score_thresholds": {
+    "probable": 6,
+    "strict": 8
+  }
+}

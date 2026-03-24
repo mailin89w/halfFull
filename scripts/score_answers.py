@@ -182,6 +182,13 @@ def main() -> None:
                 file=sys.stderr,
             )
         scores = runner.run_all(feature_vectors)
+        scores = runner.run_all_with_context(
+            feature_vectors,
+            patient_context={
+                "age_years": answers.get("age_years"),
+                "gender": answers.get("gender"),
+            },
+        )
         print(json.dumps(scores))
     except Exception as exc:
         print(json.dumps({"error": str(exc)}))

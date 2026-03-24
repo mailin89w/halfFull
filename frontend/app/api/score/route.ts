@@ -19,8 +19,11 @@ import { writeLog } from '@/src/lib/logger';
 const PROJECT_ROOT = path.resolve(process.cwd(), '..');
 
 // Python interpreter: prefer venv, fall back to system python3
-const PYTHON = process.env.PYTHON_BIN
-  ?? path.join(PROJECT_ROOT, 'ml_project_env', 'bin', 'python3');
+const PYTHON =
+  process.env.PYTHON_BIN ??
+  (process.platform === 'win32'
+    ? path.join(PROJECT_ROOT, 'ml_project_env_win', 'Scripts', 'python.exe')
+    : path.join(PROJECT_ROOT, 'ml_project_env', 'bin', 'python3'));
 
 const SCORE_SCRIPT = path.join(PROJECT_ROOT, 'scripts', 'score_answers.py');
 

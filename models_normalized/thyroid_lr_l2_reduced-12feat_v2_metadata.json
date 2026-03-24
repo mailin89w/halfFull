@@ -1,0 +1,50 @@
+{
+  "model": "thyroid_lr_l2_reduced-12feat_v2.joblib",
+  "version": "v2",
+  "condition": "thyroid",
+  "algorithm": "LogisticRegression L2 C=1.0",
+  "data_source": "nhanes_merged_adults_final_normalized.csv",
+  "n_train": 7437,
+  "prevalence": 0.0621,
+  "features": [
+    "gender_female",
+    "age_years",
+    "med_count",
+    "alq130___avg_#_alcoholic_drinks/day___past_12_mos",
+    "huq010___general_health_condition",
+    "mcq080___doctor_ever_said_you_were_overweight",
+    "slq050___ever_told_doctor_had_trouble_sleeping?",
+    "whq070___tried_to_lose_weight_in_past_year",
+    "smd650___avg_#_cigarettes/day_during_past_30_days",
+    "weight_kg",
+    "pregnancy_status_bin",
+    "kiq480___how_many_times_urinate_in_night?"
+  ],
+  "n_features": 12,
+  "cv_folds": 5,
+  "cv_auc_mean": 0.7897,
+  "cv_auc_std": 0.2414,
+  "cv_avg_precision": 0.1845,
+  "pipeline_gate": 0.35,
+  "pipeline_gate_rationale": "Global routing gate: scores above 0.35 escalate to next pipeline step",
+  "recommended_threshold": 0.6,
+  "recommended_threshold_criterion": "Lowest threshold where precision >= 0.17, maximising recall. At 0.60: prec=0.176, recall=0.602, flags=21.2%",
+  "pipeline_steps": [
+    "SimpleImputer(strategy=median, add_indicator=True)",
+    "LogisticRegression(L2, class_weight=balanced, C=1.0)"
+  ],
+  "leakage_removed": [
+    "mcq160m___ever_told_you_had_thyroid_problem (self-report diagnosis = target definition)",
+    "mcq170m___do_you_still_have_thyroid_problem (follow-up to target)",
+    "mcd180m___age_when_first_told_you_had_thyroid_problem (follow-up to target)"
+  ],
+  "changes_from_v1": [
+    "Pre-normalized z-scored data",
+    "No StandardScaler",
+    "SimpleImputer add_indicator=True",
+    "gender_female binary",
+    "5-fold stratified CV + OOF threshold sweep",
+    "No dict wrapping",
+    "pipeline_gate=0.35 + recommended_threshold from sweep"
+  ]
+}

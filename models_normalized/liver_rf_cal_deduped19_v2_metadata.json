@@ -1,0 +1,62 @@
+{
+  "model": "liver_rf_cal_deduped19_v2.joblib",
+  "version": "v2",
+  "condition": "liver",
+  "target_column": "liver",
+  "algorithm": "RandomForest(n=300,max_depth=6,min_leaf=10)+CalibratedClassifierCV(isotonic,cv=3)",
+  "model_choice_rationale": "RF+isotonic chosen over LR (AUC 0.7332\u21920.7815, AUPRC 0.1130\u21920.1813). LR precision never exceeds 14% even at t=0.75 \u2014 completely unusable. Old LR model (56 feats, rec_thr=0.60 user override from 0.85) had prec=9.7% recall=46.7%. RF at t=0.10: prec=15.7% recall=31.8% \u2014 1.6x better precision, fewer false positives.",
+  "data_source": "nhanes_merged_adults_final_normalized.csv",
+  "n_train": 7437,
+  "prevalence": 0.0406,
+  "features": [
+    "age_years",
+    "hdl_cholesterol_mg_dl",
+    "huq010___general_health_condition",
+    "med_count",
+    "slq050___ever_told_doctor_had_trouble_sleeping?",
+    "mcq080___doctor_ever_said_you_were_overweight",
+    "diq070___take_diabetic_pills_to_lower_blood_sugar",
+    "slq030___how_often_do_you_snore?",
+    "uacr_mg_g",
+    "cdq010___shortness_of_breath_on_stairs/inclines",
+    "huq071___overnight_hospital_patient_in_last_year",
+    "smd650___avg_#_cigarettes/day_during_past_30_days",
+    "alq151___ever_have_4/5_or_more_drinks_every_day?",
+    "heq030___ever_told_you_have_hepatitis_c?",
+    "mcq195___which_type_of_arthritis_was_it?",
+    "mcq300c___close_relative_had_diabetes",
+    "mcq366d___doctor_told_to_reduce_fat_in_diet",
+    "smq020___smoked_at_least_100_cigarettes_in_life",
+    "smq078___how_soon_after_waking_do_you_smoke"
+  ],
+  "n_features": 19,
+  "cv_folds": 5,
+  "cv_auc_mean": 0.7815,
+  "cv_avg_precision": 0.1813,
+  "l1_C_for_selection": 0.01,
+  "pipeline_gate": 0.35,
+  "pipeline_gate_rationale": "Global routing gate: scores above 0.35 escalate to next pipeline step",
+  "recommended_threshold": 0.1,
+  "recommended_threshold_criterion": "User-selected: prec=0.157, recall=0.318, f1=0.210, flags=8.2%. Just below 17% precision bar but 3x better than old LR at t=0.60 (prec=0.097). Feature count reduced from 56 (LR) to 19 (RF C=0.01).",
+  "pipeline_steps": [
+    "SimpleImputer(strategy=median)",
+    "CalibratedClassifierCV(RandomForestClassifier,method=isotonic,cv=3)"
+  ],
+  "leakage_removed": [
+    "mcq160l/mcq170l/mcd180l (self-reported liver condition)",
+    "mcq500 fatty liver",
+    "mcq510a-f (liver condition type)",
+    "AST/ALT liver enzymes",
+    "albumin",
+    "alkaline phosphatase",
+    "GGT",
+    "total protein",
+    "globulin"
+  ],
+  "duplicates_removed": {
+    "bmi": "r=0.588 with mcq080___doctor_ever_said_you_were_overweight"
+  },
+  "selection_rationale": "L1 C=0.01 on 76 roadmap features \u2192 20 survivors \u2192 dedup \u2192 19",
+  "replaces": "liver_lr_deduped56_L2_v2.joblib (LR, AUC=0.7332, AUPRC=0.1130, rec_thr=0.60)",
+  "created_at": "2026-03-24T11:05:36.159225+00:00"
+}

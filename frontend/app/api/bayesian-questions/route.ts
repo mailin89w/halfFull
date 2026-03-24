@@ -20,8 +20,12 @@ import { writeLog } from '@/src/lib/logger';
 
 const PROJECT_ROOT = path.resolve(process.cwd(), '..');
 const PYTHON = process.env.PYTHON_BIN
-  ?? path.join(PROJECT_ROOT, 'ml_project_env', 'bin', 'python3');
+  ?? (process.platform === 'win32'
+    ? path.join(PROJECT_ROOT, 'ml_project_env_win', 'Scripts', 'python.exe')
+    : path.join(PROJECT_ROOT, 'ml_project_env', 'bin', 'python3'));
+
 const SCRIPT = path.join(PROJECT_ROOT, 'bayesian', 'run_bayesian.py');
+
 
 function runPython(input: object): Promise<Record<string, unknown>> {
   return new Promise((resolve) => {
@@ -61,7 +65,7 @@ export async function POST(req: NextRequest) {
 
   try {
     const body = await req.json() as { mlScores?: unknown; patientSex?: unknown; existingAnswers?: unknown };
-    mlScores   = (body.mlScores ?? {}) as Record<string, number>;
+    mlScores = (body.mlScores ?? {}) as Record<string, number>;
     patientSex = typeof body.patientSex === 'string' ? body.patientSex : undefined;
     existingAnswers = (body.existingAnswers ?? {}) as Record<string, unknown>;
   } catch {

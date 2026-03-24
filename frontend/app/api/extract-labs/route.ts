@@ -130,6 +130,19 @@ export async function POST(req: NextRequest) {
       const pdfData = await parser.getText();
       rawText = pdfData.text.trim();
     } catch (pdfErr) {
+      const parseMessage = pdfErr instanceof Error ? pdfErr.message : String(pdfErr);
+      const missingPdfParse =
+        /Cannot find module ['"]pdf-parse['"]/i.test(parseMessage) ||
+        /Cannot find package ['"]pdf-parse['"]/i.test(parseMessage) ||
+        /ERR_MODULE_NOT_FOUND/i.test(parseMessage);
+
+      if (missingPdfParse) {
+        return NextResponse.json(
+          { error: "Server dependency missing: 'pdf-parse'. Run npm install in frontend and restart dev server." },
+          { status: 500 }
+        );
+      }
+
       return NextResponse.json(
         { error: `PDF parsing failed: ${String(pdfErr)}` },
         { status: 422 }
