@@ -3,12 +3,12 @@
 score_answers.py
 ----------------
 Reads a flat JSON answers dict from stdin (keyed by NHANES field_ids from
-nhanes_combined_question_flow_v2.json), scores all 11 disease models via
-questionnaire_to_model_features + ModelRunner, and writes a JSON scores dict
-to stdout.
+nhanes_combined_question_flow_v2.json), scores all disease models via the
+normalized v2 scorer in models_normalized/, and writes a frontend-compatible
+legacy JSON scores dict to stdout.
 
 Frontend answer values arrive as strings (NHANES numeric codes); this script
-coerces them to numbers before passing to the feature transformer.
+coerces them to numbers before passing them into the normalized scorer.
 
 Usage:
     echo '{"age_years": "45", "gender": "2", ...}' | python3 scripts/score_answers.py
@@ -21,13 +21,6 @@ import os
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, ROOT)
-
-USE_NORMALIZED_INFERENCE = os.getenv("HALFFULL_USE_NORMALIZED_INFERENCE", "0").lower() in {
-    "1",
-    "true",
-    "yes",
-    "on",
-}
 
 # Suppress model-loading log noise on stderr
 import logging
@@ -69,6 +62,20 @@ _CONDITIONS_FIELDS = [
     "slq060___ever_told_by_doctor_have_sleep_disorder",
     "mcq080___doctor_ever_said_you_were_overweight",
 ]
+
+NORMALIZED_TO_LEGACY_KEYS = {
+    "anemia": "anemia",
+    "iron_deficiency": "iron_deficiency",
+    "thyroid": "thyroid",
+    "kidney": "kidney",
+    "sleep_disorder": "sleep_disorder",
+    "liver": "liver",
+    "prediabetes": "prediabetes",
+    "hidden_inflammation": "inflammation",
+    "electrolyte_imbalance": "electrolytes",
+    "hepatitis_bc": "hepatitis",
+    "perimenopause": "perimenopause",
+}
 
 
 def _preprocess(answers: dict) -> dict:
@@ -151,6 +158,29 @@ def _preprocess(answers: dict) -> dict:
     return flat
 
 
+def _patient_context(answers: dict) -> dict:
+    gender = answers.get("gender")
+    if gender == 1:
+        gender = "Male"
+    elif gender == 2:
+        gender = "Female"
+    return {
+        "age_years": answers.get("age_years"),
+        "gender": gender,
+    }
+
+
+def _remap_scores(scores: dict) -> dict:
+    remapped: dict = {}
+    for key, value in scores.items():
+        legacy_key = NORMALIZED_TO_LEGACY_KEYS.get(key)
+        if not legacy_key:
+            print(f"[score] Ignoring unrecognized normalized score key: {key}", file=sys.stderr)
+            continue
+        remapped[legacy_key] = value
+    return remapped
+
+
 def main() -> None:
     raw = sys.stdin.read().strip()
     if not raw:
@@ -166,30 +196,22 @@ def main() -> None:
     answers = _preprocess(answers)
 
     try:
-        from models.questionnaire_to_model_features import build_feature_vectors
-        from models.model_runner import ModelRunner
+        from models_normalized.model_runner import ModelRunner
 
-        feature_vectors = build_feature_vectors(
-            answers,
-            normalized_for_retrained_models=USE_NORMALIZED_INFERENCE,
-        )
         runner = ModelRunner()
-        if not feature_vectors:
-            print("[score] No scoreable model metadata found; returning empty scores.", file=sys.stderr)
         if runner.failed_models:
             print(
                 f"[score] Model files unavailable for: {', '.join(sorted(runner.failed_models))}",
                 file=sys.stderr,
             )
-        scores = runner.run_all(feature_vectors)
-        scores = runner.run_all_with_context(
-            feature_vectors,
-            patient_context={
-                "age_years": answers.get("age_years"),
-                "gender": answers.get("gender"),
-            },
+        raw_scores = runner.run_all_with_context(
+            runner._get_normalizer().build_feature_vectors(answers),
+            patient_context=_patient_context(answers),
         )
-        print(json.dumps(scores))
+        legacy_scores = _remap_scores(raw_scores)
+        if not legacy_scores:
+            print("[score] No scoreable normalized models produced scores; returning empty scores.", file=sys.stderr)
+        print(json.dumps(legacy_scores))
     except Exception as exc:
         print(json.dumps({"error": str(exc)}))
         sys.exit(1)
