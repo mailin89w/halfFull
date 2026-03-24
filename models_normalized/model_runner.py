@@ -89,7 +89,7 @@ RECOMMENDED_THRESHOLDS = {
     "kidney":                0.66,
     "liver":                 0.10,
     "prediabetes":           0.53,
-    "sleep_disorder":        0.35,
+    "sleep_disorder":        0.55,
     "thyroid":               0.60,
     "hidden_inflammation":   0.41,
     "perimenopause":         0.55,

@@ -188,7 +188,8 @@ export function readStoredMLScores(): Record<string, number> | null {
 export async function fetchMLScores(
   answers: Record<string, unknown>
 ): Promise<Record<string, number>> {
-  const response = await fetch('/api/score', {
+  const backendBaseUrl = process.env.NEXT_PUBLIC_BACKEND_URL?.trim() || '';
+  const response = await fetch(`${backendBaseUrl}/api/score`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ answers }),

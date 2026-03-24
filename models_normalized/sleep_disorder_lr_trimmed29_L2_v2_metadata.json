@@ -41,10 +41,10 @@
   "cv_folds": 5,
   "cv_auc_mean": 0.7797,
   "cv_avg_precision": 0.6468,
-  "pipeline_gate": 0.35,
-  "pipeline_gate_rationale": "Global routing gate: scores above 0.35 escalate to next pipeline step",
-  "recommended_threshold": 0.35,
-  "recommended_threshold_criterion": "Sleep disorder base rate=32.3% so precision>=17% at all thresholds. Set to pipeline_gate=0.35 as meaningful operating point: prec=0.459, recall=0.839, flags=59.0%",
+  "pipeline_gate": 0.55,
+  "pipeline_gate_rationale": "Custom filter criterion (above global default of 0.35): high prevalence (32.3%) + expensive downstream test (polysomnography) — only strong signals surface",
+  "recommended_threshold": 0.55,
+  "recommended_threshold_criterion": "Sleep disorder base rate=32.3%; precision>=17% at all thresholds. Operating point raised to 0.55 to match filter_criterion — high prevalence (32.3%) + expensive downstream test (polysomnography) justify surfacing only stronger signals. At t=0.35: prec=0.459, recall=0.839, flags=59.0%.",
   "pipeline_steps": [
     "SimpleImputer(strategy=median, add_indicator=True)",
     "LogisticRegression(L2, class_weight=balanced, C=1.0)"

@@ -1,7 +1,7 @@
 {
   "model": "hidden_inflammation_lr_deduped25_L2_v2.joblib",
   "version": "v2",
-  "condition": "infection_inflammation",
+  "condition": "hidden_inflammation",
   "target_definition": "multi-marker score >= 5, n=638 (10.0%), elevated on 2-3 markers, acute excluded",
   "algorithm": "LogisticRegression L2 C=1.0",
   "data_source": "nhanes_merged_adults_final_normalized.csv",
@@ -59,6 +59,6 @@
     "AUPRC improved 0.2583 \u2192 0.2649",
     "Recall improved 0.685 \u2192 0.766 at recommended threshold"
   ],
-  "notes": "1064 rows dropped (target NaN from missing CRP/WBC/NLR). infection_inflammation maps to hidden_inflammation in roadmap.",
+  "notes": "1064 rows dropped (target NaN from missing CRP/WBC/NLR). Previously named infection_inflammation — renamed to hidden_inflammation throughout.",
   "created_at": "2026-03-24T11:22:04.453750+00:00"
 }
