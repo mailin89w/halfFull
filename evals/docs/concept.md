@@ -19,12 +19,21 @@ Colab with a Cloudflare tunnel).
 
 | Segment | Count | Description |
 |---------|-------|-------------|
-| Per-condition positive | 275 | 25 profiles x 11 conditions — strong symptom signal |
-| Per-condition borderline | 165 | 15 profiles x 11 conditions — attenuated signal (mu x 0.6) |
-| Per-condition negative | 110 | 10 profiles x 11 conditions — healthy distribution regardless of condition |
+| Per-condition positive | ~256 | 25 profiles × 11 conditions (adjusted by Bayesian prior — see below) |
+| Per-condition borderline | ~165 | 15 profiles × 11 conditions — attenuated signal (mu × 0.55), ~15% carry a co-morbid second condition |
+| Per-condition negative | ~110 | 10 profiles × 11 conditions — healthy distribution regardless of condition |
 | Healthy controls | 30 | No condition; sub-threshold symptom scores throughout |
-| Edge cases | 20 | 2-3 conflicting conditions averaged; high noise (sigma=0.15) |
+| Edge cases | 20 | 2–3 co-morbid conditions, max-blend symptom vectors + noise (sigma=0.10) |
 | **Total** | **600** | |
+
+The positive/borderline/negative split within each condition's 50 profiles is
+adjusted by condition prevalence (from model metadata):
+
+| Prevalence tier | Split |
+|---|---|
+| > 15% (e.g. inflammation 32%) | 20 pos / 20 borderline / 10 neg |
+| 5–15% (default) | 25 pos / 15 borderline / 10 neg |
+| < 5% (e.g. hepatitis 2.6%, kidney 3.5%) | 35 pos / 10 borderline / 5 neg |
 
 ### 2.2 Symptom Vector
 
@@ -42,16 +51,29 @@ Each profile carries a 10-dimensional symptom vector normalised to [0, 1]
 - `heat_intolerance`
 - `weight_change`
 
-Means are drawn from clinically informed condition profiles (see
-`cohort_generator.py:CONDITION_SYMPTOM_PROFILES`), calibrated against NHANES
-2017-2019 reference distributions.
+Symptom means are **derived from actual model weights** at generation time:
+`cohort_generator.py` loads each condition's trained `.joblib` file, extracts
+logistic regression coefficients (or GB feature importances), maps them to the
+10 symptom dimensions via `FEATURE_SYMPTOM_MAP`, and normalises to [0, 1].
+NHANES 2017–2019 healthy population means are used as the baseline for negative
+and healthy profiles.
+
+Clinically linked symptom pairs use **correlated multivariate sampling**
+(`numpy.random.multivariate_normal`) instead of independent per-symptom draws.
+For example: fatigue↔post_exertional_malaise in anemia (r=0.72),
+heat_intolerance↔sleep_quality in menopause (r=−0.78),
+sleep_quality↔fatigue in sleep_disorder (r=−0.72).
+Full correlation matrix documented in `evals/cohort/optimization_report.md`.
 
 ### 2.3 Lab Values
 
 Approximately 40% of profiles include lab values (hybrid quiz path). Lab means
-are shifted from healthy baselines for positive profiles according to
-`CONDITION_LAB_SHIFT`. Labs included: TSH, ferritin, hemoglobin, CRP,
-vitamin D, HbA1c, cortisol.
+are shifted from healthy baselines for positive profiles based on which labs
+are the highest-weighted features in each condition's model. Reference ranges
+are sourced from `data/processed/normalized/nhanes_reference_ranges_used.csv`
+where available; clinical literature fallbacks are marked `# FALLBACK` in the
+generator. Labs included: TSH, ferritin, hemoglobin, CRP, vitamin D, HbA1c,
+cortisol.
 
 ### 2.4 Reproducibility
 
@@ -64,11 +86,19 @@ alphanumeric chars).
 ## 3. Architecture
 
 ```
-cohort_generator.py
+cohort_generator.py  ──────────────────────────────────────────────────────────
+  (loads model .joblib files, derives symptom distributions from LR/GB weights,
+   applies Bayesian prior splits, correlated multivariate sampling)
         |
         v
   profiles.json  (evals/cohort/)
         |
+        ├──► score_profiles.py          [optional: score directly through LR/GB
+        │     (evals/score_profiles.py)   models for calibration — no MedGemma]
+        │           |
+        │           v
+        │     scoring_results.json + optimization_report.md
+        │
         v
   ProfileLoader  (pipeline/profile_loader.py)
         |
@@ -188,11 +218,18 @@ time (ProfileLoader.load_all()).
 
 ## 9. Extension Points
 
-- **New conditions**: Add to `config.CONDITION_IDS`, `CONDITION_SYMPTOM_PROFILES`,
-  `CONDITION_PREFIX`, and `CONDITION_LAB_SHIFT` in `cohort_generator.py`. Regenerate
-  the cohort with the same seed.
-- **New symptoms**: Extend `SYMPTOMS` list and update all condition profiles.
-  Update the JSON schema `symptom_vector.properties` accordingly.
+- **New conditions**: Add to `config.CONDITION_IDS` and `CONDITION_PREFIX` in
+  `cohort_generator.py`. The symptom distribution is derived automatically from
+  the condition's trained model — add a `# FALLBACK` entry in
+  `CONDITION_SYMPTOM_PROFILES` only if no model file exists. Regenerate with
+  the same seed.
+- **New symptoms**: Extend `SYMPTOMS` and `FEATURE_SYMPTOM_MAP` in
+  `cohort_generator.py`. Update the JSON schema `symptom_vector.properties`
+  and add the new symptom to all correlated sampling matrices.
+- **Recalibration**: Run `python evals/score_profiles.py` after regeneration to
+  check per-condition LR accuracy. Adjust `CONDITION_SYMPTOM_PROFILES` mu values
+  for any condition outside the 60–92% target range. Document changes with
+  `# RECALIBRATED` comments.
 - **New eval layers**: Implement scoring logic in `ScoringEngine` and add a new
   `--layer` option to `run_eval.py`.
 - **CI integration**: `run_eval.py` exits with code `0` if all DoD targets pass,

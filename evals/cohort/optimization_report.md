@@ -6,7 +6,7 @@ Phase 4 optimization of the HalfFull synthetic cohort generator v2. Profiles fro
 `evals/cohort/profiles.json` (600 total) were scored directly through all 11 ML models
 using `evals/score_profiles.py`. Per-condition top-1 and top-3 accuracy was measured,
 structural model constraints were identified, and targeted recalibrations were applied
-to `evals/cohort_generator_v2.py`. A second round of generation and scoring confirmed
+to `evals/cohort_generator.py`. A second round of generation and scoring confirmed
 the improvements. Both `--validate` and `--dry-run` passed on the final cohort.
 
 ---
@@ -225,7 +225,7 @@ correlates with poor sleep (low `sleep_quality`).
 ## Post-Optimization Accuracy (Round 2)
 
 After recalibration of `CONDITION_SYMPTOM_PROFILES`, demographics generator, and
-regeneration with `python evals/cohort_generator_v2.py --seed 42`.
+regeneration with `python evals/cohort_generator.py --seed 42`.
 
 | Condition | N Positive | Top-1 Acc | Top-3 Acc | Mean P(target) | Mean Rank | Status |
 |---|---|---|---|---|---|---|
@@ -370,7 +370,7 @@ insufficient to beat iron_deficiency/kidney for female profiles.
 | Healthy controls | 30 |
 | With lab values (~38%) | ~229 |
 | Schema validation | PASS (all 600) |
-| Generator | cohort_generator_v2.py --seed 42 |
+| Generator | cohort_generator.py --seed 42 |
 | Profiles file | evals/cohort/profiles.json |
 
 Scoring summary (positive profiles only):
@@ -382,7 +382,7 @@ Scoring summary (positive profiles only):
 | Highest mean P(target) | sleep_disorder | 0.826 |
 | Best mean rank | sleep_disorder / kidney_disease | 3.0 |
 
-All 600 profiles passed `python evals/cohort_generator_v2.py --validate --seed 42`.
+All 600 profiles passed `python evals/cohort_generator.py --validate --seed 42`.
 `python evals/run_eval.py --n 10 --dry-run` completed successfully.
 
 ---

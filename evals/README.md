@@ -73,12 +73,29 @@ All four metrics must pass for the eval to be considered green:
 
 ## Cohort Composition
 
-- 11 conditions x 50 profiles = 550 (25 positive / 15 borderline / 10 negative)
+- 11 conditions × 50 profiles = 550 (split adjusted by Bayesian priors — rare conditions get more positive profiles)
 - 30 healthy controls
-- 20 edge cases (2-3 conflicting conditions)
+- 20 edge cases (2–3 co-morbid conditions, max-blend symptom vectors)
+- ~15% of borderline profiles carry a co-morbid secondary condition
 - **Total: 600 profiles**
+
+Symptom distributions are derived from actual LR model coefficients and GB feature
+importances. Clinically linked symptom pairs use correlated multivariate sampling.
+See `evals/cohort/optimization_report.md` for the full calibration analysis.
+
+## Scoring Against the ML Models
+
+To score profiles directly through the LR/GB models (no MedGemma required):
+
+```bash
+python evals/score_profiles.py
+```
+
+Results are written to `evals/cohort/scoring_results.json`. This is useful for
+calibrating symptom distributions — see `evals/cohort/optimization_report.md`.
 
 ## Further Reading
 
 - `evals/docs/concept.md` — Technical architecture and design rationale
 - `evals/docs/how_to_run_evals.md` — Step-by-step operational guide
+- `evals/cohort/optimization_report.md` — Pre/post calibration analysis and structural model findings

@@ -43,16 +43,22 @@ INFO: Generating cohort with seed=42 ...
 INFO: Validating 600 profiles against schema ...
 INFO: All profiles passed schema validation
 
-Cohort generation complete
-──────────────────────────────
-Total profiles:   600
-Conditions:        11
-Profiles/condition: 50  (25 pos / 15 borderline / 10 neg)
-Healthy controls:  30
-Edge cases:        20
-With lab values:  ~240 (40%)
-Seed:              42
+Cohort generation complete (v2 — data-grounded)
+─────────────────────────────────────────────────────
+Total profiles:            600
+Conditions:                11
+Profiles/condition:        50  (split per Bayesian priors)
+  └─ Multi-condition edge: 20
+  └─ Co-morbid borderline: ~25
+Healthy controls:          30
+With lab values:           ~229  (38%)
+Symptom distributions:     derived from model weights
+Lab ranges:                from project data / fallback
+Bayesian priors:           from project data
+Co-morbidity pairs used:   19
+Seed:                      42
 Output: evals/cohort/profiles.json
+─────────────────────────────────────────────────────
 ```
 
 ### Validate Without Writing
@@ -62,6 +68,21 @@ To check schema validity without writing the output file:
 ```bash
 python evals/cohort_generator.py --seed 42 --validate
 ```
+
+---
+
+### Score Against the ML Models (Optional)
+
+To check how well the generated symptom distributions trigger the right LR/GB
+models — without MedGemma — run the standalone scoring script:
+
+```bash
+python evals/score_profiles.py
+```
+
+This scores all 600 profiles directly through all 11 models and writes
+`evals/cohort/scoring_results.json`. See `evals/cohort/optimization_report.md`
+for an explanation of the results and known structural constraints.
 
 ---
 
@@ -224,6 +245,14 @@ pip install jsonschema
 If a profile fails schema validation after regeneration, the schema or
 generator may be out of sync. Check that `profile_schema.json` and
 `cohort_generator.py` agree on symptom ranges and required fields.
+
+### Low per-condition accuracy in `score_profiles.py`
+
+If `scoring_results.json` shows a condition below 60% top-1 accuracy, increase
+the `mu` for its highest-weighted symptoms in `CONDITION_SYMPTOM_PROFILES` by
+0.10–0.15 and regenerate. Document changes with `# RECALIBRATED` comments.
+See `evals/cohort/optimization_report.md` for known structural constraints that
+cannot be resolved through generator tuning.
 
 ---
 
