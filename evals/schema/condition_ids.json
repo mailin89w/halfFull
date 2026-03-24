@@ -1,0 +1,18 @@
+{
+  "condition_ids": [
+    "menopause",
+    "perimenopause",
+    "hypothyroidism",
+    "kidney_disease",
+    "sleep_disorder",
+    "anemia",
+    "iron_deficiency",
+    "hepatitis",
+    "prediabetes",
+    "inflammation",
+    "electrolyte_imbalance"
+  ],
+  "count": 11,
+  "source": "config.CONDITION_IDS",
+  "frozen": true
+}

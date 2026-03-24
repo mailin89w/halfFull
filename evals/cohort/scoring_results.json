@@ -1,0 +1,548 @@
+{
+  "n_profiles": 600,
+  "n_scored": 600,
+  "n_failed": 0,
+  "condition_stats": {
+    "anemia": {
+      "n_positive": 25,
+      "n_with_model": 25,
+      "top1_accuracy": 0.0,
+      "top3_accuracy": 0.72,
+      "mean_target_prob": 0.8057,
+      "mean_target_rank": 3.2,
+      "n_top1_correct": 0,
+      "n_top3_correct": 18,
+      "status": "UNDERFIT"
+    },
+    "electrolyte_imbalance": {
+      "n_positive": 25,
+      "n_with_model": 25,
+      "top1_accuracy": 0.0,
+      "top3_accuracy": 0.0,
+      "mean_target_prob": 0.5726,
+      "mean_target_rank": 6.28,
+      "n_top1_correct": 0,
+      "n_top3_correct": 0,
+      "status": "UNDERFIT"
+    },
+    "hepatitis": {
+      "n_positive": 28,
+      "n_with_model": 28,
+      "top1_accuracy": 0.0,
+      "top3_accuracy": 0.0,
+      "mean_target_prob": 0.5053,
+      "mean_target_rank": 7.04,
+      "n_top1_correct": 0,
+      "n_top3_correct": 0,
+      "status": "UNDERFIT"
+    },
+    "hypothyroidism": {
+      "n_positive": 25,
+      "n_with_model": 25,
+      "top1_accuracy": 0.0,
+      "top3_accuracy": 0.0,
+      "mean_target_prob": 0.4709,
+      "mean_target_rank": 7.96,
+      "n_top1_correct": 0,
+      "n_top3_correct": 0,
+      "status": "UNDERFIT"
+    },
+    "inflammation": {
+      "n_positive": 20,
+      "n_with_model": 20,
+      "top1_accuracy": 0.0,
+      "top3_accuracy": 0.0,
+      "mean_target_prob": 0.5637,
+      "mean_target_rank": 7.0,
+      "n_top1_correct": 0,
+      "n_top3_correct": 0,
+      "status": "UNDERFIT"
+    },
+    "iron_deficiency": {
+      "n_positive": 25,
+      "n_with_model": 25,
+      "top1_accuracy": 0.28,
+      "top3_accuracy": 0.4,
+      "mean_target_prob": 0.798,
+      "mean_target_rank": 3.08,
+      "n_top1_correct": 7,
+      "n_top3_correct": 10,
+      "status": "UNDERFIT"
+    },
+    "kidney_disease": {
+      "n_positive": 28,
+      "n_with_model": 28,
+      "top1_accuracy": 0.0357,
+      "top3_accuracy": 0.6429,
+      "mean_target_prob": 0.8159,
+      "mean_target_rank": 3.04,
+      "n_top1_correct": 1,
+      "n_top3_correct": 18,
+      "status": "UNDERFIT"
+    },
+    "menopause": {
+      "n_positive": 20,
+      "n_with_model": 20,
+      "top1_accuracy": 0.0,
+      "top3_accuracy": 0.0,
+      "mean_target_prob": 0.1943,
+      "mean_target_rank": 10.0,
+      "n_top1_correct": 0,
+      "n_top3_correct": 0,
+      "status": "UNDERFIT"
+    },
+    "perimenopause": {
+      "n_positive": 20,
+      "n_with_model": 20,
+      "top1_accuracy": 0.0,
+      "top3_accuracy": 0.0,
+      "mean_target_prob": 0.1855,
+      "mean_target_rank": 10.0,
+      "n_top1_correct": 0,
+      "n_top3_correct": 0,
+      "status": "UNDERFIT"
+    },
+    "prediabetes": {
+      "n_positive": 20,
+      "n_with_model": 20,
+      "top1_accuracy": 0.0,
+      "top3_accuracy": 0.0,
+      "mean_target_prob": 0.5831,
+      "mean_target_rank": 6.1,
+      "n_top1_correct": 0,
+      "n_top3_correct": 0,
+      "status": "UNDERFIT"
+    },
+    "sleep_disorder": {
+      "n_positive": 25,
+      "n_with_model": 25,
+      "top1_accuracy": 0.08,
+      "top3_accuracy": 0.6,
+      "mean_target_prob": 0.8257,
+      "mean_target_rank": 3.0,
+      "n_top1_correct": 2,
+      "n_top3_correct": 15,
+      "status": "UNDERFIT"
+    }
+  },
+  "healthy_flagged": [
+    {
+      "profile_id": "SYN-HLT00001",
+      "top_condition": "iron_deficiency",
+      "top_score": 0.7925,
+      "all_high": {
+        "iron_deficiency": 0.7925,
+        "liver": 0.6171,
+        "kidney": 0.5921,
+        "anemia": 0.4326,
+        "electrolytes": 0.4481,
+        "sleep_disorder": 0.4732
+      }
+    },
+    {
+      "profile_id": "SYN-HLT00002",
+      "top_condition": "iron_deficiency",
+      "top_score": 0.6986,
+      "all_high": {
+        "inflammation": 0.6009,
+        "kidney": 0.4888,
+        "liver": 0.6162,
+        "iron_deficiency": 0.6986,
+        "sleep_disorder": 0.4839,
+        "electrolytes": 0.4742,
+        "prediabetes": 0.4887
+      }
+    },
+    {
+      "profile_id": "SYN-HLT00003",
+      "top_condition": "iron_deficiency",
+      "top_score": 0.6868,
+      "all_high": {
+        "liver": 0.6009,
+        "kidney": 0.4325,
+        "inflammation": 0.6201,
+        "iron_deficiency": 0.6868,
+        "sleep_disorder": 0.4571,
+        "electrolytes": 0.4401
+      }
+    },
+    {
+      "profile_id": "SYN-HLT00004",
+      "top_condition": "iron_deficiency",
+      "top_score": 0.6875,
+      "all_high": {
+        "iron_deficiency": 0.6875,
+        "kidney": 0.497,
+        "liver": 0.6375,
+        "inflammation": 0.4882,
+        "sleep_disorder": 0.4738,
+        "electrolytes": 0.4493
+      }
+    },
+    {
+      "profile_id": "SYN-HLT00005",
+      "top_condition": "iron_deficiency",
+      "top_score": 0.9689,
+      "all_high": {
+        "anemia": 0.605,
+        "kidney": 0.6637,
+        "iron_deficiency": 0.9689,
+        "liver": 0.6438,
+        "prediabetes": 0.4037,
+        "sleep_disorder": 0.5296,
+        "electrolytes": 0.4635
+      }
+    },
+    {
+      "profile_id": "SYN-HLT00006",
+      "top_condition": "iron_deficiency",
+      "top_score": 0.7928,
+      "all_high": {
+        "liver": 0.6197,
+        "anemia": 0.4394,
+        "kidney": 0.6123,
+        "inflammation": 0.4152,
+        "iron_deficiency": 0.7928,
+        "sleep_disorder": 0.4778,
+        "electrolytes": 0.4502
+      }
+    },
+    {
+      "profile_id": "SYN-HLT00007",
+      "top_condition": "iron_deficiency",
+      "top_score": 0.7933,
+      "all_high": {
+        "liver": 0.6282,
+        "kidney": 0.6146,
+        "anemia": 0.4535,
+        "inflammation": 0.5637,
+        "iron_deficiency": 0.7933,
+        "sleep_disorder": 0.4683,
+        "electrolytes": 0.4488
+      }
+    },
+    {
+      "profile_id": "SYN-HLT00008",
+      "top_condition": "iron_deficiency",
+      "top_score": 0.9691,
+      "all_high": {
+        "liver": 0.6264,
+        "iron_deficiency": 0.9691,
+        "kidney": 0.6281,
+        "anemia": 0.6249,
+        "prediabetes": 0.423,
+        "electrolytes": 0.466,
+        "sleep_disorder": 0.4788
+      }
+    },
+    {
+      "profile_id": "SYN-HLT00009",
+      "top_condition": "iron_deficiency",
+      "top_score": 0.9688,
+      "all_high": {
+        "anemia": 0.5974,
+        "kidney": 0.6324,
+        "inflammation": 0.4431,
+        "liver": 0.6358,
+        "iron_deficiency": 0.9688,
+        "sleep_disorder": 0.5168,
+        "electrolytes": 0.4603,
+        "prediabetes": 0.4037
+      }
+    },
+    {
+      "profile_id": "SYN-HLT00010",
+      "top_condition": "iron_deficiency",
+      "top_score": 0.9697,
+      "all_high": {
+        "kidney": 0.6226,
+        "iron_deficiency": 0.9697,
+        "liver": 0.6103,
+        "anemia": 0.6001,
+        "sleep_disorder": 0.4824,
+        "prediabetes": 0.4623,
+        "electrolytes": 0.4699
+      }
+    },
+    {
+      "profile_id": "SYN-HLT00011",
+      "top_condition": "iron_deficiency",
+      "top_score": 0.9696,
+      "all_high": {
+        "inflammation": 0.5406,
+        "liver": 0.6477,
+        "sleep_disorder": 0.5267,
+        "anemia": 0.6287,
+        "kidney": 0.662,
+        "iron_deficiency": 0.9696,
+        "prediabetes": 0.4557,
+        "electrolytes": 0.4692
+      }
+    },
+    {
+      "profile_id": "SYN-HLT00012",
+      "top_condition": "iron_deficiency",
+      "top_score": 0.9694,
+      "all_high": {
+        "inflammation": 0.4557,
+        "anemia": 0.619,
+        "liver": 0.6464,
+        "iron_deficiency": 0.9694,
+        "kidney": 0.6694,
+        "prediabetes": 0.4425,
+        "sleep_disorder": 0.5306
+      }
+    },
+    {
+      "profile_id": "SYN-HLT00013",
+      "top_condition": "iron_deficiency",
+      "top_score": 0.6981,
+      "all_high": {
+        "liver": 0.621,
+        "kidney": 0.4955,
+        "iron_deficiency": 0.6981,
+        "inflammation": 0.6154,
+        "sleep_disorder": 0.4858,
+        "prediabetes": 0.4821,
+        "electrolytes": 0.4746
+      }
+    },
+    {
+      "profile_id": "SYN-HLT00014",
+      "top_condition": "iron_deficiency",
+      "top_score": 0.9701,
+      "all_high": {
+        "liver": 0.6149,
+        "prediabetes": 0.502,
+        "iron_deficiency": 0.9701,
+        "kidney": 0.6355,
+        "sleep_disorder": 0.4883,
+        "anemia": 0.6122,
+        "electrolytes": 0.4767
+      }
+    },
+    {
+      "profile_id": "SYN-HLT00015",
+      "top_condition": "iron_deficiency",
+      "top_score": 0.9688,
+      "all_high": {
+        "anemia": 0.6254,
+        "liver": 0.6546,
+        "iron_deficiency": 0.9688,
+        "inflammation": 0.4087,
+        "kidney": 0.6743,
+        "sleep_disorder": 0.5264
+      }
+    },
+    {
+      "profile_id": "SYN-HLT00016",
+      "top_condition": "iron_deficiency",
+      "top_score": 0.9691,
+      "all_high": {
+        "anemia": 0.603,
+        "iron_deficiency": 0.9691,
+        "liver": 0.6131,
+        "kidney": 0.6107,
+        "sleep_disorder": 0.4696,
+        "prediabetes": 0.423,
+        "electrolytes": 0.4637
+      }
+    },
+    {
+      "profile_id": "SYN-HLT00017",
+      "top_condition": "iron_deficiency",
+      "top_score": 0.9688,
+      "all_high": {
+        "iron_deficiency": 0.9688,
+        "kidney": 0.6227,
+        "liver": 0.6209,
+        "anemia": 0.6114,
+        "sleep_disorder": 0.4834,
+        "prediabetes": 0.4037,
+        "electrolytes": 0.4655
+      }
+    },
+    {
+      "profile_id": "SYN-HLT00018",
+      "top_condition": "iron_deficiency",
+      "top_score": 0.9706,
+      "all_high": {
+        "liver": 0.6286,
+        "iron_deficiency": 0.9706,
+        "inflammation": 0.5216,
+        "anemia": 0.6514,
+        "kidney": 0.6542,
+        "sleep_disorder": 0.5057,
+        "prediabetes": 0.581,
+        "electrolytes": 0.4919
+      }
+    },
+    {
+      "profile_id": "SYN-HLT00019",
+      "top_condition": "iron_deficiency",
+      "top_score": 0.6996,
+      "all_high": {
+        "iron_deficiency": 0.6996,
+        "liver": 0.6181,
+        "kidney": 0.5133,
+        "prediabetes": 0.5153,
+        "electrolytes": 0.4795,
+        "sleep_disorder": 0.4855
+      }
+    },
+    {
+      "profile_id": "SYN-HLT00020",
+      "top_condition": "iron_deficiency",
+      "top_score": 0.6962,
+      "all_high": {
+        "iron_deficiency": 0.6962,
+        "kidney": 0.5543,
+        "liver": 0.6482,
+        "inflammation": 0.487,
+        "sleep_disorder": 0.5298,
+        "prediabetes": 0.4425,
+        "electrolytes": 0.4676
+      }
+    },
+    {
+      "profile_id": "SYN-HLT00021",
+      "top_condition": "iron_deficiency",
+      "top_score": 0.7906,
+      "all_high": {
+        "kidney": 0.5861,
+        "iron_deficiency": 0.7906,
+        "inflammation": 0.4349,
+        "liver": 0.6113,
+        "anemia": 0.4175,
+        "sleep_disorder": 0.4637,
+        "electrolytes": 0.4394
+      }
+    },
+    {
+      "profile_id": "SYN-HLT00022",
+      "top_condition": "iron_deficiency",
+      "top_score": 0.9696,
+      "all_high": {
+        "iron_deficiency": 0.9696,
+        "anemia": 0.629,
+        "liver": 0.6196,
+        "kidney": 0.6063,
+        "inflammation": 0.533,
+        "prediabetes": 0.4623,
+        "sleep_disorder": 0.4734,
+        "electrolytes": 0.4703
+      }
+    },
+    {
+      "profile_id": "SYN-HLT00023",
+      "top_condition": "iron_deficiency",
+      "top_score": 0.7959,
+      "all_high": {
+        "iron_deficiency": 0.7959,
+        "anemia": 0.4458,
+        "kidney": 0.6,
+        "inflammation": 0.6117,
+        "liver": 0.6142,
+        "sleep_disorder": 0.4681,
+        "electrolytes": 0.4551
+      }
+    },
+    {
+      "profile_id": "SYN-HLT00024",
+      "top_condition": "iron_deficiency",
+      "top_score": 0.7945,
+      "all_high": {
+        "liver": 0.6137,
+        "kidney": 0.5981,
+        "iron_deficiency": 0.7945,
+        "anemia": 0.436,
+        "sleep_disorder": 0.4658,
+        "electrolytes": 0.4527
+      }
+    },
+    {
+      "profile_id": "SYN-HLT00025",
+      "top_condition": "iron_deficiency",
+      "top_score": 0.9694,
+      "all_high": {
+        "liver": 0.6284,
+        "anemia": 0.6272,
+        "kidney": 0.646,
+        "iron_deficiency": 0.9694,
+        "electrolytes": 0.4712,
+        "prediabetes": 0.4425,
+        "sleep_disorder": 0.491
+      }
+    },
+    {
+      "profile_id": "SYN-HLT00026",
+      "top_condition": "iron_deficiency",
+      "top_score": 0.9694,
+      "all_high": {
+        "iron_deficiency": 0.9694,
+        "inflammation": 0.4561,
+        "anemia": 0.6149,
+        "kidney": 0.6659,
+        "liver": 0.642,
+        "electrolytes": 0.4728,
+        "prediabetes": 0.4425,
+        "sleep_disorder": 0.5427
+      }
+    },
+    {
+      "profile_id": "SYN-HLT00027",
+      "top_condition": "iron_deficiency",
+      "top_score": 0.696,
+      "all_high": {
+        "kidney": 0.5141,
+        "iron_deficiency": 0.696,
+        "liver": 0.6299,
+        "inflammation": 0.5822,
+        "sleep_disorder": 0.4923,
+        "prediabetes": 0.4491,
+        "electrolytes": 0.4741
+      }
+    },
+    {
+      "profile_id": "SYN-HLT00028",
+      "top_condition": "iron_deficiency",
+      "top_score": 0.9694,
+      "all_high": {
+        "iron_deficiency": 0.9694,
+        "liver": 0.6366,
+        "anemia": 0.5963,
+        "kidney": 0.6564,
+        "prediabetes": 0.4425,
+        "sleep_disorder": 0.526,
+        "electrolytes": 0.4662
+      }
+    },
+    {
+      "profile_id": "SYN-HLT00029",
+      "top_condition": "iron_deficiency",
+      "top_score": 0.698,
+      "all_high": {
+        "inflammation": 0.4556,
+        "kidney": 0.4944,
+        "liver": 0.6221,
+        "iron_deficiency": 0.698,
+        "prediabetes": 0.4887,
+        "sleep_disorder": 0.4806,
+        "electrolytes": 0.4758
+      }
+    },
+    {
+      "profile_id": "SYN-HLT00030",
+      "top_condition": "iron_deficiency",
+      "top_score": 0.9686,
+      "all_high": {
+        "iron_deficiency": 0.9686,
+        "liver": 0.6306,
+        "kidney": 0.6247,
+        "anemia": 0.6217,
+        "sleep_disorder": 0.4652,
+        "electrolytes": 0.4583
+      }
+    }
+  ]
+}

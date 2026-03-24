@@ -1,0 +1,79 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "SyntheticUserProfile",
+  "type": "object",
+  "required": ["profile_id", "demographics", "symptom_vector", "ground_truth"],
+  "properties": {
+    "profile_id":       { "type": "string", "pattern": "^SYN-[A-Z0-9]{8}$" },
+    "profile_type":     { "type": "string", "enum": ["positive", "borderline", "negative", "healthy", "edge"] },
+    "target_condition": { "type": "string" },
+    "demographics": {
+      "type": "object",
+      "required": ["age", "sex", "bmi"],
+      "properties": {
+        "age":            { "type": "integer", "minimum": 18, "maximum": 85 },
+        "sex":            { "type": "string", "enum": ["M", "F", "X"] },
+        "bmi":            { "type": "number" },
+        "smoking_status": { "type": "string", "enum": ["never", "former", "current"] },
+        "activity_level": { "type": "string", "enum": ["sedentary", "low", "moderate", "high"] }
+      }
+    },
+    "symptom_vector": {
+      "type": "object",
+      "properties": {
+        "fatigue_severity":        { "type": "number", "minimum": 0, "maximum": 1 },
+        "sleep_quality":           { "type": "number", "minimum": 0, "maximum": 1 },
+        "post_exertional_malaise": { "type": "number", "minimum": 0, "maximum": 1 },
+        "joint_pain":              { "type": "number", "minimum": 0, "maximum": 1 },
+        "cognitive_impairment":    { "type": "number", "minimum": 0, "maximum": 1 },
+        "depressive_mood":         { "type": "number", "minimum": 0, "maximum": 1 },
+        "anxiety_level":           { "type": "number", "minimum": 0, "maximum": 1 },
+        "digestive_symptoms":      { "type": "number", "minimum": 0, "maximum": 1 },
+        "heat_intolerance":        { "type": "number", "minimum": 0, "maximum": 1 },
+        "weight_change":           { "type": "number", "minimum": -1, "maximum": 1 }
+      },
+      "additionalProperties": false
+    },
+    "lab_values": {
+      "type": ["object", "null"],
+      "properties": {
+        "tsh":        { "type": "number" },
+        "ferritin":   { "type": "number" },
+        "hemoglobin": { "type": "number" },
+        "crp":        { "type": "number" },
+        "vitamin_d":  { "type": "number" },
+        "hba1c":      { "type": "number" },
+        "cortisol":   { "type": "number" }
+      }
+    },
+    "quiz_path": { "type": "string", "enum": ["full", "hybrid"] },
+    "ground_truth": {
+      "type": "object",
+      "required": ["expected_conditions"],
+      "properties": {
+        "expected_conditions": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["condition_id", "confidence"],
+            "properties": {
+              "condition_id": { "type": "string" },
+              "confidence":   { "type": "string", "enum": ["high", "medium", "low"] },
+              "rank":         { "type": "integer" }
+            }
+          }
+        },
+        "notes": { "type": "string" }
+      }
+    },
+    "metadata": {
+      "type": "object",
+      "properties": {
+        "generated_by":    { "type": "string" },
+        "generation_date": { "type": "string", "format": "date" },
+        "source_basis":    { "type": "string" },
+        "eval_layer":      { "type": "array", "items": { "type": "integer" } }
+      }
+    }
+  }
+}

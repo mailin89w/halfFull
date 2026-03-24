@@ -229,3 +229,7 @@ node_modules/
 artifacts/
 
 logs/
+
+# Eval pipeline — generated data (never commit synthetic profiles or raw results)
+evals/cohort/profiles.json
+evals/results/
