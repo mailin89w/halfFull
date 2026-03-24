@@ -174,6 +174,13 @@ def main() -> None:
             normalized_for_retrained_models=USE_NORMALIZED_INFERENCE,
         )
         runner = ModelRunner()
+        if not feature_vectors:
+            print("[score] No scoreable model metadata found; returning empty scores.", file=sys.stderr)
+        if runner.failed_models:
+            print(
+                f"[score] Model files unavailable for: {', '.join(sorted(runner.failed_models))}",
+                file=sys.stderr,
+            )
         scores = runner.run_all(feature_vectors)
         print(json.dumps(scores))
     except Exception as exc:

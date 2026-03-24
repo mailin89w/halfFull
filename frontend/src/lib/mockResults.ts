@@ -614,3 +614,121 @@ export function computeResults(answers: Record<string, unknown>): AssessmentResu
 
   return { currentPct, projectedPct, summaryLine, diagnoses, doctors };
 }
+
+export interface LocalDeepResultLike {
+  personalizedSummary: string;
+  insights: Array<{
+    diagnosisId: string;
+    personalNote: string;
+  }>;
+  nextSteps: string;
+  doctorKitSummary?: string;
+  doctorKitQuestions?: string[];
+  doctorKitArguments?: string[];
+  coachingTips?: Array<{
+    category: string;
+    tip: string;
+    timeframe: string;
+  }>;
+}
+
+function buildDoctorKitQuestions(diagnoses: Diagnosis[]): string[] {
+  const defaults = diagnoses.slice(0, 2).map((d) => {
+    const leadTest = d.tests[0]?.name;
+    return leadTest
+      ? `Could ${d.title.toLowerCase()} fit this pattern, and should we check ${leadTest}?`
+      : `Could ${d.title.toLowerCase()} fit this pattern?`;
+  });
+
+  return [
+    defaults[0] ?? 'Which first-line tests make the most sense for this fatigue pattern?',
+    defaults[1] ?? 'If the basic tests are normal, what should we investigate next?',
+  ];
+}
+
+function buildDoctorKitArguments(diagnoses: Diagnosis[]): string[] {
+  const argumentsFromTests = diagnoses
+    .flatMap((d) =>
+      d.tests
+        .filter((t) => t.mustRequest)
+        .map((t) => `Because ${d.title.toLowerCase()} is being considered, I would like to discuss ${t.name}${t.note ? ` because ${t.note.toLowerCase()}` : '.'}`)
+    )
+    .slice(0, 2);
+
+  return [
+    argumentsFromTests[0] ?? 'My fatigue pattern feels persistent enough that I would like to discuss tests beyond a routine basic panel.',
+    argumentsFromTests[1] ?? 'If common causes are not obvious, I would like help ruling out the most plausible hidden drivers step by step.',
+  ];
+}
+
+function buildCoachingTips(diagnoses: Diagnosis[]): NonNullable<LocalDeepResultLike['coachingTips']> {
+  const top = diagnoses[0]?.title ?? 'energy recovery';
+  return [
+    {
+      category: 'Pacing',
+      tip: `Keep activity steady for the next 1-2 weeks instead of pushing through crashes while you investigate ${top.toLowerCase()}.`,
+      timeframe: 'This week',
+    },
+    {
+      category: 'Sleep',
+      tip: 'Protect a consistent sleep and wake window so your symptom pattern is easier to interpret and discuss with your clinician.',
+      timeframe: 'Next 7 days',
+    },
+    {
+      category: 'Tracking',
+      tip: 'Write down your lowest-energy times, major triggers, and any related symptoms so you can bring a cleaner story into the appointment.',
+      timeframe: 'Until your visit',
+    },
+  ];
+}
+
+function buildLocalInsights(
+  diagnoses: Diagnosis[],
+  tone: 'mock' | 'offline'
+): LocalDeepResultLike['insights'] {
+  return diagnoses.slice(0, 3).map((d, index) => ({
+    diagnosisId: d.id,
+    personalNote:
+      tone === 'mock'
+        ? `Demo insight ${index + 1}: this pattern overlaps with ${d.title.toLowerCase()}, so HalfFull would normally tailor follow-up guidance around the symptoms already reported.`
+        : `Local fallback note: your answers contain signals that make ${d.title.toLowerCase()} worth discussing, especially alongside the tests already suggested in this report.`,
+  }));
+}
+
+export function buildMockDeepResult(answers: Record<string, unknown>): LocalDeepResultLike {
+  const { diagnoses, summaryLine } = computeResults(answers);
+  const titles = diagnoses.slice(0, 2).map((d) => d.title).join(' and ');
+  const leadingLabel = titles || 'a few subtle energy drivers';
+
+  return {
+    personalizedSummary:
+      `Demo mode: this is a stable mock report rather than a live MedGemma response. Based on your assessment, HalfFull would normally focus on ${leadingLabel.toLowerCase()}. ${summaryLine} This report is educational only and not medical advice.`,
+    insights: buildLocalInsights(diagnoses, 'mock'),
+    nextSteps:
+      `Demo next steps: bring this report to your GP, review the flagged areas, and start with the first recommended tests for ${leadingLabel.toLowerCase()}. If those are unrevealing, use the doctor-kit prompts below to discuss the next layer of testing.`,
+    doctorKitSummary:
+      `I have been dealing with ongoing low energy and this assessment highlighted ${leadingLabel.toLowerCase()} as worth checking. I would like to use this visit to review the most relevant tests instead of stopping at a generic fatigue workup.`,
+    doctorKitQuestions: buildDoctorKitQuestions(diagnoses),
+    doctorKitArguments: buildDoctorKitArguments(diagnoses),
+    coachingTips: buildCoachingTips(diagnoses),
+  };
+}
+
+export function buildOfflineDeepResult(answers: Record<string, unknown>): LocalDeepResultLike {
+  const { diagnoses, summaryLine } = computeResults(answers);
+  const titles = diagnoses.slice(0, 2).map((d) => d.title).join(' and ');
+  const leadingLabel = titles || 'subtle but actionable patterns';
+
+  return {
+    personalizedSummary:
+      `Offline fallback: this report was generated locally because live AI analysis was unavailable. Your answers suggest ${leadingLabel.toLowerCase()} may be worth discussing with your GP. ${summaryLine} This report is educational only and not medical advice.`,
+    insights: buildLocalInsights(diagnoses, 'offline'),
+    nextSteps:
+      'Use the structured report to guide a focused GP conversation and ask about the top recommended tests first. If symptoms continue despite normal routine bloodwork, discuss the more specific tests attached to the highest-ranked areas.',
+    doctorKitSummary:
+      `I have persistent low energy and this local assessment suggests ${leadingLabel.toLowerCase()} could be relevant. I would like help reviewing the most appropriate targeted tests and what to investigate next if routine results look normal.`,
+    doctorKitQuestions: buildDoctorKitQuestions(diagnoses),
+    doctorKitArguments: buildDoctorKitArguments(diagnoses),
+    coachingTips: buildCoachingTips(diagnoses),
+  };
+}

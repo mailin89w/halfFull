@@ -24,7 +24,7 @@ const PYTHON = process.env.PYTHON_BIN
 
 const SCORE_SCRIPT = path.join(PROJECT_ROOT, 'scripts', 'score_answers.py');
 
-function runPython(answersJson: string): Promise<{ scores?: Record<string, number>; error?: string }> {
+function runPython(answersJson: string): Promise<{ scores?: Record<string, number>; error?: string; warnings?: string[] }> {
   return new Promise((resolve) => {
     const child = spawn(PYTHON, [SCORE_SCRIPT], {
       cwd: PROJECT_ROOT,
@@ -51,7 +51,13 @@ function runPython(answersJson: string): Promise<{ scores?: Record<string, numbe
         if (parsed.error) {
           resolve({ error: String(parsed.error) });
         } else {
-          resolve({ scores: parsed as Record<string, number> });
+          resolve({
+            scores: parsed as Record<string, number>,
+            warnings: stderr
+              .split(/\r?\n/)
+              .map((line) => line.trim())
+              .filter(Boolean),
+          });
         }
       } catch {
         resolve({ error: `Could not parse Python output: ${stdout.slice(0, 200)}` });
@@ -81,6 +87,6 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: result.error }, { status: 500 });
   }
 
-  writeLog('score', { answers, scores: result.scores });
+  writeLog('score', { answers, scores: result.scores, warnings: result.warnings });
   return NextResponse.json({ scores: result.scores });
 }

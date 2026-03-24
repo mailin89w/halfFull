@@ -4,10 +4,10 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAssessment } from '@/src/hooks/useAssessment';
 import {
-  fetchDeepAnalysis,
-  fetchMedGemmaInsights,
+  createOfflineDeepResult,
+  getConfiguredAiMode,
+  getDeepAnalysisWithFallback,
   storeDeepResult,
-  storeMedGemmaResult,
   readStoredDeepResult,
   readStoredBayesianScores,
   readStoredBayesianAnswers,
@@ -27,6 +27,7 @@ export default function ProcessingPage() {
   const { answers, hydrated } = useAssessment();
   const [stepIndex, setStepIndex] = useState(0);
   const [error, setError] = useState<string | null>(null);
+  const aiMode = getConfiguredAiMode();
 
   // Cycle through loading messages
   useEffect(() => {
@@ -58,9 +59,8 @@ export default function ProcessingPage() {
       const clarificationQA = readStoredBayesianAnswers() ?? undefined;
 
       try {
-        // Primary: deep analysis (comprehensive report with doctor kit + coaching tips)
         const [result] = await Promise.all([
-          fetchDeepAnalysis(answers, mlScores, clarificationQA),
+          getDeepAnalysisWithFallback(answers, mlScores, clarificationQA),
           new Promise((resolve) => window.setTimeout(resolve, 2600)),
         ]);
 
@@ -68,26 +68,10 @@ export default function ProcessingPage() {
         storeDeepResult(result);
         router.replace('/results');
       } catch {
-        // Graceful fallback: try the simpler basic-insights endpoint
-        try {
-          const basicResult = await fetchMedGemmaInsights(answers, mlScores);
-          if (cancelled) return;
-          storeMedGemmaResult(basicResult);
-          // Wrap into DeepMedGemmaResult shape so the results page can read it
-          storeDeepResult({
-            ...basicResult,
-            doctorKitSummary: undefined,
-            doctorKitQuestions: undefined,
-            doctorKitArguments: undefined,
-            coachingTips: undefined,
-          });
-          router.replace('/results');
-        } catch (fallbackErr) {
-          if (cancelled) return;
-          setError(
-            fallbackErr instanceof Error ? fallbackErr.message : String(fallbackErr)
-          );
-        }
+        if (cancelled) return;
+        storeDeepResult(createOfflineDeepResult(answers));
+        setError('We could not build the report automatically, so HalfFull prepared a local fallback report instead.');
+        router.replace('/results');
       }
     };
 
@@ -125,6 +109,9 @@ export default function ProcessingPage() {
             <p className="mt-3 text-base leading-7 text-[var(--color-ink-soft)]">
               {loadingMessages[stepIndex]}
             </p>
+            <p className="mt-3 text-xs font-semibold uppercase tracking-[0.16em] text-[var(--color-ink-soft)]">
+              {aiMode === 'live' ? 'Mode: live with automatic demo fallback' : `Mode: ${aiMode}`}
+            </p>
 
             <div className="mx-auto mt-6 h-3 w-56 rounded-full bg-[rgba(151,166,210,0.2)] p-[3px]">
               <div
@@ -137,7 +124,7 @@ export default function ProcessingPage() {
           {error && (
             <div className="section-card px-5 py-4">
               <p className="text-sm leading-6 text-[var(--color-ink-soft)]">
-                We could not finish the AI analysis just now. You can still open the report based on the structured assessment.
+                {error}
               </p>
               <button
                 type="button"

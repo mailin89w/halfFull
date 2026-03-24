@@ -125,7 +125,18 @@ HF_API_TOKEN=hf_your_token_here
 
 # Updated each Colab session — see step 3 below
 HF_ENDPOINT_URL=https://your-tunnel.trycloudflare.com
+
+# AI mode: live | mock | offline
+NEXT_PUBLIC_AI_MODE=live
 ```
+
+### AI modes
+
+- `live` â€” current MedGemma behavior for deep analysis, with automatic fallback to mock and then offline if live analysis fails or times out.
+- `mock` â€” keeps the local assessment/scoring/clarify pipeline, but uses stable demo report text for processing/results.
+- `offline` â€” skips MedGemma completely and builds the report locally from the existing rule-based assessment logic.
+
+Change `NEXT_PUBLIC_AI_MODE` in `frontend/.env.local` and restart `npm run dev` when switching modes.
 
 ---
 

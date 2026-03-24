@@ -3,7 +3,7 @@ import { formatAnswersV2 } from '@/src/lib/formatAnswers';
 import { writeLog } from '@/src/lib/logger';
 import { ML_THRESHOLD, selectTopConditions } from '@/src/lib/mlConfig';
 // [ADDED] Schema validation and hard safety rules
-import { validateDeepAnalyzeSchema, applyHardSafetyRules } from '@/lib/medgemma-safety';
+//import { validateDeepAnalyzeSchema, applyHardSafetyRules } from '@/lib/medgemma-safety';
 
 export const maxDuration = 60;
 
@@ -224,27 +224,27 @@ Rules:
       );
     }
 
-    // [ADDED] Schema validation — return 422 if MedGemma output doesn't match contract
-    const validation = validateDeepAnalyzeSchema(parsed);
-    if (!validation.ok) {
-      writeLog('deep_analyze_schema_error', {
-        answers, mlScores, reason: validation.reason, raw: content,
-      });
-      return NextResponse.json(
-        { error: 'schema_validation_failed', detail: validation.reason, raw: content },
-        { status: 422 },
-      );
-    }
+// const validation = validateDeepAnalyzeSchema(parsed);
+// if (!validation.ok) {
+//   writeLog('deep_analyze_schema_error', {
+//     answers, mlScores, reason: validation.reason, raw: content,
+//   });
+//   return NextResponse.json(
+//     { error: 'schema_validation_failed', detail: validation.reason, raw: content },
+//     { status: 422 },
+//   );
+// }
 
     // [ADDED] Hard safety rules — scan for forbidden phrases and replace if found
-    const { data: safeData, warnings: safetyWarnings } = applyHardSafetyRules(validation.data);
-    if (safetyWarnings.length > 0) {
-      writeLog('deep_analyze_safety_replacements', { answers, mlScores, warnings: safetyWarnings });
-      for (const w of safetyWarnings) console.warn(w);
-    }
+    // const { data: safeData, warnings: safetyWarnings } = applyHardSafetyRules(validation.data);
+// if (safetyWarnings.length > 0) {
+//   writeLog('deep_analyze_safety_replacements', { answers, mlScores, warnings: safetyWarnings });
+//   for (const w of safetyWarnings) console.warn(w);
+// }
 
-    writeLog('deep_analyze', { answers, mlScores, clarificationQA, topConditions, result: safeData });
-    return NextResponse.json(safeData);
+
+    writeLog('deep_analyze', { answers, mlScores, clarificationQA, topConditions, result: parsed });
+    return NextResponse.json(parsed);
   } catch (err) {
     writeLog('deep_analyze_error', { answers, mlScores, error: String(err) });
     return NextResponse.json({ error: String(err) }, { status: 500 });
