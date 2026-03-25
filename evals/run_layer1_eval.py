@@ -806,6 +806,9 @@ Examples:
     parser.add_argument("--seed",      type=int,  default=42)
     parser.add_argument("--output",    type=str,  default=None,
                         help="Override results output directory")
+    parser.add_argument("--exclude",   type=str,  default=None,
+                        help="Comma-separated list of condition IDs to skip "
+                             "(e.g. --exclude anemia,iron_deficiency)")
     return parser.parse_args()
 
 
@@ -835,6 +838,12 @@ def main() -> int:
     if not profiles:
         logger.error("No profiles matched the given filters.")
         return 1
+
+    if args.exclude:
+        excluded = {c.strip() for c in args.exclude.split(",")}
+        before   = len(profiles)
+        profiles = [p for p in profiles if p.get("target_condition") not in excluded]
+        logger.info("Excluded conditions %s: %d → %d profiles", sorted(excluded), before, len(profiles))
 
     if args.n is not None and args.n < len(profiles):
         rng      = random.Random(args.seed)
