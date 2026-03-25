@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HalfFull — Data Architecture</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: #f7f6f3;
+    color: #1a1a1a;
+    font-size: 14px;
+    line-height: 1.5;
+  }
+
+  .page {
+    max-width: 1080px;
+    margin: 0 auto;
+    padding: 52px 40px 80px;
+  }
+
+  /* ── Header ── */
+  .header {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    margin-bottom: 48px;
+    padding-bottom: 24px;
+    border-bottom: 2px solid #e5e7eb;
+  }
+  .header h1 {
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: #4f46e5;
+    margin-bottom: 8px;
+  }
+  .header h2 {
+    font-size: 32px;
+    font-weight: 800;
+    line-height: 1.1;
+    color: #111;
+  }
+  .header-meta { font-size: 12px; color: #aaa; text-align: right; }
+
+  /* ── Layer wrapper ── */
+  .layer {
+    margin-bottom: 8px;
+  }
+
+  .layer-row {
+    display: flex;
+    gap: 10px;
+    align-items: stretch;
+  }
+
+  /* ── Layer label (left rail) ── */
+  .layer-label {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-width: 52px;
+    gap: 6px;
+  }
+  .layer-label .badge {
+    writing-mode: vertical-rl;
+    text-orientation: mixed;
+    transform: rotate(180deg);
+    font-size: 9px;
+    font-weight: 800;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    padding: 10px 5px;
+    border-radius: 6px;
+    white-space: nowrap;
+  }
+  .badge.input   { background: #f3f4f6; color: #6b7280; }
+  .badge.analysis{ background: #eef2ff; color: #4338ca; }
+  .badge.synth   { background: #fdf4ff; color: #7e22ce; }
+  .badge.safety  { background: #f0fdf4; color: #15803d; }
+  .badge.output  { background: #fffbeb; color: #b45309; }
+
+  /* ── Cards ── */
+  .cards {
+    display: flex;
+    gap: 10px;
+    flex: 1;
+    align-items: stretch;
+  }
+
+  .card {
+    background: white;
+    border-radius: 14px;
+    padding: 20px 18px;
+    border: 1.5px solid #e5e7eb;
+    flex: 1;
+    position: relative;
+  }
+  .card.span2 { flex: 2; }
+  .card.span3 { flex: 3; }
+  .card.span4 { flex: 4; }
+
+  .card-icon { font-size: 20px; margin-bottom: 8px; }
+  .card-title {
+    font-size: 13px;
+    font-weight: 800;
+    margin-bottom: 4px;
+    color: #111;
+  }
+  .card-subtitle {
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 8px;
+  }
+  .card-desc { font-size: 12px; color: #555; line-height: 1.5; }
+
+  /* card accent colours */
+  .card.blue   { border-color: #c7d2fe; }
+  .card.purple { border-color: #e9d5ff; }
+  .card.green  { border-color: #bbf7d0; }
+  .card.amber  { border-color: #fde68a; }
+  .card.gray   { border-color: #e5e7eb; }
+  .card.indigo { border-color: #4f46e5; border-width: 2px; }
+
+  .card.blue   .card-subtitle { color: #4338ca; }
+  .card.purple .card-subtitle { color: #7e22ce; }
+  .card.green  .card-subtitle { color: #15803d; }
+  .card.amber  .card-subtitle { color: #b45309; }
+  .card.gray   .card-subtitle { color: #6b7280; }
+  .card.indigo .card-subtitle { color: #4f46e5; }
+
+  /* pill tags */
+  .tags { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 10px; }
+  .tag {
+    font-size: 10px;
+    font-weight: 600;
+    padding: 3px 8px;
+    border-radius: 20px;
+    white-space: nowrap;
+  }
+  .tag.blue   { background: #eef2ff; color: #4338ca; }
+  .tag.purple { background: #fdf4ff; color: #7e22ce; }
+  .tag.green  { background: #f0fdf4; color: #15803d; }
+  .tag.amber  { background: #fffbeb; color: #b45309; }
+  .tag.gray   { background: #f3f4f6; color: #4b5563; }
+  .tag.red    { background: #fff1f2; color: #be123c; }
+
+  /* output chip */
+  .output-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 4px 10px;
+    border-radius: 6px;
+    margin-top: 10px;
+  }
+  .output-chip.blue   { background: #eef2ff; color: #4338ca; }
+  .output-chip.purple { background: #fdf4ff; color: #7e22ce; }
+  .output-chip.green  { background: #f0fdf4; color: #15803d; }
+  .output-chip.amber  { background: #fffbeb; color: #b45309; }
+
+  /* ── Arrow between layers ── */
+  .arrow-row {
+    display: flex;
+    align-items: center;
+    padding: 4px 0 4px 62px;
+    gap: 10px;
+  }
+  .arrow-line {
+    flex: 1;
+    height: 1px;
+    background: repeating-linear-gradient(90deg, #c7d2fe 0, #c7d2fe 6px, transparent 6px, transparent 12px);
+  }
+  .arrow-down {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #4f46e5;
+    font-size: 16px;
+    opacity: 0.5;
+  }
+  .arrow-center {
+    display: flex;
+    justify-content: center;
+    padding: 2px 0 2px 62px;
+    color: #4f46e5;
+    font-size: 18px;
+    opacity: 0.4;
+  }
+
+  /* ── Full-width band cards ── */
+  .band {
+    background: white;
+    border-radius: 14px;
+    padding: 20px 24px;
+    border: 1.5px solid #e5e7eb;
+    flex: 1;
+    display: flex;
+    align-items: flex-start;
+    gap: 24px;
+    flex-wrap: wrap;
+  }
+  .band-section { flex: 1; min-width: 180px; }
+  .band-section + .band-section {
+    border-left: 1px solid #f0f0f0;
+    padding-left: 24px;
+  }
+  .band.purple { border-color: #e9d5ff; }
+  .band.green  { border-color: #bbf7d0; }
+  .band.amber  { border-color: #fde68a; }
+
+  /* ── Output row ── */
+  .output-row {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+    flex: 1;
+  }
+  .output-card {
+    background: white;
+    border: 1.5px solid #fde68a;
+    border-radius: 12px;
+    padding: 16px 14px;
+  }
+  .output-card .oc-icon { font-size: 18px; margin-bottom: 6px; }
+  .output-card .oc-title { font-size: 12px; font-weight: 700; color: #111; margin-bottom: 4px; }
+  .output-card .oc-desc { font-size: 11px; color: #777; }
+
+  /* ── Bottom row ── */
+  .bottom-row {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 10px;
+    flex: 1;
+  }
+  .bottom-card {
+    background: white;
+    border: 1.5px solid #e5e7eb;
+    border-radius: 12px;
+    padding: 14px 14px;
+  }
+  .bottom-card .bc-icon { font-size: 16px; margin-bottom: 5px; }
+  .bottom-card .bc-title { font-size: 11px; font-weight: 700; color: #374151; margin-bottom: 3px; }
+  .bottom-card .bc-desc { font-size: 10px; color: #9ca3af; line-height: 1.4; }
+
+  /* ── Legend ── */
+  .legend {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+    margin-top: 32px;
+    padding-top: 20px;
+    border-top: 1px solid #e5e7eb;
+  }
+  .legend-item { display: flex; align-items: center; gap: 7px; font-size: 11px; color: #555; }
+  .legend-dot { width: 10px; height: 10px; border-radius: 3px; flex-shrink: 0; }
+
+  /* ── Divider label ── */
+  .section-divider {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: #bbb;
+    padding-left: 62px;
+    margin: 18px 0 8px;
+  }
+
+  @media print {
+    body { background: white; }
+    .page { padding: 20px; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- Header -->
+  <div class="header">
+    <div>
+      <h1>HalfFull</h1>
+      <h2>Data Architecture</h2>
+    </div>
+    <div class="header-meta">Internal · March 2026</div>
+  </div>
+
+
+  <!-- ══════════════════════════════════════ INPUT -->
+  <div class="layer">
+    <div class="layer-row">
+      <div class="layer-label">
+        <div class="badge input">Input</div>
+      </div>
+      <div class="cards">
+
+        <div class="card gray span3">
+          <div class="card-icon">📋</div>
+          <div class="card-title">Assessment Quiz</div>
+          <div class="card-subtitle gray">Primary data source</div>
+          <div class="card-desc">~46 questions covering fatigue severity, sleep, mood, lifestyle, and medical history. Mapped to NHANES variables for analysis.</div>
+          <div class="tags">
+            <span class="tag gray">46 features</span>
+            <span class="tag gray">Symptom patterns</span>
+            <span class="tag gray">Demographics</span>
+          </div>
+        </div>
+
+        <div class="card gray span2">
+          <div class="card-icon">🧪</div>
+          <div class="card-title">Lab Results (optional)</div>
+          <div class="card-subtitle gray">User-uploaded</div>
+          <div class="card-desc">Patient uploads their own blood test PDF. OCR parses values directly — bypasses the need for KNN inference where real labs exist.</div>
+          <div class="tags">
+            <span class="tag gray">OCR parsing</span>
+            <span class="tag gray">PDF upload</span>
+          </div>
+        </div>
+
+        <div class="card gray">
+          <div class="card-icon">⌚</div>
+          <div class="card-title">Wearables</div>
+          <div class="card-subtitle gray">Future input</div>
+          <div class="card-desc">Fitbit, MESA actigraphy data. Sleep stages, HRV, activity trends.</div>
+          <div class="tags">
+            <span class="tag gray">Planned</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <div class="arrow-center">↓</div>
+  <div class="section-divider">Analysis Layer — runs in parallel</div>
+
+
+  <!-- ══════════════════════════════════════ ANALYSIS -->
+  <div class="layer">
+    <div class="layer-row">
+      <div class="layer-label">
+        <div class="badge analysis">Analysis</div>
+      </div>
+      <div class="cards">
+
+        <div class="card blue span2">
+          <div class="card-icon">🤖</div>
+          <div class="card-title">ML Condition Classifiers</div>
+          <div class="card-subtitle blue">11 independent models</div>
+          <div class="card-desc">Each model is trained on NHANES data to detect one condition. Outputs a probability score per condition independently.</div>
+          <div class="tags">
+            <span class="tag blue">Anemia</span>
+            <span class="tag blue">Thyroid</span>
+            <span class="tag blue">Kidney</span>
+            <span class="tag blue">Liver</span>
+            <span class="tag blue">Sleep disorder</span>
+            <span class="tag blue">Prediabetes</span>
+            <span class="tag blue">Iron deficiency</span>
+            <span class="tag blue">Perimenopause</span>
+            <span class="tag blue">Inflammation</span>
+            <span class="tag blue">HepatitisBC</span>
+            <span class="tag blue">Electrolytes</span>
+          </div>
+          <div class="output-chip blue">→ P(condition) per disease</div>
+        </div>
+
+        <div class="card blue">
+          <div class="card-icon">📊</div>
+          <div class="card-title">Bayesian Update</div>
+          <div class="card-subtitle blue">Probability refinement</div>
+          <div class="card-desc">Triggered when any condition clears 40% probability. Asks the patient targeted follow-up questions. Each answer updates the probability using a likelihood ratio.</div>
+          <div class="tags">
+            <span class="tag blue">Triggered at P &gt; 0.40</span>
+            <span class="tag blue">Condition-specific Qs</span>
+          </div>
+          <div class="output-chip blue">→ Refined P(condition)</div>
+        </div>
+
+        <div class="card indigo">
+          <div class="card-icon">🔬</div>
+          <div class="card-title">KNN Population Matching</div>
+          <div class="card-subtitle">Lab signal inference</div>
+          <div class="card-desc">Finds the 50 most similar people in our 7,437-person NHANES database. Surfaces labs that are disproportionately abnormal in that group, ranked by how anomalous they are vs. the general population.</div>
+          <div class="tags">
+            <span class="tag blue">K = 50 neighbours</span>
+            <span class="tag blue">Cosine similarity</span>
+            <span class="tag blue">Lift ≥ 1.5×</span>
+            <span class="tag blue">34 labs tracked</span>
+          </div>
+          <div class="output-chip blue">→ Ranked lab signals + direction</div>
+        </div>
+
+        <div class="card gray">
+          <div class="card-icon">📈</div>
+          <div class="card-title">Time-Series Analysis</div>
+          <div class="card-subtitle gray">Wearable insights · Planned</div>
+          <div class="card-desc">Heart rate variability, sleep stage trends, activity recovery patterns from Fitbit and MESA actigraphy data.</div>
+          <div class="tags">
+            <span class="tag gray">Planned</span>
+            <span class="tag gray">Fitbit / MESA</span>
+          </div>
+          <div class="output-chip amber">→ Fatigue trend signals</div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <div class="arrow-center">↓</div>
+  <div class="section-divider">Synthesis Layer</div>
+
+
+  <!-- ══════════════════════════════════════ FILTERING -->
+  <div class="layer">
+    <div class="layer-row">
+      <div class="layer-label">
+        <div class="badge synth">Synth</div>
+      </div>
+      <div class="cards">
+
+        <div class="card purple">
+          <div class="card-icon">🎯</div>
+          <div class="card-title">Filtering &amp; Ranking</div>
+          <div class="card-subtitle purple">Signal selection</div>
+          <div class="card-desc">Selects the top 3 conditions above threshold. Merges ML posteriors, Bayesian updates, and KNN lab signals into one structured input for the LLM.</div>
+          <div class="tags">
+            <span class="tag purple">P &gt; 0.40 threshold</span>
+            <span class="tag purple">Top-3 conditions</span>
+            <span class="tag purple">Top-8 lab signals</span>
+          </div>
+        </div>
+
+        <div class="card purple span3">
+          <div class="card-icon">🧠</div>
+          <div class="card-title">MedGemma — LLM Synthesis</div>
+          <div class="card-subtitle purple">Personalised report generation</div>
+          <div class="card-desc">Receives the structured signal package: top-3 conditions with probabilities, Bayesian clarification Q&amp;A, and KNN lab signals. Generates a fully personalised report — every sentence references this patient's specific data, never generic advice.</div>
+          <div class="tags">
+            <span class="tag purple">Condition insights</span>
+            <span class="tag purple">Lab test recommendations</span>
+            <span class="tag purple">Doctor Kit script</span>
+            <span class="tag purple">GP questions</span>
+            <span class="tag gray">+ RAG on fatigue literature</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <div class="arrow-center">↓</div>
+
+
+  <!-- ══════════════════════════════════════ SAFETY -->
+  <div class="layer">
+    <div class="layer-row">
+      <div class="layer-label">
+        <div class="badge safety">Safety</div>
+      </div>
+      <div class="cards">
+
+        <div class="band green">
+          <div class="band-section">
+            <div class="card-icon">🛡️</div>
+            <div class="card-title" style="margin-bottom:6px;">Safety Layer</div>
+            <div class="card-desc">Every LLM output passes through a safety filter before being shown to the user. Removes diagnostic language, softens alarming phrasing, and enforces hard-coded guardrails.</div>
+          </div>
+          <div class="band-section">
+            <div class="card-subtitle green" style="margin-bottom:8px;">Hard rules (code)</div>
+            <div class="card-desc">No diagnosis statements · "May suggest / could indicate" framing enforced · Disclaimer on every report</div>
+          </div>
+          <div class="band-section">
+            <div class="card-subtitle green" style="margin-bottom:8px;">Output validation</div>
+            <div class="card-desc">JSON schema validation · AI risk assessment matrix · NeMo guardrail integration (planned)</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <div class="arrow-center">↓</div>
+  <div class="section-divider">Output</div>
+
+
+  <!-- ══════════════════════════════════════ OUTPUT -->
+  <div class="layer">
+    <div class="layer-row">
+      <div class="layer-label">
+        <div class="badge output">Output</div>
+      </div>
+      <div class="output-row">
+
+        <div class="output-card">
+          <div class="oc-icon">📄</div>
+          <div class="oc-title">Personalised Summary</div>
+          <div class="oc-desc">2–3 sentences connecting the patient's top symptom to the most likely driver. Warm, non-alarming tone.</div>
+        </div>
+
+        <div class="output-card">
+          <div class="oc-icon">🔍</div>
+          <div class="oc-title">Condition Insights</div>
+          <div class="oc-desc">Up to 3 flagged areas with probabilities and a personalised explanation of why each fits this patient's profile.</div>
+        </div>
+
+        <div class="output-card">
+          <div class="oc-icon">🧪</div>
+          <div class="oc-title">Lab Recommendations</div>
+          <div class="oc-desc">Specific tests to request, ranked by population-level signal strength. Includes reference ranges and clinical direction (high/low).</div>
+        </div>
+
+        <div class="output-card">
+          <div class="oc-icon">🩺</div>
+          <div class="oc-title">Doctor Kit</div>
+          <div class="oc-desc">First-person script for the GP appointment. What to say, what to ask for, and two evidence-based arguments to support the request.</div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <div class="arrow-center">↓</div>
+  <div class="section-divider">Infrastructure &amp; Ops</div>
+
+
+  <!-- ══════════════════════════════════════ INFRA -->
+  <div class="layer">
+    <div class="layer-row">
+      <div class="layer-label" style="min-width:52px;"></div>
+      <div class="bottom-row">
+
+        <div class="bottom-card">
+          <div class="bc-icon">🗄️</div>
+          <div class="bc-title">User Profile Store</div>
+          <div class="bc-desc">Long-term memory per consented user. Vector DB for future personalisation.</div>
+        </div>
+
+        <div class="bottom-card">
+          <div class="bc-icon">📋</div>
+          <div class="bc-title">Audit &amp; Safety Logs</div>
+          <div class="bc-desc">Every input/output logged. Versioned for QA and observability.</div>
+        </div>
+
+        <div class="bottom-card">
+          <div class="bc-icon">🧪</div>
+          <div class="bc-title">End-to-End Evals</div>
+          <div class="bc-desc">600 synthetic user cohort. Automated regression testing on each deploy.</div>
+        </div>
+
+        <div class="bottom-card">
+          <div class="bc-icon">☁️</div>
+          <div class="bc-title">Cloud Deployment</div>
+          <div class="bc-desc">Railway (API) · Vercel (frontend) · Runpod (LLM inference)</div>
+        </div>
+
+        <div class="bottom-card">
+          <div class="bc-icon">🔌</div>
+          <div class="bc-title">API</div>
+          <div class="bc-desc">FastAPI / REST. Partner and B2B integration surface.</div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+
+  <!-- Legend -->
+  <div class="legend">
+    <div class="legend-item"><div class="legend-dot" style="background:#c7d2fe;"></div> ML / Analysis layer</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#e9d5ff;"></div> LLM synthesis</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#bbf7d0;"></div> Safety layer</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#fde68a;"></div> User-facing output</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#4f46e5;"></div> KNN layer (new)</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#e5e7eb;"></div> Planned / future</div>
+  </div>
+
+</div>
+</body>
+</html>

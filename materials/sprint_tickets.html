@@ -1,0 +1,1239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HalfFull — Final Sprint Tickets</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,600;0,9..144,700;1,9..144,300&family=DM+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy:   #254662;
+    --orange: #EFB973;
+    --yellow: #EFD17B;
+    --green:  #C7D9A7;
+    --pink:   #EBC7BB;
+    --blue:   #A2B6CB;
+    --cream:  #FAF7F2;
+    --cream2: #F2EDE6;
+    --dark:   #1A2F40;
+    --muted:  #5A7A96;
+    --white:  #FFFFFF;
+
+    --track-eval:    #A2B6CB;
+    --track-safety:  #C7D9A7;
+    --track-demo:    #EFD17B;
+    --track-product: #EFB973;
+    --track-ai:      #EBC7BB;
+    --track-stretch: rgba(162,182,203,0.45);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--cream);
+    color: var(--dark);
+    min-height: 100vh;
+  }
+
+  /* ── HERO ── */
+  .hero {
+    background: var(--navy);
+    padding: 60px 48px 52px;
+  }
+  .hero-tag {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--orange);
+    margin-bottom: 14px;
+  }
+  .hero h1 {
+    font-family: 'Fraunces', serif;
+    font-size: clamp(28px, 4vw, 46px);
+    font-weight: 700;
+    color: var(--white);
+    line-height: 1.1;
+    margin-bottom: 14px;
+  }
+  .hero h1 span { color: var(--orange); }
+  .hero-sub {
+    font-size: 15px;
+    color: var(--blue);
+    max-width: 580px;
+    line-height: 1.65;
+    margin-bottom: 32px;
+  }
+  .hero-stats {
+    display: flex;
+    gap: 32px;
+    flex-wrap: wrap;
+  }
+  .stat {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+  }
+  .stat-num {
+    font-family: 'Fraunces', serif;
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--orange);
+  }
+  .stat-label {
+    font-size: 11px;
+    color: var(--blue);
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    font-family: 'JetBrains Mono', monospace;
+  }
+
+  /* ── LAYOUT ── */
+  .container {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 32px;
+  }
+
+  /* ── TRACK SECTION ── */
+  .track {
+    padding: 52px 0 8px;
+  }
+  .track-header {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 24px;
+  }
+  .track-icon {
+    width: 42px; height: 42px;
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 20px;
+    flex-shrink: 0;
+  }
+  .track-header h2 {
+    font-family: 'Fraunces', serif;
+    font-size: 21px;
+    font-weight: 600;
+    color: var(--navy);
+  }
+  .track-header p {
+    font-size: 13px;
+    color: var(--muted);
+    margin-top: 2px;
+  }
+
+  /* ── TICKET CARD ── */
+  .tickets {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    margin-bottom: 12px;
+  }
+
+  .ticket {
+    background: var(--white);
+    border-radius: 14px;
+    overflow: hidden;
+    box-shadow: 0 2px 12px rgba(37,70,98,0.06);
+    transition: box-shadow 0.2s ease, transform 0.2s ease;
+  }
+  .ticket:hover {
+    box-shadow: 0 6px 24px rgba(37,70,98,0.11);
+    transform: translateY(-1px);
+  }
+
+  .ticket-top {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 20px 24px 14px;
+    cursor: pointer;
+    user-select: none;
+  }
+  .ticket-left { flex: 1; min-width: 0; }
+
+  .ticket-meta {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 8px;
+    flex-wrap: wrap;
+  }
+
+  .ticket-id {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    color: var(--muted);
+    text-transform: uppercase;
+  }
+
+  .ticket-title {
+    font-family: 'Fraunces', serif;
+    font-size: 17px;
+    font-weight: 600;
+    color: var(--dark);
+    line-height: 1.25;
+    margin-bottom: 6px;
+  }
+
+  .ticket-goal {
+    font-size: 13px;
+    color: var(--muted);
+    line-height: 1.55;
+    max-width: 680px;
+  }
+
+  .ticket-badges {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 6px;
+    flex-shrink: 0;
+  }
+
+  /* ── BADGES ── */
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    padding: 3px 9px;
+    border-radius: 20px;
+    white-space: nowrap;
+    font-weight: 500;
+    letter-spacing: 0.03em;
+  }
+  .badge-must    { background: rgba(37,70,98,0.12);    color: #254662; border: 1px solid rgba(37,70,98,0.2); }
+  .badge-signal  { background: rgba(239,185,115,0.25); color: #7a4d10; border: 1px solid rgba(239,185,115,0.4); }
+  .badge-stretch { background: rgba(162,182,203,0.25); color: #3a5a76; border: 1px solid rgba(162,182,203,0.4); }
+
+  .badge-half  { background: rgba(199,217,167,0.3);   color: #3a5a2e; }
+  .badge-one   { background: rgba(239,209,123,0.35);  color: #6b4f0d; }
+  .badge-onep  { background: rgba(239,185,115,0.3);   color: #7a4d10; }
+  .badge-two   { background: rgba(235,199,187,0.4);   color: #7a2e20; }
+
+  .chevron {
+    font-size: 12px;
+    color: var(--muted);
+    margin-top: 4px;
+    transition: transform 0.25s ease;
+    flex-shrink: 0;
+  }
+  .ticket.open .chevron { transform: rotate(180deg); }
+
+  /* ── TICKET BODY ── */
+  .ticket-body {
+    display: none;
+    padding: 0 24px 22px;
+    border-top: 1px solid var(--cream2);
+  }
+  .ticket.open .ticket-body { display: block; }
+
+  .ticket-section-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--orange);
+    margin: 18px 0 10px;
+  }
+
+  .dod-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+  }
+  .dod-list li {
+    display: flex;
+    align-items: flex-start;
+    gap: 9px;
+    font-size: 13.5px;
+    color: var(--dark);
+    line-height: 1.5;
+  }
+  .dod-list li::before {
+    content: '';
+    width: 16px; height: 16px;
+    border: 1.5px solid rgba(37,70,98,0.25);
+    border-radius: 4px;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+
+  .start-box {
+    background: var(--cream);
+    border-radius: 10px;
+    padding: 14px 16px;
+    font-size: 13px;
+    color: var(--dark);
+    line-height: 1.65;
+    border-left: 3px solid var(--orange);
+  }
+  .start-box code {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11.5px;
+    background: rgba(37,70,98,0.08);
+    padding: 1px 5px;
+    border-radius: 4px;
+    color: var(--navy);
+  }
+
+  /* ── TRACK COLOR ACCENTS ── */
+  .track-eval    .ticket { border-top: 3px solid var(--track-eval); }
+  .track-safety  .ticket { border-top: 3px solid var(--track-safety); }
+  .track-demo    .ticket { border-top: 3px solid var(--track-demo); }
+  .track-product .ticket { border-top: 3px solid var(--track-product); }
+  .track-ai      .ticket { border-top: 3px solid var(--track-ai); }
+  .track-stretch .ticket { border-top: 3px solid var(--blue); }
+
+  .track-eval    .track-icon { background: rgba(162,182,203,0.25); }
+  .track-safety  .track-icon { background: rgba(199,217,167,0.3); }
+  .track-demo    .track-icon { background: rgba(239,209,123,0.25); }
+  .track-product .track-icon { background: rgba(239,185,115,0.2); }
+  .track-ai      .track-icon { background: rgba(235,199,187,0.3); }
+  .track-stretch .track-icon { background: rgba(162,182,203,0.2); }
+
+  /* ── DIVIDER ── */
+  .divider {
+    height: 1px;
+    background: linear-gradient(to right, transparent, rgba(162,182,203,0.35), transparent);
+    margin: 4px 0;
+  }
+
+  /* ── SUMMARY TABLE ── */
+  .summary-section {
+    padding: 56px 0 64px;
+  }
+  .summary-section h2 {
+    font-family: 'Fraunces', serif;
+    font-size: 22px;
+    color: var(--navy);
+    margin-bottom: 24px;
+  }
+  .summary-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0 5px;
+  }
+  .summary-table thead th {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    padding: 0 14px 10px;
+    text-align: left;
+    border-bottom: 1px solid rgba(162,182,203,0.3);
+  }
+  .summary-table tbody tr {
+    background: var(--white);
+  }
+  .summary-table tbody td {
+    padding: 11px 14px;
+    font-size: 13px;
+    vertical-align: middle;
+  }
+  .summary-table tbody td:first-child {
+    border-radius: 8px 0 0 8px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--muted);
+    white-space: nowrap;
+  }
+  .summary-table tbody td:nth-child(2) {
+    font-weight: 500;
+    color: var(--dark);
+  }
+  .summary-table tbody td:last-child { border-radius: 0 8px 8px 0; }
+
+  .track-pill {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    padding: 2px 8px;
+    border-radius: 20px;
+    white-space: nowrap;
+  }
+  .pill-eval    { background: rgba(162,182,203,0.25); color: #254662; }
+  .pill-safety  { background: rgba(199,217,167,0.3);  color: #2d5224; }
+  .pill-demo    { background: rgba(239,209,123,0.3);  color: #6b4f0d; }
+  .pill-product { background: rgba(239,185,115,0.25); color: #7a4d10; }
+  .pill-ai      { background: rgba(235,199,187,0.35); color: #7a2e20; }
+  .pill-stretch { background: rgba(162,182,203,0.2);  color: #3a5a76; }
+
+  .dep-tag {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--muted);
+  }
+
+  /* ── PRIORITY CALLOUT ── */
+  .callout {
+    background: var(--navy);
+    border-radius: 14px;
+    padding: 28px 32px;
+    margin: 48px 0 0;
+  }
+  .callout h3 {
+    font-family: 'Fraunces', serif;
+    font-size: 17px;
+    color: var(--white);
+    margin-bottom: 18px;
+  }
+  .callout-cols {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+  }
+  @media (max-width: 700px) { .callout-cols { grid-template-columns: 1fr; } }
+  .callout-col h4 {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--orange);
+    margin-bottom: 10px;
+  }
+  .callout-col ul {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+  }
+  .callout-col ul li {
+    font-size: 13px;
+    color: var(--blue);
+    padding-left: 14px;
+    position: relative;
+    line-height: 1.4;
+  }
+  .callout-col ul li::before {
+    content: '→';
+    position: absolute;
+    left: 0;
+    color: var(--orange);
+    font-size: 10px;
+    top: 2px;
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    background: var(--navy);
+    padding: 24px 48px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  footer span {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--blue);
+  }
+  footer strong { color: var(--orange); }
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="container">
+    <div class="hero-tag">HalfFull · Final Sprint · Capstone Tickets</div>
+    <h1>What we're building.<br><span>Before we ship.</span></h1>
+    <p class="hero-sub">16 scoped tickets across 6 tracks. Each is one day of work for one person — covering the gaps between what we've built and what we need to prove, polish, and present.</p>
+    <div class="hero-stats">
+      <div class="stat"><span class="stat-num">16</span><span class="stat-label">Total tickets</span></div>
+      <div class="stat"><span class="stat-num">7</span><span class="stat-label">Must-ship</span></div>
+      <div class="stat"><span class="stat-num">6</span><span class="stat-label">High-signal adds</span></div>
+      <div class="stat"><span class="stat-num">3</span><span class="stat-label">Stretch</span></div>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+
+  <!-- ── TRACK A: EVAL ── -->
+  <div class="track track-eval">
+    <div class="track-header">
+      <div class="track-icon">📊</div>
+      <div>
+        <h2>Track A — Eval &amp; Evidence</h2>
+        <p>Proof that the system works. The most important track for capstone credibility.</p>
+      </div>
+    </div>
+    <div class="tickets">
+
+      <div class="ticket">
+        <div class="ticket-top" onclick="toggle(this)">
+          <div class="ticket-left">
+            <div class="ticket-meta">
+              <span class="ticket-id">T2</span>
+              <span class="badge badge-must">Must ship</span>
+              <span class="badge badge-half">0.5 day</span>
+            </div>
+            <div class="ticket-title">Run Full Pipeline Eval + Publish Metrics Report</div>
+            <div class="ticket-goal">Produce the one artifact reviewers will ask for — concrete evidence the system works, layer by layer. Right now <code>scoring_results.json</code> exists but has never been turned into a clean capstone-grade summary.</div>
+          </div>
+          <div class="ticket-badges">
+            <span class="chevron">▼</span>
+          </div>
+        </div>
+        <div class="ticket-body">
+          <div class="ticket-section-label">Definition of Done</div>
+          <ul class="dod-list">
+            <li><code>python evals/run_eval.py --n 600 --output evals/cohort/</code> completes cleanly</li>
+            <li>Report includes: ML top-1 / top-3 per condition, Bayesian delta, parse success rate, hallucination rate, over-alert rate on healthy profiles</li>
+            <li><code>evals/cohort/final_eval_report.md</code> saved — includes a passed/failed DoD table and top-3 failure examples per condition</li>
+            <li>Numbers pass: top-1 ≥ 70%, hallucination &lt; 5%, parse success ≥ 95%, over-alert &lt; 10%</li>
+          </ul>
+          <div class="ticket-section-label">Where to start</div>
+          <div class="start-box">
+            <code>evals/run_eval.py</code> is the entry point — flags <code>--layer 1</code>, <code>--n 600</code>, <code>--output</code> are already wired. The <code>metrics_aggregator.py:to_markdown()</code> function already generates the report format. Run it, check the output, fix any import errors, then add the DoD pass/fail table to the top of the generated markdown.
+          </div>
+        </div>
+      </div>
+
+      <div class="ticket">
+        <div class="ticket-top" onclick="toggle(this)">
+          <div class="ticket-left">
+            <div class="ticket-meta">
+              <span class="ticket-id">T3</span>
+              <span class="badge badge-must">Must ship</span>
+              <span class="badge badge-half">0.5 day</span>
+            </div>
+            <div class="ticket-title">Failure Taxonomy: Classify and Document Bad Outputs</div>
+            <div class="ticket-goal">A clean accuracy number is less credible than a table of failure types. Knowing your system's failure modes is the difference between a student project and a mature AI system.</div>
+          </div>
+          <div class="ticket-badges">
+            <span class="chevron">▼</span>
+          </div>
+        </div>
+        <div class="ticket-body">
+          <div class="ticket-section-label">Definition of Done</div>
+          <ul class="dod-list">
+            <li>15+ real failure examples collected from the eval run</li>
+            <li>Classified into buckets: <code>overclaiming</code> · <code>wrong_condition_first</code> · <code>sparse_data_overconfident</code> · <code>hallucinated_condition_id</code> · <code>vague_next_steps</code></li>
+            <li>Saved as <code>evals/cohort/failure_taxonomy.md</code> — each bucket has 2–3 examples and a proposed fix</li>
+            <li>One slide-ready summary line per bucket: "X% of failures were type Y, addressed by Z"</li>
+          </ul>
+          <div class="ticket-section-label">Where to start</div>
+          <div class="start-box">
+            After T2 runs, filter <code>scoring_results.json</code> for profiles where <code>top1_correct: false</code>. The <code>scoring_engine.py:score_profile()</code> already captures parse success and hallucination flags — extend it to tag a <code>failure_type</code> field. Sort by failure type and write up examples manually.
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- ── TRACK B: SAFETY ── -->
+  <div class="track track-safety">
+    <div class="track-header">
+      <div class="track-icon">🔐</div>
+      <div>
+        <h2>Track B — Trust &amp; Safety</h2>
+        <p>Prove the safety layer holds. Write the responsible AI docs almost no student project has.</p>
+      </div>
+    </div>
+    <div class="tickets">
+
+      <div class="ticket">
+        <div class="ticket-top" onclick="toggle(this)">
+          <div class="ticket-left">
+            <div class="ticket-meta">
+              <span class="ticket-id">T4</span>
+              <span class="badge badge-must">Must ship</span>
+              <span class="badge badge-one">1 day</span>
+            </div>
+            <div class="ticket-title">Safety Regression Suite (Red-Team Test Pack)</div>
+            <div class="ticket-goal">The safety layer exists in the architecture — but there's no reusable test pack proving it holds under adversarial inputs. A judge will try to break it during the demo.</div>
+          </div>
+          <div class="ticket-badges">
+            <span class="chevron">▼</span>
+          </div>
+        </div>
+        <div class="ticket-body">
+          <div class="ticket-section-label">Definition of Done</div>
+          <ul class="dod-list">
+            <li><code>evals/safety/red_team_cases.json</code> contains ≥ 20 test cases across 4 categories: <code>diagnostic_language</code>, <code>false_reassurance</code>, <code>emergency_symptoms</code>, <code>sparse_data</code></li>
+            <li>Script <code>evals/safety/run_safety_eval.py</code> runs all cases through <code>/api/safety-rewrite</code> and checks for guardrail violations</li>
+            <li>Pass/fail table saved as <code>evals/safety/safety_eval_results.md</code></li>
+            <li>Zero violations in the <code>emergency_symptoms</code> category (hard requirement)</li>
+          </ul>
+          <div class="ticket-section-label">Where to start</div>
+          <div class="start-box">
+            Start with <code>frontend/app/api/safety-rewrite/route.ts</code> — the current rules are on lines 8–18 (Groq + Llama-3.1-8b-instant, temp 0.2). Write the 20 test cases as JSON first, then build the runner that calls the endpoint and checks the response for banned phrases like "you have", "you are diagnosed with", "you definitely". The Groq API key is already wired in the frontend env.
+          </div>
+        </div>
+      </div>
+
+      <div class="ticket">
+        <div class="ticket-top" onclick="toggle(this)">
+          <div class="ticket-left">
+            <div class="ticket-meta">
+              <span class="ticket-id">T5</span>
+              <span class="badge badge-must">Must ship</span>
+              <span class="badge badge-one">1 day</span>
+            </div>
+            <div class="ticket-title">Model Card + AI Risk Matrix + "What HalfFull Doesn't Do"</div>
+            <div class="ticket-goal">Three responsible AI documents in one day. Each takes ~60 min to write. Together they signal the kind of AI PM thinking that's almost never seen in student capstones.</div>
+          </div>
+          <div class="ticket-badges">
+            <span class="chevron">▼</span>
+          </div>
+        </div>
+        <div class="ticket-body">
+          <div class="ticket-section-label">Definition of Done</div>
+          <ul class="dod-list">
+            <li><code>materials/model_card.md</code> — training data (NHANES 2017–2020), 11 conditions, AUC range, known demographic gaps, intended use, out-of-scope use</li>
+            <li><code>materials/ai_risk_matrix.md</code> — table: risk type × mitigation in place × gap remaining. Covers: hallucination, bias, overreliance, data sparsity, demographic skew</li>
+            <li><code>materials/what_halffull_does_not_do.md</code> — plain-language, non-technical: not a diagnosis · not a replacement for a doctor · not validated outside US populations · not for emergencies · all outputs are probabilistic</li>
+            <li>All three linked from <code>README.md</code></li>
+          </ul>
+          <div class="ticket-section-label">Where to start</div>
+          <div class="start-box">
+            <code>models_normalized/*_metadata.json</code> files have all AUC / precision / recall numbers — read these first, copy the range into the model card. <code>evals/cohort/optimization_report.md</code> already documents the known iron_deficiency female bias — quote it directly in the risk matrix. Write the model card first; the other two documents flow naturally from it.
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- ── TRACK C: DEMO ── -->
+  <div class="track track-demo">
+    <div class="track-header">
+      <div class="track-icon">🎬</div>
+      <div>
+        <h2>Track C — Demo &amp; Presentation</h2>
+        <p>Guarantee a successful walkthrough. Align the slides with the real system, not the original MVP spec.</p>
+      </div>
+    </div>
+    <div class="tickets">
+
+      <div class="ticket">
+        <div class="ticket-top" onclick="toggle(this)">
+          <div class="ticket-left">
+            <div class="ticket-meta">
+              <span class="ticket-id">T6</span>
+              <span class="badge badge-must">Must ship</span>
+              <span class="badge badge-one">1 day</span>
+            </div>
+            <div class="ticket-title">Demo Fallback Architecture + Demo Video</div>
+            <div class="ticket-goal">If Modal or Railway goes down mid-demo, we need a guaranteed path to a complete walkthrough. The fallback engine already exists in <code>mockResults.ts</code> — it just needs to be surfaced visibly and tested.</div>
+          </div>
+          <div class="ticket-badges">
+            <span class="chevron">▼</span>
+          </div>
+        </div>
+        <div class="ticket-body">
+          <div class="ticket-section-label">Definition of Done</div>
+          <ul class="dod-list">
+            <li>Fallback path tested: manually kill <code>HF_ENDPOINT_URL</code> env var and confirm the app completes gracefully with a clearly labelled "offline mode" UI state</li>
+            <li>Offline mode banner visible in the results screen (not a silent fallback)</li>
+            <li>Demo video recorded: 3–5 min screencast of the full user journey — start → assessment → clarify → processing → results → doctor kit PDF</li>
+            <li>Video saved/linked in <code>materials/demo_video_link.md</code></li>
+            <li>One "known failure modes + fallback" note added to the presentation deck</li>
+          </ul>
+          <div class="ticket-section-label">Where to start</div>
+          <div class="start-box">
+            <code>frontend/lib/mockResults.ts</code> is the fallback engine — it already exists. Check <code>frontend/app/api/deep-analyze/route.ts</code> to confirm the error branch calls it and returns a clearly labelled response. Add a yellow <code>"Running in offline mode"</code> banner to <code>results/page.tsx</code> when the response includes <code>source: "fallback"</code>. Record the video last, after T2 eval fixes are merged.
+          </div>
+        </div>
+      </div>
+
+      <div class="ticket">
+        <div class="ticket-top" onclick="toggle(this)">
+          <div class="ticket-left">
+            <div class="ticket-meta">
+              <span class="ticket-id">T7</span>
+              <span class="badge badge-must">Must ship</span>
+              <span class="badge badge-half">0.5 day</span>
+            </div>
+            <div class="ticket-title">Prompt Version Changelog + Experimentation Matrix</div>
+            <div class="ticket-goal">Prompts are currently hardcoded strings inside API routes with no version history. A prompt changelog is one of the highest AI PM signals and takes half a day to backfill.</div>
+          </div>
+          <div class="ticket-badges">
+            <span class="chevron">▼</span>
+          </div>
+        </div>
+        <div class="ticket-body">
+          <div class="ticket-section-label">Definition of Done</div>
+          <ul class="dod-list">
+            <li>Prompts extracted from <code>deep-analyze/route.ts</code> and <code>safety-rewrite/route.ts</code> into named constants in <code>frontend/src/lib/prompts.ts</code> (e.g. <code>MEDGEMMA_SYSTEM_V3</code>, <code>SAFETY_REWRITE_V2</code>)</li>
+            <li><code>materials/prompt_changelog.md</code> — version table: what changed, why, what eval evidence justified each change</li>
+            <li><code>materials/prompt_experiments.md</code> — lightweight comparison of 3 variants × dimensions (usefulness, tone safety, parse success, hallucination). Populated with real or manually-scored examples.</li>
+          </ul>
+          <div class="ticket-section-label">Where to start</div>
+          <div class="start-box">
+            Run <code>git log -p -- frontend/app/api/deep-analyze/route.ts</code> to reconstruct prompt history from git. Move current prompts to <code>frontend/src/lib/prompts.ts</code> first — then write the changelog backward from the current version. The experimentation matrix doesn't need to be run programmatically; a manually scored table of 3 variants is enough.
+          </div>
+        </div>
+      </div>
+
+      <div class="ticket">
+        <div class="ticket-top" onclick="toggle(this)">
+          <div class="ticket-left">
+            <div class="ticket-meta">
+              <span class="ticket-id">T8</span>
+              <span class="badge badge-must">Must ship</span>
+              <span class="badge badge-one">1 day</span>
+            </div>
+            <div class="ticket-title">Interview Q&amp;A Doc + Architecture-to-Slides Alignment</div>
+            <div class="ticket-goal">Treat presentation prep like a deliverable with a done state. The current slides still reference the original MVP framing — they need to reflect the real 5-layer system we actually built.</div>
+          </div>
+          <div class="ticket-badges">
+            <span class="chevron">▼</span>
+          </div>
+        </div>
+        <div class="ticket-body">
+          <div class="ticket-section-label">Definition of Done</div>
+          <ul class="dod-list">
+            <li><code>materials/interview_qa.md</code> — 8–10 Q&amp;A pairs written in full. Covers: architecture decisions, eval evidence, safety approach, why structured UX over chat, known limitations, what we'd do differently</li>
+            <li>Each answer cites a real file, number, or artifact from the repo (not just conceptual)</li>
+            <li>Presentation deck "How the system works" slide reflects the actual 5-layer architecture: ML classifiers → Bayesian update → Cluster → MedGemma → Safety</li>
+            <li>Each architecture layer has one real metric or artifact attached (e.g., "11 models, AUC 0.72–0.82" · "56KB LR tables" · "Groq/Llama-3.1 safety rewrite")</li>
+          </ul>
+          <div class="ticket-section-label">Where to start</div>
+          <div class="start-box">
+            Pull the 8 interview questions from section 9 of <code>halffull-skillmap-updated.html</code>. For each answer, open the relevant file and pull a real number or quote. Architecture slide: use the existing data architecture diagram as the base — just add the metrics layer underneath each box. Do this after T2 runs so you have real eval numbers to cite.
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- ── TRACK D: PRODUCT ── -->
+  <div class="track track-product">
+    <div class="track-header">
+      <div class="track-icon">✨</div>
+      <div>
+        <h2>Track D — High-Signal Product Additions</h2>
+        <p>Features that make the architecture diagram come alive in the UI. Pick 2–3.</p>
+      </div>
+    </div>
+    <div class="tickets">
+
+      <div class="ticket">
+        <div class="ticket-top" onclick="toggle(this)">
+          <div class="ticket-left">
+            <div class="ticket-meta">
+              <span class="ticket-id">T9</span>
+              <span class="badge badge-signal">High signal</span>
+              <span class="badge badge-one">1 day</span>
+            </div>
+            <div class="ticket-title">Visible Reasoning Trace on Results Screen</div>
+            <div class="ticket-goal">Turn the architecture diagram into a live UI feature. Show users (and reviewers) exactly how the system went from answers to conclusions — step by step. Practices multi-step CoT/ReAct display, currently absent from the frontend.</div>
+          </div>
+          <div class="ticket-badges">
+            <span class="chevron">▼</span>
+          </div>
+        </div>
+        <div class="ticket-body">
+          <div class="ticket-section-label">Definition of Done</div>
+          <ul class="dod-list">
+            <li>Results screen has a collapsible "How we reached this" panel per condition card</li>
+            <li>Panel shows 4 steps with real numbers: ML score → Bayesian update → cluster fingerprint → MedGemma synthesis</li>
+            <li>Example: "ML: Anemia scored 0.71 (threshold 0.45) · Bayesian: fatigue + cold intolerance → 0.83 · Cluster: 68% of neighbours flagged low ferritin · Synthesis: MedGemma"</li>
+            <li>Frontend-only change — no new API endpoints needed</li>
+          </ul>
+          <div class="ticket-section-label">Where to start</div>
+          <div class="start-box">
+            Check what <code>/api/bayesian-update</code> and <code>/api/deep-analyze</code> already return — the Bayesian trace is in the response. Add a <code>&lt;ReasoningTrace /&gt;</code> component to <code>frontend/src/components/results/DiagnosisCard.tsx</code> that renders the trace collapsibly. The data is already flowing — this is purely a display feature.
+          </div>
+        </div>
+      </div>
+
+      <div class="ticket">
+        <div class="ticket-top" onclick="toggle(this)">
+          <div class="ticket-left">
+            <div class="ticket-meta">
+              <span class="ticket-id">T10</span>
+              <span class="badge badge-signal">High signal</span>
+              <span class="badge badge-one">1 day</span>
+            </div>
+            <div class="ticket-title">Confidence Orchestration Layer</div>
+            <div class="ticket-goal">Replace raw probability numbers with a user-facing confidence signal that combines all evidence sources. Closes the "confidence-weighted urgency" backlog item with a concrete, tested implementation.</div>
+          </div>
+          <div class="ticket-badges">
+            <span class="chevron">▼</span>
+          </div>
+        </div>
+        <div class="ticket-body">
+          <div class="ticket-section-label">Definition of Done</div>
+          <ul class="dod-list">
+            <li>Each condition card shows one of three tiers: <code>Low confidence</code> · <code>Moderate confidence</code> · <code>High confidence</code> with a one-line explanation</li>
+            <li>Score is computed from: ML posterior + Bayesian update magnitude + cluster support % + data completeness (did user submit labs?)</li>
+            <li>Formula documented in <code>materials/confidence_score_design.md</code></li>
+            <li>No new backend needed — computed in <code>frontend/src/lib/confidence.ts</code> from existing response fields</li>
+          </ul>
+          <div class="ticket-section-label">Where to start</div>
+          <div class="start-box">
+            <code>frontend/src/lib/types.ts</code> defines the result schema — read it first to see what fields are available. Create <code>frontend/src/lib/confidence.ts</code> with a <code>computeConfidence(result, completeness)</code> function. Use it in <code>DiagnosisCard.tsx</code>. For completeness, count non-null answers from <code>useAssessment.ts</code> state and pass it down.
+          </div>
+        </div>
+      </div>
+
+      <div class="ticket">
+        <div class="ticket-top" onclick="toggle(this)">
+          <div class="ticket-left">
+            <div class="ticket-meta">
+              <span class="ticket-id">T11</span>
+              <span class="badge badge-signal">High signal</span>
+              <span class="badge badge-half">0.5 day</span>
+            </div>
+            <div class="ticket-title">Citation Tags + Provenance Panel</div>
+            <div class="ticket-goal">Close the gap between "we claim evidence-backed reasoning" and "we can show where each claim came from." Even without full RAG, showing the pipeline inputs is a strong trust signal.</div>
+          </div>
+          <div class="ticket-badges">
+            <span class="chevron">▼</span>
+          </div>
+        </div>
+        <div class="ticket-body">
+          <div class="ticket-section-label">Definition of Done</div>
+          <ul class="dod-list">
+            <li>Each insight in the results screen is tagged with its source: <code>[ML model]</code> · <code>[Bayesian update]</code> · <code>[Cluster]</code> · <code>[MedGemma]</code></li>
+            <li>A collapsible debug/demo panel shows the MedGemma input context — what signals were passed in — making the pipeline visible without requiring full RAG</li>
+            <li>If RAG is implemented (T13): panel shows top-2 retrieved chunks with source title</li>
+          </ul>
+          <div class="ticket-section-label">Where to start</div>
+          <div class="start-box">
+            <code>frontend/app/api/deep-analyze/route.ts</code> — log the full prompt context sent to MedGemma and return it in the response as a <code>context</code> field. Add a <code>&lt;ProvenancePanel /&gt;</code> component to the results screen, collapsed by default. This surfaces what the system already knows — no new logic required.
+          </div>
+        </div>
+      </div>
+
+      <div class="ticket">
+        <div class="ticket-top" onclick="toggle(this)">
+          <div class="ticket-left">
+            <div class="ticket-meta">
+              <span class="ticket-id">T12</span>
+              <span class="badge badge-signal">High signal</span>
+              <span class="badge badge-one">1 day</span>
+            </div>
+            <div class="ticket-title">"Not Enough Information" States + NHANES Percentile Display</div>
+            <div class="ticket-goal">Two UX features that show AI product maturity and leverage the depth of the NHANES dataset. Designing graceful uncertainty is an advanced AI UX skill almost no student project demonstrates.</div>
+          </div>
+          <div class="ticket-badges">
+            <span class="chevron">▼</span>
+          </div>
+        </div>
+        <div class="ticket-body">
+          <div class="ticket-section-label">Definition of Done</div>
+          <ul class="dod-list">
+            <li>If user completes &lt; 60% of questions: results screen shows a calibrated uncertainty banner — "Based on what you've shared, we can flag early signals but can't rank conditions reliably without lab values"</li>
+            <li>For at least 3 key lab values (ferritin, TSH, hemoglobin): results show a percentile label — "Your ferritin is in the 12th percentile for adults aged 30–50 in NHANES"</li>
+            <li>Percentile lookup is a static JSON file derived from <code>data/processed/nhanes_merged_adults_final.csv</code></li>
+          </ul>
+          <div class="ticket-section-label">Where to start</div>
+          <div class="start-box">
+            Completeness check: count non-null answers in <code>frontend/hooks/useAssessment.ts</code> state — surface a completeness % on the results screen. Percentile file: run a one-time Python script on <code>nhanes_merged_adults_final.csv</code> to compute decile tables per lab × age_group × sex, save to <code>frontend/src/data/nhanes_percentiles.json</code>. Add a <code>&lt;PercentileTag /&gt;</code> component alongside each lab value in the results.
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- ── TRACK E: AI SKILLS ── -->
+  <div class="track track-ai">
+    <div class="track-header">
+      <div class="track-icon">🧠</div>
+      <div>
+        <h2>Track E — AI Skills Depth</h2>
+        <p>The two most portfolio-valuable additions. Close the RAG gap and run a real experiment.</p>
+      </div>
+    </div>
+    <div class="tickets">
+
+      <div class="ticket">
+        <div class="ticket-top" onclick="toggle(this)">
+          <div class="ticket-left">
+            <div class="ticket-meta">
+              <span class="ticket-id">T13</span>
+              <span class="badge badge-signal">High signal</span>
+              <span class="badge badge-onep">1.5 days</span>
+            </div>
+            <div class="ticket-title">Minimal RAG on PubMed Abstracts</div>
+            <div class="ticket-goal">The original plan and skill map both committed to ChromaDB RAG on PubMed abstracts. The architecture diagram shows a "RAG on knowledge corpus" box. Right now we use MedGemma directly with no vector store. This ticket closes that gap or gives us a clear documented reason why we chose not to.</div>
+          </div>
+          <div class="ticket-badges">
+            <span class="chevron">▼</span>
+          </div>
+        </div>
+        <div class="ticket-body">
+          <div class="ticket-section-label">Definition of Done</div>
+          <ul class="dod-list">
+            <li>10–15 PubMed abstracts per condition (top 11 conditions) embedded and stored in ChromaDB or Pinecone free tier</li>
+            <li>On each <code>/api/deep-analyze</code> call, top-2 relevant chunks retrieved and injected into MedGemma context</li>
+            <li>Each retrieved chunk's title visible in the T11 provenance panel</li>
+            <li><code>rag/</code> directory in repo: <code>ingest.py</code>, <code>retrieve.py</code>, <code>data/abstracts/*.txt</code></li>
+          </ul>
+          <div class="ticket-section-label">Where to start</div>
+          <div class="start-box">
+            <code>frontend/src/lib/medgemma.ts</code> is where MedGemma is called — add a <code>retrieveContext(conditions)</code> call before the prompt is assembled. Use OpenAI text-embedding-3-small (smallest, cheapest) or <code>chromadb</code>'s default embeddings. PubMed abstracts: search PubMed for the 11 condition names, export 10–15 abstracts each as .txt files. Total ingest: ~110 documents, well within any free tier.
+          </div>
+        </div>
+      </div>
+
+      <div class="ticket">
+        <div class="ticket-top" onclick="toggle(this)">
+          <div class="ticket-left">
+            <div class="ticket-meta">
+              <span class="ticket-id">T14</span>
+              <span class="badge badge-signal">High signal</span>
+              <span class="badge badge-one">1 day</span>
+            </div>
+            <div class="ticket-title">A/B Prompt Experiment on Synthetic Cohort</div>
+            <div class="ticket-goal">We're possibly the only team in the cohort that can actually run a real LLM A/B test at scale — because we built the eval harness. Using it for a prompt experiment is a unique, demonstrable AI PM skill.</div>
+          </div>
+          <div class="ticket-badges">
+            <span class="chevron">▼</span>
+          </div>
+        </div>
+        <div class="ticket-body">
+          <div class="ticket-section-label">Definition of Done</div>
+          <ul class="dod-list">
+            <li>Variant A: current MedGemma zero-shot prompt</li>
+            <li>Variant B: few-shot prompt with 3 curated clinical examples added to the system prompt</li>
+            <li>Both run on the same 50-profile subset (10 conditions × 5 profiles each)</li>
+            <li>Comparison table: parse success · hallucination rate · output specificity (manually scored 1–3) · tone safety (pass/fail via safety-rewrite)</li>
+            <li>Saved as <code>evals/ab_test/results.md</code> with a clear conclusion: which variant to ship and why</li>
+          </ul>
+          <div class="ticket-section-label">Where to start</div>
+          <div class="start-box">
+            Depends on T7 (prompts extracted to <code>lib/prompts.ts</code>). Copy <code>evals/run_eval.py</code>, add a <code>--prompt-variant A|B</code> flag that swaps the system prompt. Run on 50 profiles, not 600 — keep it tractable. The few-shot examples should be 3 real condition summaries you've already seen the system produce well.
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- ── TRACK F: STRETCH ── -->
+  <div class="track track-stretch">
+    <div class="track-header">
+      <div class="track-icon">🚀</div>
+      <div>
+        <h2>Track F — Stretch</h2>
+        <p>Only if Tracks A–C are fully done. Each adds a distinct interview story.</p>
+      </div>
+    </div>
+    <div class="tickets">
+
+      <div class="ticket">
+        <div class="ticket-top" onclick="toggle(this)">
+          <div class="ticket-left">
+            <div class="ticket-meta">
+              <span class="ticket-id">T15</span>
+              <span class="badge badge-stretch">Stretch</span>
+              <span class="badge badge-one">1 day</span>
+            </div>
+            <div class="ticket-title">Anomaly Detection via KNN Cluster Layer</div>
+            <div class="ticket-goal">Flag labs that are statistically unusual within a person's cluster neighbourhood. Practices anomaly detection — not in the original skill map — with a concrete, impressive demo moment.</div>
+          </div>
+          <div class="ticket-badges">
+            <span class="chevron">▼</span>
+          </div>
+        </div>
+        <div class="ticket-body">
+          <div class="ticket-section-label">Definition of Done</div>
+          <ul class="dod-list">
+            <li>For each flagged condition, results show: "Your CRP is elevated relative to 87% of your nearest neighbours in NHANES"</li>
+            <li>Uses existing <code>scripts/cluster_knn_inference.py</code> (K=50, 15% consensus threshold already implemented)</li>
+            <li>Results surfaced in the "Extended lab flags" section of the results screen</li>
+            <li>Output added as an additional field in the <code>/score</code> API response</li>
+          </ul>
+          <div class="ticket-section-label">Where to start</div>
+          <div class="start-box">
+            <code>scripts/cluster_knn_inference.py</code> already computes neighbourhood lab abnormality scores. <code>data/processed/cluster/</code> has the cluster assignments and UMAP artifacts. Wire the inference script output into <code>api/server.py</code> as an additional field in the <code>/score</code> response. Then display it in the results frontend.
+          </div>
+        </div>
+      </div>
+
+      <div class="ticket">
+        <div class="ticket-top" onclick="toggle(this)">
+          <div class="ticket-left">
+            <div class="ticket-meta">
+              <span class="ticket-id">T16</span>
+              <span class="badge badge-stretch">Stretch</span>
+              <span class="badge badge-half">0.5 day</span>
+            </div>
+            <div class="ticket-title">Docker + GitHub Actions CI</div>
+            <div class="ticket-goal">Show shipping discipline. The Docker gap is explicitly called out in the skill map. A Dockerfile + passing CI check in the repo header is a low-effort, high-visibility signal for any technical reviewer.</div>
+          </div>
+          <div class="ticket-badges">
+            <span class="chevron">▼</span>
+          </div>
+        </div>
+        <div class="ticket-body">
+          <div class="ticket-section-label">Definition of Done</div>
+          <ul class="dod-list">
+            <li><code>Dockerfile</code> in <code>/api/</code> wraps FastAPI + model files, runs <code>uvicorn api.server:app</code></li>
+            <li><code>docker build</code> and <code>docker run</code> tested locally</li>
+            <li><code>.github/workflows/ci.yml</code> runs <code>pytest api/</code> on every push to <code>main</code></li>
+            <li><code>README.md</code> updated with <code>docker run</code> instructions and a passing CI badge</li>
+          </ul>
+          <div class="ticket-section-label">Where to start</div>
+          <div class="start-box">
+            <code>api/requirements.txt</code> and the <code>Procfile</code> define the runtime — use <code>python:3.11-slim</code> as the base image. Models are large (~100MB each) — use <code>.dockerignore</code> to exclude <code>data/</code>, <code>notebooks/</code>, and <code>evals/cohort/</code>. The GitHub Action is 10 lines: checkout, setup-python, install requirements, run pytest.
+          </div>
+        </div>
+      </div>
+
+      <div class="ticket">
+        <div class="ticket-top" onclick="toggle(this)">
+          <div class="ticket-left">
+            <div class="ticket-meta">
+              <span class="ticket-id">T17</span>
+              <span class="badge badge-stretch">Stretch</span>
+              <span class="badge badge-one">1 day</span>
+            </div>
+            <div class="ticket-title">Longitudinal Tracking UI (Returning User)</div>
+            <div class="ticket-goal">Reframe the product from "one-time quiz" to "health monitor over time." A strong product story that requires no backend — just localStorage — and opens a genuinely different product narrative for the presentation.</div>
+          </div>
+          <div class="ticket-badges">
+            <span class="chevron">▼</span>
+          </div>
+        </div>
+        <div class="ticket-body">
+          <div class="ticket-section-label">Definition of Done</div>
+          <ul class="dod-list">
+            <li>If localStorage contains a previous result, a "Compare to last time" banner appears on the results screen</li>
+            <li>Energy score delta shown: "↑ 12 points since Feb 2026"</li>
+            <li>Condition status change shown per condition: "Anemia risk: was High → now Moderate"</li>
+            <li>A simple <code>/history</code> page lists past assessments by date with a mini score chart</li>
+          </ul>
+          <div class="ticket-section-label">Where to start</div>
+          <div class="start-box">
+            <code>frontend/hooks/useAssessment.ts</code> manages localStorage state. Extend it to save a timestamped result snapshot on completion (key: <code>halffull_history</code>, value: array of <code>{date, scores, conditions}</code>). Add a <code>&lt;HistoryBanner /&gt;</code> component to <code>results/page.tsx</code> that renders the delta if a previous result exists. No backend required.
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- ── PRIORITY CALLOUT ── -->
+  <div class="callout">
+    <h3>Recommended sprint order</h3>
+    <div class="callout-cols">
+      <div class="callout-col">
+        <h4>Must ship first</h4>
+        <ul>
+          <li>T2 — Run full eval + report</li>
+          <li>T3 — Failure taxonomy</li>
+          <li>T4 — Safety regression suite</li>
+          <li>T5 — Model card + risk docs</li>
+          <li>T6 — Fallback + demo video</li>
+          <li>T7 — Prompt changelog</li>
+          <li>T8 — Interview Q&amp;A + slides</li>
+        </ul>
+      </div>
+      <div class="callout-col">
+        <h4>Pick 2–3 from Track D/E</h4>
+        <ul>
+          <li>T9 — Reasoning trace (easy win)</li>
+          <li>T10 — Confidence layer (backlog close)</li>
+          <li>T12 — Sparse-data states + percentile</li>
+          <li>T13 — Minimal RAG (closes biggest plan gap)</li>
+          <li>T11 — Citation/provenance panel</li>
+          <li>T14 — A/B prompt experiment</li>
+        </ul>
+      </div>
+      <div class="callout-col">
+        <h4>Cut first if time is tight</h4>
+        <ul>
+          <li>T15 — Anomaly detection</li>
+          <li>T16 — Docker + CI</li>
+          <li>T17 — Longitudinal tracking</li>
+          <li>Any new personalization feature</li>
+          <li>Extra RAG scope beyond T13</li>
+          <li>Reddit custdev</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── SUMMARY TABLE ── -->
+  <div class="summary-section">
+    <h2>All tickets at a glance</h2>
+    <table class="summary-table">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Title</th>
+          <th>Track</th>
+          <th>Priority</th>
+          <th>Effort</th>
+          <th>Depends on</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>T2</td>
+          <td>Run Full Pipeline Eval + Publish Metrics Report</td>
+          <td><span class="track-pill pill-eval">Eval</span></td>
+          <td><span class="badge badge-must">Must ship</span></td>
+          <td><span class="badge badge-half">0.5 day</span></td>
+          <td class="dep-tag">—</td>
+        </tr>
+        <tr>
+          <td>T3</td>
+          <td>Failure Taxonomy: Classify and Document Bad Outputs</td>
+          <td><span class="track-pill pill-eval">Eval</span></td>
+          <td><span class="badge badge-must">Must ship</span></td>
+          <td><span class="badge badge-half">0.5 day</span></td>
+          <td class="dep-tag">T2</td>
+        </tr>
+        <tr>
+          <td>T4</td>
+          <td>Safety Regression Suite (Red-Team Test Pack)</td>
+          <td><span class="track-pill pill-safety">Safety</span></td>
+          <td><span class="badge badge-must">Must ship</span></td>
+          <td><span class="badge badge-one">1 day</span></td>
+          <td class="dep-tag">—</td>
+        </tr>
+        <tr>
+          <td>T5</td>
+          <td>Model Card + AI Risk Matrix + "What HalfFull Doesn't Do"</td>
+          <td><span class="track-pill pill-safety">Safety</span></td>
+          <td><span class="badge badge-must">Must ship</span></td>
+          <td><span class="badge badge-one">1 day</span></td>
+          <td class="dep-tag">—</td>
+        </tr>
+        <tr>
+          <td>T6</td>
+          <td>Demo Fallback Architecture + Demo Video</td>
+          <td><span class="track-pill pill-demo">Demo</span></td>
+          <td><span class="badge badge-must">Must ship</span></td>
+          <td><span class="badge badge-one">1 day</span></td>
+          <td class="dep-tag">T2</td>
+        </tr>
+        <tr>
+          <td>T7</td>
+          <td>Prompt Version Changelog + Experimentation Matrix</td>
+          <td><span class="track-pill pill-demo">Demo</span></td>
+          <td><span class="badge badge-must">Must ship</span></td>
+          <td><span class="badge badge-half">0.5 day</span></td>
+          <td class="dep-tag">—</td>
+        </tr>
+        <tr>
+          <td>T8</td>
+          <td>Interview Q&amp;A Doc + Architecture-to-Slides Alignment</td>
+          <td><span class="track-pill pill-demo">Demo</span></td>
+          <td><span class="badge badge-must">Must ship</span></td>
+          <td><span class="badge badge-one">1 day</span></td>
+          <td class="dep-tag">T2</td>
+        </tr>
+        <tr>
+          <td>T9</td>
+          <td>Visible Reasoning Trace on Results Screen</td>
+          <td><span class="track-pill pill-product">Product</span></td>
+          <td><span class="badge badge-signal">High signal</span></td>
+          <td><span class="badge badge-one">1 day</span></td>
+          <td class="dep-tag">—</td>
+        </tr>
+        <tr>
+          <td>T10</td>
+          <td>Confidence Orchestration Layer</td>
+          <td><span class="track-pill pill-product">Product</span></td>
+          <td><span class="badge badge-signal">High signal</span></td>
+          <td><span class="badge badge-one">1 day</span></td>
+          <td class="dep-tag">—</td>
+        </tr>
+        <tr>
+          <td>T11</td>
+          <td>Citation Tags + Provenance Panel</td>
+          <td><span class="track-pill pill-product">Product</span></td>
+          <td><span class="badge badge-signal">High signal</span></td>
+          <td><span class="badge badge-half">0.5 day</span></td>
+          <td class="dep-tag">—</td>
+        </tr>
+        <tr>
+          <td>T12</td>
+          <td>"Not Enough Information" States + NHANES Percentile</td>
+          <td><span class="track-pill pill-product">Product</span></td>
+          <td><span class="badge badge-signal">High signal</span></td>
+          <td><span class="badge badge-one">1 day</span></td>
+          <td class="dep-tag">—</td>
+        </tr>
+        <tr>
+          <td>T13</td>
+          <td>Minimal RAG on PubMed Abstracts</td>
+          <td><span class="track-pill pill-ai">AI Skills</span></td>
+          <td><span class="badge badge-signal">High signal</span></td>
+          <td><span class="badge badge-onep">1.5 days</span></td>
+          <td class="dep-tag">T11</td>
+        </tr>
+        <tr>
+          <td>T14</td>
+          <td>A/B Prompt Experiment on Synthetic Cohort</td>
+          <td><span class="track-pill pill-ai">AI Skills</span></td>
+          <td><span class="badge badge-signal">High signal</span></td>
+          <td><span class="badge badge-one">1 day</span></td>
+          <td class="dep-tag">T7</td>
+        </tr>
+        <tr>
+          <td>T15</td>
+          <td>Anomaly Detection via KNN Cluster Layer</td>
+          <td><span class="track-pill pill-stretch">Stretch</span></td>
+          <td><span class="badge badge-stretch">Stretch</span></td>
+          <td><span class="badge badge-one">1 day</span></td>
+          <td class="dep-tag">—</td>
+        </tr>
+        <tr>
+          <td>T16</td>
+          <td>Docker + GitHub Actions CI</td>
+          <td><span class="track-pill pill-stretch">Stretch</span></td>
+          <td><span class="badge badge-stretch">Stretch</span></td>
+          <td><span class="badge badge-half">0.5 day</span></td>
+          <td class="dep-tag">—</td>
+        </tr>
+        <tr>
+          <td>T17</td>
+          <td>Longitudinal Tracking UI (Returning User)</td>
+          <td><span class="track-pill pill-stretch">Stretch</span></td>
+          <td><span class="badge badge-stretch">Stretch</span></td>
+          <td><span class="badge badge-one">1 day</span></td>
+          <td class="dep-tag">—</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <span><strong>HalfFull</strong> · Final Sprint Tickets · 2026-03-25</span>
+  <span>16 tickets · ~13.5 days total · 7 must-ship · 6 high-signal · 3 stretch</span>
+</footer>
+
+<script>
+  function toggle(el) {
+    const card = el.closest('.ticket');
+    card.classList.toggle('open');
+  }
+</script>
+
+</body>
+</html>

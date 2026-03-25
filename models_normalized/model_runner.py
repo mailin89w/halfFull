@@ -137,6 +137,141 @@ FILTER_CRITERIA = {
     "sleep_disorder":        0.55,
 }
 
+# ── Score normalization for fair cross-model ranking ───────────────────────────
+#
+# Each model's raw probability operates in a different range.  iron_deficiency
+# outputs 0.63–0.97 for ALL female profiles regardless of symptoms because 91%
+# of training positives are women — a structural demographic bias baked into the
+# RF model.  perimenopause max output is ~0.40, well below iron_deficiency's
+# female floor of 0.63.  Ranking by raw probability makes iron_deficiency the
+# perpetual #1 for every female profile even when the clinical signal is minimal.
+#
+# Fix: normalize each model's score to its empirically observed range before
+# sorting so the rank reflects *where within its own distribution* a score sits,
+# not its absolute value.  Raw probabilities are NEVER modified — they appear
+# unchanged in all outputs and drive Bayesian update thresholds.  Normalization
+# only changes sort order inside filter_and_rank().
+#
+# For iron_deficiency a sex-specific floor is used:
+#   Female floor 0.630 → score 0.65 normalises to 0.06 (near-zero signal above floor)
+#   Female floor 0.630 → score 0.90 normalises to 0.79 (genuinely strong signal)
+#   Male   floor 0.150 → score 0.40 normalises to 0.31 (modest but real signal)
+#
+# Observed ranges come from the 600-profile validation cohort
+# (evals/cohort/profiles.json, evals/score_profiles.py).
+#
+# Set RANK_NORMALIZE = False to revert to legacy raw-probability ordering.
+
+RANK_NORMALIZE: bool = True
+
+SCORE_RANGES: dict[str, tuple[float, float]] = {
+    # (observed_max) only — used as the upper bound in mean-floor normalisation.
+    # The floor is taken from SCORE_MEANS so the rank key measures how far
+    # *above the population baseline* a score sits.
+    # Observed across 600-profile v2 validation cohort.
+    "anemia":                (0.006, 0.992),
+    "electrolyte_imbalance": (0.213, 0.690),
+    "kidney":                (0.059, 0.882),
+    "liver":                 (0.007, 0.553),
+    "prediabetes":           (0.267, 0.758),
+    "sleep_disorder":        (0.346, 0.990),
+    "thyroid":               (0.078, 0.962),
+    "hidden_inflammation":   (0.037, 0.451),
+    "perimenopause":         (0.000, 0.986),
+    "hepatitis_bc":          (0.005, 0.524),
+    "iron_deficiency":       (0.004, 0.155),
+}
+
+# Population-mean score across ALL profiles (positive + negative + healthy).
+# Used as the "no-signal baseline" in mean-floor normalisation:
+#   rank_key = (score - mean) / (max - mean)
+# This removes each model's inherent population baseline before cross-model
+# comparison.  Models that fire broadly for demographic reasons
+# (sleep_disorder mean=0.755, thyroid mean=0.643) are correctly de-weighted
+# relative to models with lower baselines and higher discriminating power.
+SCORE_MEANS: dict[str, float] = {
+    "anemia":                0.478,
+    "electrolyte_imbalance": 0.458,
+    "kidney":                0.380,
+    "liver":                 0.060,
+    "prediabetes":           0.523,
+    "sleep_disorder":        0.755,  # dominant — mean-floor correction critical
+    "thyroid":               0.643,  # dominant — mean-floor correction critical
+    "hidden_inflammation":   0.104,
+    "perimenopause":         0.297,
+    "hepatitis_bc":          0.044,
+    "iron_deficiency":       0.040,
+}
+
+# Sex-specific floors for iron_deficiency.
+# In v2 the iron_deficiency RF model removed gender_female from its feature list,
+# eliminating the v1 sex-bias floor (0.63 for all females).  Retained for
+# forward-compatibility; the effect is negligible (v2 max is 0.155).
+IRON_DEF_SEX_FLOORS: dict[str, float] = {
+    "Female": 0.010,
+    "Male":   0.004,
+}
+
+def rank_score(condition: str, prob: float, gender: str | None = None) -> float:
+    """
+    Compute a normalised ranking key for a single model score.
+
+    Uses **mean-floor normalisation**::
+
+        rank_key = (prob − population_mean) / (observed_max − population_mean)
+
+    This maps each model's score to "how far above the population baseline is
+    this score, relative to the maximum possible signal?"  Models that fire
+    broadly across all demographics (sleep_disorder mean=0.755, thyroid
+    mean=0.643) are correctly de-weighted when their score is only at baseline.
+
+    For ``iron_deficiency`` a sex-specific floor replaces ``population_mean``
+    to account for any residual demographic bias (minimal in v2 RF model).
+
+    This value is ONLY used for sort ordering in ``filter_and_rank``.
+    Raw probabilities are preserved in all output dicts.
+
+    Parameters
+    ----------
+    condition : str
+        Model registry key (e.g. ``"sleep_disorder"``).
+    prob : float
+        Raw model output probability (0–1).
+    gender : str or None
+        ``"Female"``, ``"Male"``, or ``None``.
+
+    Returns
+    -------
+    float
+        Mean-floor normalised rank score.  Negative values mean the score is
+        below the population baseline (weak signal).  1.0 means at the observed
+        maximum.  Returned value may exceed 1.0 for out-of-sample highs.
+    """
+    _lo, hi = SCORE_RANGES.get(condition, (0.0, 1.0))
+    mean = SCORE_MEANS.get(condition, _lo)
+
+    # Sex-specific iron_deficiency floor (replaces population mean as lower bound)
+    if condition == "iron_deficiency" and gender in IRON_DEF_SEX_FLOORS:
+        mean = IRON_DEF_SEX_FLOORS[gender]
+
+    span = hi - mean
+    return (prob - mean) / span if span > 0.0 else prob
+
+
+def _gender_from_context(patient_context: dict | None) -> str | None:
+    """Extract canonical gender string (``'Female'`` / ``'Male'``) from context."""
+    if not patient_context:
+        return None
+    g = patient_context.get("gender")
+    if g is None:
+        return None
+    if isinstance(g, str):
+        label = g.strip().title()
+        return label if label in ("Female", "Male") else None
+    # NHANES numeric: 1=Male, 2=Female
+    return {1: "Male", 2: "Female"}.get(int(g))
+
+
 # Education ordinal encoding (mirrors training setup)
 _EDU_ORDER = {
     "Less than 9th grade":      0,
@@ -544,6 +679,7 @@ class ModelRunner:
         self,
         scores: dict[str, float],
         top_n: int = 3,
+        patient_context: dict[str, Any] | None = None,
     ) -> list[dict]:
         """
         Apply per-disease filtering criteria, rank descending, return top N.
@@ -553,34 +689,50 @@ class ModelRunner:
         All 11 model scores are always computed before this step — filtering only
         controls which scores advance to Bayesian update / user display.
 
+        When ``RANK_NORMALIZE`` is ``True`` (default), sorting uses a per-model
+        normalised rank key rather than the raw probability.  This corrects for
+        iron_deficiency's structural sex bias (0.63–0.97 floor for all females)
+        which would otherwise block every other condition from ranking first on
+        female profiles.  Raw ``probability`` values in the returned dicts are
+        never modified.
+
         Parameters
         ----------
         scores : dict[str, float]
             Raw output of run_all_with_context() — all 11 scores.
         top_n : int
             Maximum conditions to return (default 3).
+        patient_context : dict, optional
+            ``{"gender": str, "age_years": float}`` — used to apply sex-specific
+            floor for iron_deficiency normalisation.
 
         Returns
         -------
         list[dict]
             [{"condition": str,
               "probability": float,
+              "rank_score": float,
               "filter_criterion": float,
               "recommended_threshold": float}, ...]
-            Sorted descending by probability.  Empty list when no condition
-            clears its per-disease criterion.
+            Sorted descending by rank_score (normalised) or probability (legacy).
+            Empty list when no condition clears its per-disease criterion.
         """
-        above = [
-            {
+        gender = _gender_from_context(patient_context)
+
+        above = []
+        for cond, prob in scores.items():
+            if prob < FILTER_CRITERIA.get(cond, 0.35):
+                continue
+            rs = rank_score(cond, prob, gender) if RANK_NORMALIZE else prob
+            above.append({
                 "condition":             cond,
                 "probability":           prob,
+                "rank_score":            round(rs, 4),
                 "filter_criterion":      FILTER_CRITERIA.get(cond, 0.35),
                 "recommended_threshold": RECOMMENDED_THRESHOLDS.get(cond),
-            }
-            for cond, prob in scores.items()
-            if prob >= FILTER_CRITERIA.get(cond, 0.35)
-        ]
-        return sorted(above, key=lambda x: x["probability"], reverse=True)[:top_n]
+            })
+
+        return sorted(above, key=lambda x: x["rank_score"], reverse=True)[:top_n]
 
     # ── Public entry points ─────────────────────────────────────────────────────
 
@@ -625,7 +777,7 @@ class ModelRunner:
 
         feature_vectors = self._get_normalizer().build_feature_vectors(raw_inputs)
         scores          = self.run_all_with_context(feature_vectors, patient_context)
-        return self.filter_and_rank(scores, top_n=top_n)
+        return self.filter_and_rank(scores, top_n=top_n, patient_context=patient_context)
 
     def score(
         self,
@@ -639,7 +791,7 @@ class ModelRunner:
         For production use prefer ``score_raw()`` which handles normalization.
         """
         scores = self.run_all_with_context(feature_vectors, patient_context=patient_context)
-        return self.filter_and_rank(scores, top_n=top_n)
+        return self.filter_and_rank(scores, top_n=top_n, patient_context=patient_context)
 
 
 # ── Standalone smoke-test ───────────────────────────────────────────────────────

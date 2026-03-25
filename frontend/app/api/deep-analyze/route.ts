@@ -7,6 +7,7 @@ import { ML_THRESHOLD, selectTopConditions } from '@/src/lib/mlConfig';
 
 export const maxDuration = 60;
 
+const RAILWAY_URL = process.env.RAILWAY_API_URL ?? 'http://localhost:8000';
 const HF_MODEL = 'google/medgemma-1.5-4b-it';
 const HF_API_URL = process.env.HF_ENDPOINT_URL
   ? `${process.env.HF_ENDPOINT_URL}/v1/chat/completions`
@@ -61,11 +62,14 @@ export async function POST(req: NextRequest) {
   }
 
   interface ClarificationQAPair { group: string; question: string; answer: string; }
+  interface KnnSignal { lab: string; direction: string; neighbour_pct: number; lift: number | null; ref_lower: number | null; ref_upper: number | null; context: string | null; }
+  interface KnnResult { lab_signals: KnnSignal[]; n_signals: number; k_neighbours: number; disabled?: boolean; }
 
   const body = await req.json();
   const answers: Record<string, unknown> = body.answers ?? {};
   const mlScores: Record<string, number> | undefined = body.mlScores;
   const clarificationQA: ClarificationQAPair[] | undefined = body.clarificationQA;
+  const useKNN: boolean = body.useKNN === true;
 
   const symptomsText = formatAnswersV2(answers);
 
@@ -90,6 +94,40 @@ export async function POST(req: NextRequest) {
   const isAllClear =
     !mlScores || Object.values(mlScores).every((p) => p < 0.35);
 
+  // ── KNN neighbour lab signals (optional, toggle via useKNN in request body) ──
+  let knnResult: KnnResult | null = null;
+  let knnLabText: string | null = null;
+
+  if (useKNN && !isAllClear) {
+    try {
+      const knnRes = await fetch(`${RAILWAY_URL}/knn-score`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(answers),
+      });
+      if (knnRes.ok) {
+        knnResult = await knnRes.json() as KnnResult;
+        const signals = knnResult.lab_signals ?? [];
+        if (signals.length > 0) {
+          const k = knnResult.k_neighbours ?? 50;
+          knnLabText = [
+            `NEAREST-NEIGHBOUR LAB SIGNALS (from ${k} people in our database with the most similar symptom profile):`,
+            `These labs were disproportionately abnormal in patients most similar to this one. Use as additional supporting evidence for nextSteps and doctorKit — these are population-level patterns, not this patient's own results.`,
+            ...signals.slice(0, 8).map((s) => {
+              const ref = s.ref_lower != null && s.ref_upper != null
+                ? ` [ref: ${s.ref_lower}–${s.ref_upper}]` : '';
+              const lift = s.lift != null ? ` (${s.lift}x vs population)` : '';
+              const ctx = s.context ? ` — ${s.context}` : '';
+              return `- ${s.lab}: ${s.direction.toUpperCase()} in ${s.neighbour_pct}% of similar people${lift}${ref}${ctx}`;
+            }),
+          ].join('\n');
+        }
+      }
+    } catch {
+      // KNN is additive — silently skip if the Railway scorer is unavailable
+    }
+  }
+
   const prompt = `You are a medical AI generating a personalised fatigue report. Reference the patient's actual symptoms — never give generic advice.
 
 PATIENT DATA:
@@ -97,7 +135,7 @@ ${symptomsText}
 
 TOP-3 FLAGGED CONDITIONS (posterior probabilities after Bayesian update):
 ${flaggedAreasText}
-${clarificationText ? `\nCLARIFICATION ANSWERS (patient answered these follow-up questions — treat as confirmed findings):\n${clarificationText}` : ''}
+${clarificationText ? `\nCLARIFICATION ANSWERS (patient answered these follow-up questions — treat as confirmed findings):\n${clarificationText}` : ''}${knnLabText ? `\n\n${knnLabText}` : ''}
 
 Before generating the JSON, reason through these steps internally:
 1. What is the patient's most prominent symptom?
@@ -243,8 +281,11 @@ Rules:
 // }
 
 
-    writeLog('deep_analyze', { answers, mlScores, clarificationQA, topConditions, result: parsed });
-    return NextResponse.json(parsed);
+    writeLog('deep_analyze', { answers, mlScores, clarificationQA, topConditions, useKNN, knnSignals: knnResult, result: parsed });
+    return NextResponse.json({
+      ...parsed,
+      ...(knnResult ? { knnSignals: knnResult } : {}),
+    });
   } catch (err) {
     writeLog('deep_analyze_error', { answers, mlScores, error: String(err) });
     return NextResponse.json({ error: String(err) }, { status: 500 });

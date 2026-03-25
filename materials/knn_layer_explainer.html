@@ -1,0 +1,655 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HalfFull KNN Layer — Internal Explainer</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: #f7f6f3;
+    color: #1a1a1a;
+    line-height: 1.7;
+    font-size: 16px;
+  }
+
+  .page {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 60px 40px 100px;
+  }
+
+  /* ── Header ── */
+  .header {
+    border-left: 5px solid #4f46e5;
+    padding-left: 24px;
+    margin-bottom: 56px;
+  }
+  .header .tag {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: #4f46e5;
+    margin-bottom: 10px;
+  }
+  .header h1 {
+    font-size: 36px;
+    font-weight: 800;
+    line-height: 1.2;
+    margin-bottom: 10px;
+  }
+  .header .subtitle {
+    color: #555;
+    font-size: 17px;
+  }
+
+  /* ── Section ── */
+  .section {
+    margin-bottom: 60px;
+  }
+  .section-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: #888;
+    margin-bottom: 14px;
+  }
+  .section-label .dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: #4f46e5;
+    display: inline-block;
+  }
+  h2 {
+    font-size: 26px;
+    font-weight: 700;
+    margin-bottom: 18px;
+    line-height: 1.3;
+  }
+  p { margin-bottom: 14px; color: #2a2a2a; }
+
+  /* ── Callout boxes ── */
+  .callout {
+    border-radius: 12px;
+    padding: 20px 24px;
+    margin: 24px 0;
+  }
+  .callout.blue  { background: #eef2ff; border-left: 4px solid #4f46e5; }
+  .callout.green { background: #f0fdf4; border-left: 4px solid #16a34a; }
+  .callout.amber { background: #fffbeb; border-left: 4px solid #d97706; }
+  .callout.red   { background: #fff1f2; border-left: 4px solid #e11d48; }
+  .callout.gray  { background: #f3f4f6; border-left: 4px solid #9ca3af; }
+  .callout strong { display: block; font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px; }
+
+  /* ── Pipeline diagram ── */
+  .pipeline {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    margin: 32px 0;
+    flex-wrap: wrap;
+  }
+  .pipe-step {
+    background: white;
+    border: 2px solid #e5e7eb;
+    border-radius: 10px;
+    padding: 14px 18px;
+    text-align: center;
+    min-width: 120px;
+    flex: 1;
+  }
+  .pipe-step .icon { font-size: 22px; margin-bottom: 4px; }
+  .pipe-step .label { font-size: 12px; font-weight: 700; color: #374151; }
+  .pipe-step .sublabel { font-size: 11px; color: #9ca3af; margin-top: 2px; }
+  .pipe-step.highlight { background: #eef2ff; border-color: #4f46e5; }
+  .pipe-step.highlight .label { color: #4f46e5; }
+  .pipe-arrow {
+    font-size: 18px;
+    color: #9ca3af;
+    padding: 0 6px;
+    flex-shrink: 0;
+  }
+
+  /* ── Three-layer comparison ── */
+  .layer-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    margin: 28px 0;
+  }
+  .layer-card {
+    background: white;
+    border-radius: 12px;
+    padding: 22px 18px;
+    border: 2px solid #e5e7eb;
+  }
+  .layer-card.active { border-color: #4f46e5; }
+  .layer-card .card-icon { font-size: 28px; margin-bottom: 10px; }
+  .layer-card h3 { font-size: 15px; font-weight: 700; margin-bottom: 6px; }
+  .layer-card .card-desc { font-size: 13px; color: #555; line-height: 1.5; }
+  .layer-card .card-output {
+    margin-top: 14px;
+    padding: 10px 12px;
+    border-radius: 8px;
+    background: #f9fafb;
+    font-size: 12px;
+    font-family: monospace;
+    color: #374151;
+  }
+  .layer-card.active .card-output { background: #eef2ff; color: #4338ca; }
+
+  /* ── Signal example ── */
+  .signal-list { margin: 24px 0; }
+  .signal-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    padding: 14px 18px;
+    background: white;
+    border-radius: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #e5e7eb;
+  }
+  .signal-badge {
+    min-width: 44px;
+    height: 44px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    flex-shrink: 0;
+  }
+  .signal-badge.high { background: #fff1f2; }
+  .signal-badge.low  { background: #eff6ff; }
+  .signal-body { flex: 1; }
+  .signal-name { font-weight: 700; font-size: 14px; }
+  .signal-detail { font-size: 13px; color: #555; margin-top: 2px; }
+  .signal-lift {
+    font-size: 12px;
+    font-weight: 700;
+    background: #f0fdf4;
+    color: #16a34a;
+    border-radius: 6px;
+    padding: 3px 8px;
+    white-space: nowrap;
+    align-self: center;
+    flex-shrink: 0;
+  }
+
+  /* ── Data stats bar ── */
+  .stat-row {
+    display: flex;
+    gap: 16px;
+    margin: 24px 0;
+    flex-wrap: wrap;
+  }
+  .stat-box {
+    flex: 1;
+    min-width: 130px;
+    background: white;
+    border-radius: 12px;
+    padding: 18px 16px;
+    text-align: center;
+    border: 1px solid #e5e7eb;
+  }
+  .stat-box .num {
+    font-size: 28px;
+    font-weight: 800;
+    color: #4f46e5;
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+  .stat-box .desc { font-size: 12px; color: #777; }
+
+  /* ── Cluster grid ── */
+  .cluster-row {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    gap: 12px 16px;
+    align-items: center;
+    padding: 11px 0;
+    border-bottom: 1px solid #f0f0f0;
+    font-size: 14px;
+  }
+  .cluster-row:last-child { border-bottom: none; }
+  .cluster-id {
+    width: 32px; height: 32px;
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 800; font-size: 13px;
+    background: #f3f4f6; color: #374151;
+    flex-shrink: 0;
+  }
+  .cluster-id.signal { background: #eef2ff; color: #4f46e5; }
+  .cluster-bar-wrap { position: relative; }
+  .cluster-bar {
+    height: 8px;
+    border-radius: 4px;
+    background: #e5e7eb;
+    margin-bottom: 3px;
+  }
+  .cluster-bar-fill {
+    height: 8px;
+    border-radius: 4px;
+    background: #c7d2fe;
+  }
+  .cluster-bar-fill.signal { background: #4f46e5; }
+  .cluster-name { font-size: 12px; color: #555; }
+  .cluster-lift {
+    font-size: 12px; font-weight: 700;
+    white-space: nowrap;
+  }
+  .cluster-lift.high { color: #4f46e5; }
+  .cluster-lift.normal { color: #9ca3af; }
+
+  /* ── Step-by-step ── */
+  .steps { margin: 24px 0; }
+  .step {
+    display: flex;
+    gap: 18px;
+    margin-bottom: 20px;
+  }
+  .step-num {
+    width: 34px; height: 34px;
+    border-radius: 50%;
+    background: #4f46e5;
+    color: white;
+    font-weight: 800;
+    font-size: 14px;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+  .step-body h4 { font-size: 15px; font-weight: 700; margin-bottom: 4px; }
+  .step-body p { font-size: 14px; color: #444; margin: 0; }
+
+  /* ── Toggle table ── */
+  .toggle-table { width: 100%; border-collapse: collapse; margin: 24px 0; font-size: 14px; }
+  .toggle-table th {
+    background: #f3f4f6;
+    padding: 10px 14px;
+    text-align: left;
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: #555;
+  }
+  .toggle-table td { padding: 10px 14px; border-bottom: 1px solid #f0f0f0; }
+  .toggle-table tr:last-child td { border-bottom: none; }
+  .code { font-family: monospace; font-size: 13px; background: #f3f4f6; padding: 2px 6px; border-radius: 4px; }
+  .yes { color: #16a34a; font-weight: 700; }
+  .no  { color: #9ca3af; }
+
+  /* ── Divider ── */
+  hr { border: none; border-top: 2px solid #e5e7eb; margin: 60px 0; }
+
+  /* ── Footer ── */
+  .footer { font-size: 12px; color: #aaa; text-align: center; padding-top: 32px; }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- ═══════════════════════════════════════════ HEADER -->
+  <div class="header">
+    <div class="tag">HalfFull · Internal Documentation</div>
+    <h1>The KNN Population Layer</h1>
+    <div class="subtitle">What it is, why we built it, and what it adds on top of our existing models and Bayesian update.</div>
+  </div>
+
+
+  <!-- ═══════════════════════════════════════════ 1. THE PROBLEM -->
+  <div class="section">
+    <div class="section-label"><span class="dot"></span> Section 1</div>
+    <h2>What problem were we solving?</h2>
+
+    <p>Our ML models and Bayesian layer are good at answering <strong>"does this person's symptom pattern match condition X?"</strong> They return probabilities like <em>anemia 68%, thyroid 41%</em>.</p>
+
+    <p>But they don't answer the follow-up question a doctor would immediately ask: <strong>"and which specific labs should we check?"</strong> The Bayesian update refines condition probabilities, but still no labs. MedGemma knows medical literature — it can say "for anemia, test ferritin and CBC" — but that's a generic protocol, not specific to this patient.</p>
+
+    <div class="callout amber">
+      <strong>The gap</strong>
+      A user gets told "your pattern may suggest anemia." MedGemma can already append "ask for ferritin and a full blood count" from medical literature. But what if they also have kidney and prediabetes signals? Now you have three separate condition-specific lab lists, no prioritisation, and no way to resolve overlaps. The report was directionally useful, but not precise enough to be clinically actionable.
+    </div>
+
+    <div class="callout blue">
+      <strong>Why not just use medical literature directly?</strong>
+      For a single clean condition, literature lookup works fine — and MedGemma already does this. The KNN layer adds three things literature cannot provide:
+      <br><br>
+      <strong>1. It works from symptoms, not condition labels.</strong> Literature lookup flows <em>condition → labs</em>. KNN flows <em>symptoms → labs</em> directly. For users whose pattern doesn't clearly flag a single condition, there's no label to look up.
+      <br><br>
+      <strong>2. It handles comorbidities.</strong> If someone's pattern matches anemia + kidney disease + prediabetes, literature gives you three flat lists merged together. KNN finds the 50 neighbours who have all those conditions co-occurring and surfaces only the labs that are disproportionately abnormal across that exact multi-condition group — ranked by how anomalous they are, not alphabetically.
+      <br><br>
+      <strong>3. It gives direction and relative weight.</strong> Literature says "check ferritin." KNN says "ferritin is HIGH in 38% of similar people (4.1× baseline)" — not low, not borderline, specifically elevated. That distinction changes the clinical interpretation entirely.
+    </div>
+
+    <p>The KNN layer asks: <strong>"Among the real people in our database who look most like this user, which of their lab values were abnormal — and how anomalous is that, compared to everyone else?"</strong> Those ranked, directional, empirically-grounded signals become the specific test recommendations.</p>
+  </div>
+
+
+  <!-- ═══════════════════════════════════════════ 2. THE DATA -->
+  <div class="section">
+    <div class="section-label"><span class="dot"></span> Section 2</div>
+    <h2>The dataset we're working with</h2>
+
+    <p>We use <strong>NHANES</strong> — a US national health survey where real adults answered detailed questionnaires <em>and</em> had blood draws, physical exams, and lab panels done. It's one of the most comprehensive public health datasets in the world.</p>
+
+    <div class="stat-row">
+      <div class="stat-box"><div class="num">7,437</div><div class="desc">real adults in our database</div></div>
+      <div class="stat-box"><div class="num">883</div><div class="desc">columns of data per person</div></div>
+      <div class="stat-box"><div class="num">46</div><div class="desc">features a HalfFull user provides</div></div>
+      <div class="stat-box"><div class="num">34</div><div class="desc">lab values we can surface</div></div>
+    </div>
+
+    <p>The critical thing: for every person in NHANES, we have both their <em>symptoms and demographics</em> (what our users answer) <strong>and</strong> their actual lab results. Our users only provide the first half. The KNN layer finds the NHANES people whose first half most closely matches, and looks at their second half.</p>
+  </div>
+
+
+  <!-- ═══════════════════════════════════════════ 3. WHAT WE TRIED -->
+  <div class="section">
+    <div class="section-label"><span class="dot"></span> Section 3</div>
+    <h2>What we tried — the journey</h2>
+
+    <p>We started with a more classical ML approach: train unsupervised clusters on the NHANES data, assign each cluster a "fingerprint" (its typical lab pattern), then place new users into a cluster.</p>
+
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-body">
+          <h4>Feature selection via Random Forest</h4>
+          <p>We trained RF classifiers on 883 NHANES columns to predict 7 known conditions (anemia, thyroid, kidney, etc.) plus fatigue severity (the dpq040 scale, 0–3). This ranked which of our 46 product features carry the most signal for grouping people together. Top features: fatigue severity, age, BMI, sleep hours, exercise, alcohol.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-body">
+          <h4>UMAP dimensionality reduction</h4>
+          <p>We compressed the 46 features into a 12-dimensional space using UMAP — a technique that preserves "neighbourhood" structure. People who look similar in 46 dimensions end up close together in 12D. We tried euclidean, manhattan, and cosine distance metrics.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-body">
+          <h4>HDBSCAN clustering</h4>
+          <p>We ran HDBSCAN on the 12D space to find natural groupings. It found <strong>7 clusters</strong>, with 1.6% noise points. Cosine distance was the key — euclidean and manhattan only found 3–5 clusters, with one mega-cluster containing 94% of all people.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">4</div>
+        <div class="step-body">
+          <h4>The insight: one cluster contains 90% of people</h4>
+          <p>Clusters 3, 4, 5 had strong condition signals (5–15x lift for liver, hepatitis, kidney). But Cluster 0 — the "general population" bucket — held ~90% of all NHANES adults. Fixed cluster fingerprints don't work well for a bucket that contains everyone.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">5</div>
+        <div class="step-body">
+          <h4>Pivot to pure KNN</h4>
+          <p>Instead of fixed fingerprints, we switched to direct neighbour lookup. For every user, find their 50 nearest NHANES neighbours by cosine distance — then look at which labs are abnormal across those 50 people. This is personalised to each individual, not averaged across a broad cluster.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="callout blue">
+      <strong>Why cosine distance?</strong>
+      Our features are mixed ordinal + continuous (symptom severity codes, age, BMI). Cosine distance measures the <em>pattern</em> of symptoms (the angle between feature vectors) rather than the absolute magnitude. Two people who both have "moderate fatigue + poor sleep + high stress" will be close neighbours even if one is 30 and one is 60. Euclidean distance penalises raw numeric differences, which caused the 3-cluster collapse.
+    </div>
+  </div>
+
+
+  <!-- ═══════════════════════════════════════════ 4. HOW IT WORKS NOW -->
+  <div class="section">
+    <div class="section-label"><span class="dot"></span> Section 4</div>
+    <h2>How it works now — step by step</h2>
+
+    <div class="pipeline">
+      <div class="pipe-step">
+        <div class="icon">📋</div>
+        <div class="label">User answers</div>
+        <div class="sublabel">46 quiz features</div>
+      </div>
+      <div class="pipe-arrow">→</div>
+      <div class="pipe-step">
+        <div class="icon">📐</div>
+        <div class="label">Normalise &amp; impute</div>
+        <div class="sublabel">median fill, cosine-ready</div>
+      </div>
+      <div class="pipe-arrow">→</div>
+      <div class="pipe-step highlight">
+        <div class="icon">🔍</div>
+        <div class="label">Cosine distance</div>
+        <div class="sublabel">vs 7,437 NHANES rows</div>
+      </div>
+      <div class="pipe-arrow">→</div>
+      <div class="pipe-step highlight">
+        <div class="icon">👥</div>
+        <div class="label">Top 50 neighbours</div>
+        <div class="sublabel">K = 50</div>
+      </div>
+      <div class="pipe-arrow">→</div>
+      <div class="pipe-step highlight">
+        <div class="icon">🧪</div>
+        <div class="label">Lab signal filter</div>
+        <div class="sublabel">threshold + lift gate</div>
+      </div>
+      <div class="pipe-arrow">→</div>
+      <div class="pipe-step">
+        <div class="icon">📊</div>
+        <div class="label">Ranked signals</div>
+        <div class="sublabel">to LLM prompt</div>
+      </div>
+    </div>
+
+    <h3 style="margin: 28px 0 14px; font-size: 18px;">The two filters that keep results meaningful</h3>
+
+    <p>Not every abnormal lab in the neighbourhood gets surfaced. Two gates must be passed:</p>
+
+    <div class="callout blue">
+      <strong>Gate 1 — Minimum neighbourhood fraction</strong>
+      A lab must be out-of-range in at least <strong>15% of the 50 neighbours</strong> (i.e. ≥ 8 people). Liver enzymes (ALT, AST, GGT, bilirubin) use a lower 10% threshold because they're clinically meaningful even at lower prevalence. This prevents a single outlier neighbour from triggering a signal.
+    </div>
+
+    <div class="callout blue">
+      <strong>Gate 2 — Lift vs population baseline ≥ 1.5×</strong>
+      We compare the neighbourhood rate against the general NHANES population rate for the same lab and direction. If 30% of neighbours have high LDL — but 28% of all adults have high LDL — that tells us nothing about this particular user. The signal only surfaces if the neighbourhood rate is at least 1.5× higher than the baseline. This killed the "LDL fires for everyone" false-signal problem.
+    </div>
+
+    <p>Signals that pass both gates are <strong>ranked by lift</strong> (highest signal-to-noise ratio first) and the top signals go into the MedGemma prompt.</p>
+
+    <div class="callout green">
+      <strong>Special case: Ferritin context</strong>
+      High ferritin is a cross-condition marker — it appears in anemia, kidney disease, liver disease, and diabetes. When it surfaces, we check whether other kidney/liver/glucose signals are also present. If yes: "likely reflects chronic disease, not iron overload." If no: "possible iron overload or subclinical inflammation — worth checking transferrin saturation alongside." This context is appended directly to the signal.
+    </div>
+  </div>
+
+
+  <!-- ═══════════════════════════════════════════ 5. EXAMPLE OUTPUT -->
+  <div class="section">
+    <div class="section-label"><span class="dot"></span> Section 5</div>
+    <h2>What the output looks like</h2>
+
+    <p>For a 45-year-old woman with severe fatigue, poor sleep, joint pain, and self-reported kidney disease — the KNN layer finds her 50 nearest neighbours and surfaces something like this:</p>
+
+    <div class="signal-list">
+      <div class="signal-item">
+        <div class="signal-badge high">🔴</div>
+        <div class="signal-body">
+          <div class="signal-name">Creatinine — HIGH</div>
+          <div class="signal-detail">Elevated in 43% of similar people · Normal ref: 0.5–1.1 mg/dL</div>
+        </div>
+        <div class="signal-lift">7.4× population</div>
+      </div>
+      <div class="signal-item">
+        <div class="signal-badge low">🔵</div>
+        <div class="signal-body">
+          <div class="signal-name">Hemoglobin — LOW</div>
+          <div class="signal-detail">Below range in 38% of similar people · Normal ref: 12.0–16.0 g/dL</div>
+        </div>
+        <div class="signal-lift">5.2× population</div>
+      </div>
+      <div class="signal-item">
+        <div class="signal-badge high">🔴</div>
+        <div class="signal-body">
+          <div class="signal-name">Ferritin — HIGH</div>
+          <div class="signal-detail">Elevated in 31% of similar people · Context: likely reflects chronic inflammation or kidney/liver condition, not iron overload</div>
+        </div>
+        <div class="signal-lift">4.1× population</div>
+      </div>
+      <div class="signal-item">
+        <div class="signal-badge high">🔴</div>
+        <div class="signal-body">
+          <div class="signal-name">BUN (blood urea nitrogen) — HIGH</div>
+          <div class="signal-detail">Elevated in 28% of similar people · Normal ref: 7–20 mg/dL</div>
+        </div>
+        <div class="signal-lift">3.8× population</div>
+      </div>
+    </div>
+
+    <p>These signals are injected into the MedGemma prompt alongside the ML condition probabilities and clarification Q&amp;A. The LLM then uses them to write specific test recommendations ("ask for creatinine, BUN, and a full blood count") rather than generic advice.</p>
+  </div>
+
+
+  <!-- ═══════════════════════════════════════════ 6. VALIDATION -->
+  <div class="section">
+    <div class="section-label"><span class="dot"></span> Section 6</div>
+    <h2>Validation — does it actually work?</h2>
+
+    <p>We ran a held-out test: take 200 NHANES people with confirmed diagnoses, feed only their symptom answers (no lab values) into the KNN layer, and see whether the surfaced lab signals are consistent with their known conditions.</p>
+
+    <div class="stat-row">
+      <div class="stat-box"><div class="num">84%</div><div class="desc">overall hit rate across all conditions</div></div>
+      <div class="stat-box"><div class="num">100%</div><div class="desc">hepatitis B/C — correct lab signal surfaced</div></div>
+      <div class="stat-box"><div class="num">94%</div><div class="desc">diabetes</div></div>
+      <div class="stat-box"><div class="num">93%</div><div class="desc">thyroid</div></div>
+    </div>
+
+    <p>"Hit" means: the condition's characteristic lab (e.g. elevated AST/ALT for liver, elevated creatinine for kidney, low hemoglobin for anemia) appeared in the top signals for a person who has that condition — even though we never told the system what condition they had.</p>
+
+    <div class="callout green">
+      <strong>Key insight from validation</strong>
+      The KNN layer is effectively reverse-engineering what labs are relevant from symptom similarity alone. It doesn't know the condition label — it just finds similar people and reads their labs. That it achieves 84–100% hit rates is the core validation of the approach.
+    </div>
+  </div>
+
+
+  <!-- ═══════════════════════════════════════════ 7. THE THREE LAYERS -->
+  <div class="section">
+    <div class="section-label"><span class="dot"></span> Section 7</div>
+    <h2>What each layer contributes</h2>
+
+    <p>The three layers answer three fundamentally different questions. They don't overlap — they stack.</p>
+
+    <div class="layer-grid">
+      <div class="layer-card">
+        <div class="card-icon">🤖</div>
+        <h3>ML Models</h3>
+        <div class="card-desc">11 supervised classifiers trained on NHANES. Each specialises in one condition. Output is a probability score.</div>
+        <div class="card-output">anemia: 0.68<br>thyroid: 0.41<br>kidney: 0.29</div>
+      </div>
+      <div class="layer-card">
+        <div class="card-icon">📊</div>
+        <h3>Bayesian Update</h3>
+        <div class="card-desc">Asks follow-up questions to patients who cleared a threshold. Refines the ML probabilities using confirmed symptom patterns.</div>
+        <div class="card-output">anemia: 0.68 → 0.82<br>thyroid: 0.41 → 0.55<br>(after clarification Q&amp;A)</div>
+      </div>
+      <div class="layer-card active">
+        <div class="card-icon">🔬</div>
+        <h3>KNN Lab Signals <span style="font-size:11px;font-weight:400;color:#6366f1;">← new</span></h3>
+        <div class="card-desc">Finds the 50 most similar people in NHANES and surfaces which specific labs were abnormal in that group.</div>
+        <div class="card-output">Creatinine HIGH 7.4×<br>Hemoglobin LOW 5.2×<br>Ferritin HIGH 4.1×</div>
+      </div>
+    </div>
+
+    <div class="callout blue">
+      <strong>What each layer actually does</strong>
+      ML + Bayesian → <em>"this person probably has condition X at probability Y."</em> Condition-level signal, refined by follow-up questions.<br><br>
+      MedGemma literature → <em>"for condition X, the standard labs are A, B, C."</em> Generic protocol from training data.<br><br>
+      KNN → <em>"in the 50 real people most similar to this user, these specific labs were disproportionately abnormal — here's the ranked list with directions and magnitudes."</em> Patient-specific, empirical, comorbidity-aware.<br><br>
+      For a single clean condition, MedGemma's literature knowledge and KNN produce similar recommendations. The difference compounds when multiple conditions overlap, when no single condition is clearly dominant, or when the right lab isn't the obvious one for the stated condition.
+    </div>
+
+    <p>A concrete example: the ML model flags kidney disease at 72% and anemia at 61%. MedGemma from literature would recommend kidney labs (creatinine, BUN, eGFR) and anemia labs (CBC, ferritin, serum iron) — two separate lists, 7+ tests, no ranking. The KNN layer instead finds the 50 people who have this exact combined pattern and surfaces: creatinine HIGH 7.4×, hemoglobin LOW 5.2×, ferritin HIGH 4.1× (with context: <em>"likely reflects chronic disease, not iron overload"</em>), BUN HIGH 3.8×. Four tests, ranked, directional, with a clinical interpretation of the ferritin that literature lookup alone wouldn't produce.</p>
+
+    <p>That's the difference. Not "we surface labs." It's "we surface the right labs for this specific combination, in priority order, with directions."</p>
+  </div>
+
+
+  <!-- ═══════════════════════════════════════════ 8. PRODUCT VALUE -->
+  <div class="section">
+    <div class="section-label"><span class="dot"></span> Section 8</div>
+    <h2>What this adds to the product</h2>
+
+    <p><strong>Before:</strong> The report named likely conditions and said "talk to your GP." The user arrived at the appointment knowing they might have anemia — but not which tests to ask for.</p>
+
+    <p><strong>After:</strong> The report names likely conditions <em>and</em> specific tests, with population-level evidence for why those tests matter for someone with this exact symptom pattern. The Doctor Kit section can now say: <em>"Please order ferritin, serum iron, and a full blood count — in people with my symptom profile, these are the most commonly abnormal values."</em></p>
+
+    <div class="callout green">
+      <strong>Why this matters for GP conversations</strong>
+      GPs are busy. A patient who walks in saying "I'd like to rule out iron deficiency" will get a ferritin test. A patient who says "I'm tired" might get nothing, or a TSH (thyroid) test only. The KNN layer gives patients the vocabulary and the evidence to ask for the right tests — not just the most obvious ones.
+    </div>
+
+    <p>It also handles comorbidity patterns that our single-condition ML models miss. A person flagged for both anemia and kidney disease gets a signal set that reflects the overlap — low hemoglobin + high creatinine + high ferritin (chronic disease marker, not iron overload). That co-occurrence context is something a condition-by-condition classifier cannot produce.</p>
+  </div>
+
+
+  <!-- ═══════════════════════════════════════════ 9. TOGGLE -->
+  <div class="section">
+    <div class="section-label"><span class="dot"></span> Section 9</div>
+    <h2>The toggle — A/B comparison</h2>
+
+    <p>The KNN layer is additive and fully optional. The existing pipeline is unchanged. Here's how to turn it on or off at each level:</p>
+
+    <table class="toggle-table">
+      <tr>
+        <th>Level</th>
+        <th>How to toggle</th>
+        <th>Effect</th>
+      </tr>
+      <tr>
+        <td><strong>Per request (frontend)</strong></td>
+        <td>Send <span class="code">useKNN: true</span> in the deep-analyze request body</td>
+        <td>KNN runs for this user only. Response includes <span class="code">knnSignals</span> block.</td>
+      </tr>
+      <tr>
+        <td><strong>Server-wide (Railway)</strong></td>
+        <td>Set env var <span class="code">USE_KNN=false</span> on the Railway deployment</td>
+        <td>The <span class="code">/knn-score</span> endpoint returns <span class="code">disabled: true</span> immediately, no model loaded.</td>
+      </tr>
+      <tr>
+        <td><strong>KNN off (default)</strong></td>
+        <td>Don't send <span class="code">useKNN</span> or send <span class="code">useKNN: false</span></td>
+        <td>No KNN call is made. Output is identical to before this feature existed.</td>
+      </tr>
+    </table>
+
+    <p>For A/B comparison: run one cohort with <span class="code">useKNN: false</span> (control) and one with <span class="code">useKNN: true</span> (KNN-enhanced). Both the MedGemma output and the raw <span class="code">knnSignals</span> block are logged via <span class="code">writeLog</span>, so results are comparable in the log store.</p>
+  </div>
+
+
+  <hr>
+
+
+  <!-- ═══════════════════════════════════════════ SUMMARY -->
+  <div class="section">
+    <div class="section-label"><span class="dot"></span> TL;DR</div>
+    <h2>One-paragraph summary</h2>
+
+    <div class="callout gray">
+      We have 7,437 real adults in our database who answered the same kinds of questions our users answer — and also had blood tests done. For each new user, we find the 50 most similar people (by symptom pattern, using cosine distance), look at which labs were abnormal across that group, and filter for signals that are disproportionately elevated compared to the general population (≥1.5× lift). The result is a ranked, directional list: not just "check ferritin" but "ferritin is HIGH in 38% of similar people, 4.1× more than the population baseline." This is what makes it different from MedGemma pulling standard condition-specific lab protocols from literature: it handles comorbidity combinations naturally, it tells you which direction each lab tends to go, and it works from symptom similarity — not from a condition label. For a user whose pattern suggests anemia + kidney disease simultaneously, KNN surfaces the labs relevant to that specific co-occurrence in priority order, rather than merging two flat condition-specific lists. The ML models tell you what conditions to suspect. MedGemma knows the textbook protocols. KNN tells you which labs are actually elevated in the real population of people who look like this patient.
+    </div>
+  </div>
+
+  <div class="footer">HalfFull · Internal · March 2026</div>
+
+</div>
+</body>
+</html>

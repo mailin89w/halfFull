@@ -1,0 +1,8 @@
+cluster_id,size,dominant_condition,dominant_condition_pct,mean_strength
+0,71,sleep_disorder,35.2,0.757
+1,39,sleep_disorder,33.3,0.894
+2,411,sleep_disorder,34.1,0.973
+3,21,sleep_disorder,57.1,0.997
+4,31,sleep_disorder,54.8,0.81
+5,35,diabetes,60.0,0.727
+6,6708,sleep_disorder,31.4,0.991

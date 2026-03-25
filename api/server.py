@@ -58,6 +58,7 @@ app.add_middleware(
 
 _model_runner = None
 _bayesian_updater = None
+_knn_scorer = None
 
 
 def get_model_runner():
@@ -76,6 +77,14 @@ def get_bayesian_updater():
         from bayesian.bayesian_updater import BayesianUpdater
         _bayesian_updater = BayesianUpdater()
     return _bayesian_updater
+
+
+def get_knn_scorer():
+    global _knn_scorer
+    if _knn_scorer is None:
+        from scripts.knn_scorer import KNNScorer
+        _knn_scorer = KNNScorer()
+    return _knn_scorer
 
 
 # ── /score ───────────────────────────────────────────────────────────────────
@@ -137,6 +146,32 @@ async def bayesian_update(payload: dict):
         return handle_update(payload, updater)
     except Exception as exc:
         log.exception("Error in /bayesian/update")
+        raise HTTPException(status_code=500, detail=str(exc))
+
+
+# ── /knn-score ───────────────────────────────────────────────────────────────
+
+@app.post("/knn-score")
+async def knn_score(answers: dict):
+    """
+    Accept raw quiz answers, find the 50 nearest NHANES neighbours by cosine
+    distance, and return lab signals that are disproportionately abnormal in
+    that neighbourhood (vs. population baseline).
+
+    Toggle off by setting USE_KNN=false in the environment.
+
+    Returns:
+        { lab_signals: [...], n_signals: int, k_neighbours: int }
+        or { lab_signals: [], n_signals: 0, k_neighbours: 50, disabled: true }
+    """
+    if os.environ.get("USE_KNN", "true").lower() == "false":
+        return {"lab_signals": [], "n_signals": 0, "k_neighbours": 50, "disabled": True}
+
+    try:
+        scorer = get_knn_scorer()
+        return scorer.score(answers)
+    except Exception as exc:
+        log.exception("Error in /knn-score")
         raise HTTPException(status_code=500, detail=str(exc))
 
 
