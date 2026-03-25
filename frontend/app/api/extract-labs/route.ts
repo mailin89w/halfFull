@@ -126,13 +126,14 @@ export async function POST(req: NextRequest) {
     // Step 1: always extract raw text with pdf-parse (works without MedGemma)
     let rawText: string;
     try {
-      // pdf-parse/node exports PDFParse at runtime but the .d.ts doesn't declare
-      // it — cast to any to satisfy TypeScript without altering runtime behaviour.
+      // pdf-parse default export is a plain async function: pdfParse(buffer) => { text, ... }
+      // Import from the package root (listed in serverExternalPackages so webpack won't bundle it).
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const { PDFParse } = await import('pdf-parse/node') as any;
+      const pdfParse = ((await import('pdf-parse')) as any).default as (
+        buf: Buffer
+      ) => Promise<{ text: string }>;
       const buffer = Buffer.from(base64, 'base64');
-      const parser = new PDFParse({ data: buffer });
-      const pdfData = await parser.getText();
+      const pdfData = await pdfParse(buffer);
       rawText = pdfData.text.trim();
     } catch (pdfErr) {
       const parseMessage = pdfErr instanceof Error ? pdfErr.message : String(pdfErr);
