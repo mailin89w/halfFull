@@ -2,10 +2,10 @@
 # Without this, Nixpacks auto-detects frontend/package.json and runs Next.js.
 
 [phases.setup]
-nixPkgs = ["python311"]
+nixPkgs = ["python311", "gcc", "gfortran", "libffi", "openssl"]
 
 [phases.install]
-cmds = ["pip install -r requirements.txt"]
+cmds = ["pip install --upgrade pip", "pip install -r requirements.txt"]
 
 [start]
 cmd = "uvicorn api.server:app --host 0.0.0.0 --port $PORT"
