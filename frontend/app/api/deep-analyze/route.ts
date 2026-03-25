@@ -5,7 +5,7 @@ import { ML_THRESHOLD, selectTopConditions } from '@/src/lib/mlConfig';
 // [ADDED] Schema validation and hard safety rules
 //import { validateDeepAnalyzeSchema, applyHardSafetyRules } from '@/lib/medgemma-safety';
 
-export const maxDuration = 60;
+export const maxDuration = 300; // Vercel max on Pro plan; covers Modal cold-start + inference
 
 const _rawBackendUrl = process.env.RAILWAY_API_URL ?? process.env.BACKEND_URL ?? 'http://localhost:8000';
 const RAILWAY_URL = _rawBackendUrl.startsWith('http') ? _rawBackendUrl : `https://${_rawBackendUrl}`;

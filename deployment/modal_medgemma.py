@@ -109,6 +109,7 @@ def to_hf_messages(messages: list[dict[str, Any]]) -> list[dict[str, Any]]:
     gpu="T4",
     timeout=900,
     scaledown_window=300,
+    min_containers=1,   # keep one container warm so users don't hit cold-start
     secrets=[modal.Secret.from_name("huggingface")],
 )
 @modal.asgi_app()
