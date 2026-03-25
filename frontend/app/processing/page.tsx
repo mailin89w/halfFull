@@ -8,6 +8,7 @@ import {
   getConfiguredAiMode,
   getDeepAnalysisWithFallback,
   storeDeepResult,
+  readStoredConfirmedConditions,
   readStoredDeepResult,
   readStoredBayesianScores,
   readStoredBayesianAnswers,
@@ -57,10 +58,11 @@ export default function ProcessingPage() {
 
       // Clarification Q&A from Bayesian layer — may be null if clarify was skipped
       const clarificationQA = readStoredBayesianAnswers() ?? undefined;
+      const confirmedConditions = readStoredConfirmedConditions() ?? undefined;
 
       try {
         const [result] = await Promise.all([
-          getDeepAnalysisWithFallback(answers, mlScores, clarificationQA),
+          getDeepAnalysisWithFallback(answers, mlScores, clarificationQA, confirmedConditions),
           new Promise((resolve) => window.setTimeout(resolve, 2600)),
         ]);
 

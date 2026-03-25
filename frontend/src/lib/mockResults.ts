@@ -625,6 +625,20 @@ export interface LocalDeepResultLike {
   doctorKitSummary?: string;
   doctorKitQuestions?: string[];
   doctorKitArguments?: string[];
+  recommendedDoctors?: Array<{
+    specialty: string;
+    priority: string;
+    reason: string;
+    symptomsToDiscuss: string[];
+    suggestedTests: string[];
+  }>;
+  doctorKits?: Array<{
+    specialty: string;
+    openingSummary: string;
+    concerningSymptoms: string[];
+    recommendedTests: string[];
+    discussionPoints: string[];
+  }>;
   coachingTips?: Array<{
     category: string;
     tip: string;
@@ -659,6 +673,51 @@ function buildDoctorKitArguments(diagnoses: Diagnosis[]): string[] {
     argumentsFromTests[0] ?? 'My fatigue pattern feels persistent enough that I would like to discuss tests beyond a routine basic panel.',
     argumentsFromTests[1] ?? 'If common causes are not obvious, I would like help ruling out the most plausible hidden drivers step by step.',
   ];
+}
+
+function buildRecommendedDoctors(
+  diagnoses: Diagnosis[],
+  doctors: Doctor[],
+): NonNullable<LocalDeepResultLike['recommendedDoctors']> {
+  return doctors.slice(0, 3).map((doctor, index) => {
+    const diagnosis = diagnoses[index] ?? diagnoses[0];
+    return {
+      specialty: doctor.specialty,
+      priority:
+        index === 0 ? 'start_here' : index === 1 ? 'consider_next' : 'specialist_if_needed',
+      reason: diagnosis
+        ? `${doctor.reason} Focus on the symptoms that overlap with ${diagnosis.title.toLowerCase()} and the reasons this area rose in the screening.`
+        : doctor.reason,
+      symptomsToDiscuss: diagnosis
+        ? [diagnosis.description.split('. ')[0], 'Persistent fatigue affecting normal daily function']
+        : ['Persistent fatigue affecting normal daily function'],
+      suggestedTests: diagnosis
+        ? diagnosis.tests.slice(0, 3).map((test) => test.name)
+        : ['Review first-line fatigue workup'],
+    };
+  });
+}
+
+function buildDoctorKits(
+  diagnoses: Diagnosis[],
+  doctors: Doctor[],
+): NonNullable<LocalDeepResultLike['doctorKits']> {
+  const recommendedDoctors = buildRecommendedDoctors(diagnoses, doctors);
+  const baseQuestions = buildDoctorKitQuestions(diagnoses);
+  const baseArguments = buildDoctorKitArguments(diagnoses);
+
+  return recommendedDoctors.map((doctor, index) => {
+    const diagnosis = diagnoses[index] ?? diagnoses[0];
+    return {
+      specialty: doctor.specialty,
+      openingSummary: diagnosis
+        ? `I would like to discuss whether my fatigue pattern could overlap with ${diagnosis.title.toLowerCase()} and what the most useful next tests or referrals would be.`
+        : 'I would like to discuss the most likely drivers of my fatigue and the best next steps.',
+      concerningSymptoms: doctor.symptomsToDiscuss,
+      recommendedTests: doctor.suggestedTests,
+      discussionPoints: [...baseQuestions, ...baseArguments].slice(0, 4),
+    };
+  });
 }
 
 function buildCoachingTips(diagnoses: Diagnosis[]): NonNullable<LocalDeepResultLike['coachingTips']> {
@@ -696,7 +755,7 @@ function buildLocalInsights(
 }
 
 export function buildMockDeepResult(answers: Record<string, unknown>): LocalDeepResultLike {
-  const { diagnoses, summaryLine } = computeResults(answers);
+  const { diagnoses, summaryLine, doctors } = computeResults(answers);
   const titles = diagnoses.slice(0, 2).map((d) => d.title).join(' and ');
   const leadingLabel = titles || 'a few subtle energy drivers';
 
@@ -705,17 +764,19 @@ export function buildMockDeepResult(answers: Record<string, unknown>): LocalDeep
       `Demo mode: this is a stable mock report rather than a live MedGemma response. Based on your assessment, HalfFull would normally focus on ${leadingLabel.toLowerCase()}. ${summaryLine} This report is educational only and not medical advice.`,
     insights: buildLocalInsights(diagnoses, 'mock'),
     nextSteps:
-      `Demo next steps: bring this report to your GP, review the flagged areas, and start with the first recommended tests for ${leadingLabel.toLowerCase()}. If those are unrevealing, use the doctor-kit prompts below to discuss the next layer of testing.`,
+      `Demo next steps: use this report to decide which doctor should review the strongest fatigue signals first, then discuss the most relevant targeted tests for ${leadingLabel.toLowerCase()}. If first-line testing is unrevealing, use the doctor kits below to discuss the next layer of workup.`,
     doctorKitSummary:
       `I have been dealing with ongoing low energy and this assessment highlighted ${leadingLabel.toLowerCase()} as worth checking. I would like to use this visit to review the most relevant tests instead of stopping at a generic fatigue workup.`,
     doctorKitQuestions: buildDoctorKitQuestions(diagnoses),
     doctorKitArguments: buildDoctorKitArguments(diagnoses),
+    recommendedDoctors: buildRecommendedDoctors(diagnoses, doctors),
+    doctorKits: buildDoctorKits(diagnoses, doctors),
     coachingTips: buildCoachingTips(diagnoses),
   };
 }
 
 export function buildOfflineDeepResult(answers: Record<string, unknown>): LocalDeepResultLike {
-  const { diagnoses, summaryLine } = computeResults(answers);
+  const { diagnoses, summaryLine, doctors } = computeResults(answers);
   const titles = diagnoses.slice(0, 2).map((d) => d.title).join(' and ');
   const leadingLabel = titles || 'subtle but actionable patterns';
 
@@ -724,11 +785,13 @@ export function buildOfflineDeepResult(answers: Record<string, unknown>): LocalD
       `Offline fallback: this report was generated locally because live AI analysis was unavailable. Your answers suggest ${leadingLabel.toLowerCase()} may be worth discussing with your GP. ${summaryLine} This report is educational only and not medical advice.`,
     insights: buildLocalInsights(diagnoses, 'offline'),
     nextSteps:
-      'Use the structured report to guide a focused GP conversation and ask about the top recommended tests first. If symptoms continue despite normal routine bloodwork, discuss the more specific tests attached to the highest-ranked areas.',
+      'Use the structured report to guide a focused doctor conversation and ask which clinician should review the strongest fatigue drivers first. If symptoms continue despite normal routine bloodwork, discuss the more specific tests and referrals attached to the highest-ranked areas.',
     doctorKitSummary:
       `I have persistent low energy and this local assessment suggests ${leadingLabel.toLowerCase()} could be relevant. I would like help reviewing the most appropriate targeted tests and what to investigate next if routine results look normal.`,
     doctorKitQuestions: buildDoctorKitQuestions(diagnoses),
     doctorKitArguments: buildDoctorKitArguments(diagnoses),
+    recommendedDoctors: buildRecommendedDoctors(diagnoses, doctors),
+    doctorKits: buildDoctorKits(diagnoses, doctors),
     coachingTips: buildCoachingTips(diagnoses),
   };
 }

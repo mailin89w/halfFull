@@ -19,6 +19,22 @@ export interface MedGemmaInsight {
   personalNote: string;
 }
 
+export interface RecommendedDoctor {
+  specialty: string;
+  priority: string;
+  reason: string;
+  symptomsToDiscuss: string[];
+  suggestedTests: string[];
+}
+
+export interface DoctorKit {
+  specialty: string;
+  openingSummary: string;
+  concerningSymptoms: string[];
+  recommendedTests: string[];
+  discussionPoints: string[];
+}
+
 export interface MedGemmaResult {
   personalizedSummary: string;
   insights: MedGemmaInsight[];
@@ -40,6 +56,10 @@ export interface DeepMedGemmaResult extends MedGemmaResult {
   doctorKitQuestions?: string[];
   /** AI-generated arguments for requesting additional tests */
   doctorKitArguments?: string[];
+  /** AI-selected clinician recommendations for this case */
+  recommendedDoctors?: RecommendedDoctor[];
+  /** Doctor-specific kits aligned with recommendedDoctors */
+  doctorKits?: DoctorKit[];
   /** Energy-saving and lifestyle coaching tips */
   coachingTips?: CoachingTip[];
   /** Source metadata used to label fallback content honestly in the UI */
@@ -275,11 +295,12 @@ export async function fetchDeepAnalysis(
   answers: Record<string, unknown>,
   mlScores?: Record<string, number>,
   clarificationQA?: BayesianClarificationRecord,
+  confirmedConditions?: string[],
 ): Promise<DeepMedGemmaResult> {
   const response = await fetch('/api/deep-analyze', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ answers, mlScores, clarificationQA }),
+    body: JSON.stringify({ answers, mlScores, clarificationQA, confirmedConditions }),
   });
 
   if (!response.ok) {
@@ -392,6 +413,7 @@ export async function getDeepAnalysisWithFallback(
   answers: Record<string, unknown>,
   mlScores?: Record<string, number>,
   clarificationQA?: BayesianClarificationRecord,
+  confirmedConditions?: string[],
   timeoutMs = 85000  // matches the 90s abort controller in /api/deep-analyze
 ): Promise<DeepMedGemmaResult> {
   const mode = getConfiguredAiMode();
@@ -406,7 +428,7 @@ export async function getDeepAnalysisWithFallback(
 
   try {
     const liveResult = await withTimeout(
-      fetchDeepAnalysis(answers, mlScores, clarificationQA),
+      fetchDeepAnalysis(answers, mlScores, clarificationQA, confirmedConditions),
       timeoutMs,
       'Live AI analysis'
     );

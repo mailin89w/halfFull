@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { formatAnswersV2 } from '@/src/lib/formatAnswers';
 import { writeLog } from '@/src/lib/logger';
 import { selectTopConditions, ML_THRESHOLD } from '@/src/lib/mlConfig';
+import { buildAnalyzePrompt, MEDGEMMA_JSON_SYSTEM_V1 } from '@/src/lib/prompts';
 
 export const maxDuration = 60;
 
@@ -29,27 +30,11 @@ export async function POST(req: NextRequest) {
     ? topConditions.map(([c, p]) => `- ${c}: ${(p * 100).toFixed(1)}%`).join('\n')
     : '- None';
 
-  const prompt = `You are a compassionate medical AI assistant. A user completed a fatigue and energy assessment. Your role is to provide personalized, empathetic insights that help them understand their results and prepare for a doctor visit.
-
-USER'S REPORTED SYMPTOMS AND HISTORY:
-${symptomsText}
-
-TOP-3 FLAGGED CONDITIONS (ML model, P ≥ ${ML_THRESHOLD * 100}%):
-${flaggedAreasText}
-
-Respond with a JSON object using exactly this structure — no markdown, no extra text:
-{
-  "personalizedSummary": "2–3 sentences speaking directly to this user about what their specific symptom pattern suggests. Be personal and reference what they actually reported.",
-  "insights": [
-    {
-      "diagnosisId": "use the exact id matching one of the flagged conditions above",
-      "personalNote": "1–2 sentences explaining why this area is relevant specifically to this user's profile and history."
-    }
-  ],
-  "nextSteps": "2–3 concrete, actionable sentences about what this user should prioritise when speaking with their doctor, based on their specific situation."
-}
-
-Include one insight for each flagged condition above.`;
+  const prompt = buildAnalyzePrompt({
+    symptomsText,
+    flaggedAreasText,
+    mlThresholdPercent: ML_THRESHOLD * 100,
+  });
 
   try {
     const controller = new AbortController();
@@ -63,7 +48,7 @@ Include one insight for each flagged condition above.`;
       body: JSON.stringify({
         model: HF_MODEL,
         messages: [
-          { role: 'system', content: 'You output valid JSON only. No markdown, no thinking, no explanations, no preamble. Start your response immediately with { and end with }.' },
+          { role: 'system', content: MEDGEMMA_JSON_SYSTEM_V1 },
           { role: 'user', content: prompt },
         ],
         max_tokens: 900,

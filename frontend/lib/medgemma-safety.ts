@@ -22,13 +22,31 @@ export interface InsightItem {
   personalNote: string;
 }
 
+export interface RecommendedDoctor {
+  specialty: string;
+  priority: string;
+  reason: string;
+  symptomsToDiscuss: string[];
+  suggestedTests: string[];
+}
+
+export interface DoctorKit {
+  specialty: string;
+  openingSummary: string;
+  concerningSymptoms: string[];
+  recommendedTests: string[];
+  discussionPoints: string[];
+}
+
 export interface DeepAnalyzeResult {
   personalizedSummary: string;
   insights: InsightItem[];
   nextSteps: string;
-  doctorKitSummary: string;
-  doctorKitQuestions: [string, string];
-  doctorKitArguments: [string, string];
+  doctorKitSummary?: string;
+  doctorKitQuestions: string[];
+  doctorKitArguments: string[];
+  recommendedDoctors: RecommendedDoctor[];
+  doctorKits: DoctorKit[];
   allClear?: boolean;
 }
 
@@ -72,18 +90,21 @@ export function validateDeepAnalyzeSchema(
   if (typeof parsed.nextSteps !== 'string' || !parsed.nextSteps.trim())
     return err('nextSteps must be a non-empty string');
 
-  // doctorKitSummary — non-empty string
-  if (typeof parsed.doctorKitSummary !== 'string' || !parsed.doctorKitSummary.trim())
-    return err('doctorKitSummary must be a non-empty string');
+  // doctorKitSummary — optional non-empty string
+  if (
+    parsed.doctorKitSummary !== undefined &&
+    (typeof parsed.doctorKitSummary !== 'string' || !parsed.doctorKitSummary.trim())
+  ) {
+    return err('doctorKitSummary must be a non-empty string when provided');
+  }
 
-  // doctorKitQuestions — 1 to 3 non-empty strings
+  // doctorKitQuestions — 0 to 6 non-empty strings
   if (
     !Array.isArray(parsed.doctorKitQuestions) ||
-    parsed.doctorKitQuestions.length < 1 ||
-    parsed.doctorKitQuestions.length > 3
+    parsed.doctorKitQuestions.length > 6
   )
     return err(
-      `doctorKitQuestions must have between 1 and 3 items (got ${
+      `doctorKitQuestions must have between 0 and 6 items (got ${
         Array.isArray(parsed.doctorKitQuestions)
           ? parsed.doctorKitQuestions.length
           : typeof parsed.doctorKitQuestions
@@ -97,14 +118,13 @@ export function validateDeepAnalyzeSchema(
       return err(`doctorKitQuestions[${i}] must be a non-empty string`);
   }
 
-  // doctorKitArguments — 1 to 3 non-empty strings
+  // doctorKitArguments — 0 to 6 non-empty strings
   if (
     !Array.isArray(parsed.doctorKitArguments) ||
-    parsed.doctorKitArguments.length < 1 ||
-    parsed.doctorKitArguments.length > 3
+    parsed.doctorKitArguments.length > 6
   )
     return err(
-      `doctorKitArguments must have between 1 and 3 items (got ${
+      `doctorKitArguments must have between 0 and 6 items (got ${
         Array.isArray(parsed.doctorKitArguments)
           ? parsed.doctorKitArguments.length
           : typeof parsed.doctorKitArguments
@@ -116,6 +136,42 @@ export function validateDeepAnalyzeSchema(
       !(parsed.doctorKitArguments[i] as string).trim()
     )
       return err(`doctorKitArguments[${i}] must be a non-empty string`);
+  }
+
+  if (!Array.isArray(parsed.recommendedDoctors))
+    return err('recommendedDoctors must be an array');
+  if (parsed.recommendedDoctors.length > 3)
+    return err(`recommendedDoctors has ${parsed.recommendedDoctors.length} items — max is 3`);
+  for (let i = 0; i < parsed.recommendedDoctors.length; i++) {
+    const item = parsed.recommendedDoctors[i] as Record<string, unknown>;
+    if (typeof item?.specialty !== 'string' || !item.specialty.trim())
+      return err(`recommendedDoctors[${i}].specialty must be a non-empty string`);
+    if (typeof item?.priority !== 'string' || !item.priority.trim())
+      return err(`recommendedDoctors[${i}].priority must be a non-empty string`);
+    if (typeof item?.reason !== 'string' || !item.reason.trim())
+      return err(`recommendedDoctors[${i}].reason must be a non-empty string`);
+    if (!Array.isArray(item?.symptomsToDiscuss) || item.symptomsToDiscuss.length < 1 || item.symptomsToDiscuss.length > 5)
+      return err(`recommendedDoctors[${i}].symptomsToDiscuss must have between 1 and 5 items`);
+    if (!Array.isArray(item?.suggestedTests) || item.suggestedTests.length < 1 || item.suggestedTests.length > 6)
+      return err(`recommendedDoctors[${i}].suggestedTests must have between 1 and 6 items`);
+  }
+
+  if (!Array.isArray(parsed.doctorKits))
+    return err('doctorKits must be an array');
+  if (parsed.doctorKits.length > 3)
+    return err(`doctorKits has ${parsed.doctorKits.length} items — max is 3`);
+  for (let i = 0; i < parsed.doctorKits.length; i++) {
+    const item = parsed.doctorKits[i] as Record<string, unknown>;
+    if (typeof item?.specialty !== 'string' || !item.specialty.trim())
+      return err(`doctorKits[${i}].specialty must be a non-empty string`);
+    if (typeof item?.openingSummary !== 'string' || !item.openingSummary.trim())
+      return err(`doctorKits[${i}].openingSummary must be a non-empty string`);
+    if (!Array.isArray(item?.concerningSymptoms) || item.concerningSymptoms.length < 1 || item.concerningSymptoms.length > 6)
+      return err(`doctorKits[${i}].concerningSymptoms must have between 1 and 6 items`);
+    if (!Array.isArray(item?.recommendedTests) || item.recommendedTests.length < 1 || item.recommendedTests.length > 6)
+      return err(`doctorKits[${i}].recommendedTests must have between 1 and 6 items`);
+    if (!Array.isArray(item?.discussionPoints) || item.discussionPoints.length < 2 || item.discussionPoints.length > 6)
+      return err(`doctorKits[${i}].discussionPoints must have between 2 and 6 items`);
   }
 
   return { ok: true, data: parsed as unknown as DeepAnalyzeResult };
@@ -178,15 +234,24 @@ export function applyHardSafetyRules(data: DeepAnalyzeResult): SafetyResult {
       personalNote: sanitizeString(item.personalNote, warnings),
     })),
     nextSteps:       sanitizeString(data.nextSteps, warnings),
-    doctorKitSummary: sanitizeString(data.doctorKitSummary, warnings),
-    doctorKitQuestions: [
-      sanitizeString(data.doctorKitQuestions[0], warnings),
-      sanitizeString(data.doctorKitQuestions[1], warnings),
-    ],
-    doctorKitArguments: [
-      sanitizeString(data.doctorKitArguments[0], warnings),
-      sanitizeString(data.doctorKitArguments[1], warnings),
-    ],
+    doctorKitSummary: data.doctorKitSummary
+      ? sanitizeString(data.doctorKitSummary, warnings)
+      : data.doctorKitSummary,
+    doctorKitQuestions: data.doctorKitQuestions.map((item) => sanitizeString(item, warnings)),
+    doctorKitArguments: data.doctorKitArguments.map((item) => sanitizeString(item, warnings)),
+    recommendedDoctors: data.recommendedDoctors.map((doctor) => ({
+      ...doctor,
+      reason: sanitizeString(doctor.reason, warnings),
+      symptomsToDiscuss: doctor.symptomsToDiscuss.map((item) => sanitizeString(item, warnings)),
+      suggestedTests: doctor.suggestedTests.map((item) => sanitizeString(item, warnings)),
+    })),
+    doctorKits: data.doctorKits.map((kit) => ({
+      ...kit,
+      openingSummary: sanitizeString(kit.openingSummary, warnings),
+      concerningSymptoms: kit.concerningSymptoms.map((item) => sanitizeString(item, warnings)),
+      recommendedTests: kit.recommendedTests.map((item) => sanitizeString(item, warnings)),
+      discussionPoints: kit.discussionPoints.map((item) => sanitizeString(item, warnings)),
+    })),
   };
 
   return { data: sanitized, warnings };

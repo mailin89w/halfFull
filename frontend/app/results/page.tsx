@@ -14,7 +14,6 @@ import {
 import type { DeepMedGemmaResult } from '@/src/lib/medgemma';
 import { EnergySpectrum } from '@/src/components/results/EnergySpectrum';
 import { DiagnosisCard } from '@/src/components/results/DiagnosisCard';
-import { DoctorPriority } from '@/src/components/results/DoctorPriority';
 
 export default function ResultsPage() {
   const { answers, hydrated, reset } = useAssessment();
@@ -44,32 +43,53 @@ export default function ResultsPage() {
     .map((d) => `${d.title}: ${d.description}`)
     .join(' ');
 
-  const doctorKitOpener = deep?.doctorKitSummary ?? null;
+  const recommendedDoctors =
+    deep?.recommendedDoctors && deep.recommendedDoctors.length > 0
+      ? deep.recommendedDoctors
+      : doctors.slice(0, 3).map((doctor, index) => ({
+        specialty: doctor.specialty,
+        priority: index === 0 ? 'start_here' : index === 1 ? 'consider_next' : 'specialist_if_needed',
+        reason: doctor.reason,
+        symptomsToDiscuss: diagnoses[index]
+          ? [diagnoses[index].description.split('. ')[0], 'Fatigue affecting normal daily function']
+          : ['Fatigue affecting normal daily function'],
+        suggestedTests: diagnoses[index]?.tests.slice(0, 3).map((test) => test.name) ?? ['Review first-line fatigue workup'],
+      }));
 
-  const doctorQuestions =
-    deep?.doctorKitQuestions ??
-    diagnoses.slice(0, 3).map((d) => {
-      const leadTest = d.tests[0]?.name;
-      return leadTest
-        ? `Could ${d.title.toLowerCase()} explain this pattern, and should we check ${leadTest}?`
-        : `Could ${d.title.toLowerCase()} explain this pattern?`;
-    });
+  const doctorKits =
+    deep?.doctorKits && deep.doctorKits.length > 0
+      ? deep.doctorKits
+      : recommendedDoctors.map((doctor, index) => ({
+        specialty: doctor.specialty,
+        openingSummary: index === 0 && deep?.doctorKitSummary
+          ? deep.doctorKitSummary
+          : `I would like to discuss the main drivers of my fatigue and whether ${diagnoses[index]?.title.toLowerCase() ?? 'these patterns'} could explain them.`,
+        concerningSymptoms: doctor.symptomsToDiscuss,
+        recommendedTests: doctor.suggestedTests,
+        discussionPoints: [...(deep?.doctorKitQuestions ?? []), ...(deep?.doctorKitArguments ?? [])].slice(0, 4),
+      }));
 
-  const doctorArguments =
-    deep?.doctorKitArguments ??
-    diagnoses
-      .flatMap((d) =>
-        d.tests.filter((t) => t.mustRequest).map((t) => ({
-          diagnosis: d.title,
-          test: t.name,
-          note: t.note,
-        }))
-      )
-      .slice(0, 4)
-      .map(
-        (item) =>
-          `Because ${item.diagnosis.toLowerCase()} is flagged, ask for ${item.test}${item.note ? ` — ${item.note}` : '.'}`
-      );
+  const doctorKitOpener = doctorKits[0]?.openingSummary ?? deep?.doctorKitSummary ?? null;
+
+  const combinedSummary = [
+    deep?.personalizedSummary,
+    confirmedConditions.length > 0
+      ? `Already confirmed conditions to mention: ${confirmedConditions
+        .map((c) => ({
+          anemia: 'anaemia',
+          iron_deficiency: 'iron deficiency',
+          thyroid: 'thyroid dysfunction',
+          kidney: 'kidney disease',
+          sleep_disorder: 'sleep disorder',
+          liver: 'liver disease',
+          prediabetes: 'prediabetes',
+          hepatitis_bc: 'hepatitis B/C',
+          hepatitis: 'hepatitis',
+          perimenopause: 'perimenopause',
+        }[c] ?? c))
+        .join(', ')}. Use these as part of the bigger fatigue picture when you speak with a doctor.`
+      : null,
+  ].filter(Boolean).join(' ');
 
   const coachingTips = deep?.coachingTips ?? [];
   const aiLabel = deep?.meta?.label ?? 'Structured local report';
@@ -175,21 +195,33 @@ export default function ResultsPage() {
     });
     y += 2;
 
-    // ── Questions for the doctor ─────────────────────────────────────────
-    addSectionHeader('Questions for the doctor');
-    doctorQuestions.forEach((q, i) => addBullet(q, i + 1));
-    y += 2;
-
-    // ── Arguments for tests ──────────────────────────────────────────────
-    addSectionHeader('Arguments for requesting additional tests');
-    doctorArguments.forEach((a, i) => addBullet(a, i + 1));
-    y += 2;
-
-    // ── MedGemma next steps ──────────────────────────────────────────────
+    // ── Next steps ───────────────────────────────────────────────────────
     if (deep?.nextSteps) {
-      addSectionHeader('Personalised next steps');
+      addSectionHeader('Next steps - talk to a doctor');
       addText(deep.nextSteps, { size: 10, indent: 2 });
       y += 2;
+    }
+
+    if (recommendedDoctors.length > 0) {
+      addSectionHeader('Recommended doctors');
+      recommendedDoctors.forEach((doctor, index) => {
+        addBullet(`${doctor.specialty}: ${doctor.reason}`, index + 1);
+      });
+      y += 2;
+    }
+
+    if (doctorKits.length > 0) {
+      doctorKits.forEach((kit) => {
+        addSectionHeader(`${kit.specialty} doctor kit`);
+        addText(kit.openingSummary, { size: 10, indent: 2 });
+        addText('Concerning symptoms:', { size: 9, bold: true, indent: 2 });
+        kit.concerningSymptoms.forEach((item) => addBullet(item));
+        addText('Tests worth discussing:', { size: 9, bold: true, indent: 2 });
+        kit.recommendedTests.forEach((item) => addBullet(item));
+        addText('Questions and evidence to bring:', { size: 9, bold: true, indent: 2 });
+        kit.discussionPoints.forEach((item, index) => addBullet(item, index + 1));
+        y += 2;
+      });
     }
 
     // ── Footer ───────────────────────────────────────────────────────────
@@ -221,11 +253,18 @@ export default function ResultsPage() {
         'Concerning patterns:',
         ...diagnoses.slice(0, 4).map((d) => `- ${d.title}`),
         '',
-        'Questions:',
-        ...doctorQuestions.map((q) => `- ${q}`),
+        'Next steps:',
+        ...(deep?.nextSteps ? [deep.nextSteps, ''] : []),
+        'Recommended doctors:',
+        ...recommendedDoctors.map((doctor) => `- ${doctor.specialty}: ${doctor.reason}`),
         '',
-        'Test requests:',
-        ...doctorArguments.map((a) => `- ${a}`),
+        ...doctorKits.flatMap((kit) => [
+          `${kit.specialty} doctor kit:`,
+          ...kit.concerningSymptoms.map((item) => `- Symptom: ${item}`),
+          ...kit.recommendedTests.map((item) => `- Test: ${item}`),
+          ...kit.discussionPoints.map((item) => `- Discussion point: ${item}`),
+          '',
+        ]),
       ].join('\n')
     );
     window.location.href = `mailto:?subject=${subject}&body=${body}`;
@@ -295,15 +334,15 @@ export default function ResultsPage() {
           )}
 
           {/* ── MedGemma personalised summary ─────────────────────────────── */}
-          {deep?.personalizedSummary ? (
+          {combinedSummary ? (
             <div className="section-card border-[var(--color-lime)] px-5 py-4">
               <div className="flex items-center gap-2 mb-2">
                 <span className="pill-tag bg-[var(--color-lime)] text-[var(--color-ink)]">
-                  Personalised insight · MedGemma
+                  Your fatigue story · MedGemma
                 </span>
               </div>
               <p className="text-sm leading-6 text-[var(--color-ink)]">
-                {deep.personalizedSummary}
+                {combinedSummary}
               </p>
             </div>
           ) : (
@@ -343,40 +382,28 @@ export default function ResultsPage() {
             ))}
           </div>
 
-          {/* ── Confirmed conditions reminder ─────────────────────────────── */}
-          {confirmedConditions.length > 0 && (
-            <div className="section-card px-5 py-4">
-              <p className="mb-1 text-[10px] font-bold uppercase tracking-[0.18em] text-[var(--color-ink-soft)]">
-                Already confirmed
-              </p>
-              <p className="text-sm leading-6 text-[var(--color-ink)]">
-                In addition to{' '}
-                <span className="font-semibold">
-                  {confirmedConditions
-                    .map((c) => ({
-                      anemia: 'anaemia',
-                      iron_deficiency: 'iron deficiency',
-                      thyroid: 'thyroid dysfunction',
-                      kidney: 'kidney disease',
-                      sleep_disorder: 'sleep disorder',
-                      liver: 'liver disease',
-                      prediabetes: 'prediabetes',
-                      hepatitis_bc: 'hepatitis B/C',
-                    }[c] ?? c))
-                    .join(', ')}
-                </span>{' '}
-                you already have confirmed, it may be worth checking in with your doctor about how these interact with the patterns above and whether any monitoring or follow-up tests are due.
-              </p>
-            </div>
-          )}
-
           {/* ── MedGemma next steps ───────────────────────────────────────── */}
           {deep?.nextSteps && (
             <div className="section-card border-[var(--color-lime)] bg-[rgba(215,240,104,0.18)] px-5 py-4">
               <h3 className="text-xs font-semibold uppercase tracking-[0.16em] text-[var(--color-ink)]">
-                Your personalised next steps
+                Next steps - talk to a doctor
               </h3>
               <p className="mt-2 text-sm leading-6 text-[var(--color-ink)]">{deep.nextSteps}</p>
+              {recommendedDoctors.length > 0 && (
+                <div className="mt-4 space-y-3">
+                  {recommendedDoctors.map((doctor, index) => (
+                    <div key={`${doctor.specialty}-${index}`} className="rounded-[1rem] bg-white/75 px-4 py-3">
+                      <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-[var(--color-ink-soft)]">
+                        {doctor.specialty}
+                      </p>
+                      <p className="mt-1 text-sm leading-6 text-[var(--color-ink)]">{doctor.reason}</p>
+                      <p className="mt-2 text-xs leading-5 text-[var(--color-ink-soft)]">
+                        Discuss: {doctor.symptomsToDiscuss.join(' | ')}
+                      </p>
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
           )}
 
@@ -407,9 +434,6 @@ export default function ResultsPage() {
             </div>
           )}
 
-          {/* ── Doctor priority ───────────────────────────────────────────── */}
-          <DoctorPriority doctors={doctors} />
-
           {/* ── Doctor visit kit ──────────────────────────────────────────── */}
           <div className="overflow-hidden rounded-[2rem] border border-[rgba(119,101,244,0.35)] bg-[linear-gradient(180deg,rgba(119,101,244,0.2)_0%,rgba(215,240,104,0.28)_100%)] shadow-[0_22px_44px_rgba(86,98,145,0.22)]">
             <button
@@ -425,7 +449,7 @@ export default function ResultsPage() {
                   Doctor visit kit
                 </h3>
                 <p className="mt-1 max-w-[18rem] text-sm leading-6 text-[rgba(9,9,15,0.65)]">
-                  Bring one clean brief into the appointment: symptom summary, discussion prompts, and reasons to ask for deeper testing.
+                  Bring one clean brief into the appointment: symptom summary, doctor-specific concerns, and targeted discussion points.
                 </p>
               </div>
               <span className="flex h-10 w-10 items-center justify-center rounded-full bg-white/70 text-xl font-bold text-[var(--color-ink)] shadow-[0_8px_18px_rgba(86,98,145,0.12)]">
@@ -459,39 +483,53 @@ export default function ResultsPage() {
                     </p>
                   </div>
 
-                  {/* Questions for the doctor */}
-                  <div className="rounded-[1.4rem] bg-white px-4 py-4 shadow-[0_10px_20px_rgba(86,98,145,0.08)]">
-                    <h4 className="text-[11px] font-semibold uppercase tracking-[0.16em] text-[var(--color-ink-soft)]">
-                      Questions for the doctor
-                    </h4>
-                    <div className="mt-3 space-y-3">
-                      {doctorQuestions.map((question, index) => (
-                        <div key={index} className="flex gap-3">
-                          <span className="mt-1 flex h-5 w-5 flex-shrink-0 items-center justify-center rounded-full bg-[var(--color-accent-soft)] text-[10px] font-bold text-[var(--color-ink)]">
-                            {index + 1}
-                          </span>
-                          <p className="text-sm leading-6 text-[var(--color-ink)]">{question}</p>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
+                  {doctorKits.map((kit, index) => (
+                    <div key={`${kit.specialty}-${index}`} className="rounded-[1.4rem] bg-white px-4 py-4 shadow-[0_10px_20px_rgba(86,98,145,0.08)]">
+                      <h4 className="text-[11px] font-semibold uppercase tracking-[0.16em] text-[var(--color-ink-soft)]">
+                        {kit.specialty}
+                      </h4>
+                      <p className="mt-2 text-sm leading-6 text-[var(--color-ink)]">{kit.openingSummary}</p>
 
-                  {/* Arguments for tests */}
-                  <div className="rounded-[1.4rem] bg-white px-4 py-4 shadow-[0_10px_20px_rgba(86,98,145,0.08)]">
-                    <h4 className="text-[11px] font-semibold uppercase tracking-[0.16em] text-[var(--color-ink-soft)]">
-                      Convincing arguments for additional tests
-                    </h4>
-                    <div className="mt-3 space-y-3">
-                      {doctorArguments.map((argument, index) => (
-                        <div key={index} className="rounded-[1rem] bg-[rgba(119,101,244,0.06)] px-3 py-3">
-                          <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-[var(--color-ink-soft)]">
-                            Test argument {index + 1}
-                          </p>
-                          <p className="mt-1 text-sm leading-6 text-[var(--color-ink)]">{argument}</p>
+                      <div className="mt-4">
+                        <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-[var(--color-ink-soft)]">
+                          Concerning symptoms
+                        </p>
+                        <div className="mt-2 space-y-2">
+                          {kit.concerningSymptoms.map((symptom, symptomIndex) => (
+                            <p key={symptomIndex} className="text-sm leading-6 text-[var(--color-ink)]">
+                              • {symptom}
+                            </p>
+                          ))}
                         </div>
-                      ))}
+                      </div>
+
+                      <div className="mt-4">
+                        <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-[var(--color-ink-soft)]">
+                          Tests worth discussing
+                        </p>
+                        <div className="mt-2 space-y-2">
+                          {kit.recommendedTests.map((test, testIndex) => (
+                            <p key={testIndex} className="text-sm leading-6 text-[var(--color-ink)]">
+                              • {test}
+                            </p>
+                          ))}
+                        </div>
+                      </div>
+
+                      <div className="mt-4">
+                        <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-[var(--color-ink-soft)]">
+                          Questions and evidence to bring
+                        </p>
+                        <div className="mt-2 space-y-3">
+                          {kit.discussionPoints.map((point, pointIndex) => (
+                            <div key={pointIndex} className="rounded-[1rem] bg-[rgba(119,101,244,0.06)] px-3 py-3">
+                              <p className="text-sm leading-6 text-[var(--color-ink)]">{point}</p>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
                     </div>
-                  </div>
+                  ))}
 
                   {/* Export actions */}
                   <div className="rounded-[1.4rem] bg-[#09090f] px-4 py-4 text-white shadow-[0_14px_24px_rgba(9,9,15,0.18)]">

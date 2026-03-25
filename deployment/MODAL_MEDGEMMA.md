@@ -51,5 +51,6 @@ temporary Colab tunnel.
 ## Notes
 
 - The script uses a `T4`, matching the Colab setup that already worked.
-- `scaledown_window=300` keeps the container warm for 5 minutes after a request.
-- Cold starts are expected for very sparse traffic.
+- `min_containers=0` means Modal scales to zero when idle, so you only pay when the app is actually being used.
+- `scaledown_window=300` keeps the container warm for up to 5 minutes after a request, which helps with short bursts of traffic.
+- Cold starts are expected after longer idle periods.
