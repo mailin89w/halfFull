@@ -126,7 +126,10 @@ export async function POST(req: NextRequest) {
     // Step 1: always extract raw text with pdf-parse (works without MedGemma)
     let rawText: string;
     try {
-      const { PDFParse } = await import('pdf-parse/node');
+      // pdf-parse/node exports PDFParse at runtime but the .d.ts doesn't declare
+      // it — cast to any to satisfy TypeScript without altering runtime behaviour.
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const { PDFParse } = await import('pdf-parse/node') as any;
       const buffer = Buffer.from(base64, 'base64');
       const parser = new PDFParse({ data: buffer });
       const pdfData = await parser.getText();
