@@ -416,10 +416,10 @@ const effectiveSummaryLine = mlRanButEmpty
               <p className="mb-2 text-[11px] font-bold uppercase tracking-[0.18em] text-[var(--color-ink-soft)]">
                 Assessment complete
               </p>
-              <h1 className="editorial-display text-[clamp(2.5rem,10vw,4.2rem)] leading-[0.92] text-[var(--color-ink)]">
-                YOUR ASSESSMENT
+              <h1 className="editorial-display text-[clamp(2rem,8.2vw,3.2rem)] leading-[0.96] text-[var(--color-ink)]">
+                What your
                 <br />
-                RESULTS
+                answers reveal
               </h1>
             </div>
             <p className="max-w-[18rem] text-sm leading-6 text-[var(--color-ink-soft)]">
@@ -446,13 +446,13 @@ const effectiveSummaryLine = mlRanButEmpty
           </section>
 
           {isFallbackContent && (
-            <div className="section-card border-[var(--color-lime)] px-5 py-4">
-              <div className="flex items-center gap-2 mb-2">
+            <div>
+              <div className="mb-2">
                 <span className="pill-tag bg-[var(--color-lime)] text-[var(--color-ink)]">
                   {aiLabel}
                 </span>
               </div>
-              <p className="text-sm leading-6 text-[var(--color-ink-soft)]">
+              <p className="text-sm text-[var(--color-ink-soft)]">
                 This report text was generated from demo or local fallback logic so the app stays usable even when live MedGemma is unavailable.
               </p>
             </div>
@@ -493,7 +493,7 @@ const effectiveSummaryLine = mlRanButEmpty
             </div>
           )}
 
-          {deep?.recoveryOutlook && (
+          {deep?.recoveryOutlook && !isFallbackContent && (
             <div className="section-card px-5 py-4">
               <div className="flex items-center gap-2 mb-2">
                 <span className="pill-tag bg-[var(--color-card-muted)] text-[var(--color-ink)]">
@@ -512,7 +512,7 @@ const effectiveSummaryLine = mlRanButEmpty
               </h2>
               <p className="mt-1 text-sm text-[var(--color-ink-soft)]">
                 {diagnoses.length > 0
-                  ? 'Tap each to see recommended tests and recovery outlook.'
+                  ? 'Tap each to see recommended tests and doctor-ready details.'
                   : isLikelyHealthy
                     ? 'Your answers show no strong signals pointing to an underlying energy issue.'
                     : 'Your answers show some fatigue signals, but they don\'t point clearly to a specific cause.'}

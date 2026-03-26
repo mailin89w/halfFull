@@ -10,7 +10,6 @@ import {
   getDeepAnalysisWithFallback,
   storeDeepResult,
   readStoredConfirmedConditions,
-  readStoredDeepResult,
   readStoredBayesianScores,
   readStoredBayesianAnswers,
   readStoredMLScores,
@@ -42,13 +41,6 @@ export default function ProcessingPage() {
 
   useEffect(() => {
     if (!hydrated) return;
-
-    // Skip if already cached (e.g. user navigated back and forward)
-    const cached = readStoredDeepResult();
-    if (cached) {
-      router.replace('/results');
-      return;
-    }
 
     let cancelled = false;
 

@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import { clearStoredMedGemmaResult } from '@/src/lib/medgemma';
 
 const CHAPTERS = [
   {
@@ -145,6 +146,7 @@ export default function ChaptersPage() {
           {/* CTA */}
           <Link
             href="/assessment"
+            onClick={() => clearStoredMedGemmaResult()}
             className="block w-full rounded-full px-5 py-4 text-center text-base font-bold shadow-[0_10px_24px_rgba(9,9,15,0.22)] transition-all active:scale-[0.98]"
             style={{ backgroundColor: '#09090f', color: '#ffffff' }}
           >
