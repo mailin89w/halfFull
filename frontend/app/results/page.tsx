@@ -46,19 +46,6 @@ export default function ResultsPage() {
     setExpandedDoctors((prev) => prev.includes(i) ? prev.filter((x) => x !== i) : [...prev, i]);
 
   const { currentPct, projectedPct, summaryLine, doctors } = computeResults(answers);
-      
-const mlScores = hydrated ? readStoredMLScores() : null;
-const bayesianDetails = hydrated ? readStoredBayesianDetails() : null;
-const bayesianScores = hydrated ? readStoredBayesianScores() : null;
-
-// Bayesian scores reflect clarification answers, so prefer them when present.
-// Fall back to raw ML scores, then to the rule-based results.
-const effectiveScores = bayesianScores ?? mlScores;
-
-const confirmedConditions = hydrated ? (readStoredConfirmedConditions() ?? []) : [];
-const diagnoses = effectiveScores
-  ? buildDiagnosesFromML(effectiveScores)
-  : computeResults(answers).diagnoses;
 
   const mlScores = hydrated ? readStoredMLScores() : null;
   const bayesianDetails = hydrated ? readStoredBayesianDetails() : null;
