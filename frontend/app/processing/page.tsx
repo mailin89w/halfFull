@@ -54,8 +54,10 @@ export default function ProcessingPage() {
 
     const run = async () => {
       // Scores come from Bayesian layer (clarify page) or fall back to raw ML scores
+      const rawMlScores: Record<string, number> | undefined =
+        readStoredMLScores() ?? undefined;
       const mlScores: Record<string, number> | undefined =
-        readStoredBayesianScores() ?? readStoredMLScores() ?? undefined;
+        readStoredBayesianScores() ?? rawMlScores;
 
       // Clarification Q&A from Bayesian layer — may be null if clarify was skipped
       const clarificationQA = readStoredBayesianAnswers() ?? undefined;
@@ -63,7 +65,7 @@ export default function ProcessingPage() {
 
       try {
         const [result] = await Promise.all([
-          getDeepAnalysisWithFallback(answers, mlScores, clarificationQA, confirmedConditions),
+          getDeepAnalysisWithFallback(answers, mlScores, rawMlScores, clarificationQA, confirmedConditions),
           new Promise((resolve) => window.setTimeout(resolve, 2600)),
         ]);
 

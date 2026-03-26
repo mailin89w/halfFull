@@ -8,17 +8,12 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;700;900&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
-  /* ── Design tokens from frontend/app/globals.css ── */
   :root {
     --color-page:        #d8d8e3;
-    --color-shell:       #b7c2e4;
-    --color-shell-border:#97a6d2;
-    --color-card:        #f8f8fb;
-    --color-card-muted:  #eaedf8;
+    --color-card:        #ffffff;
     --color-ink:         #09090f;
     --color-ink-soft:    #5f6783;
     --color-accent:      #7765f4;
-    --color-accent-soft: #dcd7ff;
     --color-lime:        #d7f068;
     --color-stroke:      #c7cedf;
     --font-display:      "Archivo", "Arial Narrow", sans-serif;
@@ -38,7 +33,7 @@
   }
 
   .page {
-    max-width: 1080px;
+    max-width: 1100px;
     margin: 0 auto;
     padding: 52px 40px 80px;
   }
@@ -63,17 +58,17 @@
   }
   .header h1 {
     font-family: var(--font-display);
-    font-size: 34px;
+    font-size: 36px;
     font-weight: 900;
     letter-spacing: -0.04em;
     color: var(--color-ink);
     line-height: 1.05;
   }
   .header-meta {
-    font-size: 11px;
+    font-size: 11.5px;
     color: var(--color-ink-soft);
     text-align: right;
-    line-height: 1.7;
+    line-height: 1.8;
   }
 
   /* ── Section dividers ── */
@@ -83,27 +78,22 @@
     letter-spacing: 2.5px;
     text-transform: uppercase;
     color: var(--color-ink-soft);
-    padding-left: 60px;
+    padding-left: 62px;
     margin: 22px 0 10px;
-    opacity: 0.7;
+    opacity: 0.65;
   }
-
   .arrow-center {
     display: flex;
     justify-content: center;
-    padding: 4px 0 4px 60px;
+    padding: 4px 0 4px 62px;
     color: var(--color-accent);
-    font-size: 18px;
-    opacity: 0.4;
+    font-size: 20px;
+    opacity: 0.35;
   }
 
   /* ── Layer row ── */
   .layer { margin-bottom: 6px; }
-  .layer-row {
-    display: flex;
-    gap: 10px;
-    align-items: stretch;
-  }
+  .layer-row { display: flex; gap: 10px; align-items: stretch; }
 
   /* ── Layer rail ── */
   .layer-rail {
@@ -111,7 +101,7 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    min-width: 50px;
+    min-width: 52px;
   }
   .rail-badge {
     writing-mode: vertical-rl;
@@ -121,120 +111,152 @@
     font-weight: 800;
     letter-spacing: 2px;
     text-transform: uppercase;
-    padding: 10px 5px;
+    padding: 12px 6px;
     border-radius: 8px;
     white-space: nowrap;
   }
-  .rail-badge.input   { background: rgba(151,166,210,0.2); color: var(--color-ink-soft); }
-  .rail-badge.analysis{ background: var(--color-accent-soft); color: var(--color-accent); }
-  .rail-badge.synth   { background: rgba(215,240,104,0.3); color: #5a6a00; }
-  .rail-badge.safety  { background: rgba(74,222,128,0.15); color: #15803d; }
-  .rail-badge.output  { background: rgba(253,230,138,0.5); color: #92400e; }
+  .rail-badge.input    { background: rgba(151,166,210,0.18); color: var(--color-ink-soft); }
+  .rail-badge.analysis { background: rgba(119,101,244,0.12); color: var(--color-accent); }
+  .rail-badge.synth    { background: rgba(134,200,60,0.18); color: #3d6b00; }
+  .rail-badge.safety   { background: rgba(74,222,128,0.15); color: #15803d; }
+  .rail-badge.output   { background: rgba(253,186,116,0.25); color: #92400e; }
 
-  /* ── Cards ── */
-  .cards {
-    display: flex;
-    gap: 10px;
-    flex: 1;
-    align-items: stretch;
-  }
+  /* ── Base card — always white ── */
+  .cards { display: flex; gap: 10px; flex: 1; align-items: stretch; }
 
   .card {
-    background: var(--color-card);
+    background: white;
     border-radius: 18px;
-    padding: 18px 16px;
-    border: 1px solid rgba(151,166,210,0.28);
-    box-shadow: 0 4px 14px rgba(86,98,145,0.07);
+    padding: 20px 18px;
+    border: 1.5px solid rgba(151,166,210,0.3);
+    box-shadow: 0 2px 10px rgba(86,98,145,0.07);
     flex: 1;
     position: relative;
   }
   .card.span2 { flex: 2; }
-  .card.span3 { flex: 3; }
+  .card.b-accent { border-color: rgba(119,101,244,0.35); }
+  .card.b-green  { border-color: rgba(94,178,54,0.4); }
+  .card.b-safety { border-color: rgba(74,222,128,0.45); }
+  .card.b-amber  { border-color: rgba(253,186,116,0.5); }
 
-  /* accent border colours */
-  .card.accent  { border-color: rgba(119,101,244,0.4); border-width: 1.5px; }
-  .card.lime    { border-color: rgba(215,240,104,0.6); border-width: 1.5px; }
-  .card.green   { border-color: rgba(74,222,128,0.4); }
-  .card.amber   { border-color: rgba(253,186,116,0.5); }
-  .card.muted   { background: rgba(248,248,251,0.6); border-color: rgba(151,166,210,0.2); }
-  .card.key     { border-color: var(--color-accent); border-width: 2px; background: rgba(119,101,244,0.03); }
+  /* ── NEW V6 badge — lime green ── */
+  .new-badge {
+    position: absolute;
+    top: 14px;
+    right: 14px;
+    font-size: 8.5px;
+    font-weight: 800;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    background: var(--color-lime);
+    color: #3d6400;
+    padding: 3px 8px;
+    border-radius: 999px;
+    line-height: 1.4;
+  }
 
-  .card-icon { font-size: 20px; margin-bottom: 8px; }
+  /* ── Card typography ── */
+  .card-icon { font-size: 22px; margin-bottom: 9px; }
   .card-title {
     font-family: var(--font-display);
-    font-size: 13px;
+    font-size: 16px;
     font-weight: 900;
-    letter-spacing: -0.02em;
+    letter-spacing: -0.03em;
     margin-bottom: 4px;
     color: var(--color-ink);
+    line-height: 1.2;
   }
   .card-sub {
-    font-size: 10px;
+    font-size: 11px;
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.5px;
-    margin-bottom: 8px;
+    margin-bottom: 9px;
     color: var(--color-ink-soft);
   }
   .card-sub.accent { color: var(--color-accent); }
-  .card-sub.lime   { color: #5a6a00; }
-  .card-sub.green  { color: #15803d; }
-  .card-sub.amber  { color: #92400e; }
+  .card-sub.green  { color: #3d7000; }
+  .card-sub.safety { color: #15803d; }
+  .card-desc { font-size: 12.5px; color: var(--color-ink-soft); line-height: 1.6; }
 
-  .card-desc { font-size: 11.5px; color: var(--color-ink-soft); line-height: 1.55; }
-
-  /* ── Pill tags ── */
-  .tags { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 10px; }
+  /* ── Pills — muted purple ── */
+  .tags { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 11px; }
   .tag {
     display: inline-flex;
     align-items: center;
-    font-size: 9.5px;
+    font-size: 10px;
     font-weight: 700;
-    padding: 3px 8px;
+    padding: 3px 9px;
     border-radius: 999px;
     white-space: nowrap;
   }
-  .tag.accent { background: var(--color-accent-soft); color: var(--color-accent); }
-  .tag.lime   { background: rgba(215,240,104,0.4); color: #5a6a00; }
-  .tag.green  { background: rgba(74,222,128,0.15); color: #15803d; }
+  /* accent: much more muted — barely-there tint */
+  .tag.accent { background: rgba(119,101,244,0.09); color: #6b5de8; }
+  .tag.green  { background: rgba(134,200,60,0.18); color: #3d6b00; }
+  .tag.safety { background: rgba(74,222,128,0.14); color: #15803d; }
   .tag.amber  { background: rgba(253,186,116,0.25); color: #92400e; }
-  .tag.muted  { background: rgba(151,166,210,0.2); color: var(--color-ink-soft); }
-  .tag.red    { background: rgba(254,205,211,0.5); color: #be123c; }
+  .tag.muted  { background: rgba(151,166,210,0.18); color: var(--color-ink-soft); }
 
   /* ── Output chip ── */
   .out-chip {
     display: inline-flex;
     align-items: center;
     gap: 5px;
-    font-size: 10px;
+    font-size: 10.5px;
     font-weight: 700;
-    padding: 4px 10px;
+    padding: 4px 11px;
     border-radius: 8px;
-    margin-top: 10px;
+    margin-top: 11px;
   }
-  .out-chip.accent { background: var(--color-accent-soft); color: var(--color-accent); }
-  .out-chip.lime   { background: rgba(215,240,104,0.35); color: #5a6a00; }
-  .out-chip.green  { background: rgba(74,222,128,0.15); color: #15803d; }
-  .out-chip.amber  { background: rgba(253,186,116,0.25); color: #92400e; }
+  .out-chip.accent { background: rgba(119,101,244,0.09); color: #6b5de8; }
+  .out-chip.green  { background: rgba(134,200,60,0.18); color: #3d6b00; }
 
-  /* ── Band (full-width multi-section card) ── */
+  /* ── Two-stage synth connector ── */
+  .two-stage { display: flex; gap: 8px; flex: 3; align-items: stretch; }
+  .stage-arrow {
+    display: flex;
+    align-items: center;
+    color: #3d7000;
+    font-size: 20px;
+    opacity: 0.45;
+    flex-shrink: 0;
+  }
+
+  /* ── Safety band ── */
   .band {
-    background: var(--color-card);
+    background: white;
     border-radius: 18px;
-    padding: 18px 22px;
-    border: 1px solid rgba(74,222,128,0.35);
-    box-shadow: 0 4px 14px rgba(86,98,145,0.07);
+    padding: 20px 24px;
+    border: 1.5px solid rgba(74,222,128,0.4);
+    box-shadow: 0 2px 10px rgba(86,98,145,0.07);
     flex: 1;
     display: flex;
     align-items: flex-start;
-    gap: 22px;
+    gap: 24px;
     flex-wrap: wrap;
   }
   .band-section { flex: 1; min-width: 160px; }
   .band-section + .band-section {
     border-left: 1px solid rgba(151,166,210,0.2);
-    padding-left: 22px;
+    padding-left: 24px;
   }
+  .band-title {
+    font-family: var(--font-display);
+    font-size: 16px;
+    font-weight: 900;
+    letter-spacing: -0.03em;
+    margin-bottom: 6px;
+    color: var(--color-ink);
+  }
+  .band-sub {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 7px;
+    color: #15803d;
+  }
+  .band-desc { font-size: 12px; color: var(--color-ink-soft); line-height: 1.6; }
 
   /* ── Output grid ── */
   .output-grid {
@@ -244,91 +266,135 @@
     flex: 1;
   }
   .out-card {
-    background: var(--color-card);
-    border: 1.5px solid rgba(253,186,116,0.45);
-    border-radius: 16px;
-    padding: 16px 14px;
-    box-shadow: 0 4px 14px rgba(86,98,145,0.07);
+    background: white;
+    border: 1.5px solid rgba(253,186,116,0.5);
+    border-radius: 18px;
+    padding: 18px 16px;
+    box-shadow: 0 2px 10px rgba(86,98,145,0.07);
+    position: relative;
   }
-  .out-card .oc-icon { font-size: 18px; margin-bottom: 6px; }
+  .out-card .oc-icon { font-size: 20px; margin-bottom: 7px; }
   .out-card .oc-title {
     font-family: var(--font-display);
-    font-size: 12px;
+    font-size: 15px;
     font-weight: 900;
-    letter-spacing: -0.02em;
+    letter-spacing: -0.03em;
     color: var(--color-ink);
-    margin-bottom: 5px;
+    margin-bottom: 6px;
+    line-height: 1.2;
   }
-  .out-card .oc-desc { font-size: 10.5px; color: var(--color-ink-soft); line-height: 1.5; }
-  .out-card .oc-badge {
+  .out-card .oc-desc { font-size: 12px; color: var(--color-ink-soft); line-height: 1.55; }
+  .oc-badges { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 10px; }
+  .oc-badge {
     display: inline-block;
-    font-size: 9px;
+    font-size: 9.5px;
     font-weight: 700;
-    padding: 2px 7px;
+    padding: 3px 9px;
     border-radius: 999px;
-    margin-top: 8px;
   }
-  .oc-badge.accent { background: var(--color-accent-soft); color: var(--color-accent); }
-  .oc-badge.lime   { background: rgba(215,240,104,0.4); color: #5a6a00; }
-
-  /* ── Deployment layer ── */
-  .deploy-grid {
-    display: grid;
-    grid-template-columns: repeat(5, 1fr);
-    gap: 10px;
-    flex: 1;
-  }
-  .deploy-card {
-    background: var(--color-card);
-    border: 1px solid rgba(151,166,210,0.28);
-    border-radius: 14px;
-    padding: 14px 13px;
-    box-shadow: 0 2px 8px rgba(86,98,145,0.06);
-  }
-  .deploy-card.accent-border { border-color: rgba(119,101,244,0.35); }
-  .dc-icon { font-size: 16px; margin-bottom: 5px; }
-  .dc-title {
-    font-family: var(--font-display);
-    font-size: 11px;
-    font-weight: 900;
-    letter-spacing: -0.01em;
-    color: var(--color-ink);
-    margin-bottom: 3px;
-  }
-  .dc-sub { font-size: 9.5px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px; }
-  .dc-sub.accent { color: var(--color-accent); }
-  .dc-sub.green  { color: #15803d; }
-  .dc-sub.amber  { color: #92400e; }
-  .dc-sub.muted  { color: var(--color-ink-soft); }
-  .dc-desc { font-size: 10px; color: var(--color-ink-soft); line-height: 1.45; }
-
-  /* ── LLM two-stage connector ── */
-  .two-stage {
-    display: flex;
-    gap: 8px;
-    flex: 3;
-    align-items: stretch;
-  }
-  .stage-arrow {
-    display: flex;
-    align-items: center;
-    color: var(--color-accent);
-    font-size: 18px;
-    opacity: 0.45;
-    flex-shrink: 0;
-  }
+  .oc-badge.accent { background: rgba(119,101,244,0.09); color: #6b5de8; }
+  .oc-badge.green  { background: rgba(134,200,60,0.2); color: #3d6b00; }
 
   /* ── Legend ── */
   .legend {
     display: flex;
-    gap: 18px;
+    gap: 20px;
     flex-wrap: wrap;
     margin-top: 36px;
     padding-top: 20px;
     border-top: 1px solid rgba(151,166,210,0.3);
   }
-  .legend-item { display: flex; align-items: center; gap: 7px; font-size: 10.5px; color: var(--color-ink-soft); }
+  .legend-item { display: flex; align-items: center; gap: 7px; font-size: 11px; color: var(--color-ink-soft); }
   .legend-dot { width: 10px; height: 10px; border-radius: 4px; flex-shrink: 0; }
+
+  /* ══════════════════════════════
+     DEPLOYMENT DIAGRAM
+  ══════════════════════════════ */
+
+  .deploy-section {
+    margin-top: 56px;
+    padding-top: 40px;
+    border-top: 2px solid rgba(151,166,210,0.4);
+  }
+  .deploy-heading {
+    font-family: var(--font-display);
+    font-size: 10px;
+    font-weight: 900;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--color-accent);
+    margin-bottom: 8px;
+  }
+  .deploy-title {
+    font-family: var(--font-display);
+    font-size: 28px;
+    font-weight: 900;
+    letter-spacing: -0.04em;
+    color: var(--color-ink);
+    margin-bottom: 36px;
+  }
+
+  /*
+    Fixed-pixel diagram container.
+    Nodes are absolutely positioned inside it.
+    SVG overlay draws the connection lines using the same coordinate space.
+
+    Layout (all coordinates in px, container = 960 × 410):
+    ┌─────────────────────────────────────────────────────────────┐
+    │            [HF Inference 545,0]   [Railway 752,0]          │
+    │ [User 0,155]   [Vercel 280,110]                            │
+    │            [Supabase 545,280]     [Groq 752,280]           │
+    └─────────────────────────────────────────────────────────────┘
+  */
+  .deploy-diagram {
+    position: relative;
+    width: 960px;
+    height: 410px;
+    overflow: visible;
+  }
+
+  .deploy-node {
+    position: absolute;
+    background: white;
+    border-radius: 16px;
+    border: 1.5px solid rgba(151,166,210,0.32);
+    box-shadow: 0 3px 14px rgba(86,98,145,0.09);
+    padding: 16px 18px;
+  }
+  .deploy-node.hub {
+    border-color: rgba(119,101,244,0.5);
+    border-width: 2px;
+    box-shadow: 0 6px 22px rgba(119,101,244,0.13);
+  }
+
+  .dn-logo { margin-bottom: 10px; line-height: 0; }
+  .dn-name {
+    font-family: var(--font-display);
+    font-size: 16px;
+    font-weight: 900;
+    letter-spacing: -0.03em;
+    color: var(--color-ink);
+    margin-bottom: 3px;
+  }
+  .dn-role {
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 7px;
+  }
+  .dn-role.accent { color: var(--color-accent); }
+  .dn-role.green  { color: #15803d; }
+  .dn-role.muted  { color: var(--color-ink-soft); }
+  .dn-role.orange { color: #b45309; }
+  .dn-desc { font-size: 11.5px; color: var(--color-ink-soft); line-height: 1.5; }
+
+  .conn-label {
+    font-family: var(--font-body);
+    font-size: 10px;
+    font-weight: 600;
+    fill: #97a6d2;
+  }
 
   @media print {
     body { background: white; }
@@ -347,25 +413,26 @@
     </div>
     <div class="header-meta">
       Internal · March 2026<br>
-      <span style="color:var(--color-accent);font-weight:600;">V6 Pipeline</span>
+      <span style="color:var(--color-accent);font-weight:700;">V6 Pipeline</span>
     </div>
   </div>
 
 
-  <!-- ══════════════════ INPUT ══════════════════ -->
+  <!-- ══════════ INPUT ══════════ -->
   <div class="layer">
     <div class="layer-row">
       <div class="layer-rail"><div class="rail-badge input">Input</div></div>
       <div class="cards">
 
-        <div class="card" style="flex:0.6;">
+        <div class="card b-accent" style="flex:0.65;">
+          <span class="new-badge">New V6</span>
           <div class="card-icon">🔒</div>
           <div class="card-title">Consent Gate</div>
-          <div class="card-sub">Privacy-first</div>
-          <div class="card-desc">User grants consent before any data is collected. Anonymous UUID generated — no account required.</div>
+          <div class="card-sub">Privacy-first entry</div>
+          <div class="card-desc">User grants explicit consent before any data is collected. An anonymous UUID is generated — no account or login required.</div>
           <div class="tags">
-            <span class="tag muted">Anonymous ID</span>
-            <span class="tag muted">24h TTL</span>
+            <span class="tag muted">Anonymous UUID</span>
+            <span class="tag muted">24h auto-delete</span>
           </div>
         </div>
 
@@ -373,7 +440,7 @@
           <div class="card-icon">📋</div>
           <div class="card-title">Assessment Quiz</div>
           <div class="card-sub">Primary data source</div>
-          <div class="card-desc">~46 questions covering fatigue severity, sleep, mood, lifestyle, and medical history. Mapped to NHANES variables.</div>
+          <div class="card-desc">~46 questions covering fatigue severity, sleep, mood, lifestyle, and medical history. Each answer mapped to an NHANES variable for analysis.</div>
           <div class="tags">
             <span class="tag muted">46 features</span>
             <span class="tag muted">Symptom patterns</span>
@@ -385,10 +452,10 @@
           <div class="card-icon">🧪</div>
           <div class="card-title">Lab Upload</div>
           <div class="card-sub">Optional · PDF</div>
-          <div class="card-desc">Patient uploads their own blood test PDF. OCR extracts values directly — bypasses KNN inference where real labs exist.</div>
+          <div class="card-desc">Patient uploads their own blood test PDF. OCR extracts values directly — bypasses KNN population inference where real labs already exist.</div>
           <div class="tags">
             <span class="tag muted">OCR parsing</span>
-            <span class="tag muted">Skips inference</span>
+            <span class="tag muted">Skips KNN</span>
           </div>
         </div>
 
@@ -400,57 +467,51 @@
   <div class="section-label">Analysis Layer — runs in parallel</div>
 
 
-  <!-- ══════════════════ ANALYSIS ══════════════════ -->
+  <!-- ══════════ ANALYSIS ══════════ -->
   <div class="layer">
     <div class="layer-row">
       <div class="layer-rail"><div class="rail-badge analysis">Analysis</div></div>
       <div class="cards">
 
-        <div class="card key span2">
+        <div class="card b-accent span2">
           <div class="card-icon">🤖</div>
           <div class="card-title">ML Condition Classifiers</div>
-          <div class="card-sub accent">11 independent models · Railway</div>
-          <div class="card-desc">Each model trained on NHANES data detects one condition. Logistic Regression + Random Forest. Outputs probability per condition independently.</div>
+          <div class="card-sub accent">11 independent models · Railway backend</div>
+          <div class="card-desc">Each model trained on 7,437 NHANES records detects one condition using Logistic Regression + Random Forest. Models run independently and output a probability score per condition.</div>
           <div class="tags">
-            <span class="tag accent">Anemia</span>
-            <span class="tag accent">Thyroid</span>
-            <span class="tag accent">Kidney</span>
-            <span class="tag accent">Liver</span>
-            <span class="tag accent">Sleep disorder</span>
-            <span class="tag accent">Prediabetes</span>
-            <span class="tag accent">Iron deficiency</span>
-            <span class="tag accent">Perimenopause</span>
-            <span class="tag accent">Inflammation</span>
-            <span class="tag accent">Hepatitis B/C</span>
-            <span class="tag accent">Electrolytes</span>
+            <span class="tag accent">11 condition models</span>
+            <span class="tag accent">NHANES-trained</span>
+            <span class="tag accent">LR + RF ensemble</span>
           </div>
-          <div class="out-chip accent">→ P(condition) per disease</div>
+          <div class="out-chip accent">→ P(condition) for each disease</div>
         </div>
 
-        <div class="card accent">
+        <div class="card b-accent">
+          <span class="new-badge">New V6</span>
           <div class="card-icon">📊</div>
           <div class="card-title">Bayesian Clarification</div>
           <div class="card-sub accent">Probability refinement</div>
-          <div class="card-desc">Triggered when any condition clears 40%. Asks targeted follow-up questions. Each answer updates the probability via likelihood ratio.</div>
+          <div class="card-desc">Triggered when any condition exceeds 40%. Asks the patient targeted follow-up questions. Each answer updates the score via a likelihood ratio.</div>
           <div class="tags">
             <span class="tag accent">Triggered at P &gt; 0.40</span>
             <span class="tag accent">Condition-specific Qs</span>
           </div>
-          <div class="out-chip accent">→ Posterior P(condition)</div>
+          <div class="out-chip accent">→ Refined posterior P(condition)</div>
         </div>
 
-        <div class="card key">
+        <div class="card b-accent">
+          <span class="new-badge">New V6</span>
           <div class="card-icon">🔬</div>
           <div class="card-title">KNN Population Match</div>
           <div class="card-sub accent">Lab signal inference</div>
-          <div class="card-desc">Finds 50 most similar people in the 7,437-person NHANES database. Surfaces labs disproportionately abnormal in that group.</div>
+          <div class="card-desc">Finds the 50 most similar people in our NHANES database. Surfaces labs disproportionately abnormal in that cohort, ranked by anomaly vs. the general population.</div>
           <div class="tags">
             <span class="tag accent">K = 50 neighbours</span>
             <span class="tag accent">Cosine similarity</span>
             <span class="tag accent">Lift ≥ 1.5×</span>
             <span class="tag accent">34 labs tracked</span>
           </div>
-          <div class="out-chip accent">→ Ranked lab signals</div>
+          <div class="out-chip accent">→ Ranked lab signals + direction</div>
         </div>
 
       </div>
@@ -458,57 +519,57 @@
   </div>
 
   <div class="arrow-center">↓</div>
-  <div class="section-label">Synthesis Layer</div>
+  <div class="section-label">Synthesis Layer — two-stage LLM pipeline</div>
 
 
-  <!-- ══════════════════ SYNTHESIS ══════════════════ -->
+  <!-- ══════════ SYNTHESIS ══════════ -->
   <div class="layer">
     <div class="layer-row">
       <div class="layer-rail"><div class="rail-badge synth">Synth</div></div>
       <div class="cards">
 
-        <div class="card lime" style="flex:0.7;">
+        <div class="card b-green" style="flex:0.65;">
           <div class="card-icon">🎯</div>
           <div class="card-title">Filtering &amp; Ranking</div>
-          <div class="card-sub lime">Signal selection</div>
-          <div class="card-desc">Selects top 3 conditions above threshold. Merges ML posteriors, Bayesian updates, and KNN signals into a structured package for the LLM.</div>
+          <div class="card-sub green">Signal selection</div>
+          <div class="card-desc">Selects the top 3 conditions above threshold. Merges ML posteriors, Bayesian updates, and KNN lab signals into one structured input for the LLM.</div>
           <div class="tags">
-            <span class="tag lime">P &gt; 0.40 threshold</span>
-            <span class="tag lime">Top-3 conditions</span>
-            <span class="tag lime">Top-8 lab signals</span>
+            <span class="tag green">P &gt; 0.40 threshold</span>
+            <span class="tag green">Top-3 conditions</span>
+            <span class="tag green">Top-8 lab signals</span>
           </div>
         </div>
 
-        <!-- Two-stage LLM -->
         <div class="two-stage">
 
-          <div class="card key" style="flex:1;">
-            <div class="card-icon">🔬</div>
+          <div class="card b-green">
+            <div class="card-icon">🩺</div>
             <div class="card-title">MedGemma 4B</div>
-            <div class="card-sub accent">Stage 1 · Clinical grounding · HF Inference</div>
-            <div class="card-desc">Structured clinical verification of conditions. Lightweight, fast, purpose-trained. Outputs a grounded JSON with supported suspicions, declined ones, and specialty flags.</div>
+            <div class="card-sub green">Stage 1 · Clinical grounding · HF Inference</div>
+            <div class="card-desc">Purpose-trained medical LLM. Runs at low temperature to produce a structured clinical JSON — supported suspicions, declined ones, and specialist referral flags. Fast and deterministic.</div>
             <div class="tags">
-              <span class="tag accent">Temp 0.1</span>
-              <span class="tag accent">800 tokens</span>
-              <span class="tag accent">90s timeout</span>
+              <span class="tag green">Temp 0.1 · structured</span>
+              <span class="tag green">800 tokens</span>
+              <span class="tag green">90s timeout</span>
             </div>
-            <div class="out-chip accent">→ Clinical grounding JSON</div>
+            <div class="out-chip green">→ Clinical grounding JSON</div>
           </div>
 
           <div class="stage-arrow">→</div>
 
-          <div class="card lime" style="flex:1.1;">
+          <div class="card b-green">
+            <span class="new-badge">New V6</span>
             <div class="card-icon">✍️</div>
             <div class="card-title">Groq · Llama 3.3-70B</div>
-            <div class="card-sub lime">Stage 2 · Narrative synthesis · Groq API</div>
-            <div class="card-desc">Translates clinical grounding into warm, first-person patient prose. Every sentence references this patient's specific data — never generic advice.</div>
+            <div class="card-sub green">Stage 2 · Narrative synthesis · Groq API</div>
+            <div class="card-desc">Takes MedGemma's grounding JSON and translates it into warm, first-person patient prose. Every sentence references this specific patient's data. Generates the Doctor Kit and lab recommendations.</div>
             <div class="tags">
-              <span class="tag lime">Temp 0.3</span>
-              <span class="tag lime">3 500 tokens</span>
-              <span class="tag lime">Doctor Kit</span>
-              <span class="tag lime">Lab recs</span>
+              <span class="tag green">Temp 0.3 · creative</span>
+              <span class="tag green">3,500 tokens</span>
+              <span class="tag green">Doctor Kit</span>
+              <span class="tag green">Lab recs</span>
             </div>
-            <div class="out-chip lime">→ Personalised report draft</div>
+            <div class="out-chip green">→ Personalised report draft</div>
           </div>
 
         </div>
@@ -520,32 +581,30 @@
   <div class="arrow-center">↓</div>
 
 
-  <!-- ══════════════════ SAFETY ══════════════════ -->
+  <!-- ══════════ SAFETY ══════════ -->
   <div class="layer">
     <div class="layer-row">
       <div class="layer-rail"><div class="rail-badge safety">Safety</div></div>
       <div class="cards">
-
         <div class="band">
           <div class="band-section">
-            <div class="card-icon">🛡️</div>
-            <div class="card-title" style="margin-bottom:6px;">Safety Layer</div>
-            <div class="card-desc">Every LLM output is validated and rewritten before reaching the user. Three independent checks run in sequence.</div>
+            <div style="font-size:22px;margin-bottom:9px;">🛡️</div>
+            <div class="band-title">Safety Layer</div>
+            <div class="band-desc">Every LLM output passes three independent checks before reaching the user.</div>
           </div>
           <div class="band-section">
-            <div class="card-sub green" style="margin-bottom:6px;">Hard rules (code)</div>
-            <div class="card-desc">No diagnosis statements · "May suggest / could indicate" framing enforced · Immutable fields never overwritten · Disclaimer on every report</div>
+            <div class="band-sub">Hard rules (code)</div>
+            <div class="band-desc">No diagnosis statements · "May suggest / could indicate" framing enforced · Immutable fields never overwritten · Disclaimer on every report</div>
           </div>
           <div class="band-section">
-            <div class="card-sub green" style="margin-bottom:6px;">Schema validation</div>
-            <div class="card-desc">JSON schema check on all LLM output · Auto-repair for truncated responses · Falls back to mock/offline on failure</div>
+            <div class="band-sub">Schema validation</div>
+            <div class="band-desc">JSON schema check on all LLM output · Auto-repair for truncated responses · Falls back to offline mode on failure · Raw health data never logged</div>
           </div>
           <div class="band-section">
-            <div class="card-sub green" style="margin-bottom:6px;">Tone rewrite</div>
-            <div class="card-desc">Secondary Groq pass (Llama 3.1-8B) rewrites alarming phrasing · Sensitive keys never logged · Audit trail in Supabase</div>
+            <div class="band-sub">Tone rewrite</div>
+            <div class="band-desc">Secondary Groq pass (Llama 3.1-8B) softens alarming phrasing · Sensitive keys stripped from logs · Consent audit trail in Supabase</div>
           </div>
         </div>
-
       </div>
     </div>
   </div>
@@ -554,7 +613,7 @@
   <div class="section-label">User-facing output</div>
 
 
-  <!-- ══════════════════ OUTPUT ══════════════════ -->
+  <!-- ══════════ OUTPUT ══════════ -->
   <div class="layer">
     <div class="layer-row">
       <div class="layer-rail"><div class="rail-badge output">Output</div></div>
@@ -567,72 +626,26 @@
         </div>
 
         <div class="out-card">
+          <span class="new-badge">New V6</span>
           <div class="oc-icon">🔍</div>
           <div class="oc-title">Condition Insights</div>
-          <div class="oc-desc">Up to 3 flagged areas with probabilities and a personalised explanation of why each fits this patient.</div>
-          <div class="oc-badge accent">Confidence tier</div>
-          <div class="oc-badge lime">Urgency level</div>
+          <div class="oc-desc">Up to 3 flagged areas with probabilities and a personalised explanation of why each fits this patient's profile.</div>
+          <div class="oc-badges">
+            <span class="oc-badge accent">Confidence tier</span>
+            <span class="oc-badge green">Urgency level</span>
+          </div>
         </div>
 
         <div class="out-card">
           <div class="oc-icon">🧪</div>
           <div class="oc-title">Lab Recommendations</div>
-          <div class="oc-desc">Specific tests to request, ranked by population-level signal strength. Includes reference ranges and direction.</div>
+          <div class="oc-desc">Specific tests to request, ranked by population-level signal strength. Includes reference ranges and clinical direction.</div>
         </div>
 
         <div class="out-card">
           <div class="oc-icon">🩺</div>
           <div class="oc-title">Doctor Kit</div>
-          <div class="oc-desc">First-person script for the GP appointment — what to say, what to ask for, and two evidence-based arguments.</div>
-        </div>
-
-      </div>
-    </div>
-  </div>
-
-  <div class="arrow-center" style="padding-left:0; justify-content:center;">↓</div>
-  <div class="section-label" style="padding-left:0; text-align:center;">Deployment Infrastructure</div>
-
-
-  <!-- ══════════════════ DEPLOYMENT ══════════════════ -->
-  <div class="layer">
-    <div class="layer-row">
-      <div class="layer-rail" style="min-width:50px;"></div>
-      <div class="deploy-grid">
-
-        <div class="deploy-card accent-border">
-          <div class="dc-icon">▲</div>
-          <div class="dc-title">Vercel</div>
-          <div class="dc-sub accent">Frontend</div>
-          <div class="dc-desc">Next.js 16 · React 19 · 300s timeout for deep-analyze · Edge CDN globally</div>
-        </div>
-
-        <div class="deploy-card">
-          <div class="dc-icon">🚂</div>
-          <div class="dc-title">Railway</div>
-          <div class="dc-sub muted">ML backend · Python</div>
-          <div class="dc-desc">ML classifiers · Bayesian engine · KNN scoring · FastAPI REST</div>
-        </div>
-
-        <div class="deploy-card">
-          <div class="dc-icon">🤗</div>
-          <div class="dc-title">HF Inference</div>
-          <div class="dc-sub muted">MedGemma 4B</div>
-          <div class="dc-desc">Dedicated HF endpoint · Cloudflare tunnel · Clinical grounding stage</div>
-        </div>
-
-        <div class="deploy-card">
-          <div class="dc-icon">⚡</div>
-          <div class="dc-title">Groq API</div>
-          <div class="dc-sub muted">Llama 3.3-70B</div>
-          <div class="dc-desc">Narrative synthesis + tone rewriting · &lt;30s latency · Llama 3.1-8B safety fallback</div>
-        </div>
-
-        <div class="deploy-card">
-          <div class="dc-icon">🗄️</div>
-          <div class="dc-title">Supabase</div>
-          <div class="dc-sub muted">PostgreSQL · Privacy store</div>
-          <div class="dc-desc">Anonymous sessions · Consent audit trail · 24h auto-purge · Service key only (no client access)</div>
+          <div class="oc-desc">First-person script for the GP appointment — what to say, what to ask for, two evidence-based arguments to support the request.</div>
         </div>
 
       </div>
@@ -640,14 +653,193 @@
   </div>
 
 
-  <!-- Legend -->
+  <!-- ══════════════════════════════════════════
+       DEPLOYMENT INFRASTRUCTURE
+  ═══════════════════════════════════════════ -->
+
+  <div class="deploy-section">
+    <div class="deploy-heading">Infrastructure</div>
+    <div class="deploy-title">Deployment Architecture</div>
+
+    <!--
+      Coordinate map (all px, container 960 × 410):
+      User:         left=0,   top=155, w=152, h=100  → center (76, 205)
+      Vercel:       left=280, top=110, w=205, h=155  → center (382, 187)
+      HF Inference: left=548, top=0,   w=180, h=118  → center (638, 59)
+      Railway:      left=762, top=0,   w=180, h=118  → center (852, 59)
+      Supabase:     left=548, top=285, w=180, h=118  → center (638, 344)
+      Groq:         left=762, top=285, w=180, h=118  → center (852, 344)
+
+      Gaps:  HF right(728) → Railway left(762) = 34px ✓
+             Supabase right(728) → Groq left(762) = 34px ✓
+             HF bottom(118) → Supabase top(285) = 167px ✓
+             Railway bottom(118) → Groq top(285) = 167px ✓
+    -->
+
+    <div class="deploy-diagram">
+
+      <!-- SVG connection lines — rendered below the nodes -->
+      <svg
+        style="position:absolute;top:0;left:0;pointer-events:none;"
+        width="960" height="410"
+        viewBox="0 0 960 410"
+        fill="none">
+
+        <defs>
+          <!-- arrowhead marker -->
+          <marker id="arr" markerWidth="7" markerHeight="6"
+                  refX="6" refY="3" orient="auto">
+            <polygon points="0 0, 7 3, 0 6" fill="#b0bcd4"/>
+          </marker>
+          <!-- reverse arrowhead (for bidirectional start) -->
+          <marker id="arr-r" markerWidth="7" markerHeight="6"
+                  refX="1" refY="3" orient="auto">
+            <polygon points="7 0, 0 3, 7 6" fill="#b0bcd4"/>
+          </marker>
+        </defs>
+
+        <!-- User → Vercel (HTTPS, bidirectional) -->
+        <path d="M 152,205 C 210,205 230,187 280,187"
+              stroke="#c7cedf" stroke-width="1.5" stroke-dasharray="5,4"
+              marker-start="url(#arr-r)" marker-end="url(#arr)"/>
+        <text x="198" y="196" class="conn-label" text-anchor="middle">HTTPS</text>
+
+        <!-- Vercel → HF Inference (up-right, exits Vercel top) -->
+        <path d="M 430,110 C 450,70 510,59 548,59"
+              stroke="#c7cedf" stroke-width="1.5"
+              marker-start="url(#arr-r)" marker-end="url(#arr)"/>
+        <text x="488" y="71" class="conn-label" text-anchor="middle">HTTP</text>
+
+        <!-- Vercel → Railway (up-right-far, exits Vercel top-right) -->
+        <path d="M 468,110 C 510,50 680,30 762,48"
+              stroke="#c7cedf" stroke-width="1.5"
+              marker-start="url(#arr-r)" marker-end="url(#arr)"/>
+        <text x="616" y="32" class="conn-label" text-anchor="middle">REST API</text>
+
+        <!-- Vercel → Supabase (down-right) -->
+        <path d="M 430,265 C 450,310 510,344 548,344"
+              stroke="#c7cedf" stroke-width="1.5"
+              marker-start="url(#arr-r)" marker-end="url(#arr)"/>
+        <text x="484" y="340" class="conn-label" text-anchor="middle">Service key</text>
+
+        <!-- Vercel → Groq (down-right-far) -->
+        <path d="M 468,265 C 510,340 670,370 762,355"
+              stroke="#c7cedf" stroke-width="1.5"
+              marker-start="url(#arr-r)" marker-end="url(#arr)"/>
+        <text x="614" y="382" class="conn-label" text-anchor="middle">REST API</text>
+
+      </svg>
+
+      <!-- ── User node ── -->
+      <div class="deploy-node" style="left:0px; top:155px; width:152px;">
+        <div class="dn-logo">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none">
+            <circle cx="12" cy="8" r="3.5" fill="#97a6d2"/>
+            <path d="M4.5 20c0-3.866 3.358-7 7.5-7s7.5 3.134 7.5 7"
+                  stroke="#97a6d2" stroke-width="1.8" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <div class="dn-name">User</div>
+        <div class="dn-role muted">Browser client</div>
+        <div class="dn-desc">Next.js app served via Vercel CDN</div>
+      </div>
+
+      <!-- ── Vercel (hub) ── -->
+      <div class="deploy-node hub" style="left:280px; top:110px; width:205px;">
+        <div class="dn-logo">
+          <svg width="30" height="26" viewBox="0 0 116 100">
+            <path d="M57.5 15L100 87.5H15L57.5 15z" fill="#000"/>
+          </svg>
+        </div>
+        <div class="dn-name">Vercel</div>
+        <div class="dn-role accent">Frontend · Next.js 16</div>
+        <div class="dn-desc">React 19 · Edge CDN globally · API routes proxy all backend calls · 300s timeout for deep-analyze</div>
+      </div>
+
+      <!-- ── HF Inference ── -->
+      <div class="deploy-node" style="left:548px; top:0px; width:180px;">
+        <div class="dn-logo">
+          <svg width="30" height="30" viewBox="0 0 30 30" fill="none">
+            <circle cx="15" cy="15" r="13.5" fill="#FFD21E"/>
+            <circle cx="10.5" cy="13" r="1.9" fill="#333"/>
+            <circle cx="19.5" cy="13" r="1.9" fill="#333"/>
+            <path d="M9.5 19.5c1.6 2.8 9.4 2.8 11 0"
+                  stroke="#333" stroke-width="1.6" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <div class="dn-name">HF Inference</div>
+        <div class="dn-role muted">MedGemma 4B</div>
+        <div class="dn-desc">Dedicated endpoint · Cloudflare tunnel · Clinical grounding stage</div>
+      </div>
+
+      <!-- ── Railway ── -->
+      <div class="deploy-node" style="left:762px; top:0px; width:180px;">
+        <div class="dn-logo">
+          <svg width="30" height="30" viewBox="0 0 30 30" fill="none">
+            <rect width="30" height="30" rx="7" fill="#0b0d0e"/>
+            <path d="M8 22V8h7.5a5 5 0 0 1 0 10H8" stroke="white"
+                  stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M16 18l4.5 4" stroke="white"
+                  stroke-width="2.2" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <div class="dn-name">Railway</div>
+        <div class="dn-role muted">ML backend · Python</div>
+        <div class="dn-desc">ML classifiers · Bayesian engine · KNN scoring · FastAPI REST</div>
+      </div>
+
+      <!-- ── Supabase ── -->
+      <div class="deploy-node" style="left:548px; top:285px; width:180px;">
+        <div class="dn-logo">
+          <svg width="28" height="30" viewBox="0 0 109 113" fill="none">
+            <defs>
+              <linearGradient id="sb1" x1="66" y1="107" x2="1" y2="0" gradientUnits="userSpaceOnUse">
+                <stop offset="0" stop-color="#249361"/>
+                <stop offset="1" stop-color="#3ECF8E"/>
+              </linearGradient>
+            </defs>
+            <path d="M63.7 110.3c-2.9 3.6-8.7 1.6-8.7-3L54 40h45.2c8.2 0 12.8 9.5 7.7 15.9L63.7 110.3z"
+                  fill="url(#sb1)"/>
+            <path d="M45.3 2.7C48.2-.9 54 1.1 54 5.7l.8 67.3H10c-8.2 0-12.8-9.5-7.7-15.9L45.3 2.7z"
+                  fill="#3ECF8E"/>
+          </svg>
+        </div>
+        <div class="dn-name">Supabase</div>
+        <div class="dn-role green">PostgreSQL · Privacy store</div>
+        <div class="dn-desc">Anonymous sessions · Consent audit · 24h auto-purge · Server-side only</div>
+      </div>
+
+      <!-- ── Groq ── -->
+      <div class="deploy-node" style="left:762px; top:285px; width:180px;">
+        <div class="dn-logo">
+          <!-- Groq wordmark as SVG text -->
+          <svg width="58" height="24" viewBox="0 0 58 24" fill="none">
+            <text x="0" y="19"
+                  font-family="Arial Narrow, Helvetica, sans-serif"
+                  font-weight="900" font-size="22"
+                  letter-spacing="-1"
+                  fill="#F55036">groq</text>
+          </svg>
+        </div>
+        <div class="dn-name">Groq API</div>
+        <div class="dn-role orange">Llama 3.3-70B</div>
+        <div class="dn-desc">Narrative synthesis + tone rewrite · &lt;30s latency · 3.1-8B safety fallback</div>
+      </div>
+
+    </div><!-- /deploy-diagram -->
+  </div><!-- /deploy-section -->
+
+
+  <!-- ── Legend ── -->
   <div class="legend">
-    <div class="legend-item"><div class="legend-dot" style="background:var(--color-accent-soft);border:1.5px solid var(--color-accent);"></div>ML / Analysis layer</div>
-    <div class="legend-item"><div class="legend-dot" style="background:rgba(215,240,104,0.5);border:1.5px solid #a3b50a;"></div>LLM synthesis (two-stage)</div>
-    <div class="legend-item"><div class="legend-dot" style="background:rgba(74,222,128,0.2);border:1.5px solid #4ade80;"></div>Safety layer</div>
-    <div class="legend-item"><div class="legend-dot" style="background:rgba(253,186,116,0.4);border:1.5px solid #fb923c;"></div>User-facing output</div>
-    <div class="legend-item"><div class="legend-dot" style="background:rgba(119,101,244,0.08);border:2px solid var(--color-accent);"></div>New in V6</div>
-    <div class="legend-item"><div class="legend-dot" style="background:rgba(151,166,210,0.2);border:1px solid var(--color-stroke);"></div>Infrastructure</div>
+    <div class="legend-item">
+      <span style="background:var(--color-lime);color:#3d6400;font-size:8.5px;font-weight:800;letter-spacing:1px;text-transform:uppercase;padding:3px 8px;border-radius:999px;">New V6</span>
+      Added in V6 pipeline
+    </div>
+    <div class="legend-item"><div class="legend-dot" style="background:rgba(119,101,244,0.09);border:1.5px solid rgba(119,101,244,0.35);"></div>Analysis layer (ML)</div>
+    <div class="legend-item"><div class="legend-dot" style="background:rgba(134,200,60,0.18);border:1.5px solid rgba(94,178,54,0.4);"></div>LLM synthesis — two stages</div>
+    <div class="legend-item"><div class="legend-dot" style="background:rgba(74,222,128,0.14);border:1.5px solid rgba(74,222,128,0.45);"></div>Safety layer</div>
+    <div class="legend-item"><div class="legend-dot" style="background:rgba(253,186,116,0.25);border:1.5px solid rgba(253,186,116,0.5);"></div>User-facing output</div>
   </div>
 
 </div>

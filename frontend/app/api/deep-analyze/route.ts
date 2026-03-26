@@ -13,6 +13,13 @@ import {
   MEDGEMMA_JSON_SYSTEM_V1,
 } from '@/src/lib/prompts';
 import {
+  computeConfidence,
+  computeUrgency,
+  extractBiomarkerSnapshot,
+  type ConfidenceTier,
+  type UrgencyLevel,
+} from '@/src/lib/clinicalSignals';
+import {
   applyHardSafetyRules,
   validateMedGemmaGroundingSchema,
   type MedGemmaGroundingResult,
@@ -34,6 +41,38 @@ const HF_MODEL = 'google/medgemma-1.5-4b-it';
 const HF_API_URL = process.env.HF_ENDPOINT_URL
   ? `${process.env.HF_ENDPOINT_URL}/v1/chat/completions`
   : 'https://router.huggingface.co/v1/chat/completions';
+
+type PromptCalibrationSignal = {
+  conditionId: string;
+  rawMlScore: number;
+  effectiveScore: number;
+  confidenceTier: ConfidenceTier;
+  urgencyLevel: UrgencyLevel;
+  clusterAgreement: number;
+  scoreSuppressed: boolean;
+  confidenceSummary: string;
+  urgencySummary: string;
+};
+
+function buildRiskCalibrationText(signals: PromptCalibrationSignal[]): string {
+  if (signals.length === 0) {
+    return 'No elevated conditions reached the calibration layer.';
+  }
+
+  return signals
+    .map((signal) => {
+      const suppressionText = signal.scoreSuppressed
+        ? `score_suppressed: yes (${signal.rawMlScore.toFixed(2)} -> ${signal.effectiveScore.toFixed(2)})`
+        : 'score_suppressed: no';
+
+      return [
+        `- ${signal.conditionId}: raw_ml=${signal.rawMlScore.toFixed(2)} | effective_score=${signal.effectiveScore.toFixed(2)} | confidence=${signal.confidenceTier} | urgency=${signal.urgencyLevel} | cluster_agreement=${Math.round(signal.clusterAgreement * 100)}% | ${suppressionText}`,
+        `  Confidence note: ${signal.confidenceSummary}`,
+        `  Urgency note: ${signal.urgencySummary}`,
+      ].join('\n');
+    })
+    .join('\n');
+}
 
 /**
  * Attempts to parse potentially-truncated JSON from MedGemma.
@@ -90,6 +129,7 @@ export async function POST(req: NextRequest) {
   const body = await req.json();
   const answers: Record<string, unknown> = body.answers ?? {};
   const mlScores: Record<string, number> | undefined = body.mlScores;
+  const rawMlScores: Record<string, number> | undefined = body.rawMlScores;
   let privacy: ServerPrivacyContext | null;
 
   try {
@@ -109,6 +149,7 @@ export async function POST(req: NextRequest) {
   const symptomsText = formatAnswersV2(answers);
   const answeredQuestionsText = buildAnsweredQuestionsText(answers);
   const uploadedLabsText = buildUploadedLabsText(answers);
+  const biomarkers = extractBiomarkerSnapshot(answers);
   const fatigueSeverityRaw = answers['dpq040___feeling_tired_or_having_little_energy'];
   const fatigueSeverity = fatigueSeverityRaw === undefined ? null : Number(fatigueSeverityRaw);
 
@@ -169,6 +210,41 @@ export async function POST(req: NextRequest) {
     }
   }
 
+  const promptCalibrationSignals: PromptCalibrationSignal[] = topConditions.map(([conditionId]) => {
+    const rawMlScore = rawMlScores?.[conditionId] ?? mlScores?.[conditionId] ?? 0;
+    const effectiveScore = mlScores?.[conditionId] ?? rawMlScore;
+    const confidence = computeConfidence({
+      conditionId,
+      mlScore: rawMlScore,
+      posteriorScore: effectiveScore,
+      labSignals: knnResult?.lab_signals,
+    });
+    const urgency = computeUrgency({
+      conditionId,
+      posteriorScore: effectiveScore,
+      biomarkers,
+    });
+
+    return {
+      conditionId,
+      rawMlScore,
+      effectiveScore,
+      confidenceTier: confidence.tier,
+      urgencyLevel: urgency.level,
+      clusterAgreement: confidence.clusterAgreement,
+      scoreSuppressed: effectiveScore + 0.05 < rawMlScore,
+      confidenceSummary: confidence.summary,
+      urgencySummary: urgency.reasons[0] ?? urgency.cta,
+    };
+  });
+  const riskCalibrationText = buildRiskCalibrationText(promptCalibrationSignals);
+  const overallUrgency: UrgencyLevel =
+    promptCalibrationSignals.some((signal) => signal.urgencyLevel === 'urgent')
+      ? 'urgent'
+      : promptCalibrationSignals.some((signal) => signal.urgencyLevel === 'soon')
+        ? 'soon'
+        : 'routine';
+
   // ── V6 all-clear path: skip MedGemma entirely, synthesize directly via Groq ──
   if (isAllClear) {
     try {
@@ -228,6 +304,7 @@ export async function POST(req: NextRequest) {
     knnLabText,
     prioritizedConditions: flaggedConditions,
     confirmedConditions,
+    riskCalibrationText,
   });
 
   let groundingResult: MedGemmaGroundingResult = {
@@ -307,6 +384,8 @@ export async function POST(req: NextRequest) {
     const synthesisPrompt = buildGroqSynthesisPromptV6({
       groundingResultJson: JSON.stringify(groundingResult, null, 2),
       fatigueSeverity,
+      riskCalibrationText,
+      overallUrgency,
       oneShot: selectOneShotExample(groundingResult),
     });
 
@@ -337,6 +416,7 @@ export async function POST(req: NextRequest) {
           fatigueSeverity,
           useKNN,
           knnSignals: knnResult,
+          promptCalibrationSignals,
           groundingResult,
           result: safeData,
         },
@@ -355,6 +435,7 @@ export async function POST(req: NextRequest) {
       topConditionIds: topConditions.map(([condition]) => condition),
       fatigueSeverity,
       useKNN,
+      overallUrgency,
     });
 
     return NextResponse.json({

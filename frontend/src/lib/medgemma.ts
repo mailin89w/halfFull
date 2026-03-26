@@ -344,6 +344,7 @@ export async function fetchMedGemmaInsights(
 export async function fetchDeepAnalysis(
   answers: Record<string, unknown>,
   mlScores?: Record<string, number>,
+  rawMlScores?: Record<string, number>,
   clarificationQA?: BayesianClarificationRecord,
   confirmedConditions?: string[],
 ): Promise<DeepMedGemmaResult> {
@@ -351,7 +352,7 @@ export async function fetchDeepAnalysis(
   const response = await fetch('/api/deep-analyze', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ answers, mlScores, clarificationQA, confirmedConditions, privacy }),
+    body: JSON.stringify({ answers, mlScores, rawMlScores, clarificationQA, confirmedConditions, privacy }),
   });
 
   if (!response.ok) {
@@ -469,6 +470,7 @@ export function createOfflineDeepResult(answers: Record<string, unknown>): DeepM
 export async function getDeepAnalysisWithFallback(
   answers: Record<string, unknown>,
   mlScores?: Record<string, number>,
+  rawMlScores?: Record<string, number>,
   clarificationQA?: BayesianClarificationRecord,
   confirmedConditions?: string[],
   timeoutMs = 85000  // matches the 90s abort controller in /api/deep-analyze
@@ -485,7 +487,7 @@ export async function getDeepAnalysisWithFallback(
 
   try {
     const liveResult = await withTimeout(
-      fetchDeepAnalysis(answers, mlScores, clarificationQA, confirmedConditions),
+      fetchDeepAnalysis(answers, mlScores, rawMlScores, clarificationQA, confirmedConditions),
       timeoutMs,
       'Live AI analysis'
     );
