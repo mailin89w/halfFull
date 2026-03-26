@@ -804,6 +804,8 @@ Examples:
     parser.add_argument("--type",      dest="profile_type", type=str, default=None,
                         choices=["positive", "borderline", "negative", "healthy", "edge"])
     parser.add_argument("--seed",      type=int,  default=42)
+    parser.add_argument("--profiles-path", type=str, default=str(PROFILES_PATH),
+                        help="Path to cohort profiles JSON")
     parser.add_argument("--output",    type=str,  default=None,
                         help="Override results output directory")
     parser.add_argument("--exclude",   type=str,  default=None,
@@ -814,13 +816,14 @@ Examples:
 
 def main() -> int:
     args = parse_args()
+    profiles_path = Path(args.profiles_path)
 
     results_dir = Path(args.output) if args.output else RESULTS_DIR
     results_dir.mkdir(parents=True, exist_ok=True)
     REPORTS_DIR.mkdir(parents=True, exist_ok=True)
 
     # -- Load profiles --------------------------------------------------------
-    loader = ProfileLoader(PROFILES_PATH, SCHEMA_PATH)
+    loader = ProfileLoader(profiles_path, SCHEMA_PATH)
     try:
         if args.condition:
             profiles = loader.load_by_condition(args.condition)

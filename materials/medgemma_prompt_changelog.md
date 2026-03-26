@@ -1,20 +1,24 @@
 # MedGemma Prompt Changelog
 
-This file keeps the MedGemma prompt history explicit. The current prompt is `V5`. The four prior versions are preserved below as `V1` through `V4`.
+This file keeps the MedGemma prompt history explicit. The current prompt is `V6`. Prior versions are preserved below.
 
 ## Current live prompt set
 
 - Shared prompt module: `frontend/src/lib/prompts.ts`
 - JSON-only system prompt: `MEDGEMMA_JSON_SYSTEM_V1`
-- Current deep-analysis prompt: `buildDeepAnalyzePrompt(...)`
-- Current all-clear prompt: `buildAllClearPrompt(...)`
+- **V6 Call 1 (MedGemma grounding):** `buildMedGemmaGroundingPromptV6(...)`
+- **V6 Call 2 (Groq synthesis):** `buildGroqSynthesisPromptV6(...)`
+- All-clear path (Groq): `buildAllClearPrompt(...)` passed to `synthesizeNarrativeWithGroqV6`
 - Lightweight analysis prompt: `buildAnalyzePrompt(...)`
+- V6 Groq synthesis function: `synthesizeNarrativeWithGroqV6` in `deepAnalyzeSafety.ts`
+- V6 grounding validation: `validateMedGemmaGroundingSchema` in `medgemma-safety.ts`
 
 ## Version table
 
 | Version | Date | Status | Scope | What changed | Why it changed | Evidence / note |
 | --- | --- | --- | --- | --- | --- | --- |
-| V5 | 2026-03-25 | Current working version | `deep-analyze` | Richer input context; explicit verify/decline step for filtered disease suspicions; no clarification-question framing; healthy/no-suspect path; doctor-specific kits; integrated safety-tone rewrite in the MedGemma flow. | Give MedGemma the full case context, make the fatigue summary more useful and personalized, and produce doctor guidance that is more case-specific and specialist-aware. | Implemented in the current working tree. End-to-end live MedGemma testing still pending. |
+| V6 | 2026-03-25 | Current working version | `deep-analyze` | Split into two calls: MedGemma clinical grounding (Call 1) + Groq narrative synthesis (Call 2). PDF labs removed from MedGemma. Tone/narrative moved entirely to Groq. Full MedGemma output logged to Supabase. New `declinedSuspicions` field. `confidence` field on insights. Strong doctor kit with pre-visit structure (`bringToAppointment`, `whatToSay`). 3-step decision tree with binary gates. Anti-generic discussionPoints rule with negative example. Minimum 1 doctor if insights non-empty. `llama-3.3-70b-versatile` as primary synthesis model. One-shot example slot (pending user approval of examples). | Research: general-purpose models are 25 points better at hallucination-free narrative (medRxiv 2025). MedGemma should do narrow clinical grounding only; prose generation belongs in Groq. PDF labs removed from MedGemma call because structured Q&A is sufficient for grounding and PDF parsing is unreliable. | Architecture implemented. Examples pending review. |
+| V5 | 2026-03-25 | Previous version | `deep-analyze` | Richer input context; explicit verify/decline step for filtered disease suspicions; no clarification-question framing; healthy/no-suspect path; doctor-specific kits; integrated safety-tone rewrite in the MedGemma flow. | Give MedGemma the full case context, make the fatigue summary more useful and personalized, and produce doctor guidance that is more case-specific and specialist-aware. | Superseded by V6. Prompt templates preserved below. |
 | V4 | 2026-03-25 | Previous live structure | `analyze` + `deep-analyze` | Prompts extracted into `frontend/src/lib/prompts.ts`; wording tightened to emphasize grounding, allowed conditions, lower-certainty framing, and test recommendations tied to flagged evidence only. | Make prompt iteration easier, reduce hallucinated conditions/tests, and keep a single source of truth. | No eval run recorded yet. Change was based on prompt hygiene and maintainability. |
 | V3 | 2026-03-25 | Historical | `deep-analyze` | Added optional KNN neighbour-lab evidence block to the prompt; retained all-clear path and doctor-kit output shape. | Improve specificity of test suggestions using similar-patient lab patterns. | Code change is visible in git history. No prompt-specific eval notes found in repo docs. |
 | V2 | 2026-03-25 | Historical | `deep-analyze` | Added all-clear prompt variant, clarification-answer grounding, stronger safety phrasing, and the expanded JSON response with doctor-kit fields. | Better UX for healthy users, more personalized outputs, and safer language for possible conditions. | Code change is visible in git history. No separate evaluation artifact found yet. |
@@ -136,6 +140,111 @@ Respond with valid JSON only. No markdown, no preamble:
   ],
   "allClear": false
 }
+```
+
+## V6 prompt templates
+
+### V6 Call 1 — MedGemma grounding prompt
+
+Source: `buildMedGemmaGroundingPromptV6(...)` in `frontend/src/lib/prompts.ts`
+
+Key design decisions vs V5:
+- PDF labs **removed** — only structured Q&A, Bayesian evidence, and ML scores
+- "Follow the evidence, not your priors" instruction added (addresses MedGemma over-applying common-disease priors)
+- 3-step decision tree with explicit binary gates (replaces 6-step verb list)
+- `declinedSuspicions` is a required field — model cannot silently omit unsupported hypotheses
+- `confidence` (probable / possible / worth_ruling_out) added to every supportedSuspicion
+- `anchorEvidence` must name a specific feature/question from the record — no generic statements
+- No narrative prose at all — MedGemma's only job is classification + one anchor fact per decision
+- `max_tokens: 800`, `temperature: 0.1` — narrow and deterministic
+
+Full template: see `buildMedGemmaGroundingPromptV6` in `frontend/src/lib/prompts.ts`
+
+### V6 Call 2 — Groq synthesis prompt
+
+Source: `buildGroqSynthesisPromptV6(...)` in `frontend/src/lib/prompts.ts`
+Model: `llama-3.3-70b-versatile`, timeout 30s, max_tokens 3500, temperature 0.3
+
+Key design decisions vs V5:
+- **Grounding rule added back** (dropped from V5): "Every sentence must reference THIS patient's data. Do not use generic filler."
+- Anti-generic `discussionPoints` rule with negative example: "DO NOT write 'Ask your doctor if you should get blood tests.' DO write things like: 'My questionnaire flagged heavy periods with clotting lasting 8 days — I want to ask specifically whether serum ferritin plus transferrin saturation is warranted before any supplementation decision.'"
+- **Minimum doctor rule**: "If insights is non-empty, you MUST include at least 1 recommendedDoctor. Returning 0 doctors when there are active suspicions is a product error."
+- Strong doctor kit: `bringToAppointment` list + `whatToSay` opening statement + `keySymptoms` per specialist
+- `openingSummary` expanded to 2-3 sentences (was 1-2)
+- `doctorKitSummary` expanded to 2-3 sentences naming duration and specific symptoms
+- insights only from `supportedSuspicions` (explicit rule — no additions from Groq's own reasoning)
+- `oneShot` parameter slot for approved example (currently `null` — pending review)
+
+Full template: see `buildGroqSynthesisPromptV6` in `frontend/src/lib/prompts.ts`
+
+### V6 architecture changes
+
+```
+Before V6 (V5):
+  MedGemma → full deep-analyze (clinical + narrative + doctor kit + safety)
+  Groq → light safety rewrite (5s timeout, 1000 tokens, patch only)
+
+After V6:
+  MedGemma (Call 1) → grounding only: supportedSuspicions, declinedSuspicions, medicationFlags
+                       (no PDF labs, no prose, 800 tokens, 0.1 temp)
+  Groq (Call 2)     → full synthesis: all narrative fields + strong doctor kit
+                       (llama-3.3-70b-versatile, 30s timeout, 3500 tokens)
+  Supabase log      → medgemma_grounding_raw (full raw output before any processing)
+  Supabase log      → deep_analyze (final result with groundingResult included)
+```
+
+## V5 deep-analysis prompt template
+
+Source: `buildDeepAnalyzePrompt(...)` — preserved for reference, superseded by V6.
+
+```text
+You are MedGemma acting as a medical screening synthesis assistant for a fatigue assessment product.
+
+Your job is NOT to ask clarification questions. The Bayesian layer already handled follow-up questioning. Your job is to review all provided evidence, verify which disease suspicions are still supported, decline the ones that are not supported, and produce a useful doctor-ready summary.
+
+We tested 11 diseases as fatigue-related signals in our filtering layer:
+${evaluatedDiseases}
+
+${candidateInstruction}
+
+${detailInstruction}
+
+Use the full evidence below:
+
+PATIENT SUMMARY BLOCK:
+${symptomsText}
+
+HIGH-SCORING FILTERED DISEASES:
+${flaggedAreasText}
+
+ALREADY CONFIRMED CONDITIONS:
+${confirmedText}
+
+BAYESIAN EVIDENCE (already collected upstream, not new clarification requests):
+${bayesianEvidenceText}
+
+QUESTION + ANSWER DICTIONARY (question text, feature name, answer label, raw answer):
+${answeredQuestionsText}
+
+RAW STRUCTURED ANSWERS JSON:
+${structuredAnswersJson}
+
+UPLOADED LABS (raw extracted text plus structured values before normalization):
+${uploadedLabsText}
+[NEAREST-NEIGHBOUR LAB SIGNALS if available]
+
+MODEL SCORE SUMMARY:
+${scoreSummaryJson}
+
+Reasoning task:
+1. Identify the fatigue drivers and symptom clusters that matter most clinically for this specific patient.
+2. Review the filtered disease hypotheses against the user evidence, raw labs, and Bayesian evidence.
+3. Keep only the disease suspicions that are still supported after review. Decline unsupported hypotheses.
+4. It is allowed that no disease suspects remain supported. In that case return an all-clear style result.
+5. Recommend up to 3 clinicians only when they are genuinely relevant to the supported disease risks or known confirmed conditions.
+6. Build doctor-specific kits that separate symptoms to discuss, tests worth considering, and high-value discussion points.
+
+[JSON schema — see V5 section below for full schema]
 ```
 
 ## V4 deep-analysis prompt template

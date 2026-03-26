@@ -232,7 +232,5 @@ node_modules/
 
 logs/
 
-# Eval pipeline — generated data (never commit synthetic profiles or raw results)
+# Eval pipeline — keep large generated cohort ignored, but allow reports/results to be versioned
 evals/cohort/profiles.json
-evals/results/
-evals/reports/

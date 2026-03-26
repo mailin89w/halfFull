@@ -23,7 +23,30 @@ NHANES answer codes used here:
   kiq480:  ordinal count: 0 = zero, 1 = once, 2 = twice, 3 = three or more times
 """
 
-from typing import Union
+from typing import Callable, Union
+
+
+def _convert_alcohol_category(raw_value: object) -> str:
+    """
+    Convert average drinks/day into Bayesian alcohol-risk categories.
+
+    Uses a simple weekly approximation:
+      0 drinks/day          -> "low" / "low_none" compatible
+      >0 to <=1 drink/day   -> low / low_none bucket
+      >1 to <=2 drinks/day  -> moderate bucket
+      >2 drinks/day         -> high_risk bucket
+    """
+    drinks_per_day = float(raw_value)
+    drinks_per_week = drinks_per_day * 7.0
+    if drinks_per_week > 14.0:
+        return "high_risk"
+    if drinks_per_week > 7.0:
+        return "moderate"
+    return "low"
+
+
+def _convert_alcohol_none(_: object) -> str:
+    return "none"
 
 # ── Translation table ─────────────────────────────────────────────────────────
 #
@@ -37,7 +60,7 @@ from typing import Union
 # from the frontend are string-encoded NHANES codes).
 # They must return "yes" / "no" for binary Bayesian questions.
 
-QUIZ_TO_BAYESIAN: dict[str, dict[str, Union[str, list, object]]] = {
+QUIZ_TO_BAYESIAN: dict[str, dict[str, Union[str, list[str], Callable[[object], str]]]] = {
     "rhq031___had_regular_periods_in_past_12_months": {
         # Quiz:     "Have your periods been regular in the past year?"
         #           1 = regular, 2 = irregular / absent
@@ -70,6 +93,20 @@ QUIZ_TO_BAYESIAN: dict[str, dict[str, Union[str, list, object]]] = {
         "bayesian_id": ["kidney_q3", "prediabetes_q3"],
         "convert": lambda v: "yes" if int(v) >= 2 else "no",
     },
+    "alq111___ever_had_a_drink_of_any_kind_of_alcohol": {
+        # Quiz:     "Have you ever had a drink of alcohol?"
+        #           1 = yes, 2 = no
+        # Bayesian: use liver_q1 as the canonical alcohol-intake question.
+        #           The runtime propagates this shared evidence to elec_q1/hep_q1.
+        "bayesian_id": "liver_q1",
+        "convert": lambda v: _convert_alcohol_none(v) if str(v) == "2" else "low",
+    },
+    "alq130___avg_#_alcoholic_drinks/day___past_12_mos": {
+        # Quiz:     average alcoholic drinks per day in the past 12 months
+        # Bayesian: reuse for all alcohol-intake clarification questions via liver_q1
+        "bayesian_id": "liver_q1",
+        "convert": _convert_alcohol_category,
+    },
 }
 
 # Short-key aliases so callers can look up by bare NHANES field ID too.
@@ -79,6 +116,8 @@ _ALIASES: dict[str, str] = {
     "slq030":  "slq030___how_often_do_you_snore?",
     "slq050":  "slq050___ever_told_doctor_had_trouble_sleeping?",
     "kiq480":  "kiq480___how_many_times_urinate_in_night?",
+    "alq111":  "alq111___ever_had_a_drink_of_any_kind_of_alcohol",
+    "alq130":  "alq130___avg_#_alcoholic_drinks/day___past_12_mos",
 }
 
 

@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>V6 Results Preview</title>
+<link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --ink: #09090f; --ink-soft: #5f6783; --lime: #d7f068;
+    --purple: rgba(119,101,244,1); --purple-light: rgba(119,101,244,0.06);
+    --purple-border: rgba(119,101,244,0.3);
+    --body: "Space Grotesk", system-ui, sans-serif;
+    --display: "Archivo Black", sans-serif;
+  }
+  body { font-family: var(--body); background: #eeeef4; color: var(--ink); -webkit-font-smoothing: antialiased; padding: 20px 16px 80px; max-width: 420px; margin: 0 auto; font-size: 14px; }
+  .tag { display: inline-block; font-size: 11px; font-weight: 700; letter-spacing: .04em; padding: 3px 10px; border-radius: 999px; margin-bottom: 10px; }
+  .card { background: white; border-radius: 20px; padding: 18px; margin-bottom: 12px; box-shadow: 0 8px 24px rgba(86,98,145,.1); }
+  .section-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .16em; color: var(--ink-soft); margin-bottom: 8px; }
+  h2 { font-family: var(--display); font-size: 1.7rem; letter-spacing: -.04em; margin-bottom: 10px; line-height: 1.1; }
+  h3 { font-family: var(--display); font-size: 1.4rem; letter-spacing: -.04em; margin-bottom: 8px; }
+
+  /* ── summary bullets ── */
+  .summary-card { background: white; border-radius: 20px; padding: 18px; margin-bottom: 12px; box-shadow: 0 8px 24px rgba(86,98,145,.1); border-left: 3px solid var(--lime); }
+  .bullet-list { display: flex; flex-direction: column; gap: 7px; margin-top: 4px; }
+  .bullet-row { display: flex; align-items: flex-start; gap: 8px; font-size: 13.5px; line-height: 1.6; }
+  .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--lime); flex-shrink: 0; margin-top: 5px; }
+
+  /* ── insights ── */
+  .insight { background: white; border-radius: 16px; padding: 14px; margin-bottom: 8px; box-shadow: 0 6px 18px rgba(86,98,145,.09); }
+  .insight-head { display: flex; align-items: center; gap: 8px; margin-bottom: 7px; }
+  .insight-title { font-weight: 700; font-size: 14px; }
+  .badge { font-size: 10px; font-weight: 700; letter-spacing: .06em; padding: 2px 8px; border-radius: 999px; text-transform: uppercase; }
+  .probable { background: rgba(119,101,244,.12); color: #5548c8; }
+  .possible { background: rgba(215,240,104,.55); color: #3d4500; }
+  .insight-note { font-size: 13px; line-height: 1.65; color: #333; }
+
+  /* ── next steps card ── */
+  .next-card { background: rgba(215,240,104,.22); border: 1px solid rgba(215,240,104,.7); border-radius: 20px; padding: 18px; margin-bottom: 12px; }
+  .next-card .section-label { color: var(--ink); }
+  .next-card p { font-size: 13.5px; line-height: 1.7; margin-bottom: 14px; }
+
+  /* ── doctor cards ── */
+  .doctor-card { background: rgba(255,255,255,.88); border-radius: 16px; overflow: hidden; margin-bottom: 10px; box-shadow: 0 5px 16px rgba(86,98,145,.1); }
+  .doctor-header { display: flex; align-items: center; gap: 10px; padding: 12px 14px; cursor: pointer; }
+  .num { width: 32px; height: 32px; border-radius: 50%; background: var(--ink); color: white; font-size: 13px; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .icon { font-size: 18px; flex-shrink: 0; }
+  .doctor-meta { flex: 1; min-width: 0; }
+  .doctor-name-row { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; margin-bottom: 2px; }
+  .doctor-name { font-weight: 700; font-size: 13.5px; }
+  .priority-badge { font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 999px; background: var(--lime); color: var(--ink); }
+  .doctor-reason { font-size: 12px; line-height: 1.5; color: var(--ink-soft); display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+  .expand-btn { font-size: 18px; font-weight: 700; color: var(--ink-soft); flex-shrink: 0; }
+
+  /* expanded kit */
+  .kit-body { border-top: 1px solid rgba(119,101,244,.15); padding: 14px; display: flex; flex-direction: column; gap: 14px; }
+  .what-to-say { border-radius: 12px; border: 1px solid var(--purple-border); background: var(--purple-light); padding: 12px; }
+  .what-to-say p { font-size: 13px; font-style: italic; line-height: 1.65; margin-top: 5px; }
+  .sub-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .14em; color: var(--ink-soft); margin-bottom: 6px; }
+  .bullets { display: flex; flex-direction: column; gap: 4px; }
+  .bullets p { font-size: 13px; line-height: 1.6; }
+  .discussion-points { display: flex; flex-direction: column; gap: 8px; }
+  .dp { background: var(--purple-light); border-radius: 10px; padding: 10px 12px; font-size: 13px; line-height: 1.65; }
+  .dl-btn { width: 100%; border-radius: 999px; background: var(--ink); color: white; padding: 12px; font-size: 13px; font-weight: 700; border: none; margin-top: 4px; cursor: pointer; }
+
+  /* export bar */
+  .export-bar { background: var(--ink); border-radius: 22px; padding: 18px; color: white; }
+  .export-bar .section-label { color: rgba(255,255,255,.6); }
+  .export-bar p { font-size: 13px; line-height: 1.6; color: rgba(255,255,255,.78); margin: 6px 0 14px; }
+  .btn-lime { width: 100%; border-radius: 999px; background: var(--lime); color: var(--ink); padding: 14px; font-size: 14px; font-weight: 700; border: none; cursor: pointer; margin-bottom: 8px; }
+  .btn-ghost { width: 100%; border-radius: 999px; border: 1px solid rgba(255,255,255,.2); background: rgba(255,255,255,.08); color: white; padding: 14px; font-size: 14px; font-weight: 700; cursor: pointer; }
+
+  .page-note { font-size: 11px; text-align: center; color: var(--ink-soft); margin-bottom: 18px; letter-spacing: .04em; }
+</style>
+</head>
+<body>
+
+<p class="page-note">V6 SYNTHESIS PREVIEW · IRON DEFICIENCY + PERIMENOPAUSE</p>
+
+<!-- ── Your results (structured bullets) ───────────────────────────── -->
+<div class="summary-card">
+  <span class="tag" style="background:var(--lime);color:var(--ink);">Your results · MedGemma</span>
+  <div class="bullet-list">
+    <div class="bullet-row"><span class="dot"></span>Severe fatigue at 3/3 intensity for 3 months, worst in the mornings and after physical effort</div>
+    <div class="bullet-row"><span class="dot"></span>Heavy periods lasting 8 days with clotting — consistent for 6+ months, soaking through protection on peak days</div>
+    <div class="bullet-row"><span class="dot"></span>Waking 3 times per night on an average of 5.5 hours of sleep, unrefreshed in the morning</div>
+    <div class="bullet-row"><span class="dot"></span>Cold intolerance in hands and feet even in warm environments</div>
+    <div class="bullet-row"><span class="dot"></span>Concentration and memory difficulties affecting work performance over the past 2 months</div>
+  </div>
+</div>
+
+<!-- ── Areas worth checking (insights) ─────────────────────────────── -->
+<div style="margin-bottom:12px;">
+  <h3 style="font-size:1.3rem;margin-bottom:10px;">Areas worth checking</h3>
+
+  <div class="insight">
+    <div class="insight-head">
+      <span class="insight-title">Iron deficiency</span>
+      <span class="badge probable">Probable</span>
+    </div>
+    <p class="insight-note">Your 8-day heavy periods with clotting are the strongest clinical driver here — this is the most common cause of iron depletion in premenopausal women, and it was independently confirmed in your follow-up answers. Cold intolerance and cognitive fog are separate co-signals for low ferritin that your answers also confirmed.</p>
+  </div>
+
+  <div class="insight">
+    <div class="insight-head">
+      <span class="insight-title">Perimenopause</span>
+      <span class="badge possible">Possible</span>
+    </div>
+    <p class="insight-note">At 38, the combination of cycle changes and night wakings raises perimenopause as a concurrent contributor. The evidence here doesn't confirm it — a hormone panel would — but it's distinct from the iron picture and worth ruling out with your GP or gynaecologist.</p>
+  </div>
+</div>
+
+<!-- ── Next steps + doctor cards ───────────────────────────────────── -->
+<div class="next-card">
+  <div class="section-label">Next steps · talk to a doctor</div>
+  <p>Start with your GP for a full iron panel and hormone screen — both can be ordered in a single appointment. If ferritin is low, a gynaecologist is the next step to address the cause of blood loss, not just supplement it.</p>
+
+  <!-- Doctor 1: GP -->
+  <div class="doctor-card">
+    <div class="doctor-header" onclick="toggle(0)">
+      <div class="num">1</div>
+      <span class="icon">🩺</span>
+      <div class="doctor-meta">
+        <div class="doctor-name-row">
+          <span class="doctor-name">GP / Primary Care</span>
+          <span class="priority-badge">Start here</span>
+        </div>
+        <p class="doctor-reason">Iron panel and hormone screen in one appointment — no specialist referral needed to start.</p>
+      </div>
+      <span class="expand-btn" id="arrow-0">+</span>
+    </div>
+    <div class="kit-body" id="kit-0" style="display:none;">
+      <div class="what-to-say">
+        <div class="sub-label">What to say</div>
+        <p>"I've been severely fatigued for 3 months, I have 8-day heavy periods with clotting, and I'm wondering if I have iron deficiency or early perimenopause — or both. I'd like a full iron panel including ferritin and transferrin saturation, and to discuss whether FSH and estradiol are worth checking given my age."</p>
+      </div>
+      <div>
+        <div class="sub-label">Symptoms to raise</div>
+        <div class="bullets">
+          <p>• Heavy periods 8 days with clots, consistent 6+ months</p>
+          <p>• Fatigue severity 3/3 for 3 months</p>
+          <p>• Waking 3× per night, 5.5h average sleep</p>
+          <p>• Cold intolerance, concentration difficulties</p>
+        </div>
+      </div>
+      <div>
+        <div class="sub-label">Tests to request</div>
+        <div class="bullets">
+          <p>• Serum ferritin (not just haemoglobin)</p>
+          <p>• Transferrin saturation</p>
+          <p>• Full blood count with MCV and MCH</p>
+          <p>• FSH and estradiol if iron panel normal</p>
+        </div>
+      </div>
+      <div>
+        <div class="sub-label">Questions &amp; evidence</div>
+        <div class="discussion-points">
+          <div class="dp">My period pattern — 8 days with clots for 6+ months — is the primary reason I want ferritin and transferrin saturation tested specifically, not just a standard FBC. Early iron deficiency won't show on haemoglobin until it's severe.</div>
+          <div class="dp">I wake up 3 times per night despite going to bed early. I want to understand whether this is iron-related or hormonal before starting any supplement, because treating the wrong cause won't fix the sleep.</div>
+          <div class="dp">At 38 with cycle changes and cognitive symptoms, is checking FSH and estradiol appropriate now — or should I wait for iron results first?</div>
+        </div>
+      </div>
+      <div>
+        <div class="sub-label">Bring to the appointment</div>
+        <div class="bullets">
+          <p>• Period diary: cycle dates, flow description, clotting for last 3 cycles</p>
+          <p>• Sleep log if tracked: bedtime, wake times</p>
+        </div>
+      </div>
+      <button class="dl-btn">Download GP kit (PDF)</button>
+    </div>
+  </div>
+
+  <!-- Doctor 2: Gynaecologist -->
+  <div class="doctor-card">
+    <div class="doctor-header" onclick="toggle(1)">
+      <div class="num">2</div>
+      <span class="icon">🩺</span>
+      <div class="doctor-meta">
+        <div class="doctor-name-row">
+          <span class="doctor-name">Gynaecologist</span>
+          <span class="priority-badge" style="background:rgba(119,101,244,.15);color:#5548c8;">Consider next</span>
+        </div>
+        <p class="doctor-reason">Addresses the root cause of heavy bleeding — fibroids, adenomyosis, or hormonal — so iron depletion doesn't recur.</p>
+      </div>
+      <span class="expand-btn" id="arrow-1">+</span>
+    </div>
+    <div class="kit-body" id="kit-1" style="display:none;">
+      <div class="what-to-say">
+        <div class="sub-label">What to say</div>
+        <p>"I have 8-day heavy periods with clotting that appear to be causing iron deficiency and severe fatigue. I want to understand the structural or hormonal cause — not just manage the blood loss — so I can make a treatment decision that stops the cycle rather than supplementing indefinitely."</p>
+      </div>
+      <div>
+        <div class="sub-label">Symptoms to raise</div>
+        <div class="bullets">
+          <p>• 8-day periods with heavy clotting for 6+ months</p>
+          <p>• Fatigue correlated with period timing</p>
+          <p>• Night wakings possibly hormonal</p>
+        </div>
+      </div>
+      <div>
+        <div class="sub-label">Tests to request</div>
+        <div class="bullets">
+          <p>• Transvaginal ultrasound — fibroids or adenomyosis</p>
+          <p>• FSH, LH, estradiol, AMH hormone panel</p>
+          <p>• Day 21 progesterone if cycle tracking allows</p>
+        </div>
+      </div>
+      <div>
+        <div class="sub-label">Questions &amp; evidence</div>
+        <div class="discussion-points">
+          <div class="dp">My periods have been 8 days with heavy clotting for over 6 months. I want to know whether there's a structural cause — fibroids or adenomyosis — because supplementing iron won't work long-term if the blood loss isn't controlled at the source.</div>
+          <div class="dp">At 38, is my sleep disruption consistent with early perimenopause alongside the iron picture? And if so, what treatment options address both the cycle length and the sleep issue together?</div>
+        </div>
+      </div>
+      <div>
+        <div class="sub-label">Bring to the appointment</div>
+        <div class="bullets">
+          <p>• GP blood test results (ferritin, FBC, FSH, estradiol)</p>
+          <p>• Period diary with cycle length and flow notes</p>
+          <p>• Medication and supplement list</p>
+        </div>
+      </div>
+      <button class="dl-btn">Download Gynaecologist kit (PDF)</button>
+    </div>
+  </div>
+</div>
+
+<!-- ── Export full report ─────────────────────────────────────────── -->
+<div class="export-bar">
+  <div class="section-label">Full report</div>
+  <p>Download all doctor kits in one PDF, or send a clean appointment note by email.</p>
+  <button class="btn-lime">Download full PDF</button>
+  <button class="btn-ghost">Send via email</button>
+</div>
+
+<script>
+function toggle(i) {
+  const kit = document.getElementById('kit-' + i);
+  const arrow = document.getElementById('arrow-' + i);
+  const open = kit.style.display === 'flex' || kit.style.display === '';
+  if (kit.style.display === 'none' || kit.style.display === '') {
+    kit.style.display = 'flex'; kit.style.flexDirection = 'column';
+    arrow.textContent = '−';
+  } else {
+    kit.style.display = 'none';
+    arrow.textContent = '+';
+  }
+}
+// open GP card by default
+toggle(0);
+</script>
+</body>
+</html>

@@ -8,11 +8,17 @@ import {
 } from '@/src/lib/assessmentPromptContext';
 import {
   buildAllClearPrompt,
-  buildDeepAnalyzePrompt,
+  buildMedGemmaGroundingPromptV6,
+  buildGroqSynthesisPromptV6,
   MEDGEMMA_JSON_SYSTEM_V1,
 } from '@/src/lib/prompts';
-import { applyHardSafetyRules, validateDeepAnalyzeSchema } from '@/lib/medgemma-safety';
-import { rewriteDeepAnalyzeTone } from '@/src/lib/server/deepAnalyzeSafety';
+import {
+  applyHardSafetyRules,
+  validateMedGemmaGroundingSchema,
+  type MedGemmaGroundingResult,
+} from '@/lib/medgemma-safety';
+import { synthesizeNarrativeWithGroqV6 } from '@/src/lib/server/deepAnalyzeSafety';
+import { selectOneShotExample } from '@/src/lib/oneShotExamples';
 
 export const maxDuration = 300; // Vercel max on Pro plan; covers Modal cold-start + inference
 
@@ -154,23 +160,42 @@ export async function POST(req: NextRequest) {
     }
   }
 
-  const prompt = buildDeepAnalyzePrompt({
-    symptomsText,
-    flaggedAreasText,
+  // ── V6 all-clear path: skip MedGemma entirely, synthesize directly via Groq ──
+  if (isAllClear) {
+    try {
+      const allClearPrompt = buildAllClearPrompt({ symptomsText, answeredQuestionsText, uploadedLabsText });
+      const allClearResult = await synthesizeNarrativeWithGroqV6(allClearPrompt);
+      if (!allClearResult) {
+        return NextResponse.json({ error: 'Groq synthesis unavailable for all-clear path' }, { status: 503 });
+      }
+      const { data: safeData, warnings } = applyHardSafetyRules(allClearResult);
+      if (warnings.length > 0) writeLog('deep_analyze_safety_replacements', { answers, warnings });
+      writeLog('deep_analyze', { answers, mlScores, allClear: true, result: safeData });
+      return NextResponse.json(safeData);
+    } catch (err) {
+      writeLog('deep_analyze_error', { answers, mlScores, error: String(err) });
+      return NextResponse.json({ error: String(err) }, { status: 500 });
+    }
+  }
+
+  // ── V6 non-all-clear path: Call 1 MedGemma grounding → Call 2 Groq synthesis ─
+
+  // Call 1: MedGemma clinical grounding (no PDF labs — structured Q&A only)
+  const groundingPrompt = buildMedGemmaGroundingPromptV6({
     answeredQuestionsText,
-    uploadedLabsText,
     bayesianEvidenceText,
-    structuredAnswersJson,
     scoreSummaryJson,
     knnLabText,
     prioritizedConditions: flaggedConditions,
     confirmedConditions,
-    fatigueSeverity,
   });
 
-  const activePrompt = isAllClear
-    ? buildAllClearPrompt({ symptomsText, answeredQuestionsText, uploadedLabsText })
-    : prompt;
+  let groundingResult: MedGemmaGroundingResult = {
+    supportedSuspicions: [],
+    declinedSuspicions: [],
+    medicationFlags: [],
+    recommendedSpecialties: [],
+  };
 
   try {
     const controller = new AbortController();
@@ -185,60 +210,68 @@ export async function POST(req: NextRequest) {
         model: HF_MODEL,
         messages: [
           { role: 'system', content: MEDGEMMA_JSON_SYSTEM_V1 },
-          // [ADDED] activePrompt switches between main prompt and all-clear prompt
-          { role: 'user', content: activePrompt },
+          { role: 'user', content: groundingPrompt },
         ],
-        max_tokens: 1500,
-        temperature: 0.3,
+        max_tokens: 800,
+        temperature: 0.1,
       }),
       signal: controller.signal,
     }).finally(() => clearTimeout(timeout));
 
     if (!hfResponse.ok) {
       const errText = await hfResponse.text();
-      return NextResponse.json(
-        { error: `MedGemma API error (${hfResponse.status}): ${errText}` },
-        { status: hfResponse.status }
-      );
-    }
+      writeLog('medgemma_grounding_error', { answers, mlScores, status: hfResponse.status, errText });
+      // Proceed with empty grounding — Groq synthesis still runs
+    } else {
+      const hfData = await hfResponse.json();
+      const rawContent: string = hfData.choices?.[0]?.message?.content ?? '';
 
-    const data = await hfResponse.json();
-    const content: string = data.choices?.[0]?.message?.content ?? '';
-
-    const jsonMatch = content.match(/\{[\s\S]*/);
-    if (!jsonMatch) {
-      return NextResponse.json(
-        { error: 'Could not parse model response as JSON', raw: content },
-        { status: 500 }
-      );
-    }
-
-    const parsed = repairAndParseJson(jsonMatch[0]);
-    if (!parsed) {
-      return NextResponse.json(
-        { error: 'Could not parse model response as JSON', raw: content },
-        { status: 500 }
-      );
-    }
-
-    const validation = validateDeepAnalyzeSchema(parsed);
-    if (!validation.ok) {
-      writeLog('deep_analyze_schema_error', {
-        answers, mlScores, reason: validation.reason, raw: content,
+      // Step 5: log full raw MedGemma output before any processing
+      writeLog('medgemma_grounding_raw', {
+        answers,
+        mlScores,
+        flaggedConditions,
+        confirmedConditions,
+        groundingPrompt,
+        rawOutput: rawContent,
       });
-      return NextResponse.json(
-        { error: 'schema_validation_failed', detail: validation.reason, raw: content },
-        { status: 422 },
-      );
+
+      const jsonMatch = rawContent.match(/\{[\s\S]*/);
+      if (jsonMatch) {
+        const parsed = repairAndParseJson(jsonMatch[0]);
+        const validation = validateMedGemmaGroundingSchema(parsed);
+        if (validation.ok) {
+          groundingResult = validation.data;
+        } else {
+          writeLog('medgemma_grounding_schema_error', {
+            answers, mlScores, reason: validation.reason, raw: rawContent,
+          });
+        }
+      }
+    }
+  } catch (err) {
+    writeLog('medgemma_grounding_error', { answers, mlScores, error: String(err) });
+    // Continue with empty grounding — Groq synthesis still runs
+  }
+
+  // Call 2: Groq narrative synthesis (primary synthesis, not a patch)
+  try {
+    const synthesisPrompt = buildGroqSynthesisPromptV6({
+      groundingResultJson: JSON.stringify(groundingResult, null, 2),
+      fatigueSeverity,
+      oneShot: selectOneShotExample(groundingResult),
+    });
+
+    const synthesisResult = await synthesizeNarrativeWithGroqV6(synthesisPrompt);
+    if (!synthesisResult) {
+      return NextResponse.json({ error: 'Groq synthesis unavailable' }, { status: 503 });
     }
 
-    const { data: safeData, warnings: safetyWarnings } = applyHardSafetyRules(validation.data);
+    const { data: safeData, warnings: safetyWarnings } = applyHardSafetyRules(synthesisResult);
     if (safetyWarnings.length > 0) {
       writeLog('deep_analyze_safety_replacements', { answers, mlScores, warnings: safetyWarnings });
       for (const warning of safetyWarnings) console.warn(warning);
     }
-
-    const finalResult = await rewriteDeepAnalyzeTone(safeData);
 
     writeLog('deep_analyze', {
       answers,
@@ -249,10 +282,12 @@ export async function POST(req: NextRequest) {
       fatigueSeverity,
       useKNN,
       knnSignals: knnResult,
-      result: finalResult,
+      groundingResult,
+      result: safeData,
     });
+
     return NextResponse.json({
-      ...finalResult,
+      ...safeData,
       ...(knnResult ? { knnSignals: knnResult } : {}),
     });
   } catch (err) {

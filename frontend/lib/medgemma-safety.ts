@@ -15,11 +15,125 @@ export const DIAGNOSIS_ID_ALLOWLIST = new Set([
   'prediabetes', 'inflammation', 'electrolytes', 'hepatitis', 'perimenopause',
 ]);
 
+// ── V6: MedGemma grounding output types ───────────────────────────────────
+
+export interface SupportedSuspicion {
+  diagnosisId: string;
+  confidence: 'probable' | 'possible' | 'worth_ruling_out';
+  anchorEvidence: string;
+  reasoning: string;
+  keySymptoms: string[];
+  recommendedTests: string[];
+}
+
+export interface DeclinedSuspicion {
+  diagnosisId: string;
+  reason: string;
+}
+
+export interface MedicationFlag {
+  labOrSymptom: string;
+  medication: string;
+  note: string;
+}
+
+export interface RecommendedSpecialty {
+  specialty: string;
+  priority: string;
+  clinicalReason: string;
+  symptomsToRaise: string[];
+  testsToRequest: string[];
+  discussionPoints: string[];
+}
+
+export interface MedGemmaGroundingResult {
+  supportedSuspicions: SupportedSuspicion[];
+  declinedSuspicions: DeclinedSuspicion[];
+  medicationFlags: MedicationFlag[];
+  recommendedSpecialties: RecommendedSpecialty[];
+}
+
+export type GroundingValidationResult =
+  | { ok: true;  data: MedGemmaGroundingResult }
+  | { ok: false; reason: string };
+
+/**
+ * Validates the V6 MedGemma grounding output (Call 1).
+ */
+export function validateMedGemmaGroundingSchema(
+  parsed: Record<string, unknown> | null,
+): GroundingValidationResult {
+  if (!parsed) return { ok: false, reason: 'null input' };
+  const err = (reason: string): GroundingValidationResult => ({ ok: false, reason });
+
+  if (!Array.isArray(parsed.supportedSuspicions))
+    return err('supportedSuspicions must be an array');
+  if (parsed.supportedSuspicions.length > 3)
+    return err(`supportedSuspicions has ${parsed.supportedSuspicions.length} items — max 3`);
+
+  for (let i = 0; i < parsed.supportedSuspicions.length; i++) {
+    const item = parsed.supportedSuspicions[i] as Record<string, unknown>;
+    if (typeof item?.diagnosisId !== 'string' || !DIAGNOSIS_ID_ALLOWLIST.has(item.diagnosisId))
+      return err(`supportedSuspicions[${i}].diagnosisId "${String(item?.diagnosisId)}" not in allowlist`);
+    if (!['probable', 'possible', 'worth_ruling_out'].includes(item?.confidence as string))
+      return err(`supportedSuspicions[${i}].confidence must be probable | possible | worth_ruling_out`);
+    if (typeof item?.anchorEvidence !== 'string' || !item.anchorEvidence.trim())
+      return err(`supportedSuspicions[${i}].anchorEvidence must be a non-empty string`);
+    if (typeof item?.reasoning !== 'string' || !item.reasoning.trim())
+      return err(`supportedSuspicions[${i}].reasoning must be a non-empty string`);
+    if (!Array.isArray(item?.keySymptoms) || item.keySymptoms.length < 1)
+      return err(`supportedSuspicions[${i}].keySymptoms must be a non-empty array`);
+    if (!Array.isArray(item?.recommendedTests) || item.recommendedTests.length < 1)
+      return err(`supportedSuspicions[${i}].recommendedTests must be a non-empty array`);
+  }
+
+  if (!Array.isArray(parsed.declinedSuspicions))
+    return err('declinedSuspicions must be an array');
+
+  for (let i = 0; i < parsed.declinedSuspicions.length; i++) {
+    const item = parsed.declinedSuspicions[i] as Record<string, unknown>;
+    if (typeof item?.diagnosisId !== 'string' || !DIAGNOSIS_ID_ALLOWLIST.has(item.diagnosisId))
+      return err(`declinedSuspicions[${i}].diagnosisId not in allowlist`);
+    if (typeof item?.reason !== 'string' || !item.reason.trim())
+      return err(`declinedSuspicions[${i}].reason must be a non-empty string`);
+  }
+
+  if (!Array.isArray(parsed.medicationFlags))
+    return err('medicationFlags must be an array');
+
+  if (!Array.isArray(parsed.recommendedSpecialties))
+    return err('recommendedSpecialties must be an array');
+  if (parsed.recommendedSpecialties.length > 3)
+    return err(`recommendedSpecialties has ${parsed.recommendedSpecialties.length} items — max 3`);
+
+  for (let i = 0; i < parsed.recommendedSpecialties.length; i++) {
+    const item = parsed.recommendedSpecialties[i] as Record<string, unknown>;
+    if (typeof item?.specialty !== 'string' || !item.specialty.trim())
+      return err(`recommendedSpecialties[${i}].specialty must be a non-empty string`);
+    if (typeof item?.priority !== 'string' || !item.priority.trim())
+      return err(`recommendedSpecialties[${i}].priority must be a non-empty string`);
+    if (typeof item?.clinicalReason !== 'string' || !item.clinicalReason.trim())
+      return err(`recommendedSpecialties[${i}].clinicalReason must be a non-empty string`);
+    if (!Array.isArray(item?.symptomsToRaise) || item.symptomsToRaise.length < 1)
+      return err(`recommendedSpecialties[${i}].symptomsToRaise must be a non-empty array`);
+    if (!Array.isArray(item?.testsToRequest) || item.testsToRequest.length < 1)
+      return err(`recommendedSpecialties[${i}].testsToRequest must be a non-empty array`);
+    if (!Array.isArray(item?.discussionPoints) || item.discussionPoints.length < 1)
+      return err(`recommendedSpecialties[${i}].discussionPoints must be a non-empty array`);
+  }
+
+  return {
+    ok: true,
+    data: parsed as unknown as MedGemmaGroundingResult,
+  };
+}
+
 // ── Output schema types ────────────────────────────────────────────────────
 
 export interface InsightItem {
   diagnosisId: string;
   personalNote: string;
+  confidence?: 'probable' | 'possible' | 'worth_ruling_out';
 }
 
 export interface RecommendedDoctor {
@@ -36,11 +150,16 @@ export interface DoctorKit {
   concerningSymptoms: string[];
   recommendedTests: string[];
   discussionPoints: string[];
+  // V6 additions
+  bringToAppointment?: string[];
+  whatToSay?: string;
 }
 
 export interface DeepAnalyzeResult {
   personalizedSummary: string;
+  summaryPoints?: string[];
   insights: InsightItem[];
+  declinedSuspicions?: DeclinedSuspicion[];
   nextSteps: string;
   doctorKitSummary?: string;
   doctorKitQuestions: string[];

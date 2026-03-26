@@ -213,6 +213,216 @@ Rules:
 - Complete the full JSON without truncating.`;
 }
 
+// ─── V6: MedGemma Grounding Prompt (Call 1 — clinical evidence only) ──────────
+
+export type MedGemmaGroundingPromptArgs = {
+  answeredQuestionsText: string;
+  bayesianEvidenceText: string;
+  scoreSummaryJson: string;
+  prioritizedConditions: string[];
+  confirmedConditions: string[];
+  knnLabText?: string | null;
+};
+
+export function buildMedGemmaGroundingPromptV6({
+  answeredQuestionsText,
+  bayesianEvidenceText,
+  scoreSummaryJson,
+  prioritizedConditions,
+  confirmedConditions,
+  knnLabText,
+}: MedGemmaGroundingPromptArgs): string {
+  const evaluatedDiseases = formatEvaluatedDiseaseList();
+  const confirmedText =
+    confirmedConditions.length > 0 ? confirmedConditions.join(', ') : 'None.';
+  const candidateList =
+    prioritizedConditions.length > 0
+      ? prioritizedConditions.map((id) => `- ${id}`).join('\n')
+      : '(none — if all evidence is weak, return empty supportedSuspicions)';
+
+  return `You are MedGemma acting as a clinical synthesis engine for a fatigue screening product.
+
+TASK: Produce a complete structured clinical summary. A general-purpose language model will later translate your output into patient-facing prose — it will not have access to the raw patient data, only your JSON. Everything clinically meaningful must therefore be in your output: which symptoms matter, which tests to request, which specialists to see, what to discuss. Do NOT write narrative prose yourself. Produce structured JSON only.
+
+CRITICAL INSTRUCTION: Follow the evidence in this patient record. Do not apply your prior beliefs about which diseases are statistically common. If the questionnaire answers and Bayesian data do not independently support a hypothesis beyond just the ML score, decline it — even if it is a common disease. Your job is to follow the evidence, not your priors.
+
+We tested 11 diseases as fatigue signals:
+${evaluatedDiseases}
+
+These hypotheses cleared the ML filtering layer and require verification:
+${candidateList}
+
+ALREADY CONFIRMED CONDITIONS (treat as established facts, do not re-evaluate):
+${confirmedText}
+
+PATIENT QUESTIONNAIRE ANSWERS:
+${answeredQuestionsText}
+
+BAYESIAN CLARIFICATION EVIDENCE:
+${bayesianEvidenceText}
+
+ML SCORE SUMMARY:
+${scoreSummaryJson}
+${knnLabText ? `\nNEAREST-NEIGHBOUR LAB SIGNALS:\n${knnLabText}` : ''}
+
+Decision procedure — follow exactly in order:
+1. For each filtered hypothesis, ask: "Does the questionnaire evidence OR Bayesian answers independently support this — beyond just the ML score?"
+   - If YES: add to supportedSuspicions. Include the specific symptoms from this record that support it and the specific tests that would confirm or rule it out.
+   - If NO: add to declinedSuspicions with a one-phrase reason naming the missing or contradictory evidence.
+2. For each supportedSuspicion, decide which specialist should address it and what they need to hear. Populate recommendedSpecialties (0–3). If supportedSuspicions is empty, recommendedSpecialties must also be empty.
+3. Scan for any symptom that could be explained by a medication rather than a disease process; log in medicationFlags.
+
+Respond with valid JSON only. No markdown, no preamble, no narrative prose:
+{
+  "supportedSuspicions": [
+    {
+      "diagnosisId": "exact id from: ${CONDITION_ALLOWLIST}",
+      "confidence": "probable | possible | worth_ruling_out",
+      "anchorEvidence": "One specific questionnaire answer or Bayesian feature from this record that supports the hypothesis.",
+      "reasoning": "1-2 sentences citing specific evidence from this record. Do not repeat statistical priors.",
+      "keySymptoms": [
+        "Specific symptom or finding from this patient's answers that supports this condition — quoted from the evidence, not paraphrased generically"
+      ],
+      "recommendedTests": [
+        "Specific test that would confirm or rule out this condition for this patient"
+      ]
+    }
+  ],
+  "declinedSuspicions": [
+    {
+      "diagnosisId": "exact id from: ${CONDITION_ALLOWLIST}",
+      "reason": "One sentence naming what evidence was expected but absent or contradicted by the record."
+    }
+  ],
+  "medicationFlags": [
+    {
+      "labOrSymptom": "name of the lab or symptom",
+      "medication": "medication name",
+      "note": "One sentence explaining how this medication may affect the signal."
+    }
+  ],
+  "recommendedSpecialties": [
+    {
+      "specialty": "GP | Endocrinologist | Sleep specialist | Nephrologist | Hepatologist | Gynaecologist | Rheumatologist | Haematologist | other relevant specialist",
+      "priority": "start_here | consider_next | specialist_if_needed",
+      "clinicalReason": "1-2 sentences explaining why this specialty is needed for this patient's supported suspicions — cite the specific conditions or symptoms.",
+      "symptomsToRaise": [
+        "Specific symptom or finding from this patient's evidence that this specialist needs to hear"
+      ],
+      "testsToRequest": [
+        "Specific test or referral this specialist should be asked about"
+      ],
+      "discussionPoints": [
+        "Specific clinical question or evidence-based argument this patient should raise with this specialist. Must cite a specific finding from this record. Not a generic question."
+      ]
+    }
+  ]
+}
+
+Rules:
+- supportedSuspicions: 0 to 3 items. Returning [] is valid and correct if evidence is weak.
+- Never invent a diagnosisId outside the allowlist: ${CONDITION_ALLOWLIST}.
+- keySymptoms must come from this patient's actual answers — no invented symptoms.
+- recommendedTests must be tied to a supportedSuspicion — no generic panels.
+- recommendedSpecialties: 0 to 3. Must be empty if supportedSuspicions is empty.
+- MINIMUM RULE: If supportedSuspicions is non-empty, include at least 1 recommendedSpecialty.
+- discussionPoints must cite a specific finding from this record — no generic questions like "ask about blood tests".
+- Do not write personalizedSummary, nextSteps, doctorKitSummary, or any narrative prose.
+- Complete the full JSON without truncating.`;
+}
+
+// ─── V6: Groq Synthesis Prompt (Call 2 — full narrative) ──────────────────────
+
+export type GroqSynthesisPromptArgs = {
+  groundingResultJson: string;
+  fatigueSeverity: number | null;
+  oneShot?: string | null;
+};
+
+export function buildGroqSynthesisPromptV6({
+  groundingResultJson,
+  fatigueSeverity,
+  oneShot,
+}: GroqSynthesisPromptArgs): string {
+  const detailInstruction = buildDetailInstruction(fatigueSeverity);
+
+  return `You are a medical communication writer. A clinical AI has produced a structured medical summary for a patient. Your job is to translate that clinical summary into warm, clear, first-person patient-facing text.
+
+YOUR ROLE IS PROSE TRANSLATION ONLY. Do not add conditions, symptoms, tests, doctors, or discussion points that are not already in the clinical evidence below. Do not perform your own medical reasoning. Every piece of medical content in your output must come directly from the clinical evidence JSON.
+
+${detailInstruction}
+
+SECTION ROLE ASSIGNMENT — each section answers a different question. Strictly enforce — no cross-section repetition:
+- summaryPoints / personalizedSummary: "What is this person experiencing?" — symptom picture and patterns ONLY. Do not name conditions, tests, or doctors here.
+- insights[].personalNote: "Why was this condition flagged for this specific patient?" — clinical evidence link only. Do not restate symptoms already in the summary.
+- nextSteps: "Who to see first, in what order, and why — in 2 sentences." No symptom descriptions. No condition reasoning. Pure action sequence.
+- doctorKits: "What to say, bring, and ask at each specific appointment." Actionable and appointment-ready. Do not re-summarise conditions or symptoms.
+
+SPECIALIST RULE: recommendedDoctors must always include at least one non-GP specialist when supportedSuspicions is non-empty. Patients may have already seen their GP — always give them a specialist path they may not have explored yet (e.g. Endocrinologist, Haematologist, Gynaecologist, Sleep specialist, Rheumatologist, Hepatologist, Nephrologist).
+
+CLINICAL EVIDENCE (source of all medical content — use only what is here):
+${groundingResultJson}
+
+${oneShot ? `EXAMPLE OF A PERFECT OUTPUT (follow this quality and structure, applied to the clinical evidence above):\n${oneShot}\n` : ''}Respond with valid JSON only. No markdown, no preamble:
+{
+  "summaryPoints": [
+    "4-6 bullet strings. Each describes one specific aspect of what this patient is experiencing — a symptom, pattern, severity, or duration. No conditions named. No tests. Pure symptom picture drawn from keySymptoms in the clinical evidence.",
+    "Example: 'Severe fatigue at 3/3 intensity for the past 3 months, worst in the mornings'",
+    "Example: 'Heavy periods lasting 8 days with clotting, consistent for 6+ months'",
+    "Example: 'Waking 3 times per night on an average of 5.5 hours of sleep'",
+    "Example: 'Cold intolerance in hands and feet even in warm environments'",
+    "Example: 'Concentration and memory difficulties affecting work performance'"
+  ],
+  "personalizedSummary": "1-2 sentence prose version of the above bullets, plus a screening-tool disclaimer. This is the fallback when bullets are not rendered.",
+  "insights": [
+    {
+      "diagnosisId": "exact id from supportedSuspicions in the clinical evidence — no others",
+      "confidence": "copy the confidence value from the clinical evidence",
+      "personalNote": "2-3 sentences. Translate the reasoning and anchorEvidence for this suspicion into patient-friendly language. Do NOT restate the symptoms already covered in summaryPoints."
+    }
+  ],
+  "nextSteps": "2 sentences maximum. Who to see first and why (from recommendedSpecialties[0].clinicalReason), then who second. No symptom descriptions. No condition explanations.",
+  "doctorKitSummary": "2 first-person sentences. An opening statement this patient can read at any of the recommended appointments. Draw from keySymptoms — make it specific to this patient.",
+  "doctorKitQuestions": [],
+  "doctorKitArguments": [],
+  "recommendedDoctors": [
+    {
+      "specialty": "copy from recommendedSpecialties[].specialty in the clinical evidence — no new specialties",
+      "priority": "copy from recommendedSpecialties[].priority",
+      "reason": "1-2 sentences. Why this specific specialty for this specific patient. Draw from clinicalReason. No symptom list here.",
+      "symptomsToDiscuss": "copy symptomsToRaise from the matching recommendedSpecialties entry",
+      "suggestedTests": "copy testsToRequest from the matching recommendedSpecialties entry"
+    }
+  ],
+  "doctorKits": [
+    {
+      "specialty": "same as the matching recommendedDoctor above",
+      "openingSummary": "2 first-person sentences tailored to this specialist. Name the specific conditions suspected and what you want from this doctor.",
+      "bringToAppointment": [
+        "Practical logistics only: diary, prior results, medication list. No medical content."
+      ],
+      "concerningSymptoms": "copy symptomsToRaise from the matching recommendedSpecialties entry",
+      "recommendedTests": "copy testsToRequest from the matching recommendedSpecialties entry",
+      "discussionPoints": "translate discussionPoints from the matching recommendedSpecialties entry into first-person patient language. Keep clinical specificity — do not genericise.",
+      "whatToSay": "2 sentences. First-person appointment opener specific to this specialty. State what you suspect and what you want to rule out or confirm."
+    }
+  ],
+  "allClear": false
+}
+
+Rules:
+- summaryPoints: 4-6 items. Symptoms only. No conditions, tests, or doctors.
+- insights: one entry per supportedSuspicion. No extras. personalNote must NOT repeat summaryPoints content.
+- nextSteps: maximum 2 sentences. Action sequence only.
+- recommendedDoctors: one per recommendedSpecialty. MUST include at least one non-GP specialist.
+- doctorKits: one kit per recommendedDoctor, same order.
+- Do NOT add conditions, symptoms, tests, or discussion points not in the clinical evidence.
+- For unconfirmed suspicions use: "may suggest", "could indicate", "worth ruling out".
+- Never use alarming language.
+- If recommendedSpecialties is empty, return [] for both recommendedDoctors and doctorKits.
+- Complete the full JSON without truncating.`;
+}
+
 export function buildAllClearPrompt({
   symptomsText,
   answeredQuestionsText,

@@ -33,6 +33,8 @@ export interface DoctorKit {
   concerningSymptoms: string[];
   recommendedTests: string[];
   discussionPoints: string[];
+  bringToAppointment?: string[];
+  whatToSay?: string;
 }
 
 export interface MedGemmaResult {
@@ -50,6 +52,8 @@ export interface CoachingTip {
 }
 
 export interface DeepMedGemmaResult extends MedGemmaResult {
+  /** Structured bullet points for the "Your results" summary — renders as a bullet list */
+  summaryPoints?: string[];
   /** AI-generated symptom narrative to open the doctor conversation */
   doctorKitSummary?: string;
   /** AI-generated questions to ask the doctor (replaces rule-based when present) */
@@ -97,18 +101,13 @@ export interface BayesianQuestion {
   answer_options: BayesianAnswerOption[];
 }
 
-export interface ConfounderQuestion extends BayesianQuestion {
-  confounder: string;   // "depression" | "anxiety"
-}
-
 export interface ConditionQuestion {
   condition: string;
   probability: number;
-  question: BayesianQuestion;
+  questions: BayesianQuestion[];
 }
 
 export interface BayesianQuestionsResult {
-  confounder_questions: ConfounderQuestion[];
   condition_questions:  ConditionQuestion[];
 }
 
@@ -315,12 +314,13 @@ export async function fetchDeepAnalysis(
 export async function fetchBayesianQuestions(
   mlScores: Record<string, number>,
   patientSex?: string,
+  existingAnswers?: Record<string, unknown>,
 ): Promise<BayesianQuestionsResult> {
   const backendBaseUrl = process.env.NEXT_PUBLIC_BACKEND_URL?.trim() || '';
   const response = await fetch(`${backendBaseUrl}/api/bayesian-questions`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ mlScores, patientSex }),
+    body: JSON.stringify({ mlScores, patientSex, existingAnswers }),
   });
   if (!response.ok) {
     const err = await response.json().catch(() => ({ error: 'Unknown error' }));
@@ -335,12 +335,13 @@ export async function fetchBayesianUpdate(
   confounderAnswers: Record<string, number>,
   answersByCondition: Record<string, Record<string, string>>,
   patientSex?: string,
+  existingAnswers?: Record<string, unknown>,
 ): Promise<BayesianUpdateResult> {
   const backendBaseUrl = process.env.NEXT_PUBLIC_BACKEND_URL?.trim() || '';
   const response = await fetch(`${backendBaseUrl}/api/bayesian-update`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ mlScores, confounderAnswers, answersByCondition, patientSex }),
+    body: JSON.stringify({ mlScores, confounderAnswers, answersByCondition, patientSex, existingAnswers }),
   });
   if (!response.ok) {
     const err = await response.json().catch(() => ({ error: 'Unknown error' }));
@@ -361,9 +362,10 @@ export async function fetchMLScoresWithTimeout(
 export async function fetchBayesianQuestionsWithTimeout(
   mlScores: Record<string, number>,
   patientSex?: string,
+  existingAnswers?: Record<string, unknown>,
   timeoutMs = 30000,
 ): Promise<BayesianQuestionsResult> {
-  return withTimeout(fetchBayesianQuestions(mlScores, patientSex), timeoutMs, 'Clarify questions');
+  return withTimeout(fetchBayesianQuestions(mlScores, patientSex, existingAnswers), timeoutMs, 'Clarify questions');
 }
 
 export async function fetchBayesianUpdateWithTimeout(
@@ -371,10 +373,11 @@ export async function fetchBayesianUpdateWithTimeout(
   confounderAnswers: Record<string, number>,
   answersByCondition: Record<string, Record<string, string>>,
   patientSex?: string,
+  existingAnswers?: Record<string, unknown>,
   timeoutMs = 15000,
 ): Promise<BayesianUpdateResult> {
   return withTimeout(
-    fetchBayesianUpdate(mlScores, confounderAnswers, answersByCondition, patientSex),
+    fetchBayesianUpdate(mlScores, confounderAnswers, answersByCondition, patientSex, existingAnswers),
     timeoutMs,
     'Clarify update'
   );

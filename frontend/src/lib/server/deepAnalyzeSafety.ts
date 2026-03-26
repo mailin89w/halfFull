@@ -2,6 +2,8 @@ import { validateDeepAnalyzeSchema, type DeepAnalyzeResult } from '@/lib/medgemm
 
 const GROQ_API_URL = 'https://api.groq.com/openai/v1/chat/completions';
 const GROQ_MODEL = 'llama-3.1-8b-instant';
+// V6: primary synthesis model — general-purpose, better narrative quality
+const GROQ_SYNTHESIS_MODEL = 'llama-3.3-70b-versatile';
 
 const SAFETY_SYSTEM_PROMPT = `You are a medical communication safety filter. Rewrite only the user-facing narrative fields so they stay warm, non-diagnostic, and appropriately uncertain.
 
@@ -49,6 +51,70 @@ function mergeWithImmutableFields(
     })),
     allClear: original.allClear,
   };
+}
+
+/**
+ * V6: Primary Groq synthesis call. Takes the full synthesis prompt (built by
+ * buildGroqSynthesisPromptV6 or buildAllClearPrompt) and returns a validated
+ * DeepAnalyzeResult. Returns null on timeout, parse failure, or missing API key
+ * so the caller can fall back gracefully.
+ */
+export async function synthesizeNarrativeWithGroqV6(
+  synthesisPrompt: string,
+): Promise<DeepAnalyzeResult | null> {
+  const groqKey = process.env.GROQ_API_KEY;
+  if (!groqKey) return null;
+
+  try {
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 30_000);
+
+    const response = await fetch(GROQ_API_URL, {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${groqKey}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        model: GROQ_SYNTHESIS_MODEL,
+        messages: [
+          {
+            role: 'system',
+            content:
+              'You output valid JSON only. No markdown, no thinking, no explanations, no preamble. Start your response immediately with { and end with }.',
+          },
+          { role: 'user', content: synthesisPrompt },
+        ],
+        max_tokens: 3500,
+        temperature: 0.3,
+      }),
+      signal: controller.signal,
+    }).finally(() => clearTimeout(timeout));
+
+    if (!response.ok) {
+      console.warn('[Groq V6 synthesis] API error:', response.status);
+      return null;
+    }
+
+    const data = await response.json();
+    const content: string = data.choices?.[0]?.message?.content ?? '';
+    const parsed = parseJsonObject(content);
+    if (!parsed) {
+      console.warn('[Groq V6 synthesis] Could not parse JSON from response');
+      return null;
+    }
+
+    const validation = validateDeepAnalyzeSchema(parsed);
+    if (!validation.ok) {
+      console.warn('[Groq V6 synthesis] Schema validation failed:', validation.reason);
+      return null;
+    }
+
+    return validation.data;
+  } catch (err) {
+    console.error('[Groq V6 synthesis] Error:', String(err));
+    return null;
+  }
 }
 
 export async function rewriteDeepAnalyzeTone(

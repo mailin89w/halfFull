@@ -68,17 +68,17 @@ _ROOT = _DIR.parent
 # ── Registry — v2 normalised models ────────────────────────────────────────────
 
 MODEL_REGISTRY = {
-    "anemia":                "anemia_lr_deduped36_L2_v2.joblib",
+    "anemia":                "anemia_lr_deduped38_L2_C005_v3.joblib",
     "electrolyte_imbalance": "electrolyte_imbalance_lr_deduped28_L2_v2.joblib",
     "kidney":                "kidney_lr_deduped17_L2_v2.joblib",
     "liver":                 "liver_rf_cal_deduped19_v2.joblib",
     "prediabetes":           "prediabetes_lr_deduped34_L2_C001_v2.joblib",
     "sleep_disorder":        "sleep_disorder_lr_trimmed29_L2_v2.joblib",
     "thyroid":               "thyroid_lr_l2_reduced-12feat_v2.joblib",
-    "hidden_inflammation":   "hidden_inflammation_lr_deduped25_L2_v2.joblib",
+    "hidden_inflammation":   "hidden_inflammation_lr_deduped26_L2_v3.joblib",
     "perimenopause":         "perimenopause_lr_deduped21_L2_v2.joblib",
     "hepatitis_bc":          "hepatitis_bc_rf_cal_deduped20_v2.joblib",
-    "iron_deficiency":       "iron_deficiency_rf_cal_deduped35_v2.joblib",
+    "iron_deficiency":       "iron_deficiency_rf_cal_deduped39_v3.joblib",
 }
 
 # Per-model recommended operating thresholds
@@ -129,7 +129,7 @@ FILTER_CRITERIA = {
     "iron_deficiency":       0.15,
     "kidney":                0.20,
     "anemia":                0.30,
-    "hidden_inflammation":   0.30,
+    "hidden_inflammation":   0.20,  # v3: lowered from 0.30 (waist-driven model; positives score 0.15-0.65)
     "prediabetes":           0.35,
     "thyroid":               0.35,
     "electrolyte_imbalance": 0.40,
@@ -168,18 +168,20 @@ SCORE_RANGES: dict[str, tuple[float, float]] = {
     # (observed_max) only — used as the upper bound in mean-floor normalisation.
     # The floor is taken from SCORE_MEANS so the rank key measures how far
     # *above the population baseline* a score sits.
-    # Observed across 600-profile v2 validation cohort.
-    "anemia":                (0.006, 0.992),
-    "electrolyte_imbalance": (0.213, 0.690),
-    "kidney":                (0.059, 0.882),
+    # Observed across 600-profile eval cohort (evals/cohort/profiles.json).
+    # v3 models (anemia, iron_deficiency, hidden_inflammation) re-calibrated 2026-03-23.
+    # All other models re-calibrated 2026-03-26 (eval obs max/min updated for v3 pipeline).
+    "anemia":                (0.025, 0.991),   # v3 — C=0.05, 38 feats
+    "electrolyte_imbalance": (0.213, 0.740),   # updated: eval max was 0.690, obs max now 0.730
+    "kidney":                (0.059, 0.925),   # updated: eval max was 0.882, obs max now 0.916
     "liver":                 (0.007, 0.553),
-    "prediabetes":           (0.267, 0.758),
-    "sleep_disorder":        (0.346, 0.990),
-    "thyroid":               (0.078, 0.962),
-    "hidden_inflammation":   (0.037, 0.451),
-    "perimenopause":         (0.000, 0.986),
+    "prediabetes":           (0.267, 0.820),   # updated: eval max was 0.758, obs max now 0.815
+    "sleep_disorder":        (0.346, 0.995),
+    "thyroid":               (0.078, 0.965),
+    "hidden_inflammation":   (0.043, 0.750),   # v3 — 26 feats + bmi; max from eval (0.737)
+    "perimenopause":         (0.000, 0.988),
     "hepatitis_bc":          (0.005, 0.524),
-    "iron_deficiency":       (0.004, 0.155),
+    "iron_deficiency":       (0.000, 0.850),   # v3 — 39 feats + CBC markers (eval max 0.669; headroom for extreme cases)
 }
 
 # Population-mean score across ALL profiles (positive + negative + healthy).
@@ -190,17 +192,17 @@ SCORE_RANGES: dict[str, tuple[float, float]] = {
 # (sleep_disorder mean=0.755, thyroid mean=0.643) are correctly de-weighted
 # relative to models with lower baselines and higher discriminating power.
 SCORE_MEANS: dict[str, float] = {
-    "anemia":                0.478,
-    "electrolyte_imbalance": 0.458,
-    "kidney":                0.380,
-    "liver":                 0.060,
-    "prediabetes":           0.523,
-    "sleep_disorder":        0.755,  # dominant — mean-floor correction critical
-    "thyroid":               0.643,  # dominant — mean-floor correction critical
-    "hidden_inflammation":   0.104,
-    "perimenopause":         0.297,
+    "anemia":                0.498,   # v3 — eval cohort mean (600 profiles); was 0.478 v2
+    "electrolyte_imbalance": 0.491,  # updated 2026-03-26: was 0.458
+    "kidney":                0.426,  # updated 2026-03-26: was 0.380
+    "liver":                 0.072,  # updated 2026-03-26: was 0.060
+    "prediabetes":           0.557,  # updated 2026-03-26: was 0.523
+    "sleep_disorder":        0.781,  # updated 2026-03-26: was 0.755; dominant — mean-floor correction critical
+    "thyroid":               0.662,  # updated 2026-03-26: was 0.643; dominant — mean-floor correction critical
+    "hidden_inflammation":   0.217,  # v3 — eval cohort mean; was 0.104 v2 (bmi raises NHANES baseline to 0.423 but eval mean is lower)
+    "perimenopause":         0.306,  # updated 2026-03-26: was 0.297
     "hepatitis_bc":          0.044,
-    "iron_deficiency":       0.040,
+    "iron_deficiency":       0.038,  # v3 — eval cohort mean; sex floors used for ranking
 }
 
 # Sex-specific floors for iron_deficiency.
@@ -208,8 +210,10 @@ SCORE_MEANS: dict[str, float] = {
 # eliminating the v1 sex-bias floor (0.63 for all females).  Retained for
 # forward-compatibility; the effect is negligible (v2 max is 0.155).
 IRON_DEF_SEX_FLOORS: dict[str, float] = {
-    "Female": 0.010,
-    "Male":   0.004,
+    # v3 — per-sex baseline from eval cohort (non-iron profiles only, 2026-03-23)
+    # v2 was Female=0.010, Male=0.004 (v2 model max 0.155); v3 CBC features push range to 0.85
+    "Female": 0.009,
+    "Male":   0.006,
 }
 
 def rank_score(condition: str, prob: float, gender: str | None = None) -> float:

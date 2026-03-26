@@ -11,14 +11,16 @@ import {
   readStoredDeepResult,
   readStoredMLScores,
 } from '@/src/lib/medgemma';
-import type { DeepMedGemmaResult } from '@/src/lib/medgemma';
+import type { DeepMedGemmaResult, DoctorKit } from '@/src/lib/medgemma';
 import { EnergySpectrum } from '@/src/components/results/EnergySpectrum';
 import { DiagnosisCard } from '@/src/components/results/DiagnosisCard';
 
 export default function ResultsPage() {
   const { answers, hydrated, reset } = useAssessment();
   const [deep, setDeep] = useState<DeepMedGemmaResult | null>(null);
-  const [doctorKitOpen, setDoctorKitOpen] = useState(false);
+  const [expandedDoctors, setExpandedDoctors] = useState<number[]>([]);
+  const toggleDoctor = (i: number) =>
+    setExpandedDoctors((prev) => prev.includes(i) ? prev.filter((x) => x !== i) : [...prev, i]);
 
   const { currentPct, projectedPct, summaryLine, doctors } = computeResults(answers);
 
@@ -56,7 +58,7 @@ export default function ResultsPage() {
         suggestedTests: diagnoses[index]?.tests.slice(0, 3).map((test) => test.name) ?? ['Review first-line fatigue workup'],
       }));
 
-  const doctorKits =
+  const doctorKits: DoctorKit[] =
     deep?.doctorKits && deep.doctorKits.length > 0
       ? deep.doctorKits
       : recommendedDoctors.map((doctor, index) => ({
@@ -96,7 +98,7 @@ export default function ResultsPage() {
   const isFallbackContent = deep?.meta?.fallback ?? true;
 
   // ── Export helpers ───────────────────────────────────────────────────────
-  const downloadDoctorKit = async () => {
+  const downloadDoctorKit = async (doctorIndex?: number) => {
     // Dynamically import jsPDF so it only loads client-side when needed
     const { jsPDF } = await import('jspdf');
     const doc: JsPDFType = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
@@ -210,19 +212,33 @@ export default function ResultsPage() {
       y += 2;
     }
 
-    if (doctorKits.length > 0) {
-      doctorKits.forEach((kit) => {
+    const kitsToExport = doctorIndex !== undefined
+      ? doctorKits.filter((_, i) => i === doctorIndex)
+      : doctorKits;
+    if (kitsToExport.length > 0) {
+      kitsToExport.forEach((kit) => {
         addSectionHeader(`${kit.specialty} doctor kit`);
         addText(kit.openingSummary, { size: 10, indent: 2 });
+        if (kit.whatToSay) {
+          addText('What to say:', { size: 9, bold: true, indent: 2 });
+          addText(`"${kit.whatToSay}"`, { size: 10, color: '#4a3fa0', indent: 5 });
+        }
         addText('Concerning symptoms:', { size: 9, bold: true, indent: 2 });
         kit.concerningSymptoms.forEach((item) => addBullet(item));
         addText('Tests worth discussing:', { size: 9, bold: true, indent: 2 });
         kit.recommendedTests.forEach((item) => addBullet(item));
         addText('Questions and evidence to bring:', { size: 9, bold: true, indent: 2 });
         kit.discussionPoints.forEach((item, index) => addBullet(item, index + 1));
+        if (kit.bringToAppointment && kit.bringToAppointment.length > 0) {
+          addText('Bring to the appointment:', { size: 9, bold: true, indent: 2 });
+          kit.bringToAppointment.forEach((item) => addBullet(item));
+        }
         y += 2;
       });
     }
+    const filename = doctorIndex !== undefined && doctorKits[doctorIndex]
+      ? `halffull-${doctorKits[doctorIndex].specialty.toLowerCase().replace(/\s+/g, '-')}-kit.pdf`
+      : 'halffull-doctor-kit.pdf';
 
     // ── Footer ───────────────────────────────────────────────────────────
     const pageCount = (doc as unknown as { internal: { getNumberOfPages: () => number } }).internal.getNumberOfPages();
@@ -238,7 +254,7 @@ export default function ResultsPage() {
       doc.text(`${p} / ${pageCount}`, PAGE_W - MARGIN, 290, { align: 'right' });
     }
 
-    doc.save('halffull-doctor-kit.pdf');
+    doc.save(filename);
   };
 
   const emailDoctorKit = () => {
@@ -338,12 +354,21 @@ export default function ResultsPage() {
             <div className="section-card border-[var(--color-lime)] px-5 py-4">
               <div className="flex items-center gap-2 mb-2">
                 <span className="pill-tag bg-[var(--color-lime)] text-[var(--color-ink)]">
-                  Your fatigue story · MedGemma
+                  Your results · MedGemma
                 </span>
               </div>
-              <p className="text-sm leading-6 text-[var(--color-ink)]">
-                {combinedSummary}
-              </p>
+              {deep?.summaryPoints && deep.summaryPoints.length > 0 ? (
+                <ul className="mt-1 space-y-2">
+                  {deep.summaryPoints.map((point, i) => (
+                    <li key={i} className="flex items-start gap-2 text-sm leading-6 text-[var(--color-ink)]">
+                      <span className="mt-[3px] h-2 w-2 shrink-0 rounded-full bg-[var(--color-lime)]" />
+                      {point}
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                <p className="text-sm leading-6 text-[var(--color-ink)]">{combinedSummary}</p>
+              )}
             </div>
           ) : (
             <div className="section-card flex flex-col gap-2 px-5 py-4">
@@ -382,26 +407,118 @@ export default function ResultsPage() {
             ))}
           </div>
 
-          {/* ── MedGemma next steps ───────────────────────────────────────── */}
-          {deep?.nextSteps && (
+          {/* ── Next steps + doctor cards ─────────────────────────────────── */}
+          {(deep?.nextSteps || recommendedDoctors.length > 0) && (
             <div className="section-card border-[var(--color-lime)] bg-[rgba(215,240,104,0.18)] px-5 py-4">
               <h3 className="text-xs font-semibold uppercase tracking-[0.16em] text-[var(--color-ink)]">
-                Next steps - talk to a doctor
+                Next steps · talk to a doctor
               </h3>
-              <p className="mt-2 text-sm leading-6 text-[var(--color-ink)]">{deep.nextSteps}</p>
+              {deep?.nextSteps && (
+                <p className="mt-2 text-sm leading-6 text-[var(--color-ink)]">{deep.nextSteps}</p>
+              )}
               {recommendedDoctors.length > 0 && (
                 <div className="mt-4 space-y-3">
-                  {recommendedDoctors.map((doctor, index) => (
-                    <div key={`${doctor.specialty}-${index}`} className="rounded-[1rem] bg-white/75 px-4 py-3">
-                      <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-[var(--color-ink-soft)]">
-                        {doctor.specialty}
-                      </p>
-                      <p className="mt-1 text-sm leading-6 text-[var(--color-ink)]">{doctor.reason}</p>
-                      <p className="mt-2 text-xs leading-5 text-[var(--color-ink-soft)]">
-                        Discuss: {doctor.symptomsToDiscuss.join(' | ')}
-                      </p>
-                    </div>
-                  ))}
+                  {recommendedDoctors.map((doctor, index) => {
+                    const kit = doctorKits[index];
+                    const isOpen = expandedDoctors.includes(index);
+                    const priorityLabel =
+                      doctor.priority === 'start_here' ? 'Start here'
+                      : doctor.priority === 'consider_next' ? 'Consider next'
+                      : 'Specialist option';
+                    return (
+                      <div key={`${doctor.specialty}-${index}`} className="overflow-hidden rounded-[1.2rem] bg-white/85 shadow-[0_6px_18px_rgba(86,98,145,0.1)]">
+                        {/* collapsed header — always visible */}
+                        <button
+                          type="button"
+                          onClick={() => toggleDoctor(index)}
+                          className="flex w-full items-center gap-3 px-4 py-3 text-left"
+                        >
+                          <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-[var(--color-ink)] text-sm font-bold text-white">
+                            {index + 1}
+                          </span>
+                          <span className="text-lg shrink-0">🩺</span>
+                          <div className="min-w-0 flex-1">
+                            <div className="flex flex-wrap items-center gap-2">
+                              <span className="font-bold text-sm text-[var(--color-ink)]">{doctor.specialty}</span>
+                              <span className="rounded-full bg-[var(--color-lime)] px-2 py-0.5 text-[10px] font-bold text-[var(--color-ink)]">
+                                {priorityLabel}
+                              </span>
+                            </div>
+                            <p className="mt-0.5 text-xs leading-5 text-[var(--color-ink-soft)] line-clamp-2">
+                              {doctor.reason}
+                            </p>
+                          </div>
+                          <span className="shrink-0 text-lg font-bold text-[var(--color-ink-soft)]">
+                            {isOpen ? '−' : '+'}
+                          </span>
+                        </button>
+
+                        {/* expanded kit */}
+                        {isOpen && kit && (
+                          <div className="border-t border-[rgba(119,101,244,0.15)] px-4 pb-4 pt-3 space-y-4">
+                            {kit.whatToSay && (
+                              <div className="rounded-[1rem] border border-[rgba(119,101,244,0.3)] bg-[rgba(119,101,244,0.06)] px-3 py-3">
+                                <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-[var(--color-ink-soft)]">What to say</p>
+                                <p className="mt-2 text-sm italic leading-6 text-[var(--color-ink)]">&ldquo;{kit.whatToSay}&rdquo;</p>
+                              </div>
+                            )}
+                            {kit.openingSummary && !kit.whatToSay && (
+                              <p className="text-sm leading-6 text-[var(--color-ink)]">{kit.openingSummary}</p>
+                            )}
+                            {kit.concerningSymptoms.length > 0 && (
+                              <div>
+                                <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-[var(--color-ink-soft)] mb-2">Symptoms to raise</p>
+                                <div className="space-y-1">
+                                  {kit.concerningSymptoms.map((s, si) => (
+                                    <p key={si} className="text-sm leading-6 text-[var(--color-ink)]">• {s}</p>
+                                  ))}
+                                </div>
+                              </div>
+                            )}
+                            {kit.recommendedTests.length > 0 && (
+                              <div>
+                                <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-[var(--color-ink-soft)] mb-2">Tests to request</p>
+                                <div className="space-y-1">
+                                  {kit.recommendedTests.map((t, ti) => (
+                                    <p key={ti} className="text-sm leading-6 text-[var(--color-ink)]">• {t}</p>
+                                  ))}
+                                </div>
+                              </div>
+                            )}
+                            {kit.discussionPoints.length > 0 && (
+                              <div>
+                                <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-[var(--color-ink-soft)] mb-2">Questions &amp; evidence</p>
+                                <div className="space-y-2">
+                                  {kit.discussionPoints.map((pt, pi) => (
+                                    <div key={pi} className="rounded-[1rem] bg-[rgba(119,101,244,0.06)] px-3 py-3">
+                                      <p className="text-sm leading-6 text-[var(--color-ink)]">{pt}</p>
+                                    </div>
+                                  ))}
+                                </div>
+                              </div>
+                            )}
+                            {kit.bringToAppointment && kit.bringToAppointment.length > 0 && (
+                              <div>
+                                <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-[var(--color-ink-soft)] mb-2">Bring to the appointment</p>
+                                <div className="space-y-1">
+                                  {kit.bringToAppointment.map((item, ii) => (
+                                    <p key={ii} className="text-sm leading-6 text-[var(--color-ink)]">• {item}</p>
+                                  ))}
+                                </div>
+                              </div>
+                            )}
+                            <button
+                              type="button"
+                              onClick={() => downloadDoctorKit(index)}
+                              className="mt-1 w-full rounded-full bg-[var(--color-ink)] px-4 py-3 text-sm font-bold text-white"
+                            >
+                              Download {doctor.specialty} kit (PDF)
+                            </button>
+                          </div>
+                        )}
+                      </div>
+                    );
+                  })}
                 </div>
               )}
             </div>
@@ -434,132 +551,33 @@ export default function ResultsPage() {
             </div>
           )}
 
-          {/* ── Doctor visit kit ──────────────────────────────────────────── */}
-          <div className="overflow-hidden rounded-[2rem] border border-[rgba(119,101,244,0.35)] bg-[linear-gradient(180deg,rgba(119,101,244,0.2)_0%,rgba(215,240,104,0.28)_100%)] shadow-[0_22px_44px_rgba(86,98,145,0.22)]">
-            <button
-              type="button"
-              onClick={() => setDoctorKitOpen((v) => !v)}
-              className="flex w-full items-center justify-between px-5 py-5 text-left"
-            >
-              <div>
-                <span className="pill-tag mb-3 bg-[var(--color-lime)] text-[var(--color-ink)]">
-                  {deep?.doctorKitSummary ? 'AI-powered · MedGemma' : 'Core appointment prep'}
-                </span>
-                <h3 className="text-[1.9rem] font-bold tracking-[-0.05em] text-[var(--color-ink)]">
-                  Doctor visit kit
-                </h3>
-                <p className="mt-1 max-w-[18rem] text-sm leading-6 text-[rgba(9,9,15,0.65)]">
-                  Bring one clean brief into the appointment: symptom summary, doctor-specific concerns, and targeted discussion points.
-                </p>
+          {/* ── Export full report ────────────────────────────────────────── */}
+          {doctorKits.length > 0 && (
+            <div className="rounded-[1.6rem] bg-[#09090f] px-5 py-5 text-white shadow-[0_14px_24px_rgba(9,9,15,0.18)]">
+              <h4 className="text-[11px] font-semibold uppercase tracking-[0.16em] text-white/65">
+                Full report
+              </h4>
+              <p className="mt-2 text-sm leading-6 text-white/78">
+                Download all doctor kits in one PDF, or send a clean appointment note by email.
+              </p>
+              <div className="mt-4 flex flex-col gap-3">
+                <button
+                  type="button"
+                  onClick={() => downloadDoctorKit()}
+                  className="w-full rounded-full bg-[var(--color-lime)] px-5 py-4 text-base font-bold text-[var(--color-ink)] shadow-[0_10px_24px_rgba(9,9,15,0.18)]"
+                >
+                  Download full PDF
+                </button>
+                <button
+                  type="button"
+                  onClick={emailDoctorKit}
+                  className="w-full rounded-full border border-white/18 bg-white/8 px-5 py-4 text-base font-bold text-white"
+                >
+                  Send via email
+                </button>
               </div>
-              <span className="flex h-10 w-10 items-center justify-center rounded-full bg-white/70 text-xl font-bold text-[var(--color-ink)] shadow-[0_8px_18px_rgba(86,98,145,0.12)]">
-                {doctorKitOpen ? '−' : '+'}
-              </span>
-            </button>
-
-            {doctorKitOpen && (
-              <div className="border-t border-[rgba(119,101,244,0.22)] bg-[rgba(248,248,251,0.96)] px-5 py-5">
-                <div className="space-y-4">
-
-                  {/* Opening statement (AI-generated) */}
-                  {doctorKitOpener && (
-                    <div className="rounded-[1.4rem] border border-[rgba(119,101,244,0.3)] bg-[rgba(119,101,244,0.06)] px-4 py-4">
-                      <h4 className="text-[11px] font-semibold uppercase tracking-[0.16em] text-[var(--color-ink-soft)]">
-                        How to open the appointment
-                      </h4>
-                      <p className="mt-2 text-sm italic leading-6 text-[var(--color-ink)]">
-                        &ldquo;{doctorKitOpener}&rdquo;
-                      </p>
-                    </div>
-                  )}
-
-                  {/* Concerning symptoms */}
-                  <div className="rounded-[1.4rem] bg-white px-4 py-4 shadow-[0_10px_20px_rgba(86,98,145,0.08)]">
-                    <h4 className="text-[11px] font-semibold uppercase tracking-[0.16em] text-[var(--color-ink-soft)]">
-                      Concerning symptoms gathered in the assessment
-                    </h4>
-                    <p className="mt-2 text-sm leading-6 text-[var(--color-ink)]">
-                      {concerningSummary}
-                    </p>
-                  </div>
-
-                  {doctorKits.map((kit, index) => (
-                    <div key={`${kit.specialty}-${index}`} className="rounded-[1.4rem] bg-white px-4 py-4 shadow-[0_10px_20px_rgba(86,98,145,0.08)]">
-                      <h4 className="text-[11px] font-semibold uppercase tracking-[0.16em] text-[var(--color-ink-soft)]">
-                        {kit.specialty}
-                      </h4>
-                      <p className="mt-2 text-sm leading-6 text-[var(--color-ink)]">{kit.openingSummary}</p>
-
-                      <div className="mt-4">
-                        <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-[var(--color-ink-soft)]">
-                          Concerning symptoms
-                        </p>
-                        <div className="mt-2 space-y-2">
-                          {kit.concerningSymptoms.map((symptom, symptomIndex) => (
-                            <p key={symptomIndex} className="text-sm leading-6 text-[var(--color-ink)]">
-                              • {symptom}
-                            </p>
-                          ))}
-                        </div>
-                      </div>
-
-                      <div className="mt-4">
-                        <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-[var(--color-ink-soft)]">
-                          Tests worth discussing
-                        </p>
-                        <div className="mt-2 space-y-2">
-                          {kit.recommendedTests.map((test, testIndex) => (
-                            <p key={testIndex} className="text-sm leading-6 text-[var(--color-ink)]">
-                              • {test}
-                            </p>
-                          ))}
-                        </div>
-                      </div>
-
-                      <div className="mt-4">
-                        <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-[var(--color-ink-soft)]">
-                          Questions and evidence to bring
-                        </p>
-                        <div className="mt-2 space-y-3">
-                          {kit.discussionPoints.map((point, pointIndex) => (
-                            <div key={pointIndex} className="rounded-[1rem] bg-[rgba(119,101,244,0.06)] px-3 py-3">
-                              <p className="text-sm leading-6 text-[var(--color-ink)]">{point}</p>
-                            </div>
-                          ))}
-                        </div>
-                      </div>
-                    </div>
-                  ))}
-
-                  {/* Export actions */}
-                  <div className="rounded-[1.4rem] bg-[#09090f] px-4 py-4 text-white shadow-[0_14px_24px_rgba(9,9,15,0.18)]">
-                    <h4 className="text-[11px] font-semibold uppercase tracking-[0.16em] text-white/65">
-                      Share this report
-                    </h4>
-                    <p className="mt-2 text-sm leading-6 text-white/78">
-                      Export a polished summary for printing or send a clean appointment note by email.
-                    </p>
-                    <div className="mt-4 flex flex-col gap-3">
-                      <button
-                        type="button"
-                        onClick={downloadDoctorKit}
-                        className="w-full rounded-full bg-[var(--color-lime)] px-5 py-4 text-base font-bold text-[var(--color-ink)] shadow-[0_10px_24px_rgba(9,9,15,0.18)]"
-                      >
-                        Download PDF summary
-                      </button>
-                      <button
-                        type="button"
-                        onClick={emailDoctorKit}
-                        className="w-full rounded-full border border-white/18 bg-white/8 px-5 py-4 text-base font-bold text-white"
-                      >
-                        Send via email
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            )}
-          </div>
+            </div>
+          )}
 
           {/* ── Footer actions ────────────────────────────────────────────── */}
           <div className="flex flex-col gap-3 pt-2">

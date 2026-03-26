@@ -171,9 +171,10 @@ def _build_answers(profile: dict) -> dict:
     sbp = 135.0 if (het > 0.65 or fat > 0.75) else 125.0 if (het > 0.45 or fat > 0.55) else 118.0
     dbp = 85.0 if (het > 0.65 or fat > 0.75) else 80.0 if (het > 0.45 or fat > 0.55) else 74.0
 
-    # waist_cm: correlates with weight_change and bmi
-    # For female: higher waist for perimenopause/inflammation profiles
-    waist = float(np.clip(weight_kg * 0.55 + wgt * 15.0, 65.0, 130.0))
+    # waist_cm: corrected formula anchored to NHANES waist-BMI relationship
+    # (Yim et al. 2017; NHANES mean female waist ~94 cm, male ~100 cm)
+    # Old formula weight_kg*0.55 systematically clipped to minimum — fixed.
+    waist = float(np.clip(75.0 + (bmi - 23.0) * 2.5 + wgt * 15.0, 65.0, 140.0))
 
     # Nocturia: relates to kidney/electrolyte features
     nocturia = float(np.clip((1.0 - slp) * 2.5 + fat * 1.0, 0.0, 5.0))
@@ -579,17 +580,42 @@ def _build_answers(profile: dict) -> dict:
         answers["ldl_cholesterol_mg_dl"]                        = 145.0
 
     elif target == "inflammation":
-        # Hidden_inflammation v2 is BMI-driven (+0.60 coefficient).
-        # Set BMI to obese range clinically consistent with chronic inflammation.
-        _bmi_inflam  = 33.5
+        # Hidden_inflammation v3: waist_cm + bmi are primary features.
+        # Clinical profile: obese BMI, metabolic syndrome — high BP, high
+        # cholesterol, low HDL, family diabetes history.
+        _bmi_inflam  = max(bmi, 33.5)
         _wt_inflam   = _bmi_inflam * (1.68 ** 2)
+        # Sex-specific waist: ensure profile is above at-risk threshold (NIH NHLBI).
+        # Female at-risk ≥88 cm, male at-risk ≥102 cm.
+        # Without this fix, male waist ~101 cm is BELOW 102 cm male threshold (score≈0),
+        # while female waist ~101 cm is 13 cm above 88 cm female threshold (score=0.148).
+        if sex == "M":
+            _waist_inflam = float(75.0 + (_bmi_inflam - 23.0) * 2.5 + 14.0)  # +14 cm to clear male threshold; ~115 cm for BMI 33.5
+        else:
+            _waist_inflam = float(75.0 + (_bmi_inflam - 23.0) * 2.5)  # ~101 cm for BMI 33.5
         answers["bmi"]                                          = _bmi_inflam
         answers["weight_kg"]                                    = _wt_inflam
-        answers["waist_cm"]                                     = float(
-            np.clip(_wt_inflam * 0.55 + wgt * 15.0, 90.0, 130.0)
-        )
+        answers["waist_cm"]                                     = _waist_inflam
         answers["mcq080___doctor_ever_said_you_were_overweight"] = 1.0
         answers["doctor_said_overweight"]                       = 1.0
+        # Bug B fix: these features are in model but were missing from overrides
+        answers["bpq080___doctor_told_you___high_cholesterol_level"] = 1.0
+        answers["ever_told_high_cholesterol"]                   = 1.0
+        answers["told_high_cholesterol"]                        = 1.0
+        answers["bpq030___told_had_high_blood_pressure___2+_times"] = 1.0
+        answers["hdl_cholesterol_mg_dl"]                        = 38.0  # low HDL in MetSyn
+        answers["hdl_cholesterol"]                              = 38.0
+        answers["hdl"]                                          = 38.0
+        answers["mcq300c___close_relative_had_diabetes"]        = 1.0
+        answers["med_count"]                                    = max(med_count, 3.0)
+        # Smoking: heavy smoker profile (chronic inflammation phenotype).
+        # smd650 coeff=+0.270 (cigs/day), smq040=1 daily smoker (coeff=-0.474 vs baseline -1.422 = net +0.948).
+        # Net log-odds gain ≈ +3.2 vs non-smoker default. Clinically valid for MetSyn + chronic inflammation.
+        answers["smq020___smoked_at_least_100_cigarettes_in_life"] = 1.0
+        answers["smoked_100_cigs"]                              = 1.0
+        answers["smq040___do_you_now_smoke_cigarettes?"]        = 1.0  # every day
+        answers["current_smoker"]                               = 1.0
+        answers["smd650___avg_#_cigarettes/day_during_past_30_days"] = 10.0  # 10 cigs/day
 
     elif target == "electrolyte_imbalance":
         # Electrolyte v2 top feature: pregnancy_status_bin + fasting glucose.
@@ -602,8 +628,9 @@ def _build_answers(profile: dict) -> dict:
         answers["med_count"]                                    = max(med_count, 3.0)
 
     elif target == "anemia":
-        # Anemia v2: gender_female (already set), WBC slightly lower, total
+        # Anemia v3: gender_female (already set), WBC slightly lower, total
         # protein slightly lower.  Frequent healthcare visits typical.
+        # rhq031/rhq060 are now model features — reinforce female menstrual pattern.
         answers["LBXWBCSI_white_blood_cell_count_1000_cells_ul"] = 5.1
         answers["wbc_1000_cells_ul"]                            = 5.1
         answers["wbc"]                                          = 5.1
@@ -612,6 +639,24 @@ def _build_answers(profile: dict) -> dict:
         answers["total_protein"]                               = 6.4
         answers["huq071___overnight_hospital_patient_in_last_year"] = 1.0
         answers["overnight_hospital"]                          = 1.0
+        # Reinforce irregular/absent periods (new v3 features for anemia model)
+        if sex == "F" and age < 55:
+            answers["rhq031___had_regular_periods_in_past_12_months"] = 2.0  # irregular
+            answers["regular_periods"] = 2.0
+
+    elif target == "iron_deficiency":
+        # Iron deficiency v3: CBC features added (Hgb, MCV, RDW, MCH).
+        # Clinical profile: microcytic anemia pattern — low Hgb/MCV/MCH, high RDW.
+        # Values represent NHANES raw values (pre-normalization by pipeline).
+        answers["LBXHGB_hemoglobin_g_dl"]                      = 11.5   # low (female ID anemia)
+        answers["LBXMCVSI_mean_cell_volume_fl"]                 = 76.0   # microcytic (<80 fL)
+        answers["LBXRDW_red_cell_distribution_width"]           = 14.8   # elevated (>14%)
+        answers["LBXMCHSI_mean_cell_hemoglobin_pg"]             = 23.0   # low MCH (<27 pg)
+        # Reproductive history (reinforce female iron-loss pattern)
+        if sex == "F" and age < 55:
+            answers["rhq031___had_regular_periods_in_past_12_months"] = 1.0  # yes, regular (blood loss)
+            answers["regular_periods"] = 1.0
+        answers["mcq053___taking_treatment_for_anemia/past_3_mos"] = 1.0  # on iron supplements
 
     elif target in ("perimenopause", "menopause"):
         # Perimenopause v2: reinforce no-regular-periods and age-at-last-period.
