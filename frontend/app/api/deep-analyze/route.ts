@@ -350,7 +350,7 @@ export async function POST(req: NextRequest) {
 
   try {
     const controller = new AbortController();
-    const timeout = setTimeout(() => controller.abort(), 120_000);
+    const timeout = setTimeout(() => controller.abort(), 150_000);
     const hfResponse = await fetch(HF_API_URL, {
       method: 'POST',
       headers: {

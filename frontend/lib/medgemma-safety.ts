@@ -242,11 +242,9 @@ export function validateDeepAnalyzeSchema(
   for (let i = 0; i < parsed.insights.length; i++) {
     const item = parsed.insights[i] as Record<string, unknown>;
     if (typeof item?.diagnosisId !== 'string' || !DIAGNOSIS_ID_ALLOWLIST.has(item.diagnosisId))
-      return err(
-        `insights[${i}].diagnosisId "${String(item?.diagnosisId)}" is not in the allowlist`,
-      );
+      continue; // skip hallucinated or empty diagnosisIds rather than failing the whole response
     if (typeof item?.personalNote !== 'string' || !item.personalNote.trim())
-      return err(`insights[${i}].personalNote must be a non-empty string`);
+      continue;
     insights.push({
       diagnosisId: item.diagnosisId,
       personalNote: item.personalNote.trim(),
