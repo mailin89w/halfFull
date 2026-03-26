@@ -377,17 +377,27 @@ export async function fetchDeepAnalysis(
   confirmedConditions?: string[],
 ): Promise<DeepMedGemmaResult> {
   const privacy = getPrivacyContext();
-  const response = await fetch('/api/deep-analyze', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ answers, mlScores, rawMlScores, clarificationQA, confirmedConditions, privacy }),
-  });
+  const makeRequest = async (includePrivacy: boolean) =>
+    fetch('/api/deep-analyze', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ answers, mlScores, rawMlScores, clarificationQA, confirmedConditions, privacy: includePrivacy ? privacy : null }),
+    });
 
+  let response = await makeRequest(true);
   if (!response.ok) {
     const err = await response.json().catch(() => ({ error: 'Unknown error' }));
-    throw new Error(err.error ?? `HTTP ${response.status}`);
+    const message = (err as { error?: string }).error ?? `HTTP ${response.status}`;
+    if (shouldRetryWithoutPrivacy(response.status, message, Boolean(privacy))) {
+      response = await makeRequest(false);
+    } else {
+      throw new Error(message);
+    }
   }
-
+  if (!response.ok) {
+    const err = await response.json().catch(() => ({ error: 'Unknown error' }));
+    throw new Error((err as { error?: string }).error ?? `HTTP ${response.status}`);
+  }
   return response.json() as Promise<DeepMedGemmaResult>;
 }
 
