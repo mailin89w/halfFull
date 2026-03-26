@@ -71,7 +71,7 @@ export default function ConsentPage() {
 
             <div className="relative">
               <span className="inline-flex rounded-full bg-[var(--color-lime)] px-4 py-2 text-[11px] font-bold uppercase tracking-[0.18em] text-[var(--color-ink)]">
-                Privacy and consent
+                Privacy notice
               </span>
               <h1 className="mt-4 text-[1.95rem] font-bold leading-[1.02] tracking-[-0.05em] text-[var(--color-ink)]">
                 Before we process your health answers

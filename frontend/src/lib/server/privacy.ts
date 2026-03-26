@@ -72,6 +72,30 @@ export function readOptionalPrivacyContext(value: unknown): ServerPrivacyContext
   return validatePrivacyContext(value);
 }
 
+export function normalizeConsentGrantContext(value: unknown): ServerPrivacyContext {
+  const privacy = value as Partial<ServerPrivacyContext> | null | undefined;
+
+  if (
+    !privacy?.anonymousId ||
+    !privacy.consentGrantedAt ||
+    !privacy.expiresAt
+  ) {
+    throw new Error('Missing privacy consent context.');
+  }
+
+  if (new Date(privacy.expiresAt).getTime() <= Date.now()) {
+    throw new Error('Consent has expired.');
+  }
+
+  return {
+    anonymousId: privacy.anonymousId,
+    consentVersion: CONSENT_VERSION,
+    consentGrantedAt: privacy.consentGrantedAt,
+    expiresAt: privacy.expiresAt,
+    purposes: Array.isArray(privacy.purposes) ? privacy.purposes : [],
+  };
+}
+
 function getSupabaseAdmin(): SupabaseClient | null {
   const url = process.env.SUPABASE_URL;
   const key = process.env.SUPABASE_SERVICE_KEY;
