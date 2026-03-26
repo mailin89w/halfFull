@@ -532,7 +532,7 @@ export async function getDeepAnalysisWithFallback(
   rawMlScores?: Record<string, number>,
   clarificationQA?: BayesianClarificationRecord,
   confirmedConditions?: string[],
-  timeoutMs = 150000  // allow for Vercel route time + MedGemma grounding + Groq synthesis
+  timeoutMs = 210000  // MedGemma abort (150s) + Groq synthesis (≤30s) + buffer
 ): Promise<DeepMedGemmaResult> {
   const mode = getConfiguredAiMode();
 
