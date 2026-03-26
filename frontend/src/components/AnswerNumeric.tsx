@@ -13,35 +13,15 @@ export function AnswerNumeric({
   value = '',
   onChange,
   placeholder = 'Enter a number',
-  min,
-  max,
   error,
 }: Props) {
-  const handleChange = (raw: string) => {
-    if (raw === '') {
-      onChange(raw);
-      return;
-    }
-
-    const parsed = Number(raw);
-    if (!Number.isFinite(parsed)) {
-      onChange(raw);
-      return;
-    }
-
-    if (max !== undefined && parsed > max) return;
-    onChange(raw);
-  };
-
   return (
     <div className="flex flex-col gap-2">
       <input
         type="number"
         inputMode="decimal"
-        min={min}
-        max={max}
         value={value}
-        onChange={(e) => handleChange(e.target.value)}
+        onChange={(e) => onChange(e.target.value)}
         placeholder={placeholder}
         className={[
           'w-full rounded-[1.35rem] border bg-white px-4 py-3',

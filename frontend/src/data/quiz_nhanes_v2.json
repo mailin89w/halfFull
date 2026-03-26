@@ -60,9 +60,7 @@
               "full"
             ],
             "validation": {
-              "required": true,
-              "min": 0,
-              "max": 20
+              "required": true
             }
           },
           {
@@ -86,7 +84,6 @@
             "shown_in_paths": [
               "full"
             ],
-            "screen_group": "smoking_current",
             "validation": {
               "required": true
             }
