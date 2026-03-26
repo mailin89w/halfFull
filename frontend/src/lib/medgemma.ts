@@ -550,9 +550,12 @@ export async function getDeepAnalysisWithFallback(
       timeoutMs,
       'Live AI analysis'
     );
+    if (typeof window !== 'undefined') window.sessionStorage.removeItem('halffull_last_ai_error');
     return buildStoredDeepResult('live', liveResult);
   } catch (err) {
-    console.error('[getDeepAnalysisWithFallback] Live analysis failed, using mock fallback:', err);
+    const msg = err instanceof Error ? err.message : String(err);
+    console.error('[getDeepAnalysisWithFallback] Live analysis failed, using mock fallback:', msg);
+    if (typeof window !== 'undefined') window.sessionStorage.setItem('halffull_last_ai_error', msg);
     try {
       return createMockDeepResult(answers);
     } catch {

@@ -66,6 +66,8 @@ const effectiveSummaryLine = mlRanButEmpty
     : 'Your assessment shows some low-level signals, but nothing points to a specific cause.')
   : summaryLine;
 
+  const [lastAiError, setLastAiError] = useState<string | null>(null);
+
   // Load deep analysis result from session storage (written by /processing)
   useEffect(() => {
     if (!hydrated) return;
@@ -75,6 +77,8 @@ const effectiveSummaryLine = mlRanButEmpty
       return;
     }
     setDeep(stored);
+    const err = window.sessionStorage.getItem('halffull_last_ai_error');
+    if (err) setLastAiError(err);
   }, [answers, hydrated, router]);
 
   // ── Doctor kit content: AI-generated if available, rule-based as fallback ──
@@ -455,6 +459,11 @@ const effectiveSummaryLine = mlRanButEmpty
               <p className="text-sm text-[var(--color-ink-soft)]">
                 This report text was generated from demo or local fallback logic so the app stays usable even when live MedGemma is unavailable.
               </p>
+              {lastAiError && (
+                <p className="mt-2 text-xs font-mono text-red-500 break-all">
+                  Error: {lastAiError}
+                </p>
+              )}
             </div>
           )}
 
