@@ -61,11 +61,11 @@ export function formatAnswersV2(answers: Record<string, unknown>): string {
   if (hw && typeof hw === 'object') {
     if (hw['height_cm']) (a as Record<string, unknown>)['height_cm'] = hw['height_cm'];
     if (hw['weight_kg']) (a as Record<string, unknown>)['weight_kg'] = hw['weight_kg'];
-    const h = parseFloat(hw['height_cm'] ?? '');
-    const w = parseFloat(hw['weight_kg'] ?? '');
-    if (!isNaN(h) && !isNaN(w) && h > 0) {
-      (a as Record<string, unknown>)['bmi'] = (w / (h / 100) ** 2).toFixed(1);
-    }
+  }
+  const directHeight = parseFloat(String(a['height_cm'] ?? ''));
+  const directWeight = parseFloat(String(a['weight_kg'] ?? ''));
+  if (!isNaN(directHeight) && !isNaN(directWeight) && directHeight > 0 && directWeight > 0) {
+    (a as Record<string, unknown>)['bmi'] = (directWeight / (directHeight / 100) ** 2).toFixed(1);
   }
   // sleep_hours dual_numeric → individual NHANES fields
   const sh = a['sleep_hours'] as Record<string, string> | undefined;
@@ -119,6 +119,7 @@ export function formatAnswersV2(answers: Record<string, unknown>): string {
   const gender = Number(a['gender']);
   if (gender === 1) lines.push('Sex: Male');
   if (gender === 2) lines.push('Sex: Female');
+  if (a['height_cm']) lines.push(`Height: ${a['height_cm']} cm`);
 
   // General health
   const gh = Number(a['huq010___general_health_condition']);
