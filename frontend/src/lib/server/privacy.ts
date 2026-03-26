@@ -138,8 +138,7 @@ export async function recordConsentAcceptance(
 
   await purgeExpiredPrivacyData();
 
-  const [profileResult, eventResult] = await Promise.all([
-    supabase.from('user_profiles').upsert({
+  const profileResult = await supabase.from('user_profiles').upsert({
       anonymous_id: safePrivacy.anonymousId,
       consent_version: safePrivacy.consentVersion,
       consent_status: 'granted',
@@ -150,18 +149,19 @@ export async function recordConsentAcceptance(
         purposes: safePrivacy.purposes ?? [],
         ...metadata,
       },
-    }),
-    supabase.from('consent_events').insert({
+    });
+
+  if (profileResult.error) throw new Error(profileResult.error.message);
+
+  const eventResult = await supabase.from('consent_events').insert({
       anonymous_id: safePrivacy.anonymousId,
       event_type: 'granted',
       consent_version: safePrivacy.consentVersion,
       occurred_at: safePrivacy.consentGrantedAt,
       retention_expires_at: retentionExpiresAt,
       metadata,
-    }),
-  ]);
+    });
 
-  if (profileResult.error) throw new Error(profileResult.error.message);
   if (eventResult.error) throw new Error(eventResult.error.message);
 }
 
@@ -172,8 +172,7 @@ export async function recordConsentExit(privacy: ServerPrivacyContext): Promise<
 
   const now = new Date().toISOString();
 
-  const [profileResult, eventResult] = await Promise.all([
-    supabase.from('user_profiles').upsert({
+  const profileResult = await supabase.from('user_profiles').upsert({
       anonymous_id: safePrivacy.anonymousId,
       consent_version: safePrivacy.consentVersion,
       consent_status: 'revoked',
@@ -183,8 +182,11 @@ export async function recordConsentExit(privacy: ServerPrivacyContext): Promise<
       profile: {
         exited_at: now,
       },
-    }),
-    supabase.from('consent_events').insert({
+    });
+
+  if (profileResult.error) throw new Error(profileResult.error.message);
+
+  const eventResult = await supabase.from('consent_events').insert({
       anonymous_id: safePrivacy.anonymousId,
       event_type: 'revoked',
       consent_version: safePrivacy.consentVersion,
@@ -193,10 +195,8 @@ export async function recordConsentExit(privacy: ServerPrivacyContext): Promise<
       metadata: {
         reason: 'explicit_exit',
       },
-    }),
-  ]);
+    });
 
-  if (profileResult.error) throw new Error(profileResult.error.message);
   if (eventResult.error) throw new Error(eventResult.error.message);
 }
 
@@ -215,8 +215,7 @@ export async function persistHealthSession(args: {
 
   await purgeExpiredPrivacyData();
 
-  const [profileResult, sessionResult] = await Promise.all([
-    supabase.from('user_profiles').upsert({
+  const profileResult = await supabase.from('user_profiles').upsert({
       anonymous_id: safePrivacy.anonymousId,
       consent_version: safePrivacy.consentVersion,
       consent_status: 'granted',
@@ -227,16 +226,17 @@ export async function persistHealthSession(args: {
         ...profileSummary,
         last_session_kind: sessionKind,
       },
-    }),
-    supabase.from('health_data_sessions').insert({
+    });
+
+  if (profileResult.error) throw new Error(profileResult.error.message);
+
+  const sessionResult = await supabase.from('health_data_sessions').insert({
       anonymous_id: safePrivacy.anonymousId,
       session_kind: sessionKind,
       payload,
       retention_expires_at: safePrivacy.expiresAt,
-    }),
-  ]);
+    });
 
-  if (profileResult.error) throw new Error(profileResult.error.message);
   if (sessionResult.error) throw new Error(sessionResult.error.message);
 }
 
