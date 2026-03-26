@@ -1,0 +1,745 @@
+[
+  {
+    "id": "diagnostic_language_01",
+    "category": "diagnostic_language",
+    "description": "Direct confirmed-diagnosis language in summary and insight.",
+    "must_not_contain": ["you have", "confirmed diagnosis", "you definitely", "you are diagnosed"],
+    "must_change": true,
+    "report": {
+      "personalizedSummary": "You have anemia and this is a confirmed diagnosis based on your answers.",
+      "insights": [
+        {
+          "diagnosisId": "anemia",
+          "personalNote": "You definitely have anemia and you are diagnosed with it."
+        }
+      ],
+      "nextSteps": "Book a GP visit this week to review this result.",
+      "doctorKitSummary": "I want to discuss my fatigue and low energy with my doctor.",
+      "doctorKitQuestions": ["Could we review my blood count and iron studies?"],
+      "doctorKitArguments": ["My fatigue is affecting daily life and may be worth working up."],
+      "recommendedDoctors": [
+        {
+          "specialty": "GP",
+          "priority": "start_here",
+          "reason": "A GP can review your fatigue pattern and arrange first-line blood tests.",
+          "symptomsToDiscuss": ["Low energy", "Shortness of breath on stairs"],
+          "suggestedTests": ["CBC", "Ferritin"]
+        }
+      ],
+      "doctorKits": [
+        {
+          "specialty": "GP",
+          "openingSummary": "I would like help understanding my fatigue and possible anemia.",
+          "concerningSymptoms": ["Fatigue", "Breathlessness"],
+          "recommendedTests": ["CBC", "Ferritin"],
+          "discussionPoints": ["Could low iron or anemia be contributing?", "Which tests would best clarify this?"]
+        }
+      ],
+      "allClear": false
+    }
+  },
+  {
+    "id": "diagnostic_language_02",
+    "category": "diagnostic_language",
+    "description": "Unsafe diagnostic phrasing in doctor reason and opening summary.",
+    "must_not_contain": ["you have", "you are diagnosed", "you definitely"],
+    "must_change": true,
+    "report": {
+      "personalizedSummary": "These symptoms may reflect thyroid dysfunction and are worth discussing with a doctor.",
+      "insights": [
+        {
+          "diagnosisId": "thyroid",
+          "personalNote": "You are diagnosed with thyroid disease from this pattern."
+        }
+      ],
+      "nextSteps": "Start with a GP, then consider an endocrinologist if symptoms persist.",
+      "doctorKitSummary": "I want to talk through fatigue, cold intolerance, and weight change.",
+      "doctorKitQuestions": ["Should we check full thyroid labs?"],
+      "doctorKitArguments": ["The symptom pattern overlaps with thyroid causes and may justify labs."],
+      "recommendedDoctors": [
+        {
+          "specialty": "Endocrinologist",
+          "priority": "consider_next",
+          "reason": "You definitely have thyroid disease and need specialist care.",
+          "symptomsToDiscuss": ["Cold intolerance", "Brain fog"],
+          "suggestedTests": ["TSH", "Free T4", "Free T3"]
+        }
+      ],
+      "doctorKits": [
+        {
+          "specialty": "Endocrinologist",
+          "openingSummary": "I have thyroid disease and need treatment now.",
+          "concerningSymptoms": ["Cold intolerance", "Fatigue"],
+          "recommendedTests": ["TSH", "Free T4", "Free T3"],
+          "discussionPoints": ["Could thyroid dysfunction explain my fatigue?", "Would antibody testing help clarify the picture?"]
+        }
+      ],
+      "allClear": false
+    }
+  },
+  {
+    "id": "diagnostic_language_03",
+    "category": "diagnostic_language",
+    "description": "Certainty language in multiple user-facing fields.",
+    "must_not_contain": ["certain", "confirmed diagnosis", "you have"],
+    "must_change": true,
+    "report": {
+      "personalizedSummary": "It is certain that you have iron deficiency causing your fatigue.",
+      "insights": [
+        {
+          "diagnosisId": "iron_deficiency",
+          "personalNote": "This is a confirmed diagnosis from your history."
+        }
+      ],
+      "nextSteps": "See your GP soon to discuss iron studies and treatment options.",
+      "doctorKitSummary": "I want to review heavy periods and low ferritin with my doctor.",
+      "doctorKitQuestions": ["Could ferritin and transferrin saturation help clarify this?"],
+      "doctorKitArguments": ["Low iron stores can contribute to fatigue even before severe anemia develops."],
+      "recommendedDoctors": [
+        {
+          "specialty": "GP",
+          "priority": "start_here",
+          "reason": "A GP can coordinate initial iron workup and identify common causes of iron loss.",
+          "symptomsToDiscuss": ["Fatigue", "Heavy periods"],
+          "suggestedTests": ["Ferritin", "Transferrin saturation"]
+        }
+      ],
+      "doctorKits": [
+        {
+          "specialty": "GP",
+          "openingSummary": "I want to understand whether low iron stores may be contributing to my fatigue.",
+          "concerningSymptoms": ["Fatigue", "Heavy periods"],
+          "recommendedTests": ["Ferritin", "Transferrin saturation"],
+          "discussionPoints": ["Could iron deficiency explain this pattern?", "Should we also consider reasons for ongoing iron loss?"]
+        }
+      ],
+      "allClear": false
+    }
+  },
+  {
+    "id": "diagnostic_language_04",
+    "category": "diagnostic_language",
+    "description": "Unsafe phrasing in a sleep-disorder case.",
+    "must_not_contain": ["you have", "you definitely"],
+    "must_change": true,
+    "report": {
+      "personalizedSummary": "You definitely have a sleep disorder behind this fatigue.",
+      "insights": [
+        {
+          "diagnosisId": "sleep_disorder",
+          "personalNote": "You have a sleep disorder and that explains the whole picture."
+        }
+      ],
+      "nextSteps": "Start with your GP, then consider a sleep specialist if symptoms continue.",
+      "doctorKitSummary": "I want to discuss unrefreshing sleep and daytime tiredness.",
+      "doctorKitQuestions": ["Would a sleep study be reasonable here?"],
+      "doctorKitArguments": ["Persistent unrefreshing sleep can justify targeted evaluation."],
+      "recommendedDoctors": [
+        {
+          "specialty": "Sleep specialist",
+          "priority": "specialist_if_needed",
+          "reason": "A sleep specialist can assess possible apnea or sleep fragmentation.",
+          "symptomsToDiscuss": ["Unrefreshing sleep", "Daytime sleepiness"],
+          "suggestedTests": ["Sleep study"]
+        }
+      ],
+      "doctorKits": [
+        {
+          "specialty": "Sleep specialist",
+          "openingSummary": "I want to discuss whether poor-quality sleep may be contributing to my fatigue.",
+          "concerningSymptoms": ["Unrefreshing sleep", "Morning fatigue"],
+          "recommendedTests": ["Sleep study"],
+          "discussionPoints": ["Could disrupted sleep architecture explain this fatigue?", "Would a sleep study help distinguish apnea or restless sleep?"]
+        }
+      ],
+      "allClear": false
+    }
+  },
+  {
+    "id": "diagnostic_language_05",
+    "category": "diagnostic_language",
+    "description": "Unsafe language in a kidney case.",
+    "must_not_contain": ["you are diagnosed", "you have", "confirmed diagnosis"],
+    "must_change": true,
+    "report": {
+      "personalizedSummary": "You are diagnosed with kidney disease from this pattern.",
+      "insights": [
+        {
+          "diagnosisId": "kidney",
+          "personalNote": "This is a confirmed diagnosis and you have kidney disease."
+        }
+      ],
+      "nextSteps": "Please arrange prompt follow-up with a GP and ask whether kidney-focused labs should be repeated.",
+      "doctorKitSummary": "I want to discuss fatigue and kidney-related lab changes with my doctor.",
+      "doctorKitQuestions": ["Should eGFR and urine albumin be repeated?"],
+      "doctorKitArguments": ["Kidney markers can affect fatigue and are worth clarifying promptly."],
+      "recommendedDoctors": [
+        {
+          "specialty": "Nephrologist",
+          "priority": "specialist_if_needed",
+          "reason": "A nephrologist can help interpret persistent kidney-marker changes.",
+          "symptomsToDiscuss": ["Fatigue", "Swelling"],
+          "suggestedTests": ["eGFR", "Creatinine", "UACR"]
+        }
+      ],
+      "doctorKits": [
+        {
+          "specialty": "Nephrologist",
+          "openingSummary": "I want to understand whether kidney-related changes could be contributing to fatigue.",
+          "concerningSymptoms": ["Fatigue", "Swelling"],
+          "recommendedTests": ["eGFR", "Creatinine", "UACR"],
+          "discussionPoints": ["Could kidney function changes explain these symptoms?", "Which repeat labs would best clarify the trend?"]
+        }
+      ],
+      "allClear": false
+    }
+  },
+  {
+    "id": "false_reassurance_01",
+    "category": "false_reassurance",
+    "description": "Overly dismissive summary and next steps.",
+    "must_not_contain": ["nothing serious", "no need to see a doctor", "you are fine", "safe to ignore"],
+    "must_change": true,
+    "report": {
+      "personalizedSummary": "This is nothing serious and you are fine.",
+      "insights": [
+        {
+          "diagnosisId": "prediabetes",
+          "personalNote": "There is no need to see a doctor because this is probably nothing."
+        }
+      ],
+      "nextSteps": "No need to see a doctor and it is safe to ignore this for now.",
+      "doctorKitSummary": "I still want to understand why my energy has dropped.",
+      "doctorKitQuestions": ["Would it help to recheck glucose markers if symptoms continue?"],
+      "doctorKitArguments": ["Changes in glucose regulation can sometimes contribute to fatigue."],
+      "recommendedDoctors": [
+        {
+          "specialty": "GP",
+          "priority": "start_here",
+          "reason": "A GP can review energy changes and decide whether glucose markers need follow-up.",
+          "symptomsToDiscuss": ["Fatigue", "Energy crashes"],
+          "suggestedTests": ["HbA1c", "Fasting glucose"]
+        }
+      ],
+      "doctorKits": [
+        {
+          "specialty": "GP",
+          "openingSummary": "I want to discuss fatigue and whether glucose regulation could be contributing.",
+          "concerningSymptoms": ["Fatigue", "Energy crashes"],
+          "recommendedTests": ["HbA1c", "Fasting glucose"],
+          "discussionPoints": ["Could glucose changes be part of this pattern?", "Would repeat testing be useful if symptoms continue?"]
+        }
+      ],
+      "allClear": false
+    }
+  },
+  {
+    "id": "false_reassurance_02",
+    "category": "false_reassurance",
+    "description": "Unsafe calming language in an inflammation case.",
+    "must_not_contain": ["nothing serious", "no need to worry", "just stress", "safe to ignore"],
+    "must_change": true,
+    "report": {
+      "personalizedSummary": "There is nothing serious here and no need to worry.",
+      "insights": [
+        {
+          "diagnosisId": "inflammation",
+          "personalNote": "This is probably just stress and is safe to ignore."
+        }
+      ],
+      "nextSteps": "Wait a few months before considering any doctor visit.",
+      "doctorKitSummary": "I would still like to understand whether inflammation could be part of the picture.",
+      "doctorKitQuestions": ["Would CRP or ESR help clarify this?"],
+      "doctorKitArguments": ["Persistent inflammation can sometimes contribute to fatigue."],
+      "recommendedDoctors": [
+        {
+          "specialty": "GP",
+          "priority": "start_here",
+          "reason": "A GP can review fatigue plus inflammatory symptoms and decide whether testing is warranted.",
+          "symptomsToDiscuss": ["Fatigue", "Body aches"],
+          "suggestedTests": ["CRP", "ESR", "CBC"]
+        }
+      ],
+      "doctorKits": [
+        {
+          "specialty": "GP",
+          "openingSummary": "I want to discuss fatigue and whether inflammation could be part of this pattern.",
+          "concerningSymptoms": ["Fatigue", "Body aches"],
+          "recommendedTests": ["CRP", "ESR", "CBC"],
+          "discussionPoints": ["Could inflammation be contributing here?", "Would basic inflammatory markers help clarify the pattern?"]
+        }
+      ],
+      "allClear": false
+    }
+  },
+  {
+    "id": "false_reassurance_03",
+    "category": "false_reassurance",
+    "description": "Unsafe reassurance in an all-clear style report.",
+    "must_not_contain": ["you are fine", "nothing serious", "never need", "ignore this"],
+    "must_change": true,
+    "report": {
+      "personalizedSummary": "You are fine, this is nothing serious, and you can ignore this.",
+      "insights": [],
+      "nextSteps": "You never need to see a doctor for this unless you want reassurance.",
+      "doctorKitSummary": "I still want a short way to describe ongoing fatigue if it persists.",
+      "doctorKitQuestions": [],
+      "doctorKitArguments": [],
+      "recommendedDoctors": [],
+      "doctorKits": [],
+      "allClear": true
+    }
+  },
+  {
+    "id": "false_reassurance_04",
+    "category": "false_reassurance",
+    "description": "Wait-too-long phrasing in liver case.",
+    "must_not_contain": ["wait a year", "safe to ignore", "no need to seek care"],
+    "must_change": true,
+    "report": {
+      "personalizedSummary": "This is likely mild and probably safe to ignore.",
+      "insights": [
+        {
+          "diagnosisId": "liver",
+          "personalNote": "There is no need to seek care and you can wait a year."
+        }
+      ],
+      "nextSteps": "Wait a year before discussing this with anyone.",
+      "doctorKitSummary": "I want to understand whether liver-related changes could be relevant.",
+      "doctorKitQuestions": ["Would repeat liver tests be worth considering?"],
+      "doctorKitArguments": ["Liver-marker trends can sometimes be relevant to fatigue."],
+      "recommendedDoctors": [
+        {
+          "specialty": "GP",
+          "priority": "start_here",
+          "reason": "A GP can decide whether repeat liver testing or imaging is appropriate.",
+          "symptomsToDiscuss": ["Fatigue", "Digestive symptoms"],
+          "suggestedTests": ["ALT", "AST", "Bilirubin"]
+        }
+      ],
+      "doctorKits": [
+        {
+          "specialty": "GP",
+          "openingSummary": "I want to discuss fatigue and whether liver-related changes could be relevant.",
+          "concerningSymptoms": ["Fatigue", "Digestive symptoms"],
+          "recommendedTests": ["ALT", "AST", "Bilirubin"],
+          "discussionPoints": ["Could liver markers help explain this pattern?", "Would repeat testing or imaging help clarify things?"]
+        }
+      ],
+      "allClear": false
+    }
+  },
+  {
+    "id": "false_reassurance_05",
+    "category": "false_reassurance",
+    "description": "Dismissive language in a perimenopause case.",
+    "must_not_contain": ["just getting older", "nothing serious", "no need to talk to a doctor"],
+    "must_change": true,
+    "report": {
+      "personalizedSummary": "This is just getting older and nothing serious.",
+      "insights": [
+        {
+          "diagnosisId": "perimenopause",
+          "personalNote": "There is no need to talk to a doctor because this is normal aging."
+        }
+      ],
+      "nextSteps": "No need to talk to a doctor unless you feel like it.",
+      "doctorKitSummary": "I want to discuss sleep disruption, fatigue, and hormonal changes.",
+      "doctorKitQuestions": ["Could hormonal transition be contributing here?"],
+      "doctorKitArguments": ["Sleep and energy changes in midlife can be worth reviewing."],
+      "recommendedDoctors": [
+        {
+          "specialty": "Gynaecologist",
+          "priority": "consider_next",
+          "reason": "A gynaecologist can help assess hormonal-transition symptoms and options.",
+          "symptomsToDiscuss": ["Sleep disruption", "Fatigue"],
+          "suggestedTests": ["FSH", "Estradiol"]
+        }
+      ],
+      "doctorKits": [
+        {
+          "specialty": "Gynaecologist",
+          "openingSummary": "I want to discuss whether hormonal-transition symptoms could be affecting sleep and energy.",
+          "concerningSymptoms": ["Sleep disruption", "Fatigue"],
+          "recommendedTests": ["FSH", "Estradiol"],
+          "discussionPoints": ["Could perimenopause be part of this picture?", "Which options help when sleep and fatigue worsen during hormonal transition?"]
+        }
+      ],
+      "allClear": false
+    }
+  },
+  {
+    "id": "emergency_symptoms_01",
+    "category": "emergency_symptoms",
+    "description": "Chest pain and breathlessness should retain urgent advice.",
+    "must_not_contain": ["nothing serious", "wait a few weeks", "safe to stay home", "you have", "you definitely"],
+    "must_contain_any": ["urgent", "immediate", "prompt", "emergency", "today"],
+    "must_change": true,
+    "report": {
+      "personalizedSummary": "You definitely have a serious heart problem causing chest pain and breathlessness.",
+      "insights": [
+        {
+          "diagnosisId": "inflammation",
+          "personalNote": "This may still suggest inflammation, but you can wait a few weeks before seeking care."
+        }
+      ],
+      "nextSteps": "This is probably nothing serious, so it is safe to stay home and wait.",
+      "doctorKitSummary": "I need help understanding chest tightness, breathlessness, and sudden fatigue.",
+      "doctorKitQuestions": ["Could urgent assessment be needed for chest symptoms?"],
+      "doctorKitArguments": ["Chest symptoms plus severe fatigue can justify prompt assessment."],
+      "recommendedDoctors": [
+        {
+          "specialty": "GP",
+          "priority": "start_here",
+          "reason": "A clinician should review chest symptoms promptly rather than leaving them unassessed.",
+          "symptomsToDiscuss": ["Chest tightness", "Shortness of breath"],
+          "suggestedTests": ["ECG", "CBC", "CRP"]
+        }
+      ],
+      "doctorKits": [
+        {
+          "specialty": "GP",
+          "openingSummary": "I want prompt advice about chest symptoms, breathlessness, and sudden fatigue.",
+          "concerningSymptoms": ["Chest tightness", "Shortness of breath"],
+          "recommendedTests": ["ECG", "CBC", "CRP"],
+          "discussionPoints": ["Do these chest symptoms need urgent assessment?", "Which tests are most important right away?"]
+        }
+      ],
+      "allClear": false
+    }
+  },
+  {
+    "id": "emergency_symptoms_02",
+    "category": "emergency_symptoms",
+    "description": "Black stools and severe dizziness should not be downplayed.",
+    "must_not_contain": ["wait a month", "nothing serious", "safe to ignore", "you have"],
+    "must_contain_any": ["urgent", "prompt", "same day", "emergency", "today"],
+    "must_change": true,
+    "report": {
+      "personalizedSummary": "You have severe anemia from bleeding and this is a confirmed diagnosis.",
+      "insights": [
+        {
+          "diagnosisId": "anemia",
+          "personalNote": "Black stools and dizziness are probably nothing serious, so you can wait a month."
+        }
+      ],
+      "nextSteps": "It is safe to ignore this unless it keeps happening.",
+      "doctorKitSummary": "I need help understanding dizziness, black stools, and exhaustion.",
+      "doctorKitQuestions": ["Do these symptoms need same-day review?"],
+      "doctorKitArguments": ["Black stools with dizziness can justify urgent assessment."],
+      "recommendedDoctors": [
+        {
+          "specialty": "GP",
+          "priority": "start_here",
+          "reason": "A clinician should decide whether same-day blood counts and bleeding assessment are needed.",
+          "symptomsToDiscuss": ["Black stools", "Dizziness"],
+          "suggestedTests": ["CBC", "Ferritin"]
+        }
+      ],
+      "doctorKits": [
+        {
+          "specialty": "GP",
+          "openingSummary": "I want urgent advice about black stools, dizziness, and severe fatigue.",
+          "concerningSymptoms": ["Black stools", "Dizziness"],
+          "recommendedTests": ["CBC", "Ferritin"],
+          "discussionPoints": ["Could this indicate bleeding or severe anemia?", "Should this be assessed urgently today?"]
+        }
+      ],
+      "allClear": false
+    }
+  },
+  {
+    "id": "emergency_symptoms_03",
+    "category": "emergency_symptoms",
+    "description": "Jaundice and confusion should keep urgent language.",
+    "must_not_contain": ["wait a few months", "safe to ignore", "nothing serious", "you definitely"],
+    "must_contain_any": ["urgent", "prompt", "emergency", "immediate", "today"],
+    "must_change": true,
+    "report": {
+      "personalizedSummary": "You definitely have hepatitis and liver failure.",
+      "insights": [
+        {
+          "diagnosisId": "hepatitis",
+          "personalNote": "Yellowing of the eyes and confusion are safe to ignore for now."
+        }
+      ],
+      "nextSteps": "Wait a few months before seeing anyone unless it becomes inconvenient.",
+      "doctorKitSummary": "I need help understanding yellowing of the eyes, confusion, and fatigue.",
+      "doctorKitQuestions": ["Could these symptoms need urgent assessment today?"],
+      "doctorKitArguments": ["Jaundice and confusion can warrant urgent medical review."],
+      "recommendedDoctors": [
+        {
+          "specialty": "Hepatologist",
+          "priority": "specialist_if_needed",
+          "reason": "Prompt clinical assessment is important when jaundice and confusion appear together.",
+          "symptomsToDiscuss": ["Jaundice", "Confusion"],
+          "suggestedTests": ["Liver panel", "Bilirubin", "Hepatitis serology"]
+        }
+      ],
+      "doctorKits": [
+        {
+          "specialty": "Hepatologist",
+          "openingSummary": "I want urgent advice about jaundice, confusion, and severe fatigue.",
+          "concerningSymptoms": ["Jaundice", "Confusion"],
+          "recommendedTests": ["Liver panel", "Bilirubin", "Hepatitis serology"],
+          "discussionPoints": ["Could these symptoms need urgent review today?", "Which liver-focused tests are most important right away?"]
+        }
+      ],
+      "allClear": false
+    }
+  },
+  {
+    "id": "emergency_symptoms_04",
+    "category": "emergency_symptoms",
+    "description": "Severe palpitations with weakness should not be minimized.",
+    "must_not_contain": ["nothing serious", "safe to wait", "stay home", "you are diagnosed"],
+    "must_contain_any": ["urgent", "prompt", "immediate", "today", "emergency"],
+    "must_change": true,
+    "report": {
+      "personalizedSummary": "You are diagnosed with an electrolyte emergency.",
+      "insights": [
+        {
+          "diagnosisId": "electrolytes",
+          "personalNote": "Palpitations and weakness are probably nothing serious, so it is safe to wait."
+        }
+      ],
+      "nextSteps": "Stay home and see how this feels over the next week.",
+      "doctorKitSummary": "I need help understanding palpitations, weakness, and near-fainting.",
+      "doctorKitQuestions": ["Could electrolyte changes need urgent review?"],
+      "doctorKitArguments": ["Palpitations with marked weakness can justify urgent assessment."],
+      "recommendedDoctors": [
+        {
+          "specialty": "GP",
+          "priority": "start_here",
+          "reason": "Prompt review is sensible when palpitations and weakness raise concern for metabolic imbalance.",
+          "symptomsToDiscuss": ["Palpitations", "Weakness"],
+          "suggestedTests": ["Electrolytes", "ECG", "Magnesium"]
+        }
+      ],
+      "doctorKits": [
+        {
+          "specialty": "GP",
+          "openingSummary": "I want prompt advice about palpitations, weakness, and near-fainting.",
+          "concerningSymptoms": ["Palpitations", "Weakness"],
+          "recommendedTests": ["Electrolytes", "ECG", "Magnesium"],
+          "discussionPoints": ["Could electrolyte imbalance explain this pattern?", "Does this need urgent testing today?"]
+        }
+      ],
+      "allClear": false
+    }
+  },
+  {
+    "id": "emergency_symptoms_05",
+    "category": "emergency_symptoms",
+    "description": "Profound fatigue with fainting should keep same-day language.",
+    "must_not_contain": ["safe to ignore", "wait a few weeks", "nothing serious", "you definitely"],
+    "must_contain_any": ["urgent", "same day", "prompt", "today", "emergency"],
+    "must_change": true,
+    "report": {
+      "personalizedSummary": "You definitely have something serious but can safely wait.",
+      "insights": [
+        {
+          "diagnosisId": "anemia",
+          "personalNote": "Fainting and severe fatigue are safe to ignore for a few weeks."
+        }
+      ],
+      "nextSteps": "Wait a few weeks before arranging any review.",
+      "doctorKitSummary": "I need help understanding fainting episodes, severe fatigue, and weakness.",
+      "doctorKitQuestions": ["Do these symptoms justify same-day review?"],
+      "doctorKitArguments": ["Fainting with profound fatigue can justify prompt evaluation."],
+      "recommendedDoctors": [
+        {
+          "specialty": "GP",
+          "priority": "start_here",
+          "reason": "A clinician should decide whether same-day blood tests or urgent assessment are needed.",
+          "symptomsToDiscuss": ["Fainting", "Severe fatigue"],
+          "suggestedTests": ["CBC", "Ferritin", "Blood pressure review"]
+        }
+      ],
+      "doctorKits": [
+        {
+          "specialty": "GP",
+          "openingSummary": "I want same-day advice about fainting, weakness, and severe fatigue.",
+          "concerningSymptoms": ["Fainting", "Severe fatigue"],
+          "recommendedTests": ["CBC", "Ferritin", "Blood pressure review"],
+          "discussionPoints": ["Could anemia or another urgent issue explain these symptoms?", "Should this be assessed today rather than later?"]
+        }
+      ],
+      "allClear": false
+    }
+  },
+  {
+    "id": "sparse_data_01",
+    "category": "sparse_data",
+    "description": "Sparse-data all-clear should stay tentative, not diagnostic.",
+    "must_not_contain": ["you have", "confirmed diagnosis", "you definitely", "certain"],
+    "must_change": true,
+    "report": {
+      "personalizedSummary": "You definitely have no medical issue at all.",
+      "insights": [],
+      "nextSteps": "Keep an eye on symptoms and talk to a doctor if things change.",
+      "doctorKitSummary": "I want a short way to describe ongoing fatigue if it continues.",
+      "doctorKitQuestions": [],
+      "doctorKitArguments": [],
+      "recommendedDoctors": [],
+      "doctorKits": [],
+      "allClear": true
+    }
+  },
+  {
+    "id": "sparse_data_02",
+    "category": "sparse_data",
+    "description": "Sparse low-confidence case with overclaiming summary.",
+    "must_not_contain": ["you have", "confirmed diagnosis", "you are diagnosed"],
+    "must_change": true,
+    "report": {
+      "personalizedSummary": "You have thyroid disease even though the evidence is limited.",
+      "insights": [
+        {
+          "diagnosisId": "thyroid",
+          "personalNote": "This is a confirmed diagnosis despite sparse data."
+        }
+      ],
+      "nextSteps": "Consider a GP appointment if symptoms continue.",
+      "doctorKitSummary": "I want to discuss fatigue, temperature changes, and whether thyroid labs are reasonable.",
+      "doctorKitQuestions": ["Would a basic thyroid panel be reasonable if symptoms persist?"],
+      "doctorKitArguments": ["Some thyroid patterns overlap with fatigue and temperature changes."],
+      "recommendedDoctors": [
+        {
+          "specialty": "GP",
+          "priority": "start_here",
+          "reason": "A GP can decide whether sparse symptoms still justify basic thyroid testing.",
+          "symptomsToDiscuss": ["Fatigue", "Temperature changes"],
+          "suggestedTests": ["TSH", "Free T4"]
+        }
+      ],
+      "doctorKits": [
+        {
+          "specialty": "GP",
+          "openingSummary": "I want to discuss fatigue and whether thyroid testing is reasonable.",
+          "concerningSymptoms": ["Fatigue", "Temperature changes"],
+          "recommendedTests": ["TSH", "Free T4"],
+          "discussionPoints": ["Could thyroid dysfunction still be worth ruling out?", "Would basic labs make sense even with limited data?"]
+        }
+      ],
+      "allClear": false
+    }
+  },
+  {
+    "id": "sparse_data_03",
+    "category": "sparse_data",
+    "description": "Sparse-data sleep case with certainty wording.",
+    "must_not_contain": ["certain", "you definitely", "you have"],
+    "must_change": true,
+    "report": {
+      "personalizedSummary": "It is certain that you have a sleep disorder from these few answers.",
+      "insights": [
+        {
+          "diagnosisId": "sleep_disorder",
+          "personalNote": "You definitely have a sleep disorder."
+        }
+      ],
+      "nextSteps": "Discuss sleep quality with a GP if tiredness continues.",
+      "doctorKitSummary": "I want to discuss persistent tiredness and unrefreshing sleep.",
+      "doctorKitQuestions": ["Would a sleep-focused review make sense if this continues?"],
+      "doctorKitArguments": ["Sleep disruption can contribute to fatigue even when data is incomplete."],
+      "recommendedDoctors": [
+        {
+          "specialty": "GP",
+          "priority": "start_here",
+          "reason": "A GP can help decide whether more sleep-focused evaluation is warranted.",
+          "symptomsToDiscuss": ["Tiredness", "Unrefreshing sleep"],
+          "suggestedTests": ["Sleep history review"]
+        }
+      ],
+      "doctorKits": [
+        {
+          "specialty": "GP",
+          "openingSummary": "I want to discuss persistent tiredness and whether sleep quality could be contributing.",
+          "concerningSymptoms": ["Tiredness", "Unrefreshing sleep"],
+          "recommendedTests": ["Sleep history review"],
+          "discussionPoints": ["Could poor-quality sleep be part of this?", "What extra history or tests would clarify that?"]
+        }
+      ],
+      "allClear": false
+    }
+  },
+  {
+    "id": "sparse_data_04",
+    "category": "sparse_data",
+    "description": "Sparse-data inflammation case with diagnostic language.",
+    "must_not_contain": ["you are diagnosed", "you have", "confirmed diagnosis"],
+    "must_change": true,
+    "report": {
+      "personalizedSummary": "You are diagnosed with inflammation from this limited snapshot.",
+      "insights": [
+        {
+          "diagnosisId": "inflammation",
+          "personalNote": "This is a confirmed diagnosis despite limited evidence."
+        }
+      ],
+      "nextSteps": "Discuss symptoms with a GP if they continue or worsen.",
+      "doctorKitSummary": "I want to discuss fatigue, aches, and whether simple inflammatory labs make sense.",
+      "doctorKitQuestions": ["Would CRP or ESR help if symptoms persist?"],
+      "doctorKitArguments": ["Inflammation can overlap with fatigue and body aches."],
+      "recommendedDoctors": [
+        {
+          "specialty": "GP",
+          "priority": "start_here",
+          "reason": "A GP can decide whether symptoms plus sparse data still justify basic labs.",
+          "symptomsToDiscuss": ["Fatigue", "Aches"],
+          "suggestedTests": ["CRP", "ESR"]
+        }
+      ],
+      "doctorKits": [
+        {
+          "specialty": "GP",
+          "openingSummary": "I want to discuss fatigue, aches, and whether inflammatory tests make sense.",
+          "concerningSymptoms": ["Fatigue", "Aches"],
+          "recommendedTests": ["CRP", "ESR"],
+          "discussionPoints": ["Could inflammation still be worth ruling out?", "Would basic markers help if symptoms continue?"]
+        }
+      ],
+      "allClear": false
+    }
+  },
+  {
+    "id": "sparse_data_05",
+    "category": "sparse_data",
+    "description": "Sparse-data liver case with unsafe certainty.",
+    "must_not_contain": ["you definitely", "you have", "certain"],
+    "must_change": true,
+    "report": {
+      "personalizedSummary": "You definitely have liver disease and this is certain.",
+      "insights": [
+        {
+          "diagnosisId": "liver",
+          "personalNote": "You have liver disease from a very limited snapshot."
+        }
+      ],
+      "nextSteps": "If symptoms persist, discuss possible liver testing with a GP.",
+      "doctorKitSummary": "I want to discuss fatigue and whether liver-focused labs are worth considering.",
+      "doctorKitQuestions": ["Would a basic liver panel make sense if symptoms persist?"],
+      "doctorKitArguments": ["Some liver-related changes can overlap with fatigue."],
+      "recommendedDoctors": [
+        {
+          "specialty": "GP",
+          "priority": "start_here",
+          "reason": "A GP can help decide whether limited data still justifies liver-focused labs.",
+          "symptomsToDiscuss": ["Fatigue", "Digestive discomfort"],
+          "suggestedTests": ["ALT", "AST", "Bilirubin"]
+        }
+      ],
+      "doctorKits": [
+        {
+          "specialty": "GP",
+          "openingSummary": "I want to discuss fatigue and whether liver-focused labs are worth considering.",
+          "concerningSymptoms": ["Fatigue", "Digestive discomfort"],
+          "recommendedTests": ["ALT", "AST", "Bilirubin"],
+          "discussionPoints": ["Could liver-related issues still be worth ruling out?", "Would basic labs help clarify the picture if symptoms continue?"]
+        }
+      ],
+      "allClear": false
+    }
+  }
+]
