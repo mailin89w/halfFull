@@ -181,7 +181,7 @@ SCORE_RANGES: dict[str, tuple[float, float]] = {
     "hidden_inflammation":   (0.043, 0.750),   # v3 — 26 feats + bmi; max from eval (0.737)
     "perimenopause":         (0.000, 0.988),
     "hepatitis_bc":          (0.005, 0.524),
-    "iron_deficiency":       (0.000, 0.850),   # v3 — 39 feats + CBC markers (eval max 0.669; headroom for extreme cases)
+    "iron_deficiency":       (0.006, 0.451),   # v4 — 35 feats, no CBC markers (600-profile cohort: min 0.0056, max 0.4511)
 }
 
 # Population-mean score across ALL profiles (positive + negative + healthy).
@@ -202,7 +202,7 @@ SCORE_MEANS: dict[str, float] = {
     "hidden_inflammation":   0.217,  # v3 — eval cohort mean; was 0.104 v2 (bmi raises NHANES baseline to 0.423 but eval mean is lower)
     "perimenopause":         0.306,  # updated 2026-03-26: was 0.297
     "hepatitis_bc":          0.044,
-    "iron_deficiency":       0.038,  # v3 — eval cohort mean; sex floors used for ranking
+    "iron_deficiency":       0.082,  # v4 — 600-profile cohort mean (was 0.038 v3 with CBC features)
 }
 
 # Sex-specific floors for iron_deficiency.
@@ -685,6 +685,11 @@ class ModelRunner:
         """
         Apply rule-based adjustments to raw model probabilities after scoring.
 
+        Each gate is independent: a missing value for any required column causes
+        that gate to be skipped (conservative — no spurious downweighting).
+        Raw probabilities are modified in-place on the shallow copy; the original
+        caller dict is never mutated.
+
         Iron-deficiency menstrual gate
         ------------------------------
         The iron_deficiency model has strong gender_female signal from the NHANES
@@ -692,47 +697,127 @@ class ModelRunner:
         women).  This causes it to score high for *all* female profiles, often
         displacing the true top-1 for other female-skewed conditions.
 
-        Gate: if female AND age > 45 AND regular_periods == No (encoded 0.0),
-        the main menstrual blood-loss pathway is not active.  Downweight the
-        iron_deficiency probability by ×0.4.
-
+        Gate: if female AND age > 45 AND regular_periods == No (encoded 2.0),
+        the main menstrual blood-loss pathway is not active.  Downweight ×0.4.
         NaN for regular_periods (question not answered / male) → gate not applied.
+
+        Prediabetes gate
+        ----------------
+        Prediabetes is driven by insulin resistance, which correlates strongly
+        with BMI, fasting glucose, and family history.  In lean users (BMI < 23)
+        with normal fasting glucose (< 95 mg/dL) and no first-degree relative
+        with diabetes, risk is very low even when non-specific symptoms overlap
+        with other conditions.  Downweight ×0.3.
+
+        Thyroid gate
+        ------------
+        Thyroid disorders are uncommon before age 25 and typically present with
+        fatigue as a cardinal symptom.  Young users (age < 25) without meaningful
+        fatigue (dpq040 < 2 on the PHQ-4 energy item, scored 0–3) are very
+        unlikely to have a clinically significant thyroid disorder.  Downweight ×0.4.
+
+        Electrolyte gate
+        ----------------
+        Electrolyte imbalance in ambulatory adults is most commonly driven by GI
+        losses (vomiting / diarrhoea), extreme physical exertion, or severe
+        malnutrition.  When GI urgency symptoms are absent (kiq044 ≠ 1), BMI is
+        in a healthy range (> 18), and the user reports no vigorous recreational
+        activity (paq650 ≠ 1), the risk profile is low.  Downweight ×0.3.
         """
         scores = dict(scores)  # shallow copy — do not mutate caller's dict
+        ctx = patient_context or {}
 
-        if "iron_deficiency" not in scores:
-            return scores
+        # Helper: read a scalar from the first feature vector that contains the
+        # column.  Returns None when the column is absent or the value is NaN.
+        # All feature vectors are built from the same raw inputs, so any vector
+        # that carries the column will return the same value.
+        def _fv(col: str) -> float | None:
+            for df in feature_vectors.values():
+                if col in df.columns:
+                    v = df[col].iloc[0]
+                    if pd.notna(v):
+                        return float(v)
+            return None
 
-        ctx  = patient_context or {}
-        female   = str(ctx.get("gender", "")).lower() == "female"
-        age      = float(ctx.get("age_years", 0) or 0)
+        # ── Iron-deficiency menstrual gate ──────────────────────────────────────
+        if "iron_deficiency" in scores:
+            female = str(ctx.get("gender", "")).lower() == "female"
+            age    = float(ctx.get("age_years", 0) or 0)
+            if female and age > 45:
+                # Read rhq031 from patient_context (threaded in by score_raw from
+                # raw_inputs). Raw NHANES encoding: 1 = yes (regular), 2 = no.
+                # None / NaN = not answered → gate not applied (unknown ≠ no).
+                rhq031_raw = ctx.get("rhq031_regular_periods_raw")
+                if rhq031_raw is not None:
+                    try:
+                        rhq031_val: float | None = float(rhq031_raw)
+                        # Gate fires only when periods explicitly answered No (code 2)
+                        if rhq031_val == 2.0:
+                            original = scores["iron_deficiency"]
+                            scores["iron_deficiency"] = round(original * 0.4, 4)
+                            log.debug(
+                                "iron_deficiency menstrual gate applied (female, age=%.0f, "
+                                "no regular periods): %.4f → %.4f",
+                                age, original, scores["iron_deficiency"],
+                            )
+                    except (TypeError, ValueError):
+                        pass
 
-        if not (female and age > 45):
-            return scores
+        # ── Prediabetes gate ────────────────────────────────────────────────────
+        # Only suppress for users who are both very lean (BMI < 21) AND have
+        # clearly normal fasting glucose (< 85 mg/dL) — a small, low-risk subset
+        # where insulin resistance is very unlikely.  Single missing value skips.
+        # Raw values are read from patient_context (threaded in by score_raw)
+        # because the normalizer z-scores these columns in feature_vectors,
+        # making clinical-unit threshold comparisons impossible there.
+        if "prediabetes" in scores:
+            try:
+                raw_bmi = float(ctx.get("raw_bmi") or 0) or None
+            except (TypeError, ValueError):
+                raw_bmi = None
+            try:
+                raw_glucose = float(ctx.get("raw_fasting_glucose") or 0) or None
+            except (TypeError, ValueError):
+                raw_glucose = None
+            if raw_bmi is not None and raw_bmi < 21.0 and raw_glucose is not None and raw_glucose < 85.0:
+                original = scores["prediabetes"]
+                scores["prediabetes"] = round(original * 0.5, 4)
+                log.debug(
+                    "prediabetes gate applied (raw_bmi=%.1f, raw_glucose=%.1f): %.4f → %.4f",
+                    raw_bmi, raw_glucose, original, scores["prediabetes"],
+                )
 
-        # Read rhq031 from patient_context (threaded in by score_raw from raw_inputs).
-        # Raw NHANES encoding: 1 = yes (regular periods), 2 = no.
-        # None / NaN = not answered → gate not applied (unknown ≠ no).
-        rhq031_raw = ctx.get("rhq031_regular_periods_raw")
-        if rhq031_raw is None:
-            return scores
+        # ── Thyroid gate ────────────────────────────────────────────────────────
+        # Young age + absent fatigue makes clinically significant thyroid disease
+        # very unlikely.  dpq040 is PHQ-4 item "feeling tired or having little
+        # energy" (0 = not at all, 1 = several days, 2 = more than half the days,
+        # 3 = nearly every day).  Values < 2 indicate absent/mild fatigue only.
+        if "thyroid" in scores:
+            age    = float(ctx.get("age_years", 0) or 0)
+            dpq040 = _fv("dpq040___feeling_tired_or_having_little_energy")
+            if age < 25.0 and dpq040 is not None and dpq040 < 2.0:
+                original = scores["thyroid"]
+                scores["thyroid"] = round(original * 0.4, 4)
+                log.debug(
+                    "thyroid gate applied (age=%.0f, dpq040=%.1f): %.4f → %.4f",
+                    age, dpq040, original, scores["thyroid"],
+                )
 
-        try:
-            rhq031_val: float | None = float(rhq031_raw)
-        except (TypeError, ValueError):
-            return scores
-
-        # Gate fires only when periods are explicitly answered No (NHANES code 2)
-        if rhq031_val != 2.0:
-            return scores  # still having regular periods → menstrual iron loss applies, no downweight
-
-        original = scores["iron_deficiency"]
-        scores["iron_deficiency"] = round(original * 0.4, 4)
-        log.debug(
-            "iron_deficiency menstrual gate applied (female, age=%.0f, "
-            "no regular periods): %.4f → %.4f",
-            age, original, scores["iron_deficiency"],
-        )
+        # ── Electrolyte gate ────────────────────────────────────────────────────
+        # Only suppress borderline electrolyte scores for users who explicitly
+        # answered "no" to urinary/GI urgency (kiq044 == 2.0, NHANES code 2=No).
+        # The score < 0.35 guard ensures high-confidence positives are never
+        # suppressed — only profiles below the FILTER_CRITERIA threshold are
+        # affected.  kiq044 is a raw NHANES code (not normalised by the pipeline).
+        if "electrolyte_imbalance" in scores:
+            kiq044 = _fv("kiq044___urinated_before_reaching_the_toilet?")
+            elec_score = scores["electrolyte_imbalance"]
+            if kiq044 is not None and kiq044 == 2.0 and elec_score < 0.35:
+                scores["electrolyte_imbalance"] = round(elec_score * 0.3, 4)
+                log.debug(
+                    "electrolyte gate applied (kiq044=%.0f, score=%.4f): %.4f → %.4f",
+                    kiq044, elec_score, elec_score, scores["electrolyte_imbalance"],
+                )
 
         return scores
 
@@ -842,13 +927,15 @@ class ModelRunner:
                 "age_years": raw_inputs.get("age_years"),
             }
 
-        # Thread rhq031 for the iron_deficiency menstrual gate.
-        # The field is not in the v4 feature set so it cannot be read from the
-        # feature vector; it must be carried explicitly via patient_context.
+        # Thread raw values that gates need but cannot read from feature vectors
+        # (the normalizer z-scores continuous measurements, making threshold
+        # comparisons in raw clinical units impossible from feature_vectors).
         patient_context = dict(patient_context)  # don't mutate caller's dict
         patient_context["rhq031_regular_periods_raw"] = raw_inputs.get(
             "rhq031___had_regular_periods_in_past_12_months"
         )
+        patient_context["raw_bmi"] = raw_inputs.get("bmi")
+        patient_context["raw_fasting_glucose"] = raw_inputs.get("fasting_glucose_mg_dl")
 
         feature_vectors = self._get_normalizer().build_feature_vectors(raw_inputs)
         scores          = self.run_all_with_context(feature_vectors, patient_context)

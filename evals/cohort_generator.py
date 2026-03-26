@@ -3,7 +3,7 @@
 cohort_generator_v2.py — Data-grounded synthetic cohort generator for HalfFull evals.
 
 Version: 2.0.0 (data-grounded)
-Generates 600 synthetic user profiles with symptom vectors derived from actual
+Generates 550 synthetic user profiles with symptom vectors derived from actual
 project model weights and NHANES population statistics.
 
 ─────────────────────────────────────────────────────────────────────────────
@@ -1067,7 +1067,7 @@ def generate_profile(
 
 def generate_cohort(seed: int = 42) -> list[dict]:
     """
-    Generate the full 600-profile cohort.
+    Generate the full 550-profile cohort.
 
     Distribution per condition (50 profiles each, adjusted by Bayesian prior):
       Positive:   clip(normal(mu_from_weight, 0.08), 0, 1) — correlated for linked pairs
@@ -1129,7 +1129,7 @@ def generate_cohort(seed: int = 42) -> list[dict]:
             edge_conditions=edge_conditions,
         ))
 
-    assert len(profiles) == 600, f"Expected 600 profiles, got {len(profiles)}"
+    assert len(profiles) == 550, f"Expected 550 profiles, got {len(profiles)}"
     return profiles
 
 
@@ -1184,7 +1184,7 @@ def print_summary(profiles: list[dict], seed: int, output: Path) -> None:
 
 def main() -> None:
     parser = argparse.ArgumentParser(
-        description="Generate 600 synthetic HalfFull evaluation profiles (v2 — data-grounded)."
+        description="Generate 550 synthetic HalfFull evaluation profiles (v2 — data-grounded)."
     )
     parser.add_argument("--seed",     type=int,  default=42,          help="Random seed (default: 42)")
     parser.add_argument("--output",   type=str,  default=str(OUTPUT_PATH), help="Output path for profiles.json")

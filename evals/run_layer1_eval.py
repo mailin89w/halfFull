@@ -521,6 +521,8 @@ def _score_profile(
                 "rhq031___had_regular_periods_in_past_12_months"
             ),
         }
+        patient_context["raw_bmi"] = raw_inputs.get("bmi")
+        patient_context["raw_fasting_glucose"] = raw_inputs.get("fasting_glucose_mg_dl")
         norm = runner._get_normalizer()
         feature_vectors = norm.build_feature_vectors(raw_inputs)
         scores = runner.run_all_with_context(feature_vectors, patient_context)
