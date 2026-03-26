@@ -84,18 +84,15 @@ export default function ConsentPage() {
 
           <section className="section-card flex flex-col gap-4 px-5 py-5">
             <div className="rounded-[1.6rem] border border-[rgba(140,170,101,0.24)] bg-[rgba(255,255,255,0.92)] px-4 py-4 shadow-[inset_0_1px_0_rgba(255,255,255,0.75)]">
-              <div className="flex items-center gap-2">
-                <span className="text-base" aria-hidden="true">🌿</span>
-                <p className="text-sm font-semibold text-[var(--color-ink)]">We care about your privacy</p>
-              </div>
+              <p className="text-sm font-semibold text-[var(--color-ink)]">We care about your privacy</p>
 
               <ul className="mt-3 space-y-2.5 text-sm leading-6 text-[var(--color-ink-soft)]">
-                <li>🪪 Your data is linked to a random anonymous ID, not your name.</li>
-                <li>⏳ It&apos;s stored only temporarily, for up to 24 hours.</li>
-                <li>🧹 You can leave anytime and clear this session data.</li>
+                <li>✔ Your data is linked to a random anonymous ID, not your name.</li>
+                <li>✔ It&apos;s stored only temporarily, for up to 24 hours.</li>
+                <li>✔ You can leave anytime and clear this session data.</li>
               </ul>
 
-              <label className="mt-4 flex items-start gap-3 rounded-[1.4rem] border border-[rgba(140,170,101,0.24)] bg-[rgba(244,250,232,0.8)] px-4 py-4">
+              <label className="mt-5 flex items-start gap-3 border-t border-[rgba(140,170,101,0.18)] pt-4">
                 <input
                   type="checkbox"
                   checked={consentChecked}

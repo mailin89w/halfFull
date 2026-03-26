@@ -60,7 +60,9 @@
               "full"
             ],
             "validation": {
-              "required": true
+              "required": true,
+              "min": 0,
+              "max": 20
             }
           },
           {
@@ -84,6 +86,7 @@
             "shown_in_paths": [
               "full"
             ],
+            "screen_group": "smoking_current",
             "validation": {
               "required": true
             }
@@ -176,7 +179,7 @@
           {
             "id": "waist_cm",
             "text": "What is your waist circumference?",
-            "help_text": "Measure around your belly button. Used to assess metabolic health risk. Leave blank if unsure.",
+            "help_text": "Measure around your belly button in cm. Used to assess metabolic health risk. Leave blank if unsure.",
             "type": "numeric",
             "feature_name": "waist_cm",
             "options": [
@@ -231,7 +234,6 @@
             "shown_in_paths": [
               "full"
             ],
-            "screen_group": "alcohol_use",
             "validation": {
               "required": false
             }
@@ -426,7 +428,6 @@
             "shown_in_paths": [
               "full"
             ],
-            "screen_group": "alcohol_use",
             "validation": {
               "required": true
             }
@@ -528,7 +529,9 @@
               "full"
             ],
             "validation": {
-              "required": true
+              "required": true,
+              "min": 0,
+              "max": 20
             }
           },
           {
@@ -683,7 +686,9 @@
               "full"
             ],
             "validation": {
-              "required": true
+              "required": true,
+              "min": 0,
+              "max": 20
             }
           },
           {
@@ -822,6 +827,7 @@
             "shown_in_paths": [
               "full"
             ],
+            "screen_group": "work_intensity",
             "validation": {
               "required": false
             }
@@ -847,6 +853,7 @@
             "shown_in_paths": [
               "full"
             ],
+            "screen_group": "work_intensity",
             "validation": {
               "required": true
             }
@@ -909,6 +916,7 @@
             "shown_in_paths": [
               "full"
             ],
+            "screen_group": "alcohol_use",
             "validation": {
               "required": false
             }
@@ -933,6 +941,7 @@
             "shown_in_paths": [
               "full"
             ],
+            "screen_group": "alcohol_use",
             "validation": {
               "required": true
             }
@@ -957,6 +966,7 @@
             "shown_in_paths": [
               "full"
             ],
+            "screen_group": "smoking_current",
             "validation": {
               "required": true
             }
@@ -993,6 +1003,7 @@
             "shown_in_paths": [
               "full"
             ],
+            "screen_group": "smoking_current",
             "validation": {
               "required": true
             }
@@ -1019,6 +1030,7 @@
             "shown_in_paths": [
               "full"
             ],
+            "screen_group": "smoking_current",
             "validation": {
               "required": false
             }
@@ -1061,6 +1073,7 @@
             "shown_in_paths": [
               "full"
             ],
+            "screen_group": "smoking_current",
             "validation": {
               "required": true
             }
@@ -1096,39 +1109,13 @@
                 "value": "slq050___ever_told_doctor_had_trouble_sleeping?",
                 "label": "Trouble sleeping (discussed with a doctor)",
                 "sub_type": "binary"
-              }
-            ],
-            "shown_in_paths": [
-              "full"
-            ],
-            "validation": {
-              "required": true
-            }
-          },
-          {
-            "id": "bpq030___told_had_high_blood_pressure___2+_times",
-            "text": "Were you told you had high blood pressure on two or more visits?",
-            "type": "binary",
-            "feature_name": "bpq030___told_had_high_blood_pressure___2+_times",
-            "options": [
-              {
-                "value": "1",
-                "label": "Yes",
-                "encoded_value": 1
               },
               {
-                "value": "2",
-                "label": "No",
-                "encoded_value": 2
+                "value": "bpq030___told_had_high_blood_pressure___2+_times",
+                "label": "High blood pressure on two or more visits",
+                "sub_type": "binary"
               }
             ],
-            "conditional": {
-              "parent_id": "conditions_diagnosed",
-              "parent_values": [
-                "bpq020___ever_told_you_had_high_blood_pressure"
-              ],
-              "condition_type": "contains"
-            },
             "shown_in_paths": [
               "full"
             ],

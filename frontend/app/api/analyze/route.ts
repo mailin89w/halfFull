@@ -111,16 +111,19 @@ export async function POST(req: NextRequest) {
       });
     }
 
-    writeLog('analyze', {
+    await writeLog('analyze', {
       anonymousId: privacy?.anonymousId ?? null,
-      answerCount: Object.keys(answers).length,
-      topConditionIds: topConditions.map(([condition]) => condition),
+      answers,
+      mlScores: mlScores ?? {},
+      topConditions,
+      result: parsed,
     });
     return NextResponse.json(parsed);
   } catch (err) {
-    writeLog('analyze_error', {
+    await writeLog('analyze_error', {
       anonymousId: privacy?.anonymousId ?? null,
-      answerCount: Object.keys(answers).length,
+      answers,
+      mlScores: mlScores ?? {},
       error: String(err),
     });
     return NextResponse.json({ error: String(err) }, { status: 500 });

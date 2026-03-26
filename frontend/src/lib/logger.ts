@@ -40,12 +40,12 @@ function getSupabase() {
  * - Always console.logs in development.
  * - Writes to local JSONL file when filesystem is available (local dev).
  * - Writes to Supabase `app_logs` table when SUPABASE_URL + SUPABASE_SERVICE_KEY
- *   are set (production on Vercel). Fire-and-forget — never blocks the response.
+ *   are set (production on Vercel). Await in API routes so serverless does not drop it.
  */
-export function writeLog(event: string, data: Record<string, unknown>): void {
+export async function writeLog(event: string, data: Record<string, unknown>): Promise<void> {
   const ts = new Date().toISOString();
   const safeData = sanitizeForLogging(data);
-  const entry = JSON.stringify({ ts, event, ...safeData });
+  const entry = JSON.stringify({ ts, event, payload: data, payload_sanitized: safeData });
 
   // Always log to console (visible in Vercel / Railway log streams)
   console.log(`[${event}]`, JSON.stringify(safeData, null, 2));
@@ -56,11 +56,9 @@ export function writeLog(event: string, data: Record<string, unknown>): void {
   // Supabase (production) — async, never await
   const supabase = getSupabase();
   if (supabase) {
-    supabase
+    const { error } = await supabase
       .from('app_logs')
-      .insert({ ts, event, payload: safeData })
-      .then(({ error }) => {
-        if (error) console.error('[logger] Supabase insert failed:', error.message);
-      });
+      .insert({ ts, event, payload: data });
+    if (error) console.error('[logger] Supabase insert failed:', error.message);
   }
 }

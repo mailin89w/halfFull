@@ -8,14 +8,14 @@ export async function POST(req: NextRequest) {
     const privacy = validatePrivacyContext(body.privacy);
 
     await recordConsentExit(privacy);
-    writeLog('privacy_exit', {
+    await writeLog('privacy_exit', {
       anonymousId: privacy.anonymousId,
       consentVersion: privacy.consentVersion,
     });
 
     return NextResponse.json({ ok: true });
   } catch (error) {
-    writeLog('privacy_exit_error', {
+    await writeLog('privacy_exit_error', {
       error: String(error),
     });
     return NextResponse.json(

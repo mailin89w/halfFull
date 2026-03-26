@@ -83,9 +83,13 @@ export async function POST(req: NextRequest) {
   });
 
   if (result.error) {
-    writeLog('bayesian_update_error', {
+    await writeLog('bayesian_update_error', {
       anonymousId: privacy?.anonymousId ?? null,
-      mlScoreKeys: Object.keys(mlScores),
+      mlScores,
+      confounderAnswers,
+      answersByCondition,
+      patientSex,
+      existingAnswers,
       error: result.error,
     });
     return NextResponse.json({ error: result.error }, { status: 500 });
@@ -110,10 +114,14 @@ export async function POST(req: NextRequest) {
     });
   }
 
-  writeLog('bayesian_update', {
+  await writeLog('bayesian_update', {
     anonymousId: privacy?.anonymousId ?? null,
-    mlScoreKeys: Object.keys(mlScores),
-    updatedConditionCount: Object.keys(answersByCondition).length,
+    mlScores,
+    confounderAnswers,
+    answersByCondition,
+    patientSex,
+    existingAnswers,
+    result,
   });
   return NextResponse.json(result);
 }

@@ -27,7 +27,14 @@ export function AnswerDualNumeric({
   max,
   errors = {},
 }: Props) {
-  const handleChange = (key: string, raw: string) => {
+  const handleChange = (key: string, raw: string, field?: Field) => {
+    if (raw !== '') {
+      const parsed = Number(raw);
+      if (Number.isFinite(parsed)) {
+        const resolvedMax = field?.max ?? max;
+        if (resolvedMax !== undefined && parsed > resolvedMax) return;
+      }
+    }
     onChange({ ...value, [key]: raw });
   };
 
@@ -71,7 +78,7 @@ export function AnswerDualNumeric({
                 min={min ?? field.min}
                 max={max ?? field.max}
                 value={value[field.value] ?? ''}
-                onChange={(e) => handleChange(field.value, e.target.value)}
+                onChange={(e) => handleChange(field.value, e.target.value, field)}
                 placeholder="0"
                 className={[
                   'w-full rounded-[1.35rem] border bg-white px-4 py-3 pr-16',

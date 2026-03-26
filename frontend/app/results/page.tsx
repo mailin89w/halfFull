@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import type { jsPDF as JsPDFType } from 'jspdf';
 import { useAssessment } from '@/src/hooks/useAssessment';
 import { ExitAssessmentButton } from '@/src/components/ExitAssessmentButton';
@@ -26,21 +27,14 @@ import {
   readStoredMLScores,
 } from '@/src/lib/medgemma';
 
-import {
-  createPrivacyConsentRecord,
-  PRIVACY_STORAGE_KEY,
-  readPrivacyConsent,
-  storePrivacyConsent,
-} from '@/src/lib/privacy';
 import type { DeepMedGemmaResult, DoctorKit } from '@/src/lib/medgemma';
 import { DiagnosisCard } from '@/src/components/results/DiagnosisCard';
 
 export default function ResultsPage() {
+  const router = useRouter();
   const { answers, hydrated, reset } = useAssessment();
   const [deep, setDeep] = useState<DeepMedGemmaResult | null>(null);
   const [expandedDoctors, setExpandedDoctors] = useState<number[]>([]);
-  const [profileStatus, setProfileStatus] = useState<'idle' | 'saving' | 'saved' | 'error'>('idle');
-  const [profileError, setProfileError] = useState<string | null>(null);
   const toggleDoctor = (i: number) =>
     setExpandedDoctors((prev) => prev.includes(i) ? prev.filter((x) => x !== i) : [...prev, i]);
 
@@ -76,11 +70,12 @@ const effectiveSummaryLine = mlRanButEmpty
   useEffect(() => {
     if (!hydrated) return;
     const stored = readStoredDeepResult();
-    setDeep(stored);
-    if (readPrivacyConsent()) {
-      setProfileStatus('saved');
+    if (!stored && Object.keys(answers).length > 0) {
+      router.replace('/processing');
+      return;
     }
-  }, [hydrated]);
+    setDeep(stored);
+  }, [answers, hydrated, router]);
 
   // ── Doctor kit content: AI-generated if available, rule-based as fallback ──
   const recommendedDoctors =
@@ -184,44 +179,6 @@ const effectiveSummaryLine = mlRanButEmpty
       ] as const;
     })
   );
-
-  const saveProfile = async () => {
-    if (profileStatus === 'saving' || profileStatus === 'saved') return;
-
-    setProfileStatus('saving');
-    setProfileError(null);
-
-    const privacy = createPrivacyConsentRecord();
-    storePrivacyConsent(privacy);
-
-    try {
-      const response = await fetch('/api/privacy/consent', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          privacy,
-          source: 'results_profile_prompt',
-          snapshot: {
-            answers,
-            mlScores: mlScores ?? {},
-            confirmedConditions,
-            deepResult: deep,
-          },
-        }),
-      });
-
-      if (!response.ok) {
-        const data = await response.json().catch(() => ({ error: 'Could not save your profile.' }));
-        throw new Error((data as { error?: string }).error ?? 'Could not save your profile.');
-      }
-
-      setProfileStatus('saved');
-    } catch (error) {
-      window.localStorage.removeItem(PRIVACY_STORAGE_KEY);
-      setProfileStatus('error');
-      setProfileError(error instanceof Error ? error.message : 'Could not save your profile.');
-    }
-  };
 
   // ── Export helpers ───────────────────────────────────────────────────────
   const downloadDoctorKit = async (doctorIndex?: number) => {
@@ -460,9 +417,9 @@ const effectiveSummaryLine = mlRanButEmpty
                 Assessment complete
               </p>
               <h1 className="editorial-display text-[clamp(2.5rem,10vw,4.2rem)] leading-[0.92] text-[var(--color-ink)]">
-                Your
+                YOUR ASSESSMENT
                 <br />
-                report
+                RESULTS
               </h1>
             </div>
             <p className="max-w-[18rem] text-sm leading-6 text-[var(--color-ink-soft)]">
@@ -471,29 +428,20 @@ const effectiveSummaryLine = mlRanButEmpty
             <div className="mt-6 flex flex-col gap-3 sm:flex-row">
               <button
                 type="button"
-                onClick={saveProfile}
-                disabled={profileStatus === 'saving' || profileStatus === 'saved'}
-                className="rounded-full bg-[#09090f] px-5 py-3 text-sm font-bold text-white disabled:cursor-not-allowed disabled:opacity-50"
-              >
-                {profileStatus === 'saved'
-                  ? 'Saved'
-                  : profileStatus === 'saving'
-                    ? 'Saving...'
-                    : 'Create account and save your data'}
-              </button>
-              <button
-                type="button"
                 onClick={emailDoctorKit}
-                className="rounded-full border border-[rgba(9,9,15,0.14)] bg-white px-5 py-3 text-sm font-bold text-[var(--color-ink)]"
+                className="rounded-full bg-[#09090f] px-5 py-3 text-sm font-bold text-white"
               >
                 Email this report
               </button>
+              <Link
+                href="/create-account"
+                className="rounded-full border border-[rgba(9,9,15,0.14)] bg-white px-5 py-3 text-center text-sm font-bold text-[var(--color-ink)]"
+              >
+                Create account and save data
+              </Link>
             </div>
-            {profileError && (
-              <p className="mt-3 text-sm text-[#b34343]">{profileError}</p>
-            )}
-            <p className="mt-3 text-xs leading-5 text-[var(--color-ink-soft)]">
-              Optional. If you skip this, your data stays only in this browser session.
+            <p className="mt-3 max-w-[28rem] text-xs leading-5 text-[var(--color-ink-soft)]">
+              Optional. If you skip this, your data stays only in this browser session. If you create an account, we store your responses and you can add information once you have more labs after your doctor visits.
             </p>
           </section>
 

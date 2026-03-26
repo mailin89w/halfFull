@@ -45,16 +45,17 @@ export async function POST(req: NextRequest) {
       });
     }
 
-    writeLog('privacy_consent_granted', {
+    await writeLog('privacy_consent_granted', {
       anonymousId: privacy.anonymousId,
       consentVersion: privacy.consentVersion,
       source: body.source ?? 'consent_page',
       savedProfile: Object.keys(answers).length > 0,
+      snapshot: body.snapshot ?? null,
     });
 
     return NextResponse.json({ ok: true });
   } catch (error) {
-    writeLog('privacy_consent_error', {
+    await writeLog('privacy_consent_error', {
       error: String(error),
     });
     return NextResponse.json(

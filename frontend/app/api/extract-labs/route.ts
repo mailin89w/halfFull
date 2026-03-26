@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { writeLog } from '@/src/lib/logger';
 
 export const runtime = 'nodejs';
 
@@ -170,12 +171,22 @@ export async function POST(req: NextRequest) {
         /ERR_MODULE_NOT_FOUND/i.test(parseMessage);
 
       if (missingPdfParse) {
+        await writeLog('extract_labs_error', {
+          filename,
+          mimeType: normalizedMimeType,
+          error: "Server dependency missing: 'pdf-parse'.",
+        });
         return NextResponse.json(
           { error: "Server dependency missing: 'pdf-parse'. Run npm install in frontend and restart dev server." },
           { status: 500 }
         );
       }
 
+      await writeLog('extract_labs_error', {
+        filename,
+        mimeType: normalizedMimeType,
+        error: `PDF parsing failed: ${String(pdfErr)}`,
+      });
       return NextResponse.json(
         { error: `PDF parsing failed: ${String(pdfErr)}` },
         { status: 422 }
@@ -183,6 +194,11 @@ export async function POST(req: NextRequest) {
     }
 
     if (!rawText) {
+      await writeLog('extract_labs_error', {
+        filename,
+        mimeType: normalizedMimeType,
+        error: 'No text found in PDF.',
+      });
       return NextResponse.json(
         { error: 'No text found in PDF. Try uploading a photo of your results instead.' },
         { status: 422 }
@@ -227,6 +243,13 @@ export async function POST(req: NextRequest) {
     }
 
     console.log(`[extract-labs] ${filename}: ${extractedText.length} chars, ${Object.keys(structuredValues).length} structured values`);
+    await writeLog('extract_labs', {
+      filename,
+      mimeType: normalizedMimeType,
+      rawText,
+      extractedText,
+      structuredValues,
+    });
     return NextResponse.json({ extractedText, structuredValues });
   }
 
@@ -256,10 +279,21 @@ export async function POST(req: NextRequest) {
     }
 
     console.log(`[extract-labs] ${filename}: ${extractedText.length} chars, ${Object.keys(structuredValues).length} structured values from image`);
+    await writeLog('extract_labs', {
+      filename,
+      mimeType: normalizedMimeType,
+      extractedText,
+      structuredValues,
+    });
     return NextResponse.json({ extractedText, structuredValues });
   }
 
   // ── Unsupported type ──────────────────────────────────────────────────────
+  await writeLog('extract_labs_error', {
+    filename,
+    mimeType: normalizedMimeType,
+    error: `Unsupported file type: ${normalizedMimeType}.`,
+  });
   return NextResponse.json(
     { error: `Unsupported file type: ${normalizedMimeType}. Please upload a PDF, JPG, or PNG.` },
     { status: 415 }

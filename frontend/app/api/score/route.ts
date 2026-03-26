@@ -55,10 +55,10 @@ export async function POST(req: NextRequest) {
   const result = await callRailway(answers);
 
   if (result.error) {
-    writeLog('score_error', {
+    await writeLog('score_error', {
       anonymousId: privacy?.anonymousId ?? null,
+      answers,
       error: result.error,
-      answerCount: Object.keys(answers).length,
     });
     return NextResponse.json({ error: result.error }, { status: 500 });
   }
@@ -80,10 +80,10 @@ export async function POST(req: NextRequest) {
     });
   }
 
-  writeLog('score', {
+  await writeLog('score', {
     anonymousId: privacy?.anonymousId ?? null,
-    answerCount: Object.keys(answers).length,
-    scoreKeys: Object.keys(result.scores ?? {}),
+    answers,
+    scores: result.scores ?? {},
     confirmed: result.confirmed ?? [],
   });
   return NextResponse.json({ scores: result.scores, confirmed: result.confirmed ?? [] });

@@ -282,9 +282,9 @@ export async function POST(req: NextRequest) {
       }
       const { data: safeData, warnings } = applyHardSafetyRules(allClearResult);
       if (warnings.length > 0) {
-        writeLog('deep_analyze_safety_replacements', {
+        await writeLog('deep_analyze_safety_replacements', {
           anonymousId: privacy?.anonymousId ?? null,
-          warningCount: warnings.length,
+          warnings,
         });
       }
 
@@ -305,16 +305,23 @@ export async function POST(req: NextRequest) {
         });
       }
 
-      writeLog('deep_analyze', {
+      await writeLog('deep_analyze', {
         anonymousId: privacy?.anonymousId ?? null,
-        answerCount: Object.keys(answers).length,
+        answers,
+        mlScores: mlScores ?? {},
+        rawMlScores: rawMlScores ?? {},
+        clarificationQA: clarificationQA ?? [],
+        confirmedConditions,
+        fatigueSeverity,
         allClear: true,
+        result: safeData,
       });
       return NextResponse.json(safeData);
     } catch (err) {
-      writeLog('deep_analyze_error', {
+      await writeLog('deep_analyze_error', {
         anonymousId: privacy?.anonymousId ?? null,
-        answerCount: Object.keys(answers).length,
+        answers,
+        mlScores: mlScores ?? {},
         error: String(err),
       });
       return NextResponse.json({ error: String(err) }, { status: 500 });
@@ -364,10 +371,12 @@ export async function POST(req: NextRequest) {
 
     if (!hfResponse.ok) {
       const errText = await hfResponse.text();
-      writeLog('medgemma_grounding_error', {
+      await writeLog('medgemma_grounding_error', {
         anonymousId: privacy?.anonymousId ?? null,
         status: hfResponse.status,
         errText,
+        answers,
+        flaggedConditions,
       });
       // Proceed with empty grounding — Groq synthesis still runs
     } else {
@@ -375,8 +384,11 @@ export async function POST(req: NextRequest) {
       const rawContent: string = hfData.choices?.[0]?.message?.content ?? '';
 
       // Step 5: log full raw MedGemma output before any processing
-      writeLog('medgemma_grounding_raw', {
+      await writeLog('medgemma_grounding_raw', {
         anonymousId: privacy?.anonymousId ?? null,
+        answers,
+        mlScores: mlScores ?? {},
+        rawMlScores: rawMlScores ?? {},
         flaggedConditions,
         confirmedConditions,
         groundingPrompt,
@@ -390,7 +402,7 @@ export async function POST(req: NextRequest) {
         if (validation.ok) {
           groundingResult = validation.data;
         } else {
-          writeLog('medgemma_grounding_schema_error', {
+          await writeLog('medgemma_grounding_schema_error', {
             anonymousId: privacy?.anonymousId ?? null,
             reason: validation.reason,
             raw: rawContent,
@@ -399,8 +411,10 @@ export async function POST(req: NextRequest) {
       }
     }
   } catch (err) {
-    writeLog('medgemma_grounding_error', {
+    await writeLog('medgemma_grounding_error', {
       anonymousId: privacy?.anonymousId ?? null,
+      answers,
+      mlScores: mlScores ?? {},
       error: String(err),
     });
     // Continue with empty grounding — Groq synthesis still runs
@@ -428,9 +442,9 @@ export async function POST(req: NextRequest) {
 
     const { data: safeData, warnings: safetyWarnings } = applyHardSafetyRules(coveredResult);
     if (safetyWarnings.length > 0) {
-      writeLog('deep_analyze_safety_replacements', {
+      await writeLog('deep_analyze_safety_replacements', {
         anonymousId: privacy?.anonymousId ?? null,
-        warningCount: safetyWarnings.length,
+        warnings: safetyWarnings,
       });
       for (const warning of safetyWarnings) console.warn(warning);
     }
@@ -460,13 +474,19 @@ export async function POST(req: NextRequest) {
       });
     }
 
-    writeLog('deep_analyze', {
+    await writeLog('deep_analyze', {
       anonymousId: privacy?.anonymousId ?? null,
-      answerCount: Object.keys(answers).length,
+      answers,
+      mlScores: mlScores ?? {},
+      rawMlScores: rawMlScores ?? {},
+      clarificationQA: clarificationQA ?? [],
       confirmedConditions,
-      topConditionIds: topConditions.map(([condition]) => condition),
+      topConditions,
       fatigueSeverity,
       useKNN,
+      knnSignals: knnResult,
+      groundingResult,
+      result: safeData,
       overallUrgency,
     });
 
@@ -475,9 +495,12 @@ export async function POST(req: NextRequest) {
       ...(knnResult ? { knnSignals: knnResult } : {}),
     });
   } catch (err) {
-    writeLog('deep_analyze_error', {
+    await writeLog('deep_analyze_error', {
       anonymousId: privacy?.anonymousId ?? null,
-      answerCount: Object.keys(answers).length,
+      answers,
+      mlScores: mlScores ?? {},
+      rawMlScores: rawMlScores ?? {},
+      clarificationQA: clarificationQA ?? [],
       error: String(err),
     });
     return NextResponse.json({ error: String(err) }, { status: 500 });

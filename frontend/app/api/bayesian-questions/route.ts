@@ -55,9 +55,11 @@ export async function POST(req: NextRequest) {
   const result = await callRailway({ mode: 'questions', ml_scores: mlScores, patient_sex: patientSex, existing_answers: existingAnswers });
 
   if (result.error) {
-    writeLog('bayesian_questions_error', {
+    await writeLog('bayesian_questions_error', {
       anonymousId: privacy?.anonymousId ?? null,
-      mlScoreKeys: Object.keys(mlScores),
+      mlScores,
+      patientSex,
+      existingAnswers,
       error: result.error,
     });
     return NextResponse.json({ error: result.error }, { status: 500 });
@@ -82,12 +84,12 @@ export async function POST(req: NextRequest) {
     });
   }
 
-  writeLog('bayesian_questions', {
+  await writeLog('bayesian_questions', {
     anonymousId: privacy?.anonymousId ?? null,
-    mlScoreKeys: Object.keys(mlScores),
-    followUpConditionCount: Array.isArray(result.condition_questions)
-      ? result.condition_questions.length
-      : 0,
+    mlScores,
+    patientSex,
+    existingAnswers,
+    result,
   });
   return NextResponse.json(result);
 }

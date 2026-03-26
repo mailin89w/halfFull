@@ -17,6 +17,22 @@ export function AnswerNumeric({
   max,
   error,
 }: Props) {
+  const handleChange = (raw: string) => {
+    if (raw === '') {
+      onChange(raw);
+      return;
+    }
+
+    const parsed = Number(raw);
+    if (!Number.isFinite(parsed)) {
+      onChange(raw);
+      return;
+    }
+
+    if (max !== undefined && parsed > max) return;
+    onChange(raw);
+  };
+
   return (
     <div className="flex flex-col gap-2">
       <input
@@ -25,7 +41,7 @@ export function AnswerNumeric({
         min={min}
         max={max}
         value={value}
-        onChange={(e) => onChange(e.target.value)}
+        onChange={(e) => handleChange(e.target.value)}
         placeholder={placeholder}
         className={[
           'w-full rounded-[1.35rem] border bg-white px-4 py-3',

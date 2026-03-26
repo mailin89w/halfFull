@@ -166,6 +166,7 @@ export function useAssessment() {
 
   const setAnswer = useCallback((questionId: string, value: unknown) => {
     setState((prev) => {
+      clearStoredMedGemmaResult();
       const newAnswers = deriveBodyMetrics({ ...prev.answers, [questionId]: value });
 
       // Recalculate path and prune answers that no longer belong
