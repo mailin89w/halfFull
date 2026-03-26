@@ -86,9 +86,6 @@ const effectiveSummaryLine = mlRanButEmpty
     : 'Your assessment shows some low-level signals, but nothing points to a specific cause.')
   : summaryLine;
 
-      : 'Your assessment shows some low-level signals, but nothing points to a specific cause.')
-    : summaryLine;
-
   // Load deep analysis result from session storage (written by /processing)
   useEffect(() => {
     if (!hydrated) return;
