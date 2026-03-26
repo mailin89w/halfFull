@@ -1,10 +1,12 @@
 import { validateDeepAnalyzeSchema, type DeepAnalyzeResult } from '@/lib/medgemma-safety';
 
 const GROQ_API_URL = 'https://api.groq.com/openai/v1/chat/completions';
+const OPENAI_API_URL = 'https://api.openai.com/v1/chat/completions';
 const GROQ_MODEL = 'llama-3.1-8b-instant';
-// V7: primary synthesis model; fallback to smaller model if primary fails/times out
+// V7: primary synthesis model; fallback chain: groq-70b → groq-8b → openai-4o-mini
 const GROQ_SYNTHESIS_MODEL = 'llama-3.3-70b-versatile';
 const GROQ_SYNTHESIS_FALLBACK_MODEL = 'llama-3.1-8b-instant';
+const OPENAI_SYNTHESIS_MODEL = 'gpt-4o-mini';
 
 const SAFETY_SYSTEM_PROMPT = `You are a medical communication safety filter. Rewrite only the user-facing narrative fields so they stay warm, non-diagnostic, and appropriately uncertain.
 
@@ -124,19 +126,92 @@ async function callGroqSynthesis(
   }
 }
 
+async function callOpenAISynthesis(
+  synthesisPrompt: string,
+  openaiKey: string,
+  timeoutMs: number,
+): Promise<DeepAnalyzeResult | null> {
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), timeoutMs);
+
+  try {
+    const response = await fetch(OPENAI_API_URL, {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${openaiKey}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        model: OPENAI_SYNTHESIS_MODEL,
+        messages: [
+          {
+            role: 'system',
+            content:
+              'You output valid JSON only. No markdown, no thinking, no explanations, no preamble. Start your response immediately with { and end with }.',
+          },
+          { role: 'user', content: synthesisPrompt },
+        ],
+        max_tokens: 3500,
+        temperature: 0.3,
+        response_format: { type: 'json_object' },
+      }),
+      signal: controller.signal,
+    });
+
+    if (!response.ok) {
+      const errBody = await response.text().catch(() => '');
+      console.warn(`[OpenAI synthesis][${OPENAI_SYNTHESIS_MODEL}] API error: ${response.status}`, errBody.slice(0, 300));
+      return null;
+    }
+
+    const data = await response.json();
+    const content: string = data.choices?.[0]?.message?.content ?? '';
+    const parsed = parseJsonObject(content);
+    if (!parsed) {
+      console.warn(`[OpenAI synthesis] Could not parse JSON. Raw:`, content.slice(0, 500));
+      return null;
+    }
+
+    const validation = validateDeepAnalyzeSchema(parsed);
+    if (!validation.ok) {
+      console.warn(`[OpenAI synthesis] Schema failed: ${validation.reason} | keys: ${Object.keys(parsed).join(', ')}`);
+      return null;
+    }
+
+    console.info('[OpenAI synthesis] Success via fallback');
+    return validation.data;
+  } catch (err) {
+    console.warn(`[OpenAI synthesis] Error: ${String(err)}`);
+    return null;
+  } finally {
+    clearTimeout(timeout);
+  }
+}
+
 export async function synthesizeNarrativeWithGroqV6(
   synthesisPrompt: string,
 ): Promise<DeepAnalyzeResult | null> {
   const groqKey = process.env.GROQ_API_KEY;
-  if (!groqKey) return null;
+  const openaiKey = process.env.OPENAI_API_KEY;
 
-  // Try primary model with 45s timeout
-  const primary = await callGroqSynthesis(synthesisPrompt, groqKey, GROQ_SYNTHESIS_MODEL, 45_000);
-  if (primary) return primary;
+  // 1. Try primary Groq model (45s)
+  if (groqKey) {
+    const primary = await callGroqSynthesis(synthesisPrompt, groqKey, GROQ_SYNTHESIS_MODEL, 45_000);
+    if (primary) return primary;
 
-  // Fallback: smaller model with 30s timeout
-  console.warn('[Groq synthesis] Primary failed — retrying with fallback model');
-  return callGroqSynthesis(synthesisPrompt, groqKey, GROQ_SYNTHESIS_FALLBACK_MODEL, 30_000);
+    // 2. Try smaller Groq model (30s)
+    console.warn('[synthesis] Primary Groq failed — retrying with Groq fallback model');
+    const groqFallback = await callGroqSynthesis(synthesisPrompt, groqKey, GROQ_SYNTHESIS_FALLBACK_MODEL, 30_000);
+    if (groqFallback) return groqFallback;
+  }
+
+  // 3. Try OpenAI as final fallback
+  if (openaiKey) {
+    console.warn('[synthesis] Groq exhausted — trying OpenAI fallback');
+    return callOpenAISynthesis(synthesisPrompt, openaiKey, 45_000);
+  }
+
+  return null;
 }
 
 export async function rewriteDeepAnalyzeTone(
