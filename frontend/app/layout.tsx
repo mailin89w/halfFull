@@ -2,9 +2,9 @@ import type { Metadata } from 'next';
 import './globals.css';
 
 export const metadata: Metadata = {
-  title: "HalfFull — Find what's draining you",
+  title: 'HalfFull - Understand your fatigue',
   description:
-    'Discover the patterns behind your fatigue and walk into your next doctor appointment prepared.',
+    'Understand possible fatigue drivers, prioritize what to check next, and prepare for your next doctor visit.',
 };
 
 export default function RootLayout({

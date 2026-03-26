@@ -45,6 +45,10 @@ a {
   letter-spacing: -0.06em;
 }
 
+.card-title {
+  font-family: var(--font-display);
+}
+
 .phone-frame {
   width: min(100%, 27rem);
   min-height: 100vh;
@@ -70,4 +74,12 @@ a {
   font-size: 0.72rem;
   font-weight: 700;
   line-height: 1;
+}
+
+.safe-bottom-padding {
+  padding-bottom: calc(7rem + env(safe-area-inset-bottom));
+}
+
+.safe-bottom-offset {
+  padding-bottom: calc(1.25rem + env(safe-area-inset-bottom));
 }
