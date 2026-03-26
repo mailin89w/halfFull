@@ -126,30 +126,6 @@
             }
           },
           {
-            "id": "height_weight",
-            "text": "What is your height and weight?",
-            "help_text": "Used to calculate BMI for the health models. Leave blank if unsure.",
-            "type": "dual_numeric",
-            "feature_name": "height_weight",
-            "options": [
-              {
-                "value": "height_cm",
-                "label": "Height (cm)"
-              },
-              {
-                "value": "weight_kg",
-                "label": "Weight (kg)"
-              }
-            ],
-            "shown_in_paths": [
-              "full"
-            ],
-            "screen_group": "body_measurements",
-            "validation": {
-              "required": false
-            }
-          },
-          {
             "id": "waist_cm",
             "text": "What is your waist circumference?",
             "help_text": "Measure around your belly button. Used to assess metabolic health risk. Leave blank if unsure.",
@@ -425,6 +401,7 @@
             "shown_in_paths": [
               "full"
             ],
+            "screen_group": "weight_goals",
             "validation": {
               "required": true
             }
@@ -648,6 +625,7 @@
             "shown_in_paths": [
               "full"
             ],
+            "screen_group": "weight_goals",
             "validation": {
               "required": true
             }

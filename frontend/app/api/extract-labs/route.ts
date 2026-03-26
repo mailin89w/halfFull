@@ -60,6 +60,31 @@ const LAB_PATTERNS: Array<{ key: string; pattern: RegExp; toMgDl?: number }> = [
   { key: 'total_protein_g_dl',      pattern: /total\s+protein[^\d]*(\d+(?:\.\d+)?)/i },
 ];
 
+const PDF_MIME_TYPES = new Set([
+  'application/pdf',
+  'application/x-pdf',
+  'application/acrobat',
+  'applications/vnd.pdf',
+  'text/pdf',
+]);
+
+function normalizeMimeType(filename: string, mimeType: string, base64: string): string {
+  const normalized = mimeType.trim().toLowerCase();
+  if (PDF_MIME_TYPES.has(normalized)) return 'application/pdf';
+  if (normalized === 'image/jpg') return 'image/jpeg';
+  if (normalized.startsWith('image/')) return normalized;
+
+  const lowerName = filename.toLowerCase();
+  if (lowerName.endsWith('.pdf')) return 'application/pdf';
+  if (lowerName.endsWith('.jpg') || lowerName.endsWith('.jpeg')) return 'image/jpeg';
+  if (lowerName.endsWith('.png')) return 'image/png';
+
+  // PDF files begin with "%PDF", which is "JVBERi0" in base64.
+  if (base64.startsWith('JVBERi0')) return 'application/pdf';
+
+  return normalized || 'application/octet-stream';
+}
+
 function extractStructuredFromText(text: string): Record<string, number> {
   const result: Record<string, number> = {};
   for (const { key, pattern } of LAB_PATTERNS) {
@@ -121,8 +146,10 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'No file data provided' }, { status: 400 });
   }
 
+  const normalizedMimeType = normalizeMimeType(filename, mimeType, base64);
+
   // ── PDF path ──────────────────────────────────────────────────────────────
-  if (mimeType === 'application/pdf') {
+  if (normalizedMimeType === 'application/pdf') {
     // Step 1: always extract raw text with pdf-parse (works without MedGemma)
     let rawText: string;
     try {
@@ -204,7 +231,7 @@ export async function POST(req: NextRequest) {
   }
 
   // ── Image path ────────────────────────────────────────────────────────────
-  if (mimeType.startsWith('image/')) {
+  if (normalizedMimeType.startsWith('image/')) {
     // Images require MedGemma vision — no server-side text fallback available
     if (!hfToken || hfToken === 'hf_your_token_here') {
       // No MedGemma: still mark upload as done; the image filename is stored
@@ -213,7 +240,7 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ extractedText: '' });
     }
 
-    const imageContent = { type: 'image_url', image_url: { url: `data:${mimeType};base64,${base64}` } };
+    const imageContent = { type: 'image_url', image_url: { url: `data:${normalizedMimeType};base64,${base64}` } };
     const [gemmaText, gemmaStructured] = await Promise.all([
       callMedGemma(hfToken, [{ role: 'user', content: [{ type: 'text', text: EXTRACTION_PROMPT }, imageContent] }]),
       callMedGemma(hfToken, [{ role: 'user', content: [{ type: 'text', text: STRUCTURED_PROMPT }, imageContent] }]),
@@ -234,7 +261,7 @@ export async function POST(req: NextRequest) {
 
   // ── Unsupported type ──────────────────────────────────────────────────────
   return NextResponse.json(
-    { error: `Unsupported file type: ${mimeType}. Please upload a PDF, JPG, or PNG.` },
+    { error: `Unsupported file type: ${normalizedMimeType}. Please upload a PDF, JPG, or PNG.` },
     { status: 415 }
   );
 }
