@@ -680,6 +680,43 @@ const effectiveSummaryLine = mlRanButEmpty
             </div>
           )}
 
+          {/* ── KNN similar-profile lab signals ───────────────────────────── */}
+          {knnLabSignals.length > 0 && !isFallbackContent && (
+            <div className="section-card px-5 py-4">
+              <div className="mb-3">
+                <h3 className="text-xs font-semibold uppercase tracking-[0.16em] text-[var(--color-ink)]">
+                  For people similar to you, it&rsquo;s worth checking
+                </h3>
+                <p className="mt-1 text-xs leading-5 text-[var(--color-ink-soft)]">
+                  In {deep?.knnSignals?.k_neighbours ?? knnLabSignals.length} people from our database with a similar fatigue pattern, these lab markers were more commonly abnormal.
+                </p>
+              </div>
+              <div className="space-y-2">
+                {knnLabSignals.slice(0, 6).map((signal, i) => (
+                  <div key={i} className="flex items-start gap-3 rounded-[1rem] bg-[rgba(119,101,244,0.06)] px-3 py-3">
+                    <span className={`mt-0.5 shrink-0 rounded-full px-2 py-0.5 text-[10px] font-bold uppercase ${
+                      signal.direction === 'high'
+                        ? 'bg-[rgba(235,98,60,0.12)] text-[#b84a25]'
+                        : 'bg-[rgba(74,102,196,0.12)] text-[#3a5db5]'
+                    }`}>
+                      {signal.direction}
+                    </span>
+                    <div className="min-w-0">
+                      <p className="text-sm font-semibold text-[var(--color-ink)]">{signal.lab}</p>
+                      <p className="text-xs text-[var(--color-ink-soft)]">
+                        {Math.round(signal.neighbour_pct)}% of similar people
+                        {signal.lift != null ? ` · ${signal.lift.toFixed(1)}× more common than average` : ''}
+                      </p>
+                      {signal.context && (
+                        <p className="mt-0.5 text-xs leading-5 text-[var(--color-ink-soft)]">{signal.context}</p>
+                      )}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
           {/* ── Footer actions ────────────────────────────────────────────── */}
           <div className="flex flex-col gap-3 pt-2">
             <Link

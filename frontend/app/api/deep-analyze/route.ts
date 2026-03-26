@@ -9,7 +9,7 @@ import {
 import {
   buildAllClearPrompt,
   buildMedGemmaGroundingPromptV6,
-  buildGroqSynthesisPromptV6,
+  buildGroqSynthesisPromptV7,
   MEDGEMMA_JSON_SYSTEM_V1,
 } from '@/src/lib/prompts';
 import {
@@ -420,14 +420,31 @@ export async function POST(req: NextRequest) {
     // Continue with empty grounding — Groq synthesis still runs
   }
 
-  // Call 2: Groq narrative synthesis (primary synthesis, not a patch)
+  // Derive top Bayesian gain conditions from clarification QA
+  const bayesianGainMap: Record<string, number> = {};
+  for (const qa of (clarificationQA ?? [])) {
+    const answerLower = (qa.answer ?? '').toLowerCase();
+    const isConfirming = ['yes', 'often', 'always', 'severe', 'daily', 'frequent', 'regularly', 'every night', 'constantly'].some(
+      (w) => answerLower.includes(w)
+    );
+    if (isConfirming) {
+      bayesianGainMap[qa.group] = (bayesianGainMap[qa.group] ?? 0) + 1;
+    }
+  }
+  const topBayesianConditions = Object.entries(bayesianGainMap)
+    .sort(([, a], [, b]) => b - a)
+    .slice(0, 3)
+    .map(([group, count]) => `${group} (${count} confirming signal${count > 1 ? 's' : ''} from Bayesian follow-up)`);
+
+  // Call 2: Groq narrative synthesis V7
   try {
-    const synthesisPrompt = buildGroqSynthesisPromptV6({
+    const synthesisPrompt = buildGroqSynthesisPromptV7({
       groundingResultJson: JSON.stringify(groundingResult, null, 2),
       fatigueSeverity,
       riskCalibrationText,
       overallUrgency,
       oneShot: selectOneShotExample(groundingResult),
+      topBayesianConditions,
     });
 
     const synthesisResult = await synthesizeNarrativeWithGroqV6(synthesisPrompt);

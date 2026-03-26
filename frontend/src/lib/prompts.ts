@@ -499,7 +499,7 @@ Respond with valid JSON only. No markdown, no preamble:
   "summaryPoints": [
     "3-4 short symptom or wellness-pattern bullets grounded in this assessment. No conditions."
   ],
-  "personalizedSummary": "Up to 6 sentences. Acknowledge the patient's effort, explain that the current screening looks reassuring, mention any positive patterns or low-risk context that supports that, and include a brief disclaimer that this is a screening tool.",
+  "personalizedSummary": "2-3 sentences. Reference the specific things this person actually mentioned (sleep, energy dips, stress patterns — by name). Do NOT use generic phrases like 'your answers look reassuring'. Instead write something like: 'From what you shared, the tiredness you experience seems connected to [specific pattern] rather than pointing to an underlying condition. The screening didn't flag anything that would need urgent follow-up, which is genuinely good news.' No medical disclaimers in this field. Warm, direct, second-person voice.",
   "declinedSuspicions": [],
   "recoveryOutlook": "2-3 sentences. Keep this light and reassuring. Explain that no major fatigue signal was found and that outlook stays good if symptoms remain mild or stable, while noting when to seek follow-up if things change.",
   "insights": [],
@@ -516,6 +516,137 @@ Rules:
 - Warm, positive tone throughout. Never create concern where none exists.
 - Do not invent conditions, red flags, or diagnostic urgency.
 - summaryPoints and recoveryOutlook are required.
+- personalizedSummary must reference something specific from the answers — not generic.
 - Keep the answer lightweight when the fatigue signal is low.
+- Complete the full JSON without truncating.`;
+}
+
+// ─── V7: Groq Synthesis Prompt (improved personalizedSummary, KNN block, fatigue-severity tone) ──
+
+export type GroqSynthesisPromptV7Args = GroqSynthesisPromptArgs & {
+  topBayesianConditions?: string[];
+};
+
+export function buildGroqSynthesisPromptV7({
+  groundingResultJson,
+  fatigueSeverity,
+  riskCalibrationText,
+  overallUrgency = 'routine',
+  oneShot,
+  topBayesianConditions,
+}: GroqSynthesisPromptV7Args): string {
+  const detailInstruction = buildDetailInstruction(fatigueSeverity);
+
+  const toneInstruction =
+    overallUrgency === 'urgent'
+      ? 'Tone calibration: stay calm and supportive, but be more explicit that prompt medical follow-up matters for the highest-risk items. Do not sound panicked or diagnostic.'
+      : overallUrgency === 'soon'
+        ? 'Tone calibration: stay calm and supportive, while clearly encouraging near-term follow-up for the stronger signals.'
+        : 'Tone calibration: stay calm, supportive, and non-urgent. Do not create unnecessary alarm.';
+
+  const summaryOpeningInstruction =
+    fatigueSeverity === 3
+      ? 'For personalizedSummary: open with the weight of what they are dealing with. Example opening: "You\'re dealing with persistent, significant fatigue — and from what you shared, this isn\'t a standalone symptom. It seems to overlap with [specific symptoms from keySymptoms]."'
+      : fatigueSeverity === 0
+        ? 'For personalizedSummary: open gently. Example opening: "You mentioned some tiredness on certain days — and from what else you shared, there are a few patterns worth looking into together."'
+        : 'For personalizedSummary: open directly and personally. Example opening: "From what you shared, your fatigue is not a standalone symptom — it\'s worth looking into how it connects with [specific symptoms from keySymptoms]."';
+
+  const bayesianContext = topBayesianConditions && topBayesianConditions.length > 0
+    ? `\nHIGHEST BAYESIAN GAIN CONDITIONS (Bayesian follow-up most strongly confirmed these — give them priority in the personalizedSummary):\n${topBayesianConditions.map(c => `- ${c}`).join('\n')}`
+    : '';
+
+  return `You are a medical communication writer. A clinical AI has produced a structured medical summary for a patient. Your job is to translate that clinical summary into warm, clear, first-person patient-facing text.
+
+YOUR ROLE IS PROSE TRANSLATION ONLY. Do not add conditions, symptoms, tests, doctors, or discussion points that are not already in the clinical evidence below. Every piece of medical content in your output must come directly from the clinical evidence JSON.
+
+${detailInstruction}
+${toneInstruction}
+${summaryOpeningInstruction}
+
+CRITICAL INSTRUCTION FOR personalizedSummary:
+- Do NOT use generic clinical language ("fatigue may suggest", "potential thyroid abnormalities", "markers could be present").
+- Instead, NAME the actual symptoms this person reported. Pull them from keySymptoms arrays in the clinical evidence.
+- Connect the dots: show how fatigue overlaps with other specific symptoms (e.g. "the heavy periods you mentioned", "your disrupted sleep schedule", "the night sweats").
+- The highest-Bayesian-gain conditions are most worth mentioning by connection.
+- Write in warm second person: "from what you shared", "you mentioned", "the [symptom] you described".
+- Do NOT include a screening disclaimer in this field. That is handled elsewhere.
+- End with: "Below you can see some hypotheses on the root causes and which doctors to see first, and how to prepare for your visit."
+- Maximum 3 sentences.
+
+SECTION ROLE ASSIGNMENT — strictly enforce, no cross-section repetition:
+- personalizedSummary: "What is this person experiencing and how do their symptoms connect?" — symptom picture only. No conditions, tests, or doctors.
+- insights[].personalNote: "Why was this condition flagged for this specific patient?" — clinical evidence link only.
+- nextSteps: "Who to see first and why — 2 sentences max." Action only.
+- doctorKits: "What to say, bring, and ask at each appointment." Actionable and appointment-ready.
+
+SPECIALIST RULE: recommendedDoctors must always include at least one non-GP specialist when supportedSuspicions is non-empty.
+
+CLINICAL EVIDENCE (source of all medical content):
+${groundingResultJson}
+${bayesianContext}
+${riskCalibrationText ? `\nRISK CALIBRATION SNAPSHOT:\n${riskCalibrationText}\n` : ''}
+Use the risk calibration snapshot to tune language:
+- urgent items: clearer that prompt review is appropriate
+- soon items: encourage near-term booking
+- routine items: keep the framing light
+- low confidence: softer uncertainty language
+- high confidence: clearer explanation allowed, never imply diagnosis
+- score_suppressed: do not over-emphasize unless clinical evidence strongly supports it
+
+${oneShot ? `EXAMPLE OF A PERFECT OUTPUT (follow this quality and structure):\n${oneShot}\n` : ''}Respond with valid JSON only. No markdown, no preamble:
+{
+  "personalizedSummary": "2-3 sentences. Open with the personalizedSummary opening instruction above. Name the actual symptoms from keySymptoms. Connect them to fatigue. End with the 'Below you can see...' sentence. No disclaimer.",
+  "declinedSuspicions": [
+    {
+      "diagnosisId": "copy every declined diagnosisId from the clinical evidence",
+      "reason": "translate the declined reason into concise patient-friendly language without adding new medical claims"
+    }
+  ],
+  "insights": [
+    {
+      "diagnosisId": "exact id from supportedSuspicions in the clinical evidence — no others",
+      "confidence": "copy the confidence value from the clinical evidence",
+      "personalNote": "2-3 sentences. Translate the reasoning and anchorEvidence for this suspicion into patient-friendly language. Do NOT restate symptoms already in personalizedSummary."
+    }
+  ],
+  "recoveryOutlook": "2-3 sentences. What improvement depends on, what is treatable first, how quickly clarity often comes. Realistic and non-diagnostic.",
+  "nextSteps": "2 sentences maximum. Who to see first and why, then who second. No symptom descriptions.",
+  "doctorKitSummary": "2 first-person sentences. Opening statement for any of the recommended appointments. Specific to this patient.",
+  "doctorKitQuestions": [],
+  "doctorKitArguments": [],
+  "recommendedDoctors": [
+    {
+      "specialty": "copy from recommendedSpecialties in the clinical evidence",
+      "priority": "copy from recommendedSpecialties",
+      "reason": "1-2 sentences. Why this specialty for this patient specifically.",
+      "symptomsToDiscuss": ["copy from symptomsToRaise in the matching entry"],
+      "suggestedTests": ["copy from testsToRequest in the matching entry"]
+    }
+  ],
+  "doctorKits": [
+    {
+      "specialty": "same as the matching recommendedDoctor",
+      "openingSummary": "2 first-person sentences tailored to this specialist.",
+      "bringToAppointment": ["Practical logistics only: diary, prior results, medication list."],
+      "concerningSymptoms": ["copy from symptomsToRaise in the matching entry"],
+      "recommendedTests": ["copy from testsToRequest in the matching entry"],
+      "discussionPoints": ["translate discussionPoints from the matching entry into first-person patient language"],
+      "whatToSay": "2 sentences. First-person appointment opener for this specialty."
+    }
+  ],
+  "allClear": false
+}
+
+Rules:
+- personalizedSummary: name actual symptoms, connect them, warm tone, end with 'Below you can see...', no disclaimer.
+- If supportedSuspicions plus declinedSuspicions exist, every diagnosisId from both must appear in insights or declinedSuspicions.
+- insights: one entry per supportedSuspicion. personalNote must NOT repeat personalizedSummary content.
+- recoveryOutlook: required only when supportedSuspicions is non-empty. Omit for all-clear.
+- nextSteps: maximum 2 sentences. Action sequence only.
+- recommendedDoctors: at least one non-GP specialist when supportedSuspicions is non-empty.
+- doctorKits: one kit per recommendedDoctor, same order.
+- Do NOT add conditions, symptoms, tests not in the clinical evidence.
+- For unconfirmed suspicions: "may suggest", "could indicate", "worth ruling out".
+- Never use alarming language.
 - Complete the full JSON without truncating.`;
 }
