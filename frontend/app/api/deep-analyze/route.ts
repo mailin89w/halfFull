@@ -1,10 +1,13 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { formatAnswersV2 } from '@/src/lib/formatAnswers';
 import { writeLog } from '@/src/lib/logger';
 import { ML_THRESHOLD, selectTopConditions } from '@/src/lib/mlConfig';
 import {
   buildAnsweredQuestionsText,
+  buildUploadedLabsText,
 } from '@/src/lib/assessmentPromptContext';
 import {
+  buildAllClearPrompt,
   buildMedGemmaGroundingPromptV6,
   buildGroqSynthesisPromptV6,
   MEDGEMMA_JSON_SYSTEM_V1,
@@ -170,7 +173,9 @@ export async function POST(req: NextRequest) {
     : [];
   const useKNN: boolean = body.useKNN === true;
 
+  const symptomsText = formatAnswersV2(answers);
   const answeredQuestionsText = buildAnsweredQuestionsText(answers);
+  const uploadedLabsText = buildUploadedLabsText(answers);
   const biomarkers = extractBiomarkerSnapshot(answers);
   const fatigueSeverityRaw = answers['dpq040___feeling_tired_or_having_little_energy'];
   const fatigueSeverity = fatigueSeverityRaw === undefined ? null : Number(fatigueSeverityRaw);
@@ -267,7 +272,63 @@ export async function POST(req: NextRequest) {
         ? 'soon'
         : 'routine';
 
-  // ── V6 path: Call 1 MedGemma grounding → Call 2 Groq synthesis ─
+  // ── V6 all-clear path: skip MedGemma entirely, synthesize directly via Groq ──
+  if (isAllClear) {
+    try {
+      const allClearPrompt = buildAllClearPrompt({ symptomsText, answeredQuestionsText, uploadedLabsText });
+      const allClearResult = await synthesizeNarrativeWithGroqV6(allClearPrompt);
+      if (!allClearResult) {
+        return NextResponse.json({ error: 'Groq synthesis unavailable for all-clear path' }, { status: 503 });
+      }
+      const { data: safeData, warnings } = applyHardSafetyRules(allClearResult);
+      if (warnings.length > 0) {
+        await writeLog('deep_analyze_safety_replacements', {
+          anonymousId: privacy?.anonymousId ?? null,
+          warnings,
+        });
+      }
+
+      if (privacy) {
+        await persistHealthSession({
+          privacy,
+          sessionKind: 'deep_analyze_all_clear',
+          payload: {
+            answers,
+            mlScores: mlScores ?? {},
+            result: safeData,
+            warnings,
+          },
+          profileSummary: {
+            ...buildHealthDataSummary(answers),
+            allClear: true,
+          },
+        });
+      }
+
+      await writeLog('deep_analyze', {
+        anonymousId: privacy?.anonymousId ?? null,
+        answers,
+        mlScores: mlScores ?? {},
+        rawMlScores: rawMlScores ?? {},
+        clarificationQA: clarificationQA ?? [],
+        confirmedConditions,
+        fatigueSeverity,
+        allClear: true,
+        result: safeData,
+      });
+      return NextResponse.json(safeData);
+    } catch (err) {
+      await writeLog('deep_analyze_error', {
+        anonymousId: privacy?.anonymousId ?? null,
+        answers,
+        mlScores: mlScores ?? {},
+        error: String(err),
+      });
+      return NextResponse.json({ error: String(err) }, { status: 500 });
+    }
+  }
+
+  // ── V6 non-all-clear path: Call 1 MedGemma grounding → Call 2 Groq synthesis ─
 
   // Call 1: MedGemma clinical grounding (no PDF labs — structured Q&A only)
   const groundingPrompt = buildMedGemmaGroundingPromptV6({

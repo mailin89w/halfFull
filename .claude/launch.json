@@ -5,7 +5,7 @@
       "name": "halffull-frontend",
       "runtimeExecutable": "npm",
       "runtimeArgs": ["run", "dev"],
-      "port": 3000,
+      "port": 55775,
       "autoPort": true,
       "cwd": "/Users/annaesakova/aipm/halfFull/frontend"
     }
