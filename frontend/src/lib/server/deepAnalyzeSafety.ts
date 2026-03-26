@@ -2,8 +2,9 @@ import { validateDeepAnalyzeSchema, type DeepAnalyzeResult } from '@/lib/medgemm
 
 const GROQ_API_URL = 'https://api.groq.com/openai/v1/chat/completions';
 const GROQ_MODEL = 'llama-3.1-8b-instant';
-// V6: primary synthesis model — general-purpose, better narrative quality
+// V7: primary synthesis model; fallback to smaller model if primary fails/times out
 const GROQ_SYNTHESIS_MODEL = 'llama-3.3-70b-versatile';
+const GROQ_SYNTHESIS_FALLBACK_MODEL = 'llama-3.1-8b-instant';
 
 const SAFETY_SYSTEM_PROMPT = `You are a medical communication safety filter. Rewrite only the user-facing narrative fields so they stay warm, non-diagnostic, and appropriately uncertain.
 
@@ -62,16 +63,16 @@ function mergeWithImmutableFields(
  * DeepAnalyzeResult. Returns null on timeout, parse failure, or missing API key
  * so the caller can fall back gracefully.
  */
-export async function synthesizeNarrativeWithGroqV6(
+async function callGroqSynthesis(
   synthesisPrompt: string,
+  groqKey: string,
+  model: string,
+  timeoutMs: number,
 ): Promise<DeepAnalyzeResult | null> {
-  const groqKey = process.env.GROQ_API_KEY;
-  if (!groqKey) return null;
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), timeoutMs);
 
   try {
-    const controller = new AbortController();
-    const timeout = setTimeout(() => controller.abort(), 30_000);
-
     const response = await fetch(GROQ_API_URL, {
       method: 'POST',
       headers: {
@@ -79,7 +80,7 @@ export async function synthesizeNarrativeWithGroqV6(
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        model: GROQ_SYNTHESIS_MODEL,
+        model,
         messages: [
           {
             role: 'system',
@@ -92,11 +93,11 @@ export async function synthesizeNarrativeWithGroqV6(
         temperature: 0.3,
       }),
       signal: controller.signal,
-    }).finally(() => clearTimeout(timeout));
+    });
 
     if (!response.ok) {
       const errBody = await response.text().catch(() => '');
-      console.warn('[Groq V6 synthesis] API error:', response.status, errBody.slice(0, 300));
+      console.warn(`[Groq synthesis][${model}] API error: ${response.status}`, errBody.slice(0, 300));
       return null;
     }
 
@@ -104,21 +105,38 @@ export async function synthesizeNarrativeWithGroqV6(
     const content: string = data.choices?.[0]?.message?.content ?? '';
     const parsed = parseJsonObject(content);
     if (!parsed) {
-      console.warn('[Groq V6 synthesis] Could not parse JSON. Raw content:', content.slice(0, 500));
+      console.warn(`[Groq synthesis][${model}] Could not parse JSON. Raw:`, content.slice(0, 500));
       return null;
     }
 
     const validation = validateDeepAnalyzeSchema(parsed);
     if (!validation.ok) {
-      console.warn('[Groq V6 synthesis] Schema validation failed:', validation.reason, '| keys:', Object.keys(parsed).join(', '));
+      console.warn(`[Groq synthesis][${model}] Schema failed: ${validation.reason} | keys: ${Object.keys(parsed).join(', ')}`);
       return null;
     }
 
     return validation.data;
   } catch (err) {
-    console.error('[Groq V6 synthesis] Error:', String(err));
+    console.warn(`[Groq synthesis][${model}] Error: ${String(err)}`);
     return null;
+  } finally {
+    clearTimeout(timeout);
   }
+}
+
+export async function synthesizeNarrativeWithGroqV6(
+  synthesisPrompt: string,
+): Promise<DeepAnalyzeResult | null> {
+  const groqKey = process.env.GROQ_API_KEY;
+  if (!groqKey) return null;
+
+  // Try primary model with 45s timeout
+  const primary = await callGroqSynthesis(synthesisPrompt, groqKey, GROQ_SYNTHESIS_MODEL, 45_000);
+  if (primary) return primary;
+
+  // Fallback: smaller model with 30s timeout
+  console.warn('[Groq synthesis] Primary failed — retrying with fallback model');
+  return callGroqSynthesis(synthesisPrompt, groqKey, GROQ_SYNTHESIS_FALLBACK_MODEL, 30_000);
 }
 
 export async function rewriteDeepAnalyzeTone(
