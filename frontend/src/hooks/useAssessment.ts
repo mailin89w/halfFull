@@ -21,6 +21,20 @@ const DEFAULT_STATE: AssessmentState = {
   currentIndex: 0,
 };
 
+function deriveBodyMetrics(answers: Record<string, unknown>): Record<string, unknown> {
+  const nextAnswers = { ...answers };
+  const height = parseFloat(String(nextAnswers.height_cm ?? ''));
+  const weight = parseFloat(String(nextAnswers.weight_kg ?? ''));
+
+  if (Number.isFinite(height) && Number.isFinite(weight) && height > 0 && weight > 0) {
+    nextAnswers.bmi = (weight / (height / 100) ** 2).toFixed(1);
+  } else {
+    delete nextAnswers.bmi;
+  }
+
+  return nextAnswers;
+}
+
 export function useAssessment() {
   const [state, setState] = useState<AssessmentState>(() => {
     if (typeof window === 'undefined') {
@@ -93,7 +107,7 @@ export function useAssessment() {
 
   const setAnswer = useCallback((questionId: string, value: unknown) => {
     setState((prev) => {
-      const newAnswers = { ...prev.answers, [questionId]: value };
+      const newAnswers = deriveBodyMetrics({ ...prev.answers, [questionId]: value });
 
       // Recalculate path and prune answers that no longer belong
       const newPath = resolveQuestionPath(newAnswers);

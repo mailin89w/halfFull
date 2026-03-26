@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { validateDeepAnalyzeSchema } from '@/lib/medgemma-safety';
+import { applyHardSafetyRules, validateDeepAnalyzeSchema } from '@/lib/medgemma-safety';
 import { rewriteDeepAnalyzeTone } from '@/src/lib/server/deepAnalyzeSafety';
 
 export async function POST(req: NextRequest) {
@@ -14,5 +14,6 @@ export async function POST(req: NextRequest) {
   }
 
   const rewritten = await rewriteDeepAnalyzeTone(inputValidation.data);
-  return NextResponse.json(rewritten);
+  const { data: safeData } = applyHardSafetyRules(rewritten);
+  return NextResponse.json(safeData);
 }

@@ -1,175 +1,56 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1160" viewBox="0 0 1600 1160" role="img" aria-labelledby="title desc">
-  <title id="title">HalfFull frontend architecture graph</title>
-  <desc id="desc">Diagram showing how the main frontend routes, shared state, question system, API routes, and result components connect.</desc>
-  <defs>
-    <style>
-      .bg { fill: #f7f4ee; }
-      .title { font: 700 28px Arial, sans-serif; fill: #16324a; }
-      .subtitle { font: 400 15px Arial, sans-serif; fill: #58718a; }
-      .section { font: 700 18px Arial, sans-serif; fill: #16324a; }
-      .label { font: 700 14px Arial, sans-serif; fill: #16324a; }
-      .small { font: 400 12px Arial, sans-serif; fill: #58718a; }
-      .box { stroke: #9cb2c7; stroke-width: 2; rx: 18; ry: 18; }
-      .route { fill: #fff8e8; }
-      .state { fill: #eef5ff; }
-      .lib { fill: #f3efff; }
-      .api { fill: #eaf8f0; }
-      .comp { fill: #fff; }
-      .note { fill: #f5f0ea; stroke: #d8c7b4; stroke-width: 2; rx: 18; ry: 18; }
-      .arrow { stroke: #6d8298; stroke-width: 2.5; fill: none; marker-end: url(#arrowhead); }
-      .arrow-soft { stroke: #9cb2c7; stroke-width: 2; fill: none; marker-end: url(#arrowhead); }
-    </style>
-    <marker id="arrowhead" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto">
-      <polygon points="0 0, 10 4, 0 8" fill="#6d8298"/>
-    </marker>
-  </defs>
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="720" viewBox="0 0 1200 720" role="img" aria-labelledby="title desc">
+  <title id="title">HalfFull frontend architecture summary</title>
+  <desc id="desc">Current frontend structure with a single app route tree and shared code under src.</desc>
+  <style>
+    .bg { fill: #f6f7fb; }
+    .card { fill: #ffffff; stroke: #b8c1db; stroke-width: 2; rx: 18; ry: 18; }
+    .title { font: 700 28px Arial, sans-serif; fill: #1c2233; }
+    .subtitle { font: 400 16px Arial, sans-serif; fill: #5b6480; }
+    .section { font: 700 18px Arial, sans-serif; fill: #314062; }
+    .item { font: 400 15px Arial, sans-serif; fill: #2b3347; }
+    .small { font: 400 14px Arial, sans-serif; fill: #5b6480; }
+    .line { stroke: #7d8cbc; stroke-width: 3; stroke-linecap: round; }
+  </style>
+  <rect class="bg" x="0" y="0" width="1200" height="720"/>
 
-  <rect class="bg" x="0" y="0" width="1600" height="1160"/>
+  <text class="title" x="60" y="70">HalfFull Frontend</text>
+  <text class="subtitle" x="60" y="100">Current structure after removing the stale duplicate route tree.</text>
 
-  <text class="title" x="60" y="56">HalfFull Frontend Architecture</text>
-  <text class="subtitle" x="60" y="84">Routes, shared state, question content, API calls, and results flow</text>
+  <rect class="card" x="60" y="150" width="300" height="220"/>
+  <text class="section" x="85" y="190">Active Routes</text>
+  <text class="item" x="85" y="225">frontend/app</text>
+  <text class="small" x="85" y="255">/start → /consent → /assessment</text>
+  <text class="small" x="85" y="280">→ /clarify → /processing → /results</text>
+  <text class="small" x="85" y="320">API routes also live here:</text>
+  <text class="small" x="85" y="345">score, bayesian-questions,</text>
+  <text class="small" x="85" y="370">bayesian-update, analyze,</text>
+  <text class="small" x="85" y="395">deep-analyze, extract-labs</text>
 
-  <text class="section" x="60" y="130">Route Flow</text>
+  <rect class="card" x="450" y="150" width="300" height="220"/>
+  <text class="section" x="475" y="190">Shared Code</text>
+  <text class="item" x="475" y="225">frontend/src</text>
+  <text class="small" x="475" y="255">components/</text>
+  <text class="small" x="475" y="280">hooks/useAssessment.ts</text>
+  <text class="small" x="475" y="305">data/quiz_nhanes_v2.json</text>
+  <text class="small" x="475" y="330">lib/questions.ts</text>
+  <text class="small" x="475" y="355">lib/medgemma.ts</text>
+  <text class="small" x="475" y="380">lib/formatAnswers.ts</text>
 
-  <rect class="box route" x="60" y="150" width="180" height="78"/>
-  <text class="label" x="82" y="182">app/page.tsx</text>
-  <text class="small" x="82" y="204">redirect('/start')</text>
+  <rect class="card" x="840" y="150" width="300" height="220"/>
+  <text class="section" x="865" y="190">Server Utility</text>
+  <text class="item" x="865" y="225">frontend/lib</text>
+  <text class="small" x="865" y="255">medgemma-safety.ts</text>
+  <text class="small" x="865" y="290">Used by safety/analyze</text>
+  <text class="small" x="865" y="315">server routes for schema</text>
+  <text class="small" x="865" y="340">validation and hard rules</text>
 
-  <rect class="box route" x="290" y="150" width="180" height="78"/>
-  <text class="label" x="312" y="182">app/start/page.tsx</text>
-  <text class="small" x="312" y="204">landing page</text>
+  <line class="line" x1="360" y1="260" x2="450" y2="260"/>
+  <line class="line" x1="750" y1="260" x2="840" y2="260"/>
 
-  <rect class="box route" x="520" y="150" width="190" height="78"/>
-  <text class="label" x="542" y="182">app/assessment/page.tsx</text>
-  <text class="small" x="542" y="204">questionnaire UI</text>
-
-  <rect class="box route" x="760" y="150" width="180" height="78"/>
-  <text class="label" x="782" y="182">app/clarify/page.tsx</text>
-  <text class="small" x="782" y="204">AI follow-up questions</text>
-
-  <rect class="box route" x="990" y="150" width="200" height="78"/>
-  <text class="label" x="1012" y="182">app/processing/page.tsx</text>
-  <text class="small" x="1012" y="204">deep analysis loading</text>
-
-  <rect class="box route" x="1240" y="150" width="180" height="78"/>
-  <text class="label" x="1262" y="182">app/results/page.tsx</text>
-  <text class="small" x="1262" y="204">report + doctor kit</text>
-
-  <path class="arrow" d="M240 189 H290"/>
-  <path class="arrow" d="M470 189 H520"/>
-  <path class="arrow" d="M710 189 H760"/>
-  <path class="arrow" d="M940 189 H990"/>
-  <path class="arrow" d="M1190 189 H1240"/>
-
-  <text class="section" x="60" y="310">Shared State And Question System</text>
-
-  <rect class="box state" x="350" y="340" width="250" height="92"/>
-  <text class="label" x="372" y="374">src/hooks/useAssessment.ts</text>
-  <text class="small" x="372" y="397">localStorage state</text>
-  <text class="small" x="372" y="416">current question, answers, path</text>
-
-  <rect class="box lib" x="680" y="340" width="230" height="92"/>
-  <text class="label" x="702" y="374">src/lib/questions.ts</text>
-  <text class="small" x="702" y="397">question registry</text>
-  <text class="small" x="702" y="416">branching / resolveQuestionPath</text>
-
-  <rect class="box lib" x="980" y="340" width="300" height="92"/>
-  <text class="label" x="1002" y="374">src/data/Assessment_Tree_Complete_Example_FINAL.json</text>
-  <text class="small" x="1002" y="397">assessment content source</text>
-
-  <path class="arrow-soft" d="M615 228 V340 H475"/>
-  <path class="arrow-soft" d="M850 228 V340 H475"/>
-  <path class="arrow-soft" d="M1090 228 V340 H475"/>
-  <path class="arrow-soft" d="M1330 228 V340 H475"/>
-  <path class="arrow" d="M600 386 H680"/>
-  <path class="arrow" d="M910 386 H980"/>
-
-  <text class="section" x="60" y="500">Assessment Components</text>
-
-  <rect class="box comp" x="140" y="530" width="210" height="76"/>
-  <text class="label" x="162" y="562">src/components/QuestionCard.tsx</text>
-  <text class="small" x="162" y="584">renders active question</text>
-
-  <rect class="box comp" x="400" y="530" width="160" height="76"/>
-  <text class="label" x="422" y="562">ProgressBar.tsx</text>
-  <text class="small" x="422" y="584">progress UI</text>
-
-  <rect class="box comp" x="610" y="530" width="160" height="76"/>
-  <text class="label" x="632" y="562">NavButtons.tsx</text>
-  <text class="small" x="632" y="584">back / next</text>
-
-  <rect class="box comp" x="80" y="660" width="140" height="70"/>
-  <text class="label" x="102" y="692">AnswerSingle</text>
-  <rect class="box comp" x="240" y="660" width="140" height="70"/>
-  <text class="label" x="262" y="692">AnswerMultiple</text>
-  <rect class="box comp" x="400" y="660" width="140" height="70"/>
-  <text class="label" x="422" y="692">AnswerScale</text>
-  <rect class="box comp" x="560" y="660" width="140" height="70"/>
-  <text class="label" x="582" y="692">AnswerDate</text>
-  <rect class="box comp" x="720" y="660" width="150" height="70"/>
-  <text class="label" x="742" y="692">AnswerFreeText</text>
-  <rect class="box comp" x="890" y="660" width="160" height="70"/>
-  <text class="label" x="912" y="692">AnswerFileUpload</text>
-
-  <rect class="box api" x="1110" y="652" width="180" height="86"/>
-  <text class="label" x="1132" y="686">app/api/extract-labs/route.ts</text>
-  <text class="small" x="1132" y="708">lab OCR / extraction</text>
-
-  <path class="arrow-soft" d="M245 432 V530"/>
-  <path class="arrow-soft" d="M475 432 V530"/>
-  <path class="arrow-soft" d="M690 228 V530"/>
-  <path class="arrow" d="M245 606 V660"/>
-  <path class="arrow" d="M245 606 C245 630,310 640,310 660"/>
-  <path class="arrow" d="M245 606 C245 630,470 640,470 660"/>
-  <path class="arrow" d="M245 606 C245 630,630 640,630 660"/>
-  <path class="arrow" d="M245 606 C245 630,795 640,795 660"/>
-  <path class="arrow" d="M245 606 C245 630,970 640,970 660"/>
-  <path class="arrow" d="M970 730 C970 750,1200 750,1200 738"/>
-
-  <text class="section" x="60" y="820">Analysis And Results Layer</text>
-
-  <rect class="box lib" x="80" y="850" width="220" height="92"/>
-  <text class="label" x="102" y="884">src/lib/mockResults.ts</text>
-  <text class="small" x="102" y="907">rule-based shortlist</text>
-  <text class="small" x="102" y="926">diagnoses + doctors</text>
-
-  <rect class="box lib" x="360" y="850" width="240" height="92"/>
-  <text class="label" x="382" y="884">src/lib/medgemma.ts</text>
-  <text class="small" x="382" y="907">fetch helpers + sessionStorage cache</text>
-
-  <rect class="box lib" x="660" y="850" width="220" height="92"/>
-  <text class="label" x="682" y="884">src/lib/formatAnswers.ts</text>
-  <text class="small" x="682" y="907">answers → prompt text</text>
-
-  <rect class="box api" x="950" y="820" width="190" height="78"/>
-  <text class="label" x="972" y="852">/api/generate-followup</text>
-  <rect class="box api" x="950" y="920" width="190" height="78"/>
-  <text class="label" x="972" y="952">/api/deep-analyze</text>
-  <rect class="box api" x="1180" y="870" width="170" height="78"/>
-  <text class="label" x="1202" y="902">/api/analyze</text>
-  <text class="small" x="1202" y="924">fallback insights</text>
-
-  <rect class="box comp" x="1390" y="840" width="150" height="88"/>
-  <text class="label" x="1412" y="874">results components</text>
-  <text class="small" x="1412" y="897">EnergySpectrum</text>
-  <text class="small" x="1412" y="914">DiagnosisCard</text>
-
-  <rect class="box note" x="1360" y="960" width="180" height="100"/>
-  <text class="label" x="1382" y="992">Important note</text>
-  <text class="small" x="1382" y="1016">frontend/app/ is the</text>
-  <text class="small" x="1382" y="1034">active App Router path.</text>
-  <text class="small" x="1382" y="1052">frontend/src/app/ looks</text>
-  <text class="small" x="1382" y="1070">like an older duplicate.</text>
-
-  <path class="arrow-soft" d="M850 228 V850 H190"/>
-  <path class="arrow-soft" d="M850 228 V850 H480"/>
-  <path class="arrow-soft" d="M1090 228 V850 H480"/>
-  <path class="arrow-soft" d="M1330 228 V850 H190"/>
-  <path class="arrow" d="M600 896 H660"/>
-  <path class="arrow" d="M880 896 H950"/>
-  <path class="arrow" d="M880 896 C915 896,915 959,950 959"/>
-  <path class="arrow" d="M880 896 C1010 896,1050 909,1180 909"/>
-  <path class="arrow" d="M1140 859 C1235 830,1320 835,1390 870"/>
-  <path class="arrow" d="M1140 959 C1235 950,1320 905,1390 892"/>
-  <path class="arrow" d="M1350 909 H1390"/>
+  <rect class="card" x="60" y="450" width="1080" height="180"/>
+  <text class="section" x="85" y="490">Important Notes</text>
+  <text class="item" x="85" y="525">Only one route tree remains: frontend/app</text>
+  <text class="item" x="85" y="555">frontend/src now contains shared code only, not pages</text>
+  <text class="item" x="85" y="585">Assessment state key: halffull_assessment_v2</text>
+  <text class="item" x="85" y="615">Active quiz source: frontend/src/data/quiz_nhanes_v2.json</text>
 </svg>

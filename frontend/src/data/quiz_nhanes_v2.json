@@ -126,16 +126,33 @@
             }
           },
           {
-            "id": "height_weight",
-            "text": "What is your height and weight?",
-            "help_text": "Used to calculate BMI for the health models. Leave blank if unsure.",
-            "type": "dual_numeric",
-            "feature_name": "height_weight",
+            "id": "height_cm",
+            "text": "What is your height?",
+            "help_text": "Used with your weight to calculate BMI in the background. Leave blank if unsure.",
+            "type": "numeric",
+            "feature_name": "height_cm",
             "options": [
               {
                 "value": "height_cm",
                 "label": "Height (cm)"
-              },
+              }
+            ],
+            "shown_in_paths": [
+              "full"
+            ],
+            "screen_group": "body_measurements",
+            "optional": true,
+            "validation": {
+              "required": false
+            }
+          },
+          {
+            "id": "weight_kg",
+            "text": "What is your weight?",
+            "help_text": "Used with your height to calculate BMI in the background. Leave blank if unsure.",
+            "type": "numeric",
+            "feature_name": "weight_kg",
+            "options": [
               {
                 "value": "weight_kg",
                 "label": "Weight (kg)"
@@ -145,6 +162,7 @@
               "full"
             ],
             "screen_group": "body_measurements",
+            "optional": true,
             "validation": {
               "required": false
             }
@@ -406,30 +424,6 @@
             }
           },
           {
-            "id": "whq070___tried_to_lose_weight_in_past_year",
-            "text": "Have you actively tried to lose weight in the past year?",
-            "type": "binary",
-            "feature_name": "whq070___tried_to_lose_weight_in_past_year",
-            "options": [
-              {
-                "value": "1",
-                "label": "Yes",
-                "encoded_value": 1
-              },
-              {
-                "value": "2",
-                "label": "No",
-                "encoded_value": 2
-              }
-            ],
-            "shown_in_paths": [
-              "full"
-            ],
-            "validation": {
-              "required": true
-            }
-          },
-          {
             "id": "mcq300c___close_relative_had_diabetes",
             "text": "Has a close family member (parent, sibling, or child) been diagnosed with diabetes?",
             "type": "binary",
@@ -648,6 +642,32 @@
             "shown_in_paths": [
               "full"
             ],
+            "screen_group": "weight_goals",
+            "validation": {
+              "required": true
+            }
+          },
+          {
+            "id": "whq070___tried_to_lose_weight_in_past_year",
+            "text": "Have you actively tried to lose weight in the past year?",
+            "type": "binary",
+            "feature_name": "whq070___tried_to_lose_weight_in_past_year",
+            "options": [
+              {
+                "value": "1",
+                "label": "Yes",
+                "encoded_value": 1
+              },
+              {
+                "value": "2",
+                "label": "No",
+                "encoded_value": 2
+              }
+            ],
+            "shown_in_paths": [
+              "full"
+            ],
+            "screen_group": "weight_goals",
             "validation": {
               "required": true
             }

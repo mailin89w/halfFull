@@ -8,6 +8,18 @@ interface Props {
   onChange: (val: LabUploadAnswer) => void;
 }
 
+function inferMimeType(file: File): string {
+  const declared = file.type?.trim().toLowerCase();
+  if (declared) return declared;
+
+  const filename = file.name.toLowerCase();
+  if (filename.endsWith('.pdf')) return 'application/pdf';
+  if (filename.endsWith('.jpg') || filename.endsWith('.jpeg')) return 'image/jpeg';
+  if (filename.endsWith('.png')) return 'image/png';
+
+  return 'application/octet-stream';
+}
+
 /** Reads a File as base64, returns just the data portion (no data URI prefix). */
 function fileToBase64(file: File): Promise<string> {
   return new Promise((resolve, reject) => {
@@ -51,7 +63,7 @@ export function AnswerFileUpload({ value, onChange }: Props) {
       const res = await fetch('/api/extract-labs', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ filename: file.name, base64, mimeType: file.type }),
+        body: JSON.stringify({ filename: file.name, base64, mimeType: inferMimeType(file) }),
       });
 
       if (!res.ok) {
@@ -165,7 +177,7 @@ export function AnswerFileUpload({ value, onChange }: Props) {
       {isExtracting && (
         <>
           <p className="text-sm font-semibold text-[var(--color-ink)]">{value.filename}</p>
-          <p className="text-xs text-[var(--color-accent)]">Analyzing labs with MedGemma…</p>
+          <p className="text-xs text-[var(--color-accent)]">Analyzing labs…</p>
         </>
       )}
 
@@ -190,7 +202,7 @@ export function AnswerFileUpload({ value, onChange }: Props) {
       {!hasFile && (
         <>
           <p className="text-sm font-medium text-[var(--color-ink)]">Drag and drop or tap to upload</p>
-          <p className="text-xs text-[var(--color-ink-soft)]">PDF, JPG, or PNG — MedGemma will read your values</p>
+          <p className="text-xs text-[var(--color-ink-soft)]">PDF, JPG, or PNG</p>
         </>
       )}
 

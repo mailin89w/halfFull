@@ -1,106 +1,106 @@
 # Frontend Connection Graph
 
-This graph shows how the main pieces in `frontend/` connect today.
+This file documents the current runtime structure in `frontend/`.
 
 ## Main Runtime Graph
 
 ```mermaid
 flowchart TD
-    Root["app/layout.tsx\nRoot layout + global fonts/styles"] --> Home["app/page.tsx\nredirect('/start')"]
+    Root["app/layout.tsx\nRoot layout + global styles"] --> Home["app/page.tsx\nredirect('/start')"]
     Home --> Start["app/start/page.tsx\nLanding page"]
-    Start --> Assessment["app/assessment/page.tsx\nMain questionnaire UI"]
-    Assessment --> Clarify["app/clarify/page.tsx\nAI follow-up questions"]
-    Clarify --> Processing["app/processing/page.tsx\nRun AI analysis"]
-    Processing --> Results["app/results/page.tsx\nFinal report + doctor kit"]
+    Start --> Consent["app/consent/page.tsx\nPrivacy consent"]
+    Consent --> Assessment["app/assessment/page.tsx\nMain questionnaire UI"]
+    Assessment --> Clarify["app/clarify/page.tsx\nBayesian follow-up questions"]
+    Clarify --> Processing["app/processing/page.tsx\nRun analysis"]
+    Processing --> Results["app/results/page.tsx\nFinal report"]
 
-    Assessment --> UseAssessment["src/hooks/useAssessment.ts\nassessment state + localStorage"]
+    Assessment --> UseAssessment["src/hooks/useAssessment.ts\nsession state + navigation"]
     Clarify --> UseAssessment
     Processing --> UseAssessment
     Results --> UseAssessment
 
-    UseAssessment --> QuestionsLib["src/lib/questions.ts\nquestion registry + branching"]
-    QuestionsLib --> TreeJson["src/data/Assessment_Tree_Complete_Example_FINAL.json\nassessment content"]
+    UseAssessment --> QuestionsLib["src/lib/questions.ts\nquestion registry + path resolution"]
+    QuestionsLib --> TreeJson["src/data/quiz_nhanes_v2.json\nactive assessment content"]
 
     Assessment --> QuestionCard["src/components/QuestionCard.tsx"]
+    Assessment --> QuestionGroupCard["src/components/QuestionGroupCard.tsx"]
     Assessment --> ProgressBar["src/components/ProgressBar.tsx"]
     Assessment --> NavButtons["src/components/NavButtons.tsx"]
 
     QuestionCard --> AnswerSingle["src/components/AnswerSingle.tsx"]
     QuestionCard --> AnswerMultiple["src/components/AnswerMultiple.tsx"]
-    QuestionCard --> AnswerScale["src/components/AnswerScale.tsx"]
+    QuestionCard --> AnswerNumeric["src/components/AnswerNumeric.tsx"]
+    QuestionCard --> AnswerDualNumeric["src/components/AnswerDualNumeric.tsx"]
     QuestionCard --> AnswerDate["src/components/AnswerDate.tsx"]
     QuestionCard --> AnswerFreeText["src/components/AnswerFreeText.tsx"]
     QuestionCard --> AnswerFileUpload["src/components/AnswerFileUpload.tsx"]
 
-    AnswerFileUpload --> ExtractLabs["app/api/extract-labs/route.ts\nextract uploaded lab text"]
+    AnswerFileUpload --> ExtractLabs["app/api/extract-labs/route.ts\nextract uploaded PDF/image lab data"]
 
-    Clarify --> MockResults["src/lib/mockResults.ts\nrule-based diagnosis shortlist"]
-    Clarify --> MedGemma["src/lib/medgemma.ts\nsession cache + fetch helpers"]
-    Clarify --> FollowupAPI["app/api/generate-followup/route.ts"]
-    Clarify --> Blob["src/components/ui/BlobCharacter.tsx"]
+    Clarify --> MedgemmaLib["src/lib/medgemma.ts\nfetch helpers + storage"]
+    Clarify --> MlScoreAPI["app/api/score/route.ts"]
+    Clarify --> BayesianQuestions["app/api/bayesian-questions/route.ts"]
+    Clarify --> BayesianUpdate["app/api/bayesian-update/route.ts"]
 
-    Processing --> MockResults
-    Processing --> MedGemma
+    Processing --> MedgemmaLib
+    Processing --> AnalyzeAPI["app/api/analyze/route.ts"]
     Processing --> DeepAnalyze["app/api/deep-analyze/route.ts"]
-    Processing --> Analyze["app/api/analyze/route.ts\nfallback insights"]
-    Processing --> Blob
 
-    Results --> MockResults
-    Results --> MedGemma
+    Results --> MedgemmaLib
+    Results --> ClinicalSignals["src/lib/clinicalSignals.ts"]
+    Results --> MockResults["src/lib/mockResults.ts"]
     Results --> Energy["src/components/results/EnergySpectrum.tsx"]
     Results --> Diagnosis["src/components/results/DiagnosisCard.tsx"]
     Results --> Doctor["src/components/results/DoctorPriority.tsx"]
-    Results --> Blob
 
-    Analyze --> FormatAnswers["src/lib/formatAnswers.ts\nserialize answers for prompts"]
+    AnalyzeAPI --> FormatAnswers["src/lib/formatAnswers.ts\nserialize answers for prompts"]
     DeepAnalyze --> FormatAnswers
-    FollowupAPI --> FormatAnswers
 ```
 
 ## Data Flow
 
 ```mermaid
 flowchart LR
-    User["User answers"] --> AssessmentState["useAssessment\nlocalStorage: halffull_assessment_v1"]
+    User["User answers"] --> AssessmentState["useAssessment\nsessionStorage: halffull_assessment_v2"]
     AssessmentState --> Path["resolveQuestionPath()"]
-    Path --> UI["QuestionCard + answer components"]
+    Path --> UI["Assessment UI"]
 
-    AssessmentState --> ClarifyAnswers["clarify_* answers"]
-    AssessmentState --> RuleEngine["computeResults()"]
+    AssessmentState --> Upload["lab_upload answer"]
+    Upload --> ExtractLabs["/api/extract-labs"]
 
-    RuleEngine --> FollowUpFetch["fetchFollowUpQuestions()"]
-    FollowUpFetch --> FollowUpAPI["/api/generate-followup"]
-    FollowUpAPI --> HF["HuggingFace / MedGemma"]
-    HF --> FollowUpCache["sessionStorage: halffull_followup_v1"]
+    AssessmentState --> ScoreFetch["fetchMLScoresWithTimeout()"]
+    ScoreFetch --> ScoreAPI["/api/score"]
+    ScoreAPI --> ScoreCache["sessionStorage: halffull_ml_scores_v1"]
 
-    RuleEngine --> DeepFetch["fetchDeepAnalysis()"]
+    ScoreCache --> QuestionFetch["fetchBayesianQuestionsWithTimeout()"]
+    QuestionFetch --> QuestionsAPI["/api/bayesian-questions"]
+    QuestionsAPI --> QuestionsUI["clarify page"]
+
+    QuestionsUI --> UpdateFetch["fetchBayesianUpdateWithTimeout()"]
+    UpdateFetch --> UpdateAPI["/api/bayesian-update"]
+    UpdateAPI --> BayesianCache["sessionStorage: halffull_bayesian_*"]
+
+    BayesianCache --> DeepFetch["getDeepAnalysisWithFallback()"]
     DeepFetch --> DeepAPI["/api/deep-analyze"]
-    DeepAPI --> HF
-    HF --> DeepCache["sessionStorage: halffull_deep_v1"]
-
-    DeepFetch --> BasicFallback["fetchMedGemmaInsights()"]
-    BasicFallback --> AnalyzeAPI["/api/analyze"]
-    AnalyzeAPI --> HF
-    HF --> BasicCache["sessionStorage: halffull_medgemma_v1"]
+    DeepAPI --> DeepCache["sessionStorage: halffull_deep_v1"]
 
     DeepCache --> Results["results page"]
-    RuleEngine --> Results
 ```
 
 ## File Roles
 
 - `frontend/app/*`: active App Router pages and API routes.
-- `frontend/src/hooks/useAssessment.ts`: shared assessment state, localStorage persistence, path recalculation, reset.
-- `frontend/src/lib/questions.ts`: turns the assessment tree JSON into runtime questions and branching logic.
-- `frontend/src/lib/mockResults.ts`: current rule-based scoring and doctor recommendations used before / alongside backend ML.
-- `frontend/src/lib/medgemma.ts`: fetch helpers and session-storage caching for AI outputs.
-- `frontend/src/lib/formatAnswers.ts`: common serializer used by the API routes to turn raw answers into prompt text.
-- `frontend/src/components/*`: reusable input and presentation components.
-- `frontend/src/components/results/*`: result-specific cards and visual summaries.
-- `frontend/src/data/Assessment_Tree_Complete_Example_FINAL.json`: question content source consumed by `questions.ts`.
+- `frontend/src/components/*`: reusable UI components.
+- `frontend/src/hooks/useAssessment.ts`: assessment state, storage, screen navigation.
+- `frontend/src/lib/questions.ts`: converts quiz JSON into runtime questions and conditional flow.
+- `frontend/src/data/quiz_nhanes_v2.json`: active assessment content.
+- `frontend/src/lib/medgemma.ts`: API helpers and browser storage helpers for ML/Bayesian/deep-analysis state.
+- `frontend/src/lib/formatAnswers.ts`: serializer used by analysis routes.
+- `frontend/src/lib/clinicalSignals.ts` and `frontend/src/lib/mockResults.ts`: result shaping and fallback logic.
+- `frontend/lib/medgemma-safety.ts`: shared safety/schema utility used by server routes.
 
 ## Important Structural Note
 
-- There are duplicate route files under both `frontend/app/` and `frontend/src/app/`.
-- The active Next.js App Router entrypoint is `frontend/app/`.
-- `frontend/src/app/` looks like an older parallel copy or prototype layer and is not the primary runtime path if `frontend/app/` is being served.
+- `frontend/app/` is the only route tree.
+- `frontend/src/` contains shared code, not pages.
+- The old duplicate `frontend/src/app/` tree has been removed.

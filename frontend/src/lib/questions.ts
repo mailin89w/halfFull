@@ -199,8 +199,10 @@ export function getScreens(path: string[]): string[][] {
 }
 
 export function resolveQuestionPath(answers: Record<string, unknown>): string[] {
-  const isHybrid = answers['q0.0'] === 'lab_yes';
-  const activePath: ShownIn = isHybrid ? 'hybrid' : 'full';
+  // The active NHANES v2 assessment currently ships a single "full" path.
+  // Keep the shown_in_paths filter so future path variants can be reintroduced
+  // in data, but do not depend on the removed legacy q0.0 gate.
+  const activePath: ShownIn = 'full';
 
   return QUESTIONS.filter((question) => {
     if (!question.shown_in_paths.includes(activePath)) {
