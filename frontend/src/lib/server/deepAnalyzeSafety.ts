@@ -95,7 +95,8 @@ export async function synthesizeNarrativeWithGroqV6(
     }).finally(() => clearTimeout(timeout));
 
     if (!response.ok) {
-      console.warn('[Groq V6 synthesis] API error:', response.status);
+      const errBody = await response.text().catch(() => '');
+      console.warn('[Groq V6 synthesis] API error:', response.status, errBody.slice(0, 300));
       return null;
     }
 
@@ -103,13 +104,13 @@ export async function synthesizeNarrativeWithGroqV6(
     const content: string = data.choices?.[0]?.message?.content ?? '';
     const parsed = parseJsonObject(content);
     if (!parsed) {
-      console.warn('[Groq V6 synthesis] Could not parse JSON from response');
+      console.warn('[Groq V6 synthesis] Could not parse JSON. Raw content:', content.slice(0, 500));
       return null;
     }
 
     const validation = validateDeepAnalyzeSchema(parsed);
     if (!validation.ok) {
-      console.warn('[Groq V6 synthesis] Schema validation failed:', validation.reason);
+      console.warn('[Groq V6 synthesis] Schema validation failed:', validation.reason, '| keys:', Object.keys(parsed).join(', '));
       return null;
     }
 

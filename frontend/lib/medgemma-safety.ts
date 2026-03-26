@@ -227,11 +227,10 @@ export function validateDeepAnalyzeSchema(
   if (typeof parsed.personalizedSummary !== 'string' || !parsed.personalizedSummary.trim())
     return err('personalizedSummary must be a non-empty string');
 
-  if (!Array.isArray(parsed.summaryPoints) || parsed.summaryPoints.length < 3 || parsed.summaryPoints.length > 6)
-    return err('summaryPoints must have between 3 and 6 items');
-  const summaryPoints = normalizeStringArray(parsed.summaryPoints);
-  if (summaryPoints.length !== parsed.summaryPoints.length)
-    return err('summaryPoints must contain only non-empty strings');
+  // summaryPoints — optional array, skip items that aren't strings
+  const summaryPoints = Array.isArray(parsed.summaryPoints)
+    ? normalizeStringArray(parsed.summaryPoints)
+    : [];
 
   // insights — array, 0–4 items, each with valid diagnosisId + non-empty personalNote
   if (!Array.isArray(parsed.insights))
@@ -259,8 +258,7 @@ export function validateDeepAnalyzeSchema(
   if (typeof parsed.nextSteps !== 'string' || !parsed.nextSteps.trim())
     return err('nextSteps must be a non-empty string');
 
-  if (typeof parsed.recoveryOutlook !== 'string' || !parsed.recoveryOutlook.trim())
-    return err('recoveryOutlook must be a non-empty string');
+  // recoveryOutlook — optional
 
   // doctorKitSummary — optional non-empty string
   if (
@@ -377,23 +375,28 @@ export function validateDeepAnalyzeSchema(
   for (let i = 0; i < declinedInput.length; i++) {
     const item = declinedInput[i] as Record<string, unknown>;
     if (typeof item?.diagnosisId !== 'string' || !DIAGNOSIS_ID_ALLOWLIST.has(item.diagnosisId))
-      return err(`declinedSuspicions[${i}].diagnosisId not in allowlist`);
+      continue; // skip hallucinated ids rather than failing the whole response
     if (typeof item?.reason !== 'string' || !item.reason.trim())
-      return err(`declinedSuspicions[${i}].reason must be a non-empty string`);
+      continue;
     declinedSuspicions.push({
       diagnosisId: item.diagnosisId,
       reason: item.reason.trim(),
     });
   }
 
+  const recoveryOutlook =
+    typeof parsed.recoveryOutlook === 'string' && parsed.recoveryOutlook.trim()
+      ? parsed.recoveryOutlook.trim()
+      : undefined;
+
   return {
     ok: true,
     data: {
       personalizedSummary: parsed.personalizedSummary.trim(),
-      summaryPoints,
+      ...(summaryPoints.length > 0 ? { summaryPoints } : {}),
       insights,
       ...(declinedSuspicions.length > 0 ? { declinedSuspicions } : {}),
-      recoveryOutlook: parsed.recoveryOutlook.trim(),
+      ...(recoveryOutlook ? { recoveryOutlook } : {}),
       nextSteps: parsed.nextSteps.trim(),
       ...(typeof parsed.doctorKitSummary === 'string' && parsed.doctorKitSummary.trim()
         ? { doctorKitSummary: parsed.doctorKitSummary.trim() }
