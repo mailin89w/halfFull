@@ -1,6 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 import { createClient } from '@supabase/supabase-js';
+import { sanitizeForLogging } from '@/src/lib/server/privacy';
 
 // ─── Local file fallback (dev / non-Vercel) ───────────────────────────────────
 
@@ -43,10 +44,11 @@ function getSupabase() {
  */
 export function writeLog(event: string, data: Record<string, unknown>): void {
   const ts = new Date().toISOString();
-  const entry = JSON.stringify({ ts, event, ...data });
+  const safeData = sanitizeForLogging(data);
+  const entry = JSON.stringify({ ts, event, ...safeData });
 
   // Always log to console (visible in Vercel / Railway log streams)
-  console.log(`[${event}]`, JSON.stringify(data, null, 2));
+  console.log(`[${event}]`, JSON.stringify(safeData, null, 2));
 
   // Local file (dev)
   writeLocalLog(entry);
@@ -56,7 +58,7 @@ export function writeLog(event: string, data: Record<string, unknown>): void {
   if (supabase) {
     supabase
       .from('app_logs')
-      .insert({ ts, event, payload: data })
+      .insert({ ts, event, payload: safeData })
       .then(({ error }) => {
         if (error) console.error('[logger] Supabase insert failed:', error.message);
       });

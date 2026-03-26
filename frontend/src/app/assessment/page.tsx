@@ -6,6 +6,7 @@ import { QuestionCard } from '@/src/components/QuestionCard';
 import { QuestionGroupCard } from '@/src/components/QuestionGroupCard';
 import { ProgressBar } from '@/src/components/ProgressBar';
 import { NavButtons } from '@/src/components/NavButtons';
+import { ExitAssessmentButton } from '@/src/components/ExitAssessmentButton';
 
 export default function AssessmentPage() {
   const router = useRouter();
@@ -59,7 +60,13 @@ export default function AssessmentPage() {
             <span className="text-[#254662] font-semibold text-lg tracking-tight">
               HalfFull
             </span>
-            <span className="text-xs text-[#A2B6CB]">🔒 Data stays on your device</span>
+            <div className="flex items-center gap-3">
+              <span className="text-xs text-[#A2B6CB]">Data expires in 24h</span>
+              <ExitAssessmentButton
+                label="Exit"
+                className="text-xs font-semibold text-[#254662]"
+              />
+            </div>
           </div>
           <ProgressBar
             progress={progress}

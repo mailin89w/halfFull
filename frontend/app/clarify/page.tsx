@@ -9,11 +9,13 @@ import {
   fetchMLScoresWithTimeout,
   readStoredMLScores,
   storeBayesianAnswers,
+  storeBayesianDetails,
   storeBayesianScores,
   storeConfirmedConditions,
   storeMLScores,
 } from '@/src/lib/medgemma';
 import type {
+  BayesianConditionTrace,
   BayesianQuestion,
   BayesianQuestionsResult,
   ClarificationQAPair,
@@ -214,7 +216,40 @@ export default function ClarifyPage() {
         })
       );
 
+      const questionMeta = Object.fromEntries(
+        conditionQs.flatMap((conditionGroup) =>
+          conditionGroup.questions.map((question) => [
+            question.id,
+            {
+              condition: conditionGroup.condition,
+              text: question.text,
+              answers: Object.fromEntries(question.answer_options.map((opt) => [opt.value, opt.label])),
+            },
+          ])
+        )
+      ) as Record<string, { condition: string; text: string; answers: Record<string, string> }>;
+
+      const detailRecord = Object.fromEntries(
+        Object.entries(result.details ?? {}).map(([condition, detail]) => {
+          const trace = detail as BayesianConditionTrace;
+          const lrsApplied = Array.isArray(trace?.lrs_applied) ? trace.lrs_applied : [];
+          return [
+            condition,
+            {
+              ...trace,
+              condition,
+              lrs_applied: lrsApplied.map((entry) => ({
+                ...entry,
+                questionText: questionMeta[entry.question_id]?.text,
+                answerLabel: questionMeta[entry.question_id]?.answers?.[entry.answer] ?? entry.answer,
+              })),
+            },
+          ];
+        })
+      );
+
       storeBayesianScores(result.posteriorScores);
+      storeBayesianDetails(detailRecord);
       storeBayesianAnswers(qaRecord);
       router.push('/processing');
     } catch {

@@ -3,6 +3,12 @@ import { formatAnswersV2 } from '@/src/lib/formatAnswers';
 import { writeLog } from '@/src/lib/logger';
 import { selectTopConditions, ML_THRESHOLD } from '@/src/lib/mlConfig';
 import { buildAnalyzePrompt, MEDGEMMA_JSON_SYSTEM_V1 } from '@/src/lib/prompts';
+import {
+  buildHealthDataSummary,
+  persistHealthSession,
+  readOptionalPrivacyContext,
+  type ServerPrivacyContext,
+} from '@/src/lib/server/privacy';
 
 export const maxDuration = 60;
 
@@ -23,6 +29,16 @@ export async function POST(req: NextRequest) {
   const body = await req.json();
   const answers: Record<string, unknown> = body.answers ?? {};
   const mlScores: Record<string, number> | undefined = body.mlScores;
+  let privacy: ServerPrivacyContext | null;
+
+  try {
+    privacy = readOptionalPrivacyContext(body.privacy);
+  } catch (error) {
+    return NextResponse.json(
+      { error: error instanceof Error ? error.message : 'Invalid consent payload.' },
+      { status: 400 }
+    );
+  }
 
   const symptomsText = formatAnswersV2(answers);
   const topConditions = mlScores ? selectTopConditions(mlScores) : [];
@@ -78,10 +94,35 @@ export async function POST(req: NextRequest) {
     }
 
     const parsed = JSON.parse(jsonMatch[0]);
-    writeLog('analyze', { answers, mlScores, topConditions, result: parsed });
+    if (privacy) {
+      await persistHealthSession({
+        privacy,
+        sessionKind: 'analyze',
+        payload: {
+          answers,
+          mlScores: mlScores ?? {},
+          topConditions,
+          result: parsed,
+        },
+        profileSummary: {
+          ...buildHealthDataSummary(answers),
+          topConditionIds: topConditions.map(([condition]) => condition),
+        },
+      });
+    }
+
+    writeLog('analyze', {
+      anonymousId: privacy?.anonymousId ?? null,
+      answerCount: Object.keys(answers).length,
+      topConditionIds: topConditions.map(([condition]) => condition),
+    });
     return NextResponse.json(parsed);
   } catch (err) {
-    writeLog('analyze_error', { answers, mlScores, error: String(err) });
+    writeLog('analyze_error', {
+      anonymousId: privacy?.anonymousId ?? null,
+      answerCount: Object.keys(answers).length,
+      error: String(err),
+    });
     return NextResponse.json({ error: String(err) }, { status: 500 });
   }
 }

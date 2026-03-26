@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useAssessment } from '@/src/hooks/useAssessment';
+import { ExitAssessmentButton } from '@/src/components/ExitAssessmentButton';
 import { QuestionCard } from '@/src/components/QuestionCard';
 import { QuestionGroupCard } from '@/src/components/QuestionGroupCard';
 import { ProgressBar } from '@/src/components/ProgressBar';
@@ -74,9 +75,16 @@ export default function AssessmentPage() {
         <div className="mx-auto max-w-lg">
           <div className="mb-5 flex items-center justify-between text-[11px] font-bold uppercase tracking-[0.18em] text-[var(--color-ink)]">
             <span>HalfFull</span>
-            <Link href="/start" className="text-[var(--color-ink-soft)]">
-              Start
-            </Link>
+            <div className="flex items-center gap-3">
+              <span className="text-[var(--color-ink-soft)]">24h retention</span>
+              <ExitAssessmentButton
+                className="text-[var(--color-ink-soft)]"
+                label="Exit"
+              />
+              <Link href="/start" className="text-[var(--color-ink-soft)]">
+                Start
+              </Link>
+            </div>
           </div>
 
           <ProgressBar

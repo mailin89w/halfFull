@@ -13,12 +13,25 @@ import {
   MEDGEMMA_JSON_SYSTEM_V1,
 } from '@/src/lib/prompts';
 import {
+  computeConfidence,
+  computeUrgency,
+  extractBiomarkerSnapshot,
+  type ConfidenceTier,
+  type UrgencyLevel,
+} from '@/src/lib/clinicalSignals';
+import {
   applyHardSafetyRules,
   validateMedGemmaGroundingSchema,
   type MedGemmaGroundingResult,
 } from '@/lib/medgemma-safety';
 import { synthesizeNarrativeWithGroqV6 } from '@/src/lib/server/deepAnalyzeSafety';
 import { selectOneShotExample } from '@/src/lib/oneShotExamples';
+import {
+  buildHealthDataSummary,
+  persistHealthSession,
+  readOptionalPrivacyContext,
+  type ServerPrivacyContext,
+} from '@/src/lib/server/privacy';
 
 export const maxDuration = 300; // Vercel max on Pro plan; covers Modal cold-start + inference
 
@@ -28,6 +41,38 @@ const HF_MODEL = 'google/medgemma-1.5-4b-it';
 const HF_API_URL = process.env.HF_ENDPOINT_URL
   ? `${process.env.HF_ENDPOINT_URL}/v1/chat/completions`
   : 'https://router.huggingface.co/v1/chat/completions';
+
+type PromptCalibrationSignal = {
+  conditionId: string;
+  rawMlScore: number;
+  effectiveScore: number;
+  confidenceTier: ConfidenceTier;
+  urgencyLevel: UrgencyLevel;
+  clusterAgreement: number;
+  scoreSuppressed: boolean;
+  confidenceSummary: string;
+  urgencySummary: string;
+};
+
+function buildRiskCalibrationText(signals: PromptCalibrationSignal[]): string {
+  if (signals.length === 0) {
+    return 'No elevated conditions reached the calibration layer.';
+  }
+
+  return signals
+    .map((signal) => {
+      const suppressionText = signal.scoreSuppressed
+        ? `score_suppressed: yes (${signal.rawMlScore.toFixed(2)} -> ${signal.effectiveScore.toFixed(2)})`
+        : 'score_suppressed: no';
+
+      return [
+        `- ${signal.conditionId}: raw_ml=${signal.rawMlScore.toFixed(2)} | effective_score=${signal.effectiveScore.toFixed(2)} | confidence=${signal.confidenceTier} | urgency=${signal.urgencyLevel} | cluster_agreement=${Math.round(signal.clusterAgreement * 100)}% | ${suppressionText}`,
+        `  Confidence note: ${signal.confidenceSummary}`,
+        `  Urgency note: ${signal.urgencySummary}`,
+      ].join('\n');
+    })
+    .join('\n');
+}
 
 /**
  * Attempts to parse potentially-truncated JSON from MedGemma.
@@ -84,6 +129,17 @@ export async function POST(req: NextRequest) {
   const body = await req.json();
   const answers: Record<string, unknown> = body.answers ?? {};
   const mlScores: Record<string, number> | undefined = body.mlScores;
+  const rawMlScores: Record<string, number> | undefined = body.rawMlScores;
+  let privacy: ServerPrivacyContext | null;
+
+  try {
+    privacy = readOptionalPrivacyContext(body.privacy);
+  } catch (error) {
+    return NextResponse.json(
+      { error: error instanceof Error ? error.message : 'Invalid consent payload.' },
+      { status: 400 }
+    );
+  }
   const clarificationQA: ClarificationQAPair[] | undefined = body.clarificationQA;
   const confirmedConditions: string[] = Array.isArray(body.confirmedConditions)
     ? body.confirmedConditions.map((value: unknown) => String(value))
@@ -93,7 +149,7 @@ export async function POST(req: NextRequest) {
   const symptomsText = formatAnswersV2(answers);
   const answeredQuestionsText = buildAnsweredQuestionsText(answers);
   const uploadedLabsText = buildUploadedLabsText(answers);
-  const structuredAnswersJson = JSON.stringify(answers, null, 2);
+  const biomarkers = extractBiomarkerSnapshot(answers);
   const fatigueSeverityRaw = answers['dpq040___feeling_tired_or_having_little_energy'];
   const fatigueSeverity = fatigueSeverityRaw === undefined ? null : Number(fatigueSeverityRaw);
 
@@ -101,12 +157,6 @@ export async function POST(req: NextRequest) {
   const flaggedConditions = topConditions
     .filter(([, p]) => p >= ML_THRESHOLD)
     .map(([c]) => c);
-
-  const flaggedAreasText = topConditions.length > 0
-    ? topConditions
-      .map(([condition, prob]) => `- ${condition}: ${(prob * 100).toFixed(1)}%`)
-      .join('\n')
-    : '- None';
 
   const bayesianEvidenceText = clarificationQA && clarificationQA.length > 0
     ? clarificationQA
@@ -160,6 +210,41 @@ export async function POST(req: NextRequest) {
     }
   }
 
+  const promptCalibrationSignals: PromptCalibrationSignal[] = topConditions.map(([conditionId]) => {
+    const rawMlScore = rawMlScores?.[conditionId] ?? mlScores?.[conditionId] ?? 0;
+    const effectiveScore = mlScores?.[conditionId] ?? rawMlScore;
+    const confidence = computeConfidence({
+      conditionId,
+      mlScore: rawMlScore,
+      posteriorScore: effectiveScore,
+      labSignals: knnResult?.lab_signals,
+    });
+    const urgency = computeUrgency({
+      conditionId,
+      posteriorScore: effectiveScore,
+      biomarkers,
+    });
+
+    return {
+      conditionId,
+      rawMlScore,
+      effectiveScore,
+      confidenceTier: confidence.tier,
+      urgencyLevel: urgency.level,
+      clusterAgreement: confidence.clusterAgreement,
+      scoreSuppressed: effectiveScore + 0.05 < rawMlScore,
+      confidenceSummary: confidence.summary,
+      urgencySummary: urgency.reasons[0] ?? urgency.cta,
+    };
+  });
+  const riskCalibrationText = buildRiskCalibrationText(promptCalibrationSignals);
+  const overallUrgency: UrgencyLevel =
+    promptCalibrationSignals.some((signal) => signal.urgencyLevel === 'urgent')
+      ? 'urgent'
+      : promptCalibrationSignals.some((signal) => signal.urgencyLevel === 'soon')
+        ? 'soon'
+        : 'routine';
+
   // ── V6 all-clear path: skip MedGemma entirely, synthesize directly via Groq ──
   if (isAllClear) {
     try {
@@ -169,11 +254,42 @@ export async function POST(req: NextRequest) {
         return NextResponse.json({ error: 'Groq synthesis unavailable for all-clear path' }, { status: 503 });
       }
       const { data: safeData, warnings } = applyHardSafetyRules(allClearResult);
-      if (warnings.length > 0) writeLog('deep_analyze_safety_replacements', { answers, warnings });
-      writeLog('deep_analyze', { answers, mlScores, allClear: true, result: safeData });
+      if (warnings.length > 0) {
+        writeLog('deep_analyze_safety_replacements', {
+          anonymousId: privacy?.anonymousId ?? null,
+          warningCount: warnings.length,
+        });
+      }
+
+      if (privacy) {
+        await persistHealthSession({
+          privacy,
+          sessionKind: 'deep_analyze_all_clear',
+          payload: {
+            answers,
+            mlScores: mlScores ?? {},
+            result: safeData,
+            warnings,
+          },
+          profileSummary: {
+            ...buildHealthDataSummary(answers),
+            allClear: true,
+          },
+        });
+      }
+
+      writeLog('deep_analyze', {
+        anonymousId: privacy?.anonymousId ?? null,
+        answerCount: Object.keys(answers).length,
+        allClear: true,
+      });
       return NextResponse.json(safeData);
     } catch (err) {
-      writeLog('deep_analyze_error', { answers, mlScores, error: String(err) });
+      writeLog('deep_analyze_error', {
+        anonymousId: privacy?.anonymousId ?? null,
+        answerCount: Object.keys(answers).length,
+        error: String(err),
+      });
       return NextResponse.json({ error: String(err) }, { status: 500 });
     }
   }
@@ -188,6 +304,7 @@ export async function POST(req: NextRequest) {
     knnLabText,
     prioritizedConditions: flaggedConditions,
     confirmedConditions,
+    riskCalibrationText,
   });
 
   let groundingResult: MedGemmaGroundingResult = {
@@ -220,7 +337,11 @@ export async function POST(req: NextRequest) {
 
     if (!hfResponse.ok) {
       const errText = await hfResponse.text();
-      writeLog('medgemma_grounding_error', { answers, mlScores, status: hfResponse.status, errText });
+      writeLog('medgemma_grounding_error', {
+        anonymousId: privacy?.anonymousId ?? null,
+        status: hfResponse.status,
+        errText,
+      });
       // Proceed with empty grounding — Groq synthesis still runs
     } else {
       const hfData = await hfResponse.json();
@@ -228,8 +349,7 @@ export async function POST(req: NextRequest) {
 
       // Step 5: log full raw MedGemma output before any processing
       writeLog('medgemma_grounding_raw', {
-        answers,
-        mlScores,
+        anonymousId: privacy?.anonymousId ?? null,
         flaggedConditions,
         confirmedConditions,
         groundingPrompt,
@@ -244,13 +364,18 @@ export async function POST(req: NextRequest) {
           groundingResult = validation.data;
         } else {
           writeLog('medgemma_grounding_schema_error', {
-            answers, mlScores, reason: validation.reason, raw: rawContent,
+            anonymousId: privacy?.anonymousId ?? null,
+            reason: validation.reason,
+            raw: rawContent,
           });
         }
       }
     }
   } catch (err) {
-    writeLog('medgemma_grounding_error', { answers, mlScores, error: String(err) });
+    writeLog('medgemma_grounding_error', {
+      anonymousId: privacy?.anonymousId ?? null,
+      error: String(err),
+    });
     // Continue with empty grounding — Groq synthesis still runs
   }
 
@@ -259,6 +384,8 @@ export async function POST(req: NextRequest) {
     const synthesisPrompt = buildGroqSynthesisPromptV6({
       groundingResultJson: JSON.stringify(groundingResult, null, 2),
       fatigueSeverity,
+      riskCalibrationText,
+      overallUrgency,
       oneShot: selectOneShotExample(groundingResult),
     });
 
@@ -269,21 +396,46 @@ export async function POST(req: NextRequest) {
 
     const { data: safeData, warnings: safetyWarnings } = applyHardSafetyRules(synthesisResult);
     if (safetyWarnings.length > 0) {
-      writeLog('deep_analyze_safety_replacements', { answers, mlScores, warnings: safetyWarnings });
+      writeLog('deep_analyze_safety_replacements', {
+        anonymousId: privacy?.anonymousId ?? null,
+        warningCount: safetyWarnings.length,
+      });
       for (const warning of safetyWarnings) console.warn(warning);
     }
 
+    if (privacy) {
+      await persistHealthSession({
+        privacy,
+        sessionKind: 'deep_analyze',
+        payload: {
+          answers,
+          mlScores: mlScores ?? {},
+          clarificationQA: clarificationQA ?? [],
+          confirmedConditions,
+          topConditions,
+          fatigueSeverity,
+          useKNN,
+          knnSignals: knnResult,
+          promptCalibrationSignals,
+          groundingResult,
+          result: safeData,
+        },
+        profileSummary: {
+          ...buildHealthDataSummary(answers),
+          topConditionIds: topConditions.map(([condition]) => condition),
+          confirmedConditions,
+        },
+      });
+    }
+
     writeLog('deep_analyze', {
-      answers,
-      mlScores,
-      clarificationQA,
+      anonymousId: privacy?.anonymousId ?? null,
+      answerCount: Object.keys(answers).length,
       confirmedConditions,
-      topConditions,
+      topConditionIds: topConditions.map(([condition]) => condition),
       fatigueSeverity,
       useKNN,
-      knnSignals: knnResult,
-      groundingResult,
-      result: safeData,
+      overallUrgency,
     });
 
     return NextResponse.json({
@@ -291,7 +443,11 @@ export async function POST(req: NextRequest) {
       ...(knnResult ? { knnSignals: knnResult } : {}),
     });
   } catch (err) {
-    writeLog('deep_analyze_error', { answers, mlScores, error: String(err) });
+    writeLog('deep_analyze_error', {
+      anonymousId: privacy?.anonymousId ?? null,
+      answerCount: Object.keys(answers).length,
+      error: String(err),
+    });
     return NextResponse.json({ error: String(err) }, { status: 500 });
   }
 }

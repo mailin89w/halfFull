@@ -1,13 +1,6 @@
 import { buildMockDeepResult, buildOfflineDeepResult } from '@/src/lib/mockResults';
+import { BAYESIAN_ANSWERS_KEY, BAYESIAN_DETAILS_KEY, BAYESIAN_SCORES_KEY, CONFIRMED_CONDITIONS_KEY, DEEP_STORAGE_KEY, MEDGEMMA_STORAGE_KEY, ML_SCORES_KEY, getPrivacyContext } from '@/src/lib/privacy';
 // ─── Storage keys ─────────────────────────────────────────────────────────────
-
-export const MEDGEMMA_STORAGE_KEY    = 'halffull_medgemma_v1';
-export const DEEP_STORAGE_KEY        = 'halffull_deep_v1';
-export const FOLLOWUP_STORAGE_KEY    = 'halffull_followup_v1';
-export const ML_SCORES_KEY           = 'halffull_ml_scores_v1';
-export const BAYESIAN_SCORES_KEY     = 'halffull_bayesian_scores_v1';
-export const BAYESIAN_ANSWERS_KEY    = 'halffull_bayesian_answers_v1';
-export const CONFIRMED_CONDITIONS_KEY = 'halffull_confirmed_v1';
 
 export type AiMode = 'live' | 'mock' | 'offline';
 export type AiResultSource = 'live' | 'mock' | 'offline';
@@ -51,6 +44,23 @@ export interface CoachingTip {
   timeframe: string;
 }
 
+export interface KnnLabSignal {
+  lab: string;
+  direction: string;
+  neighbour_pct: number;
+  lift: number | null;
+  ref_lower: number | null;
+  ref_upper: number | null;
+  context: string | null;
+}
+
+export interface KnnSignalsResult {
+  lab_signals: KnnLabSignal[];
+  n_signals: number;
+  k_neighbours: number;
+  disabled?: boolean;
+}
+
 export interface DeepMedGemmaResult extends MedGemmaResult {
   /** Structured bullet points for the "Your results" summary — renders as a bullet list */
   summaryPoints?: string[];
@@ -66,6 +76,7 @@ export interface DeepMedGemmaResult extends MedGemmaResult {
   doctorKits?: DoctorKit[];
   /** Energy-saving and lifestyle coaching tips */
   coachingTips?: CoachingTip[];
+  knnSignals?: KnnSignalsResult;
   /** Source metadata used to label fallback content honestly in the UI */
   meta?: {
     mode: AiResultSource;
@@ -115,6 +126,28 @@ export interface BayesianUpdateResult {
   posteriorScores: Record<string, number>;
   details:         Record<string, unknown>;
 }
+
+export interface BayesianAppliedLR {
+  question_id: string;
+  answer: string;
+  lr: number;
+  questionText?: string;
+  answerLabel?: string;
+}
+
+export interface BayesianConditionTrace {
+  condition: string;
+  prior: number;
+  posterior: number;
+  prior_odds?: number;
+  posterior_odds?: number;
+  lrs_applied: BayesianAppliedLR[];
+  questions_used: string[];
+  confounder_mult?: number;
+  clipped?: boolean;
+}
+
+export type BayesianDetailsRecord = Record<string, BayesianConditionTrace>;
 
 // ─── Storage helpers ──────────────────────────────────────────────────────────
 
@@ -170,6 +203,7 @@ export function clearStoredMedGemmaResult(): void {
   window.sessionStorage.removeItem(ML_SCORES_KEY);
   window.sessionStorage.removeItem(BAYESIAN_SCORES_KEY);
   window.sessionStorage.removeItem(BAYESIAN_ANSWERS_KEY);
+  window.sessionStorage.removeItem(BAYESIAN_DETAILS_KEY);
   window.sessionStorage.removeItem(CONFIRMED_CONDITIONS_KEY);
 }
 
@@ -203,6 +237,21 @@ export function readStoredBayesianScores(): Record<string, number> | null {
   }
 }
 
+export function storeBayesianDetails(details: BayesianDetailsRecord): void {
+  if (typeof window === 'undefined') return;
+  window.sessionStorage.setItem(BAYESIAN_DETAILS_KEY, JSON.stringify(details));
+}
+
+export function readStoredBayesianDetails(): BayesianDetailsRecord | null {
+  if (typeof window === 'undefined') return null;
+  try {
+    const raw = window.sessionStorage.getItem(BAYESIAN_DETAILS_KEY);
+    return raw ? (JSON.parse(raw) as BayesianDetailsRecord) : null;
+  } catch {
+    return null;
+  }
+}
+
 export function storeMLScores(scores: Record<string, number>): void {
   if (typeof window === 'undefined') return;
   window.sessionStorage.setItem(ML_SCORES_KEY, JSON.stringify(scores));
@@ -229,11 +278,12 @@ export interface MLScoreResult {
 export async function fetchMLScores(
   answers: Record<string, unknown>
 ): Promise<MLScoreResult> {
+  const privacy = getPrivacyContext();
   const backendBaseUrl = process.env.NEXT_PUBLIC_BACKEND_URL?.trim() || '';
   const response = await fetch(`${backendBaseUrl}/api/score`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ answers }),
+    body: JSON.stringify({ answers, privacy }),
   });
 
   if (!response.ok) {
@@ -275,10 +325,11 @@ export async function fetchMedGemmaInsights(
   answers: Record<string, unknown>,
   mlScores?: Record<string, number>
 ): Promise<MedGemmaResult> {
+  const privacy = getPrivacyContext();
   const response = await fetch('/api/analyze', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ answers, mlScores }),
+    body: JSON.stringify({ answers, mlScores, privacy }),
   });
 
   if (!response.ok) {
@@ -293,13 +344,15 @@ export async function fetchMedGemmaInsights(
 export async function fetchDeepAnalysis(
   answers: Record<string, unknown>,
   mlScores?: Record<string, number>,
+  rawMlScores?: Record<string, number>,
   clarificationQA?: BayesianClarificationRecord,
   confirmedConditions?: string[],
 ): Promise<DeepMedGemmaResult> {
+  const privacy = getPrivacyContext();
   const response = await fetch('/api/deep-analyze', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ answers, mlScores, clarificationQA, confirmedConditions }),
+    body: JSON.stringify({ answers, mlScores, rawMlScores, clarificationQA, confirmedConditions, privacy }),
   });
 
   if (!response.ok) {
@@ -316,11 +369,12 @@ export async function fetchBayesianQuestions(
   patientSex?: string,
   existingAnswers?: Record<string, unknown>,
 ): Promise<BayesianQuestionsResult> {
+  const privacy = getPrivacyContext();
   const backendBaseUrl = process.env.NEXT_PUBLIC_BACKEND_URL?.trim() || '';
   const response = await fetch(`${backendBaseUrl}/api/bayesian-questions`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ mlScores, patientSex, existingAnswers }),
+    body: JSON.stringify({ mlScores, patientSex, existingAnswers, privacy }),
   });
   if (!response.ok) {
     const err = await response.json().catch(() => ({ error: 'Unknown error' }));
@@ -337,11 +391,12 @@ export async function fetchBayesianUpdate(
   patientSex?: string,
   existingAnswers?: Record<string, unknown>,
 ): Promise<BayesianUpdateResult> {
+  const privacy = getPrivacyContext();
   const backendBaseUrl = process.env.NEXT_PUBLIC_BACKEND_URL?.trim() || '';
   const response = await fetch(`${backendBaseUrl}/api/bayesian-update`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ mlScores, confounderAnswers, answersByCondition, patientSex, existingAnswers }),
+    body: JSON.stringify({ mlScores, confounderAnswers, answersByCondition, patientSex, existingAnswers, privacy }),
   });
   if (!response.ok) {
     const err = await response.json().catch(() => ({ error: 'Unknown error' }));
@@ -415,6 +470,7 @@ export function createOfflineDeepResult(answers: Record<string, unknown>): DeepM
 export async function getDeepAnalysisWithFallback(
   answers: Record<string, unknown>,
   mlScores?: Record<string, number>,
+  rawMlScores?: Record<string, number>,
   clarificationQA?: BayesianClarificationRecord,
   confirmedConditions?: string[],
   timeoutMs = 85000  // matches the 90s abort controller in /api/deep-analyze
@@ -431,7 +487,7 @@ export async function getDeepAnalysisWithFallback(
 
   try {
     const liveResult = await withTimeout(
-      fetchDeepAnalysis(answers, mlScores, clarificationQA, confirmedConditions),
+      fetchDeepAnalysis(answers, mlScores, rawMlScores, clarificationQA, confirmedConditions),
       timeoutMs,
       'Live AI analysis'
     );

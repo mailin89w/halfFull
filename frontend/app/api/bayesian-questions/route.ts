@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { writeLog } from '@/src/lib/logger';
+import { persistHealthSession, readOptionalPrivacyContext, type ServerPrivacyContext } from '@/src/lib/server/privacy';
 
 /**
  * POST /api/bayesian-questions
@@ -39,23 +40,54 @@ export async function POST(req: NextRequest) {
   let mlScores: Record<string, number>;
   let patientSex: string | undefined;
   let existingAnswers: Record<string, unknown>;
+  let privacy: ServerPrivacyContext | null;
 
   try {
-    const body = await req.json() as { mlScores?: unknown; patientSex?: unknown; existingAnswers?: unknown };
+    const body = await req.json() as { mlScores?: unknown; patientSex?: unknown; existingAnswers?: unknown; privacy?: unknown };
     mlScores = (body.mlScores ?? {}) as Record<string, number>;
     patientSex = typeof body.patientSex === 'string' ? body.patientSex : undefined;
     existingAnswers = (body.existingAnswers ?? {}) as Record<string, unknown>;
+    privacy = readOptionalPrivacyContext(body.privacy);
   } catch {
-    return NextResponse.json({ error: 'Invalid JSON body' }, { status: 400 });
+    return NextResponse.json({ error: 'Invalid JSON body or consent payload' }, { status: 400 });
   }
 
   const result = await callRailway({ mode: 'questions', ml_scores: mlScores, patient_sex: patientSex, existing_answers: existingAnswers });
 
   if (result.error) {
-    writeLog('bayesian_questions_error', { mlScores, error: result.error });
+    writeLog('bayesian_questions_error', {
+      anonymousId: privacy?.anonymousId ?? null,
+      mlScoreKeys: Object.keys(mlScores),
+      error: result.error,
+    });
     return NextResponse.json({ error: result.error }, { status: 500 });
   }
 
-  writeLog('bayesian_questions', { mlScores, result });
+  if (privacy) {
+    await persistHealthSession({
+      privacy,
+      sessionKind: 'bayesian_questions',
+      payload: {
+        mlScores,
+        patientSex,
+        existingAnswers,
+        result,
+      },
+      profileSummary: {
+        mlScoreKeys: Object.keys(mlScores),
+        followUpConditionCount: Array.isArray(result.condition_questions)
+          ? result.condition_questions.length
+          : 0,
+      },
+    });
+  }
+
+  writeLog('bayesian_questions', {
+    anonymousId: privacy?.anonymousId ?? null,
+    mlScoreKeys: Object.keys(mlScores),
+    followUpConditionCount: Array.isArray(result.condition_questions)
+      ? result.condition_questions.length
+      : 0,
+  });
   return NextResponse.json(result);
 }

@@ -98,4 +98,5 @@ calibrating symptom distributions — see `evals/cohort/optimization_report.md`.
 
 - `evals/docs/concept.md` — Technical architecture and design rationale
 - `evals/docs/how_to_run_evals.md` — Step-by-step operational guide
+- `evals/docs/llm_layer_eval.md` — Live MedGemma + safety rewrite eval for the current deep-analysis flow
 - `evals/cohort/optimization_report.md` — Pre/post calibration analysis and structural model findings

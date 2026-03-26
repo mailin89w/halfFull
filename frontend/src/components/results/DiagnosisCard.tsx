@@ -1,12 +1,29 @@
 'use client';
 
 import { useState } from 'react';
+import type { BayesianConditionTrace } from '@/src/lib/medgemma';
 import type { Diagnosis, SignalStrength } from '@/src/lib/mockResults';
+import type { ConfidenceTier, UrgencyLevel } from '@/src/lib/clinicalSignals';
 
 interface Props {
   diagnosis: Diagnosis;
   rank: number;
   personalNote?: string;
+  confidence?: {
+    tier: ConfidenceTier;
+    summary: string;
+  };
+  urgency?: {
+    level: UrgencyLevel;
+    summary: string;
+  };
+  reasoningTrace?: {
+    mlScore?: number;
+    threshold?: number;
+    bayesian?: BayesianConditionTrace | null;
+    clusterSummary?: string;
+    synthesisSummary?: string;
+  };
 }
 
 const SIGNAL_CONFIG: Record<
@@ -33,9 +50,119 @@ const SIGNAL_CONFIG: Record<
   },
 };
 
-export function DiagnosisCard({ diagnosis, rank, personalNote }: Props) {
+const CONFIDENCE_CONFIG: Record<ConfidenceTier, { label: string; bg: string; text: string }> = {
+  high: {
+    label: 'High confidence',
+    bg: 'bg-[rgba(119,101,244,0.12)]',
+    text: 'text-[var(--color-ink)]',
+  },
+  medium: {
+    label: 'Medium confidence',
+    bg: 'bg-[rgba(215,240,104,0.35)]',
+    text: 'text-[var(--color-ink)]',
+  },
+  low: {
+    label: 'Low confidence',
+    bg: 'bg-[rgba(158,169,211,0.25)]',
+    text: 'text-[var(--color-ink)]',
+  },
+};
+
+const URGENCY_CONFIG: Record<UrgencyLevel, { label: string; bg: string; text: string; border: string }> = {
+  urgent: {
+    label: 'Urgent',
+    bg: 'bg-[rgba(214,72,72,0.12)]',
+    text: 'text-[#8f2222]',
+    border: 'border-[rgba(214,72,72,0.22)]',
+  },
+  soon: {
+    label: 'Soon',
+    bg: 'bg-[rgba(239,185,115,0.18)]',
+    text: 'text-[#8a5a13]',
+    border: 'border-[rgba(239,185,115,0.22)]',
+  },
+  routine: {
+    label: 'Routine',
+    bg: 'bg-[rgba(151,166,210,0.18)]',
+    text: 'text-[var(--color-ink-soft)]',
+    border: 'border-[rgba(151,166,210,0.18)]',
+  },
+};
+
+function ReasoningTrace({
+  trace,
+}: {
+  trace: NonNullable<Props['reasoningTrace']>;
+}) {
+  const [open, setOpen] = useState(false);
+  const applied = trace.bayesian?.lrs_applied ?? [];
+  const bayesSummary = trace.bayesian
+    ? `Bayesian: ${trace.bayesian.prior.toFixed(2)} -> ${trace.bayesian.posterior.toFixed(2)}`
+    : 'Bayesian: no clarification update';
+
+  return (
+    <div className="rounded-2xl border border-[rgba(151,166,210,0.18)] bg-white">
+      <button
+        type="button"
+        onClick={() => setOpen((value) => !value)}
+        className="flex w-full items-center justify-between px-4 py-3 text-left"
+      >
+        <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-[var(--color-ink-soft)]">
+          How we reached this
+        </p>
+        <span className="text-sm font-semibold text-[var(--color-ink-soft)]">
+          {open ? 'Hide' : 'Show'}
+        </span>
+      </button>
+      {open && (
+        <div className="space-y-3 border-t border-[rgba(151,166,210,0.18)] p-4 pt-3">
+          <div className="rounded-[1rem] bg-[rgba(119,101,244,0.06)] px-3 py-3">
+            <p className="text-xs font-semibold text-[var(--color-ink)]">1. ML score</p>
+            <p className="mt-1 text-sm leading-6 text-[var(--color-ink-soft)]">
+              {trace.mlScore !== undefined
+                ? `ML: scored ${trace.mlScore.toFixed(2)} (threshold ${trace.threshold?.toFixed(2) ?? '0.40'})`
+                : 'ML score unavailable'}
+            </p>
+          </div>
+
+          <div className="rounded-[1rem] bg-[rgba(215,240,104,0.14)] px-3 py-3">
+            <p className="text-xs font-semibold text-[var(--color-ink)]">2. Bayesian update</p>
+            <p className="mt-1 text-sm leading-6 text-[var(--color-ink-soft)]">{bayesSummary}</p>
+            {applied.length > 0 && (
+              <div className="mt-2 space-y-1">
+                {applied.slice(0, 3).map((entry, index) => (
+                  <p key={`${entry.question_id}-${index}`} className="text-xs leading-5 text-[var(--color-ink-soft)]">
+                    {entry.questionText ?? entry.question_id}: {entry.answerLabel ?? entry.answer} {'->'} LR {entry.lr.toFixed(2)}
+                  </p>
+                ))}
+              </div>
+            )}
+          </div>
+
+          <div className="rounded-[1rem] bg-[rgba(239,185,115,0.14)] px-3 py-3">
+            <p className="text-xs font-semibold text-[var(--color-ink)]">3. KNN / cluster layer</p>
+            <p className="mt-1 text-sm leading-6 text-[var(--color-ink-soft)]">
+              {trace.clusterSummary ?? 'Cluster: no neighbour support available'}
+            </p>
+          </div>
+
+          <div className="rounded-[1rem] bg-[rgba(158,169,211,0.14)] px-3 py-3">
+            <p className="text-xs font-semibold text-[var(--color-ink)]">4. MedGemma synthesis</p>
+            <p className="mt-1 text-sm leading-6 text-[var(--color-ink-soft)]">
+              {trace.synthesisSummary ?? 'Synthesis: included in MedGemma report narrative'}
+            </p>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+export function DiagnosisCard({ diagnosis, rank, personalNote, confidence, urgency, reasoningTrace }: Props) {
   const [open, setOpen] = useState(false);
   const cfg = SIGNAL_CONFIG[diagnosis.signal];
+  const confidenceCfg = confidence ? CONFIDENCE_CONFIG[confidence.tier] : null;
+  const urgencyCfg = urgency ? URGENCY_CONFIG[urgency.level] : null;
 
   return (
     <div
@@ -56,11 +183,21 @@ export function DiagnosisCard({ diagnosis, rank, personalNote }: Props) {
 
         <div className="flex-1 min-w-0">
           <p className="text-base font-bold leading-snug tracking-[-0.03em] text-[var(--color-ink)]">{diagnosis.title}</p>
-          <div className="flex items-center gap-1.5 mt-1">
+          <div className="mt-1 flex flex-wrap items-center gap-1.5">
             <span className={`w-1.5 h-1.5 rounded-full flex-shrink-0 ${cfg.dotColor}`} />
             <span className={`rounded-full px-2 py-0.5 text-[11px] font-medium ${cfg.pillBg} ${cfg.pillText}`}>
               {cfg.label}
             </span>
+            {confidenceCfg && (
+              <span className={`rounded-full px-2 py-0.5 text-[11px] font-medium ${confidenceCfg.bg} ${confidenceCfg.text}`}>
+                {confidenceCfg.label}
+              </span>
+            )}
+            {urgencyCfg && (
+              <span className={`rounded-full border px-2 py-0.5 text-[11px] font-semibold ${urgencyCfg.bg} ${urgencyCfg.text} ${urgencyCfg.border}`}>
+                {urgencyCfg.label}
+              </span>
+            )}
           </div>
         </div>
 
@@ -85,6 +222,39 @@ export function DiagnosisCard({ diagnosis, rank, personalNote }: Props) {
           )}
 
           <p className="text-sm leading-6 text-[var(--color-ink-soft)]">{diagnosis.description}</p>
+
+          {(confidence || urgency) && (
+            <div className="grid gap-3 md:grid-cols-2">
+              {confidence && (
+                <div className="rounded-2xl border border-[rgba(151,166,210,0.18)] bg-white p-4">
+                  <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-[var(--color-ink-soft)]">
+                    Confidence
+                  </p>
+                  <p className="mt-1 text-sm font-semibold text-[var(--color-ink)]">
+                    {CONFIDENCE_CONFIG[confidence.tier].label}
+                  </p>
+                  <p className="mt-1 text-xs leading-relaxed text-[var(--color-ink-soft)]">
+                    {confidence.summary}
+                  </p>
+                </div>
+              )}
+              {urgency && (
+                <div className={`rounded-2xl border p-4 ${URGENCY_CONFIG[urgency.level].border} ${URGENCY_CONFIG[urgency.level].bg}`}>
+                  <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-[var(--color-ink-soft)]">
+                    Urgency
+                  </p>
+                  <p className={`mt-1 text-sm font-semibold ${URGENCY_CONFIG[urgency.level].text}`}>
+                    {URGENCY_CONFIG[urgency.level].label}
+                  </p>
+                  <p className="mt-1 text-xs leading-relaxed text-[var(--color-ink-soft)]">
+                    {urgency.summary}
+                  </p>
+                </div>
+              )}
+            </div>
+          )}
+
+          {reasoningTrace && <ReasoningTrace trace={reasoningTrace} />}
 
           <div>
             <h4 className="mb-3 text-xs font-semibold uppercase tracking-[0.16em] text-[var(--color-ink)]">

@@ -3,9 +3,13 @@
 import { useState, useEffect, useCallback } from 'react';
 import { resolveQuestionPath, getQuestion, getScreens } from '@/src/lib/questions';
 import { clearStoredMedGemmaResult } from '@/src/lib/medgemma';
+import {
+  ASSESSMENT_STORAGE_KEY,
+  clearExpiredHealthData,
+  unwrapPersistedHealthData,
+  wrapPersistedHealthData,
+} from '@/src/lib/privacy';
 import type { Question } from '@/src/lib/questions';
-
-const STORAGE_KEY = 'halffull_assessment_v2';
 
 interface AssessmentState {
   answers: Record<string, unknown>;
@@ -23,9 +27,10 @@ export function useAssessment() {
       return DEFAULT_STATE;
     }
 
+    clearExpiredHealthData();
     try {
-      const saved = window.localStorage.getItem(STORAGE_KEY);
-      return saved ? (JSON.parse(saved) as AssessmentState) : DEFAULT_STATE;
+      const saved = window.sessionStorage.getItem(ASSESSMENT_STORAGE_KEY);
+      return unwrapPersistedHealthData<AssessmentState>(saved) ?? DEFAULT_STATE;
     } catch {
       return DEFAULT_STATE;
     }
@@ -42,9 +47,11 @@ export function useAssessment() {
 
   // Persist to localStorage on every change
   useEffect(() => {
-    if (hydrated) {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
-    }
+    if (!hydrated) return;
+    window.sessionStorage.setItem(
+      ASSESSMENT_STORAGE_KEY,
+      JSON.stringify(wrapPersistedHealthData(state))
+    );
   }, [state, hydrated]);
 
   // Recalculate path and screens from current answers
@@ -116,7 +123,7 @@ export function useAssessment() {
 
   const reset = useCallback(() => {
     setState(DEFAULT_STATE);
-    localStorage.removeItem(STORAGE_KEY);
+    window.sessionStorage.removeItem(ASSESSMENT_STORAGE_KEY);
     clearStoredMedGemmaResult();
   }, []);
 

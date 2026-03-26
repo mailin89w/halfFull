@@ -221,6 +221,7 @@ export type MedGemmaGroundingPromptArgs = {
   scoreSummaryJson: string;
   prioritizedConditions: string[];
   confirmedConditions: string[];
+  riskCalibrationText?: string | null;
   knnLabText?: string | null;
 };
 
@@ -230,6 +231,7 @@ export function buildMedGemmaGroundingPromptV6({
   scoreSummaryJson,
   prioritizedConditions,
   confirmedConditions,
+  riskCalibrationText,
   knnLabText,
 }: MedGemmaGroundingPromptArgs): string {
   const evaluatedDiseases = formatEvaluatedDiseaseList();
@@ -263,6 +265,7 @@ ${bayesianEvidenceText}
 
 ML SCORE SUMMARY:
 ${scoreSummaryJson}
+${riskCalibrationText ? `\nRISK CALIBRATION SNAPSHOT:\n${riskCalibrationText}` : ''}
 ${knnLabText ? `\nNEAREST-NEIGHBOUR LAB SIGNALS:\n${knnLabText}` : ''}
 
 Decision procedure — follow exactly in order:
@@ -271,6 +274,11 @@ Decision procedure — follow exactly in order:
    - If NO: add to declinedSuspicions with a one-phrase reason naming the missing or contradictory evidence.
 2. For each supportedSuspicion, decide which specialist should address it and what they need to hear. Populate recommendedSpecialties (0–3). If supportedSuspicions is empty, recommendedSpecialties must also be empty.
 3. Scan for any symptom that could be explained by a medication rather than a disease process; log in medicationFlags.
+4. Use the risk calibration snapshot to calibrate your confidence and prioritization:
+   - urgent = prompt medical follow-up should be easier to justify when the record supports it
+   - high confidence = evidence sources agree, so you can be more decisive while still using uncertainty language
+   - low confidence = keep the suspicion lightweight unless the direct evidence is strong
+   - score_suppressed = upstream gating/Bayesian review reduced the effective score, so do not overstate that hypothesis unless the record strongly supports it anyway
 
 Respond with valid JSON only. No markdown, no preamble, no narrative prose:
 {
@@ -336,21 +344,32 @@ Rules:
 export type GroqSynthesisPromptArgs = {
   groundingResultJson: string;
   fatigueSeverity: number | null;
+  riskCalibrationText?: string | null;
+  overallUrgency?: 'routine' | 'soon' | 'urgent';
   oneShot?: string | null;
 };
 
 export function buildGroqSynthesisPromptV6({
   groundingResultJson,
   fatigueSeverity,
+  riskCalibrationText,
+  overallUrgency = 'routine',
   oneShot,
 }: GroqSynthesisPromptArgs): string {
   const detailInstruction = buildDetailInstruction(fatigueSeverity);
+  const toneInstruction =
+    overallUrgency === 'urgent'
+      ? 'Tone calibration: stay calm and supportive, but be more explicit that prompt medical follow-up matters for the highest-risk items. Do not sound panicked or diagnostic.'
+      : overallUrgency === 'soon'
+        ? 'Tone calibration: stay calm and supportive, while clearly encouraging near-term follow-up for the stronger signals.'
+        : 'Tone calibration: stay calm, supportive, and non-urgent. Do not create unnecessary alarm.';
 
   return `You are a medical communication writer. A clinical AI has produced a structured medical summary for a patient. Your job is to translate that clinical summary into warm, clear, first-person patient-facing text.
 
 YOUR ROLE IS PROSE TRANSLATION ONLY. Do not add conditions, symptoms, tests, doctors, or discussion points that are not already in the clinical evidence below. Do not perform your own medical reasoning. Every piece of medical content in your output must come directly from the clinical evidence JSON.
 
 ${detailInstruction}
+${toneInstruction}
 
 SECTION ROLE ASSIGNMENT — each section answers a different question. Strictly enforce — no cross-section repetition:
 - summaryPoints / personalizedSummary: "What is this person experiencing?" — symptom picture and patterns ONLY. Do not name conditions, tests, or doctors here.
@@ -362,6 +381,14 @@ SPECIALIST RULE: recommendedDoctors must always include at least one non-GP spec
 
 CLINICAL EVIDENCE (source of all medical content — use only what is here):
 ${groundingResultJson}
+
+${riskCalibrationText ? `RISK CALIBRATION SNAPSHOT:\n${riskCalibrationText}\n` : ''}Use the risk calibration snapshot to tune language:
+- urgent items: be clearer that prompt review is appropriate
+- soon items: encourage near-term booking
+- routine items: keep the framing light
+- low confidence items: use softer uncertainty language
+- high confidence items: clearer explanation is allowed, but still never imply diagnosis
+- if a condition is marked score_suppressed, do not over-emphasize it unless the clinical evidence strongly supports it
 
 ${oneShot ? `EXAMPLE OF A PERFECT OUTPUT (follow this quality and structure, applied to the clinical evidence above):\n${oneShot}\n` : ''}Respond with valid JSON only. No markdown, no preamble:
 {

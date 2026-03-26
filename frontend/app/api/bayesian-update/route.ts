@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { writeLog } from '@/src/lib/logger';
+import { persistHealthSession, readOptionalPrivacyContext, type ServerPrivacyContext } from '@/src/lib/server/privacy';
 
 /**
  * POST /api/bayesian-update
@@ -51,6 +52,7 @@ export async function POST(req: NextRequest) {
   let answersByCondition: Record<string, Record<string, string>>;
   let patientSex: string | undefined;
   let existingAnswers: Record<string, unknown>;
+  let privacy: ServerPrivacyContext | null;
 
   try {
     const body = await req.json() as {
@@ -59,14 +61,16 @@ export async function POST(req: NextRequest) {
       answersByCondition?: unknown;
       patientSex?: unknown;
       existingAnswers?: unknown;
+      privacy?: unknown;
     };
     mlScores = (body.mlScores ?? {}) as Record<string, number>;
     confounderAnswers = (body.confounderAnswers ?? {}) as Record<string, number>;
     answersByCondition = (body.answersByCondition ?? {}) as Record<string, Record<string, string>>;
     patientSex = typeof body.patientSex === 'string' ? body.patientSex : undefined;
     existingAnswers = (body.existingAnswers ?? {}) as Record<string, unknown>;
+    privacy = readOptionalPrivacyContext(body.privacy);
   } catch {
-    return NextResponse.json({ error: 'Invalid JSON body' }, { status: 400 });
+    return NextResponse.json({ error: 'Invalid JSON body or consent payload' }, { status: 400 });
   }
 
   const result = await callRailway({
@@ -79,10 +83,37 @@ export async function POST(req: NextRequest) {
   });
 
   if (result.error) {
-    writeLog('bayesian_update_error', { mlScores, error: result.error });
+    writeLog('bayesian_update_error', {
+      anonymousId: privacy?.anonymousId ?? null,
+      mlScoreKeys: Object.keys(mlScores),
+      error: result.error,
+    });
     return NextResponse.json({ error: result.error }, { status: 500 });
   }
 
-  writeLog('bayesian_update', { mlScores, confounderAnswers, answersByCondition, result });
+  if (privacy) {
+    await persistHealthSession({
+      privacy,
+      sessionKind: 'bayesian_update',
+      payload: {
+        mlScores,
+        confounderAnswers,
+        answersByCondition,
+        patientSex,
+        existingAnswers,
+        result,
+      },
+      profileSummary: {
+        mlScoreKeys: Object.keys(mlScores),
+        updatedConditionCount: Object.keys(answersByCondition).length,
+      },
+    });
+  }
+
+  writeLog('bayesian_update', {
+    anonymousId: privacy?.anonymousId ?? null,
+    mlScoreKeys: Object.keys(mlScores),
+    updatedConditionCount: Object.keys(answersByCondition).length,
+  });
   return NextResponse.json(result);
 }

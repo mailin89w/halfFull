@@ -1,5 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { writeLog } from '@/src/lib/logger';
+import {
+  buildHealthDataSummary,
+  persistHealthSession,
+  readOptionalPrivacyContext,
+  type ServerPrivacyContext,
+} from '@/src/lib/server/privacy';
 
 /**
  * POST /api/score
@@ -36,21 +42,49 @@ async function callRailway(answers: Record<string, unknown>): Promise<{ scores?:
 
 export async function POST(req: NextRequest) {
   let answers: Record<string, unknown>;
+  let privacy: ServerPrivacyContext | null;
 
   try {
-    const body = await req.json() as { answers?: unknown };
+    const body = await req.json() as { answers?: unknown; privacy?: unknown };
     answers = (body.answers ?? {}) as Record<string, unknown>;
+    privacy = readOptionalPrivacyContext(body.privacy);
   } catch {
-    return NextResponse.json({ error: 'Invalid JSON body' }, { status: 400 });
+    return NextResponse.json({ error: 'Invalid JSON body or consent payload' }, { status: 400 });
   }
 
   const result = await callRailway(answers);
 
   if (result.error) {
-    writeLog('score_error', { answers, error: result.error });
+    writeLog('score_error', {
+      anonymousId: privacy?.anonymousId ?? null,
+      error: result.error,
+      answerCount: Object.keys(answers).length,
+    });
     return NextResponse.json({ error: result.error }, { status: 500 });
   }
 
-  writeLog('score', { answers, scores: result.scores, confirmed: result.confirmed });
+  if (privacy) {
+    await persistHealthSession({
+      privacy,
+      sessionKind: 'score',
+      payload: {
+        answers,
+        scores: result.scores ?? {},
+        confirmed: result.confirmed ?? [],
+      },
+      profileSummary: {
+        ...buildHealthDataSummary(answers),
+        confirmedConditions: result.confirmed ?? [],
+        scoreKeys: Object.keys(result.scores ?? {}),
+      },
+    });
+  }
+
+  writeLog('score', {
+    anonymousId: privacy?.anonymousId ?? null,
+    answerCount: Object.keys(answers).length,
+    scoreKeys: Object.keys(result.scores ?? {}),
+    confirmed: result.confirmed ?? [],
+  });
   return NextResponse.json({ scores: result.scores, confirmed: result.confirmed ?? [] });
 }

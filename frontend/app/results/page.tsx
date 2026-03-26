@@ -4,13 +4,32 @@ import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import type { jsPDF as JsPDFType } from 'jspdf';
 import { useAssessment } from '@/src/hooks/useAssessment';
+import { ExitAssessmentButton } from '@/src/components/ExitAssessmentButton';
+import {
+  ML_THRESHOLD,
+} from '@/src/lib/mlConfig';
+import {
+  computeConfidence,
+  computeUrgency,
+  extractBiomarkerSnapshot,
+  type ConfidenceAssessment,
+  type UrgencyAssessment,
+} from '@/src/lib/clinicalSignals';
 import { computeResults, buildDiagnosesFromML } from '@/src/lib/mockResults';
 import {
   getInsightForDiagnosis,
+  readStoredBayesianDetails,
+  readStoredBayesianScores,
   readStoredConfirmedConditions,
   readStoredDeepResult,
   readStoredMLScores,
 } from '@/src/lib/medgemma';
+import {
+  createPrivacyConsentRecord,
+  PRIVACY_STORAGE_KEY,
+  readPrivacyConsent,
+  storePrivacyConsent,
+} from '@/src/lib/privacy';
 import type { DeepMedGemmaResult, DoctorKit } from '@/src/lib/medgemma';
 import { EnergySpectrum } from '@/src/components/results/EnergySpectrum';
 import { DiagnosisCard } from '@/src/components/results/DiagnosisCard';
@@ -19,6 +38,8 @@ export default function ResultsPage() {
   const { answers, hydrated, reset } = useAssessment();
   const [deep, setDeep] = useState<DeepMedGemmaResult | null>(null);
   const [expandedDoctors, setExpandedDoctors] = useState<number[]>([]);
+  const [profileStatus, setProfileStatus] = useState<'idle' | 'saving' | 'saved' | 'error'>('idle');
+  const [profileError, setProfileError] = useState<string | null>(null);
   const toggleDoctor = (i: number) =>
     setExpandedDoctors((prev) => prev.includes(i) ? prev.filter((x) => x !== i) : [...prev, i]);
 
@@ -27,24 +48,25 @@ export default function ResultsPage() {
   // Use ML diagnoses when available (from /api/score run on /processing page),
   // falling back to rule-based diagnoses from computeResults.
   const mlScores = hydrated ? readStoredMLScores() : null;
+  const bayesianDetails = hydrated ? readStoredBayesianDetails() : null;
+  const bayesianScores = hydrated ? readStoredBayesianScores() : null;
   const confirmedConditions = hydrated ? (readStoredConfirmedConditions() ?? []) : [];
   const diagnoses = mlScores
     ? buildDiagnosesFromML(mlScores)
     : computeResults(answers).diagnoses;
+  const biomarkers = extractBiomarkerSnapshot(answers);
 
   // Load deep analysis result from session storage (written by /processing)
   useEffect(() => {
     if (!hydrated) return;
     const stored = readStoredDeepResult();
     setDeep(stored);
+    if (readPrivacyConsent()) {
+      setProfileStatus('saved');
+    }
   }, [hydrated]);
 
   // ── Doctor kit content: AI-generated if available, rule-based as fallback ──
-  const concerningSummary = diagnoses
-    .slice(0, 4)
-    .map((d) => `${d.title}: ${d.description}`)
-    .join(' ');
-
   const recommendedDoctors =
     deep?.recommendedDoctors && deep.recommendedDoctors.length > 0
       ? deep.recommendedDoctors
@@ -96,6 +118,97 @@ export default function ResultsPage() {
   const coachingTips = deep?.coachingTips ?? [];
   const aiLabel = deep?.meta?.label ?? 'Structured local report';
   const isFallbackContent = deep?.meta?.fallback ?? true;
+  const knnLabSignals = deep?.knnSignals?.lab_signals ?? [];
+
+  const diagnosisMeta = Object.fromEntries(
+    diagnoses.map((diagnosis) => {
+      const mlScore = mlScores?.[diagnosis.id] ?? 0;
+      const posteriorScore = bayesianScores?.[diagnosis.id] ?? mlScore;
+      const confidence = computeConfidence({
+        conditionId: diagnosis.id,
+        mlScore,
+        posteriorScore,
+        labSignals: knnLabSignals,
+      });
+      const urgency = computeUrgency({
+        conditionId: diagnosis.id,
+        posteriorScore,
+        biomarkers,
+      });
+
+      return [diagnosis.id, { confidence, urgency }] as const;
+    })
+  ) as Record<string, { confidence: ConfidenceAssessment; urgency: UrgencyAssessment }>;
+
+  const urgentDiagnoses = diagnoses.filter((diagnosis) => diagnosisMeta[diagnosis.id]?.urgency.level === 'urgent');
+
+  const diagnosisReasoning = Object.fromEntries(
+    diagnoses.map((diagnosis) => {
+      const clusterMatch = knnLabSignals.find((signal) =>
+        signal.lab.toLowerCase().includes(diagnosis.id.replace('_', ' ')) ||
+        diagnosis.tests.some((test) => signal.lab.toLowerCase().includes(test.name.toLowerCase().split(' ')[0]))
+      );
+
+      const clusterSummary = clusterMatch
+        ? `Cluster: ${Math.round(clusterMatch.neighbour_pct)}% of neighbours flagged ${clusterMatch.lab.toLowerCase()}`
+        : 'Cluster: no strong neighbour lab support available';
+
+      const synthesisSummary = getInsightForDiagnosis(deep, diagnosis.id)
+        ? `Synthesis: ${getInsightForDiagnosis(deep, diagnosis.id)}`
+        : deep?.personalizedSummary
+          ? 'Synthesis: reflected in the MedGemma report narrative'
+          : 'Synthesis: local report layer';
+
+      return [
+        diagnosis.id,
+        {
+          mlScore: mlScores?.[diagnosis.id],
+          threshold: ML_THRESHOLD,
+          bayesian: bayesianDetails?.[diagnosis.id] ?? null,
+          clusterSummary,
+          synthesisSummary,
+        },
+      ] as const;
+    })
+  );
+
+  const saveProfile = async () => {
+    if (profileStatus === 'saving' || profileStatus === 'saved') return;
+
+    setProfileStatus('saving');
+    setProfileError(null);
+
+    const privacy = createPrivacyConsentRecord();
+    storePrivacyConsent(privacy);
+
+    try {
+      const response = await fetch('/api/privacy/consent', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          privacy,
+          source: 'results_profile_prompt',
+          snapshot: {
+            answers,
+            mlScores: mlScores ?? {},
+            confirmedConditions,
+            deepResult: deep,
+          },
+        }),
+      });
+
+      if (!response.ok) {
+        const data = await response.json().catch(() => ({ error: 'Could not save your profile.' }));
+        throw new Error((data as { error?: string }).error ?? 'Could not save your profile.');
+      }
+
+      setProfileStatus('saved');
+    } catch (error) {
+      window.localStorage.removeItem(PRIVACY_STORAGE_KEY);
+      setProfileStatus('error');
+      setProfileError(error instanceof Error ? error.message : 'Could not save your profile.');
+    }
+  };
 
   // ── Export helpers ───────────────────────────────────────────────────────
   const downloadDoctorKit = async (doctorIndex?: number) => {
@@ -300,12 +413,17 @@ export default function ResultsPage() {
       <header className="sticky top-0 z-10 border-b border-white/30 bg-[rgba(184,194,228,0.82)] px-5 pt-6 pb-4 backdrop-blur-sm">
         <div className="mx-auto flex max-w-lg items-center justify-between">
           <span className="text-[11px] font-bold uppercase tracking-[0.18em] text-[var(--color-ink)]">HalfFull</span>
-          <Link
-            href="/assessment"
-            className="text-[11px] font-bold uppercase tracking-[0.16em] text-[var(--color-ink-soft)] transition-colors"
-          >
-            Review
-          </Link>
+          <div className="flex items-center gap-3">
+            <Link
+              href="/assessment"
+              className="text-[11px] font-bold uppercase tracking-[0.16em] text-[var(--color-ink-soft)] transition-colors"
+            >
+              Review
+            </Link>
+            <ExitAssessmentButton
+              className="text-[11px] font-bold uppercase tracking-[0.16em] text-[var(--color-ink-soft)] transition-colors"
+            />
+          </div>
         </div>
       </header>
 
@@ -335,6 +453,76 @@ export default function ResultsPage() {
               Scroll for the flagged patterns
             </div>
           </section>
+
+          <section className="section-card border-[var(--color-lime)] px-5 py-5">
+            <div className="flex flex-wrap items-center gap-2">
+              <span className="pill-tag bg-[var(--color-lime)] text-[var(--color-ink)]">
+                Save this report
+              </span>
+              {profileStatus === 'saved' && (
+                <span className="text-xs font-semibold uppercase tracking-[0.14em] text-[var(--color-ink-soft)]">
+                  Profile ready
+                </span>
+              )}
+            </div>
+            <h2 className="mt-3 text-2xl font-bold tracking-[-0.04em] text-[var(--color-ink)]">
+              Want us to remember this for next time?
+            </h2>
+            <p className="mt-2 text-sm leading-6 text-[var(--color-ink-soft)]">
+              If you consent, we’ll save this report under an anonymous profile so next time you can come back with new labs and compare what changed.
+            </p>
+            <div className="mt-4 flex flex-col gap-3 sm:flex-row">
+              <button
+                type="button"
+                onClick={saveProfile}
+                disabled={profileStatus === 'saving' || profileStatus === 'saved'}
+                className="rounded-full bg-[#09090f] px-5 py-3 text-sm font-bold text-white disabled:cursor-not-allowed disabled:opacity-50"
+              >
+                {profileStatus === 'saved'
+                  ? 'Profile saved'
+                  : profileStatus === 'saving'
+                    ? 'Saving...'
+                    : 'Consent and save'}
+              </button>
+              <p className="flex items-center text-xs leading-5 text-[var(--color-ink-soft)]">
+                Optional. If you skip this, your data stays only in this browser session.
+              </p>
+            </div>
+            {profileError && (
+              <p className="mt-3 text-sm text-[#b34343]">{profileError}</p>
+            )}
+          </section>
+
+          {urgentDiagnoses.length > 0 && (
+            <section className="rounded-[1.8rem] border border-[rgba(214,72,72,0.2)] bg-[rgba(214,72,72,0.07)] px-5 py-5 shadow-[0_12px_28px_rgba(214,72,72,0.08)]">
+              <div className="flex flex-wrap items-center gap-2">
+                <span className="pill-tag bg-[rgba(214,72,72,0.12)] text-[#8f2222]">
+                  Prompt medical follow-up
+                </span>
+              </div>
+              <h2 className="mt-3 text-2xl font-bold tracking-[-0.04em] text-[var(--color-ink)]">
+                One or more findings should be checked urgently
+              </h2>
+              <p className="mt-2 text-sm leading-6 text-[var(--color-ink-soft)]">
+                Based on the current probabilities and biomarker flags, please contact your doctor promptly about {urgentDiagnoses.map((diagnosis) => diagnosis.title).join(', ')}.
+              </p>
+              <div className="mt-4 flex flex-col gap-3 sm:flex-row">
+                <a
+                  href="tel:"
+                  className="rounded-full bg-[#8f2222] px-5 py-3 text-center text-sm font-bold text-white"
+                >
+                  Call your doctor now
+                </a>
+                <button
+                  type="button"
+                  onClick={emailDoctorKit}
+                  className="rounded-full border border-[rgba(214,72,72,0.24)] bg-white px-5 py-3 text-sm font-bold text-[#8f2222]"
+                >
+                  Email this report
+                </button>
+              </div>
+            </section>
+          )}
 
           {isFallbackContent && (
             <div className="section-card border-[var(--color-lime)] px-5 py-4">
@@ -403,6 +591,15 @@ export default function ResultsPage() {
                 diagnosis={d}
                 rank={i + 1}
                 personalNote={getInsightForDiagnosis(deep, d.id)}
+                confidence={{
+                  tier: diagnosisMeta[d.id]?.confidence.tier ?? 'low',
+                  summary: diagnosisMeta[d.id]?.confidence.summary ?? 'Limited evidence available.',
+                }}
+                urgency={{
+                  level: diagnosisMeta[d.id]?.urgency.level ?? 'routine',
+                  summary: diagnosisMeta[d.id]?.urgency.reasons[0] ?? 'Routine follow-up is appropriate.',
+                }}
+                reasoningTrace={diagnosisReasoning[d.id]}
               />
             ))}
           </div>
