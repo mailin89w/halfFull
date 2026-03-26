@@ -109,14 +109,41 @@ DUPLICATE_LAB_COLS = {
 }
 NON_LAB_REF_COLS = {"bmi", "waist_cm"}
 
+# Stricter default gate for broad/noisy signals. Keep lower thresholds only for
+# highly specific organ markers where smaller local consensus can still matter.
 LAB_SPECIFIC_THRESHOLDS = {
-    "alt_u_l": 0.10, "ast_u_l": 0.10,
-    "ggt_u_l": 0.10, "alp_u_l": 0.10,
+    # Liver-specific markers
+    "alt_u_l": 0.10,
+    "ast_u_l": 0.10,
+    "ggt_u_l": 0.10,
+    "alp_u_l": 0.10,
     "total_bilirubin_mg_dl": 0.10,
+    # Kidney / anaemia core markers
+    "serum_creatinine_mg_dl": 0.15,
+    "bun_mg_dl": 0.15,
+    "LBXSC3SI_bicarbonate_mmol_l": 0.15,
+    "LBXHGB_hemoglobin_g_dl": 0.15,
+    "LBXHCT_hematocrit": 0.15,
+    "LBXRBCSI_red_blood_cell_count_million_cells_ul": 0.15,
+    "LBXMCVSI_mean_cell_volume_fl": 0.15,
+    "LBXMCHSI_mean_cell_hemoglobin_pg": 0.15,
+    "ferritin_ng_ml": 0.15,
+    "serum_iron_ug_dl": 0.15,
+    "tibc_ug_dl": 0.15,
+    "transferrin_saturation_pct": 0.15,
+    # Broad metabolic / inflammatory markers need more agreement
+    "fasting_glucose_mg_dl": 0.25,
+    "LBXGH_glycohemoglobin": 0.25,
+    "triglycerides_mg_dl": 0.25,
+    "hdl_cholesterol_mg_dl": 0.25,
+    "LBDLDL_ldl_cholesterol_friedewald_mg_dl": 0.25,
+    "total_cholesterol_mg_dl": 0.25,
+    "LBXHSCRP_hs_c_reactive_protein_mg_l": 0.25,
+    "LBXWBCSI_white_blood_cell_count_1000_cells_ul": 0.25,
 }
 
-MIN_NEIGHBOUR_FRACTION = 0.15
-MIN_LIFT               = 1.5
+MIN_NEIGHBOUR_FRACTION = 0.20
+MIN_LIFT               = 2.0
 KNN_K                  = 50
 
 FERRITIN_CD_COLS = {

@@ -78,7 +78,7 @@ MODEL_REGISTRY = {
     "hidden_inflammation":   "hidden_inflammation_lr_deduped26_L2_v3.joblib",
     "perimenopause":         "perimenopause_lr_deduped21_L2_v2.joblib",
     "hepatitis_bc":          "hepatitis_bc_rf_cal_deduped20_v2.joblib",
-    "iron_deficiency":       "iron_deficiency_rf_cal_deduped39_v3.joblib",
+    "iron_deficiency":       "iron_deficiency_rf_cal_deduped35_v4.joblib",
 }
 
 # Per-model recommended operating thresholds
@@ -127,14 +127,14 @@ FILTER_CRITERIA = {
     "hepatitis_bc":          0.10,
     "liver":                 0.10,
     "iron_deficiency":       0.15,
-    "kidney":                0.20,
-    "anemia":                0.30,
-    "hidden_inflammation":   0.20,  # v3: lowered from 0.30 (waist-driven model; positives score 0.15-0.65)
-    "prediabetes":           0.35,
-    "thyroid":               0.35,
-    "electrolyte_imbalance": 0.40,
+    "kidney":                0.25,   # raised 0.20→0.25: flag 51%→28%, recall 73%→~40%
+    "anemia":                0.50,   # raised 0.30→0.50: flag 53%→23%, recall 85%→85%
+    "hidden_inflammation":   0.30,   # raised 0.20→0.30: flag 54%→32%, recall 78%→56%
+    "prediabetes":           0.40,   # raised 0.35→0.40: flag 66%→42%, recall 61%→44%
+    "thyroid":               0.55,   # raised 0.35→0.55: flag 81%→47%, recall 100%→90%
+    "electrolyte_imbalance": 0.46,   # raised 0.40→0.46: flag 54%→34%, recall 40%→15%
     "perimenopause":         0.40,
-    "sleep_disorder":        0.55,
+    "sleep_disorder":        0.70,   # raised 0.55→0.70: flag 73%→30%, recall 100%→70%
 }
 
 # ── Score normalization for fair cross-model ranking ───────────────────────────
@@ -671,7 +671,70 @@ class ModelRunner:
                 if prob is not None:
                     results[condition] = round(prob, 4)
 
+        results = self._apply_post_score_gates(results, feature_vectors, patient_context)
         return results
+
+    # ── Post-score gates ─────────────────────────────────────────────────────────
+
+    @staticmethod
+    def _apply_post_score_gates(
+        scores: dict[str, float],
+        feature_vectors: dict[str, pd.DataFrame],
+        patient_context: dict[str, Any] | None,
+    ) -> dict[str, float]:
+        """
+        Apply rule-based adjustments to raw model probabilities after scoring.
+
+        Iron-deficiency menstrual gate
+        ------------------------------
+        The iron_deficiency model has strong gender_female signal from the NHANES
+        training data (menstrual blood loss is the primary iron-loss mechanism in
+        women).  This causes it to score high for *all* female profiles, often
+        displacing the true top-1 for other female-skewed conditions.
+
+        Gate: if female AND age > 45 AND regular_periods == No (encoded 0.0),
+        the main menstrual blood-loss pathway is not active.  Downweight the
+        iron_deficiency probability by ×0.4.
+
+        NaN for regular_periods (question not answered / male) → gate not applied.
+        """
+        scores = dict(scores)  # shallow copy — do not mutate caller's dict
+
+        if "iron_deficiency" not in scores:
+            return scores
+
+        ctx  = patient_context or {}
+        female   = str(ctx.get("gender", "")).lower() == "female"
+        age      = float(ctx.get("age_years", 0) or 0)
+
+        if not (female and age > 45):
+            return scores
+
+        # Read rhq031 from patient_context (threaded in by score_raw from raw_inputs).
+        # Raw NHANES encoding: 1 = yes (regular periods), 2 = no.
+        # None / NaN = not answered → gate not applied (unknown ≠ no).
+        rhq031_raw = ctx.get("rhq031_regular_periods_raw")
+        if rhq031_raw is None:
+            return scores
+
+        try:
+            rhq031_val: float | None = float(rhq031_raw)
+        except (TypeError, ValueError):
+            return scores
+
+        # Gate fires only when periods are explicitly answered No (NHANES code 2)
+        if rhq031_val != 2.0:
+            return scores  # still having regular periods → menstrual iron loss applies, no downweight
+
+        original = scores["iron_deficiency"]
+        scores["iron_deficiency"] = round(original * 0.4, 4)
+        log.debug(
+            "iron_deficiency menstrual gate applied (female, age=%.0f, "
+            "no regular periods): %.4f → %.4f",
+            age, original, scores["iron_deficiency"],
+        )
+
+        return scores
 
     def run_all(self, feature_vectors: dict[str, pd.DataFrame]) -> dict[str, float]:
         """Score without patient context (perimenopause returns 0.0)."""
@@ -778,6 +841,14 @@ class ModelRunner:
                 "gender":    raw_inputs.get("gender"),
                 "age_years": raw_inputs.get("age_years"),
             }
+
+        # Thread rhq031 for the iron_deficiency menstrual gate.
+        # The field is not in the v4 feature set so it cannot be read from the
+        # feature vector; it must be carried explicitly via patient_context.
+        patient_context = dict(patient_context)  # don't mutate caller's dict
+        patient_context["rhq031_regular_periods_raw"] = raw_inputs.get(
+            "rhq031___had_regular_periods_in_past_12_months"
+        )
 
         feature_vectors = self._get_normalizer().build_feature_vectors(raw_inputs)
         scores          = self.run_all_with_context(feature_vectors, patient_context)

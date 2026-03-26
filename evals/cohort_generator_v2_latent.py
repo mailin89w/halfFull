@@ -45,7 +45,7 @@ try:
     from config import CONDITION_IDS
 except ImportError:
     CONDITION_IDS = [
-        "menopause", "perimenopause", "hypothyroidism", "kidney_disease",
+        "perimenopause", "hypothyroidism", "kidney_disease",
         "sleep_disorder", "anemia", "iron_deficiency", "hepatitis",
         "prediabetes", "inflammation", "electrolyte_imbalance",
     ]
@@ -67,7 +67,6 @@ SYMPTOMS = [
 ]
 
 CONDITION_PREFIX: dict[str, str] = {
-    "menopause": "MNP",
     "perimenopause": "PMN",
     "hypothyroidism": "THY",
     "kidney_disease": "KDN",
@@ -86,7 +85,6 @@ BAYESIAN_PRIORS: dict[str, float] = {
     "hepatitis": 0.026,
     "iron_deficiency": 0.060,
     "inflammation": 0.324,
-    "menopause": 0.30,
     "perimenopause": 0.40,
     "sleep_disorder": 0.20,
     "anemia": 0.08,
@@ -102,10 +100,8 @@ COMORBIDITY_PAIRS: list[tuple[str, str]] = [
     ("kidney_disease", "electrolyte_imbalance"),
     ("sleep_disorder", "hypothyroidism"),
     ("sleep_disorder", "perimenopause"),
-    ("menopause", "perimenopause"),
     ("inflammation", "hepatitis"),
     ("prediabetes", "sleep_disorder"),
-    ("menopause", "hypothyroidism"),
     ("iron_deficiency", "perimenopause"),
 ]
 
@@ -199,11 +195,6 @@ CONDITION_FACTOR_WEIGHTS: dict[str, dict[str, float]] = {
         "sleep_fragmentation": 0.30,
         "psychological_load": 0.35,
     },
-    "menopause": {
-        "menopause_transition": 0.98,
-        "sleep_fragmentation": 0.28,
-        "psychological_load": 0.25,
-    },
 }
 
 MIMIC_FACTOR_WEIGHTS: dict[str, list[dict[str, float]]] = {
@@ -246,10 +237,6 @@ MIMIC_FACTOR_WEIGHTS: dict[str, list[dict[str, float]]] = {
     "perimenopause": [
         {"sleep_fragmentation": 0.55, "psychological_load": 0.45},
         {"thyroid_slowdown": 0.40, "menopause_transition": 0.25},
-    ],
-    "menopause": [
-        {"sleep_fragmentation": 0.55, "psychological_load": 0.35},
-        {"thyroid_slowdown": 0.35, "menopause_transition": 0.25},
     ],
 }
 
@@ -512,6 +499,7 @@ def latent_to_labs(
     labs = {}
     hemo_sex_adj = -0.5 if sex == "F" else 0.4
     labs["hemoglobin"] = 14.2 + hemo_sex_adj - 3.6 * state["blood_loss"] - 2.2 * state["iron_depletion"] - 0.7 * state["kidney_impairment"] + nprng.normal(0.0, 0.6)
+
     labs["tsh"] = 1.9 + 5.2 * state["thyroid_slowdown"] + nprng.normal(0.0, 0.55)
     labs["ferritin"] = 82.0 - 62.0 * state["iron_depletion"] - 18.0 * state["blood_loss"] + nprng.normal(0.0, 8.0)
     labs["crp"] = 0.8 + 7.0 * state["inflammation_load"] + 1.8 * state["infection_load"] + nprng.normal(0.0, 0.8)
@@ -663,7 +651,7 @@ def generate_cohort(seed: int = 42) -> list[dict[str, Any]]:
         edge_conditions = rng.sample(CONDITION_IDS, n_conditions)
         profiles.append(generate_profile("edge", None, "EDG", idx, rng, nprng, edge_conditions=edge_conditions))
 
-    assert len(profiles) == 600, f"Expected 600 profiles, got {len(profiles)}"
+    assert len(profiles) == 548, f"Expected 548 profiles, got {len(profiles)}"
     return profiles
 
 

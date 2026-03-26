@@ -1,0 +1,188 @@
+{
+  "profiles_path": "evals/cohort/knn_liver_pack.json",
+  "skip_reasons": {},
+  "summary": {
+    "n_profiles": 10,
+    "control_hit_rate": 0.7,
+    "treatment_hit_rate": 0.8,
+    "delta_hit_rate": 0.1,
+    "control_exact_coverage": 0.2,
+    "treatment_exact_coverage": 0.5,
+    "delta_exact_coverage": 0.3,
+    "control_mean_recall": 0.4333,
+    "treatment_mean_recall": 0.6333,
+    "delta_mean_recall": 0.2,
+    "control_mean_precision": 0.3,
+    "treatment_mean_precision": 0.2483,
+    "delta_mean_precision": -0.0517,
+    "profiles_with_knn_signal": 10,
+    "profiles_improved_by_knn": 4,
+    "by_profile_type": {
+      "edge": {
+        "count": 7,
+        "control_hit_rate": 0.7143,
+        "treatment_hit_rate": 0.8571,
+        "improved_rate": 0.5714
+      },
+      "positive": {
+        "count": 3,
+        "control_hit_rate": 0.6667,
+        "treatment_hit_rate": 0.6667,
+        "improved_rate": 0.0
+      }
+    }
+  },
+  "sample_improvements": [
+    {
+      "profile_id": "KNN-LVR-004",
+      "profile_type": "edge",
+      "expected_conditions": [
+        "hepatitis",
+        "prediabetes"
+      ],
+      "top_conditions": [
+        "sleep_disorder",
+        "hepatitis",
+        "hypothyroidism"
+      ],
+      "ground_truth_groups": [
+        "glycemic",
+        "lipids",
+        "liver_panel"
+      ],
+      "expected_groups": [
+        "glycemic",
+        "lipids",
+        "liver_panel"
+      ],
+      "control_groups": [
+        "liver_panel",
+        "thyroid"
+      ],
+      "knn_groups": [
+        "glycemic",
+        "kidney",
+        "lipids"
+      ],
+      "treatment_groups": [
+        "glycemic",
+        "kidney",
+        "lipids",
+        "liver_panel",
+        "thyroid"
+      ]
+    },
+    {
+      "profile_id": "KNN-LVR-005",
+      "profile_type": "edge",
+      "expected_conditions": [
+        "liver",
+        "prediabetes"
+      ],
+      "top_conditions": [
+        "sleep_disorder",
+        "anemia",
+        "hypothyroidism"
+      ],
+      "ground_truth_groups": [
+        "glycemic",
+        "lipids",
+        "liver_panel"
+      ],
+      "expected_groups": [
+        "glycemic",
+        "lipids",
+        "liver_panel"
+      ],
+      "control_groups": [
+        "cbc",
+        "iron_studies",
+        "thyroid"
+      ],
+      "knn_groups": [
+        "kidney",
+        "lipids"
+      ],
+      "treatment_groups": [
+        "cbc",
+        "iron_studies",
+        "kidney",
+        "lipids",
+        "thyroid"
+      ]
+    },
+    {
+      "profile_id": "KNN-LVR-007",
+      "profile_type": "edge",
+      "expected_conditions": [
+        "liver",
+        "kidney_disease"
+      ],
+      "top_conditions": [
+        "sleep_disorder",
+        "hepatitis",
+        "inflammation"
+      ],
+      "ground_truth_groups": [
+        "kidney",
+        "liver_panel"
+      ],
+      "expected_groups": [
+        "kidney",
+        "liver_panel"
+      ],
+      "control_groups": [
+        "inflammation",
+        "liver_panel"
+      ],
+      "knn_groups": [
+        "kidney",
+        "lipids"
+      ],
+      "treatment_groups": [
+        "inflammation",
+        "kidney",
+        "lipids",
+        "liver_panel"
+      ]
+    },
+    {
+      "profile_id": "KNN-LVR-010",
+      "profile_type": "edge",
+      "expected_conditions": [
+        "hepatitis",
+        "prediabetes"
+      ],
+      "top_conditions": [
+        "sleep_disorder",
+        "hepatitis",
+        "hypothyroidism"
+      ],
+      "ground_truth_groups": [
+        "glycemic",
+        "liver_panel"
+      ],
+      "expected_groups": [
+        "glycemic",
+        "lipids",
+        "liver_panel"
+      ],
+      "control_groups": [
+        "liver_panel",
+        "thyroid"
+      ],
+      "knn_groups": [
+        "glycemic",
+        "kidney",
+        "lipids"
+      ],
+      "treatment_groups": [
+        "glycemic",
+        "kidney",
+        "lipids",
+        "liver_panel",
+        "thyroid"
+      ]
+    }
+  ]
+}

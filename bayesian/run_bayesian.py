@@ -77,7 +77,6 @@ DISABLED_QUESTION_IDS = {
     "elec_q1",
     "hep_q1",
     "peri_q1",
-    "peri_q4",
 }
 
 SHARED_QUESTION_GROUPS = {

@@ -144,8 +144,32 @@
             "shown_in_paths": [
               "full"
             ],
+            "screen_group": "body_measurements",
             "validation": {
               "required": false
+            }
+          },
+          {
+            "id": "waist_cm",
+            "text": "What is your waist circumference?",
+            "help_text": "Measure around your belly button. Used to assess metabolic health risk. Leave blank if unsure.",
+            "type": "numeric",
+            "feature_name": "waist_cm",
+            "options": [
+              {
+                "value": "waist_cm",
+                "label": "Waist (cm)"
+              }
+            ],
+            "shown_in_paths": [
+              "full"
+            ],
+            "screen_group": "body_measurements",
+            "optional": true,
+            "validation": {
+              "required": false,
+              "min": 50,
+              "max": 180
             }
           },
           {

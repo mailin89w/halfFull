@@ -1,0 +1,654 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="1900" viewBox="0 0 1400 1900" font-family="Inter, system-ui, sans-serif">
+  <defs>
+    <style>
+      text { font-family: Inter, system-ui, sans-serif; }
+      .title { font-size: 22px; font-weight: 700; fill: #0f172a; }
+      .section-label { font-size: 13px; font-weight: 700; fill: #fff; letter-spacing: 0.5px; }
+      .q-id { font-size: 11px; fill: #1e293b; font-weight: 600; }
+      .q-type { font-size: 10px; fill: #64748b; }
+      .badge { font-size: 9px; font-weight: 700; }
+      .legend-label { font-size: 11px; fill: #374151; }
+      .arrow-label { font-size: 9px; fill: #6b7280; }
+      .note { font-size: 10px; fill: #64748b; font-style: italic; }
+    </style>
+    <marker id="arrow" markerWidth="7" markerHeight="7" refX="5" refY="3.5" orient="auto">
+      <polygon points="0 0, 7 3.5, 0 7" fill="#94a3b8"/>
+    </marker>
+    <marker id="arrow-cond" markerWidth="7" markerHeight="7" refX="5" refY="3.5" orient="auto">
+      <polygon points="0 0, 7 3.5, 0 7" fill="#f59e0b"/>
+    </marker>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1400" height="1900" fill="#f8fafc"/>
+
+  <!-- Title -->
+  <text x="700" y="40" text-anchor="middle" class="title">halfFull · Questionnaire Tree</text>
+  <text x="700" y="60" text-anchor="middle" font-size="12" fill="#64748b">52 questions · 8 modules · 22 conditional branches</text>
+
+  <!-- ─────────────────────────────────────────
+       LEGEND
+  ───────────────────────────────────────── -->
+  <rect x="30" y="78" width="660" height="38" rx="6" fill="#fff" stroke="#e2e8f0"/>
+  <!-- types -->
+  <rect x="46" y="89" width="28" height="16" rx="3" fill="#e0f2fe"/>
+  <text x="60" y="101" text-anchor="middle" class="badge" fill="#0284c7">ord</text>
+  <text x="82" y="101" class="legend-label">ordinal</text>
+
+  <rect x="136" y="89" width="28" height="16" rx="3" fill="#dcfce7"/>
+  <text x="150" y="101" text-anchor="middle" class="badge" fill="#16a34a">bin</text>
+  <text x="172" y="101" class="legend-label">binary</text>
+
+  <rect x="226" y="89" width="28" height="16" rx="3" fill="#fef9c3"/>
+  <text x="240" y="101" text-anchor="middle" class="badge" fill="#ca8a04">cat</text>
+  <text x="266" y="101" class="legend-label">categorical</text>
+
+  <rect x="346" y="89" width="28" height="16" rx="3" fill="#fce7f3"/>
+  <text x="360" y="101" text-anchor="middle" class="badge" fill="#db2777">num</text>
+  <text x="382" y="101" class="legend-label">numeric</text>
+
+  <rect x="446" y="89" width="28" height="16" rx="3" fill="#ede9fe"/>
+  <text x="460" y="101" text-anchor="middle" class="badge" fill="#7c3aed">2x</text>
+  <text x="482" y="101" class="legend-label">dual_numeric</text>
+
+  <rect x="566" y="89" width="28" height="16" rx="3" fill="#ffedd5"/>
+  <text x="580" y="101" text-anchor="middle" class="badge" fill="#ea580c">ms</text>
+  <text x="596" y="101" class="legend-label">multi_select</text>
+
+  <!-- conditional arrow legend -->
+  <rect x="710" y="78" width="320" height="38" rx="6" fill="#fff" stroke="#e2e8f0"/>
+  <line x1="726" y1="97" x2="756" y2="97" stroke="#94a3b8" stroke-width="2" marker-end="url(#arrow)"/>
+  <text x="764" y="101" class="legend-label">flow</text>
+  <line x1="820" y1="97" x2="850" y2="97" stroke="#f59e0b" stroke-width="2" stroke-dasharray="4,3" marker-end="url(#arrow-cond)"/>
+  <text x="858" y="101" class="legend-label">conditional (shown IF)</text>
+
+  <!-- ─────────────────────────────────────────
+       MODULE 1 — PROFILE
+  ───────────────────────────────────────── -->
+  <!-- header -->
+  <rect x="30" y="135" width="200" height="28" rx="5" fill="#334155"/>
+  <text x="130" y="154" text-anchor="middle" class="section-label">1 · PROFILE</text>
+
+  <!-- questions col 1 -->
+  <!-- dpq040 -->
+  <rect x="30" y="172" width="190" height="34" rx="4" fill="#fff" stroke="#cbd5e1"/>
+  <rect x="30" y="172" width="28" height="34" rx="4" fill="#e0f2fe"/>
+  <text x="44" y="193" text-anchor="middle" class="badge" fill="#0284c7">ord</text>
+  <text x="66" y="184" class="q-id">dpq040</text>
+  <text x="66" y="196" class="q-type">feeling tired / energy</text>
+
+  <!-- age_years -->
+  <rect x="30" y="214" width="190" height="34" rx="4" fill="#fff" stroke="#cbd5e1"/>
+  <rect x="30" y="214" width="28" height="34" rx="4" fill="#fce7f3"/>
+  <text x="44" y="235" text-anchor="middle" class="badge" fill="#db2777">num</text>
+  <text x="66" y="226" class="q-id">age_years</text>
+  <text x="66" y="238" class="q-type">age in years</text>
+
+  <!-- gender -->
+  <rect x="30" y="256" width="190" height="34" rx="4" fill="#fff" stroke="#cbd5e1"/>
+  <rect x="30" y="256" width="28" height="34" rx="4" fill="#fef9c3"/>
+  <text x="44" y="277" text-anchor="middle" class="badge" fill="#ca8a04">cat</text>
+  <text x="66" y="268" class="q-id">gender</text>
+  <text x="66" y="280" class="q-type">male / female / other</text>
+
+  <!-- huq010 -->
+  <rect x="30" y="298" width="190" height="34" rx="4" fill="#fff" stroke="#cbd5e1"/>
+  <rect x="30" y="298" width="28" height="34" rx="4" fill="#e0f2fe"/>
+  <text x="44" y="319" text-anchor="middle" class="badge" fill="#0284c7">ord</text>
+  <text x="66" y="310" class="q-id">huq010</text>
+  <text x="66" y="322" class="q-type">general health condition</text>
+
+  <!-- height_weight -->
+  <rect x="30" y="340" width="190" height="34" rx="4" fill="#fff" stroke="#cbd5e1"/>
+  <rect x="30" y="340" width="28" height="34" rx="4" fill="#ede9fe"/>
+  <text x="44" y="361" text-anchor="middle" class="badge" fill="#7c3aed">2x</text>
+  <text x="66" y="352" class="q-id">height_weight</text>
+  <text x="66" y="364" class="q-type">height cm / weight kg → BMI</text>
+
+  <!-- blood_pressure -->
+  <rect x="30" y="382" width="190" height="34" rx="4" fill="#fff" stroke="#cbd5e1"/>
+  <rect x="30" y="382" width="28" height="34" rx="4" fill="#ede9fe"/>
+  <text x="44" y="403" text-anchor="middle" class="badge" fill="#7c3aed">2x</text>
+  <text x="66" y="394" class="q-id">blood_pressure</text>
+  <text x="66" y="406" class="q-type">SBP / DBP mmHg</text>
+
+  <!-- waist_cm -->
+  <rect x="30" y="424" width="190" height="34" rx="4" fill="#fff" stroke="#cbd5e1"/>
+  <rect x="30" y="424" width="28" height="34" rx="4" fill="#fce7f3"/>
+  <text x="44" y="445" text-anchor="middle" class="badge" fill="#db2777">num</text>
+  <text x="66" y="436" class="q-id">waist_cm</text>
+  <text x="66" y="448" class="q-type">waist circumference cm</text>
+
+  <!-- dmdeduc2 -->
+  <rect x="30" y="466" width="190" height="34" rx="4" fill="#fff" stroke="#cbd5e1"/>
+  <rect x="30" y="466" width="28" height="34" rx="4" fill="#e0f2fe"/>
+  <text x="44" y="487" text-anchor="middle" class="badge" fill="#0284c7">ord</text>
+  <text x="66" y="478" class="q-id">dmdeduc2</text>
+  <text x="66" y="490" class="q-type">education level</text>
+
+  <!-- huq071 -->
+  <rect x="30" y="508" width="190" height="34" rx="4" fill="#fff" stroke="#cbd5e1"/>
+  <rect x="30" y="508" width="28" height="34" rx="4" fill="#dcfce7"/>
+  <text x="44" y="529" text-anchor="middle" class="badge" fill="#16a34a">bin</text>
+  <text x="66" y="520" class="q-id">huq071</text>
+  <text x="66" y="532" class="q-type">overnight hospital past year</text>
+
+  <!-- med_count -->
+  <rect x="30" y="550" width="190" height="34" rx="4" fill="#fff" stroke="#cbd5e1"/>
+  <rect x="30" y="550" width="28" height="34" rx="4" fill="#fce7f3"/>
+  <text x="44" y="571" text-anchor="middle" class="badge" fill="#db2777">num</text>
+  <text x="66" y="562" class="q-id">med_count</text>
+  <text x="66" y="574" class="q-type">number of prescriptions</text>
+
+  <!-- flow arrows module 1 -->
+  <line x1="125" y1="206" x2="125" y2="214" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <line x1="125" y1="248" x2="125" y2="256" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <line x1="125" y1="290" x2="125" y2="298" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <line x1="125" y1="332" x2="125" y2="340" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <line x1="125" y1="374" x2="125" y2="382" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <line x1="125" y1="416" x2="125" y2="424" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <line x1="125" y1="458" x2="125" y2="466" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <line x1="125" y1="500" x2="125" y2="508" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <line x1="125" y1="542" x2="125" y2="550" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+  <!-- ─────────────────────────────────────────
+       MODULE 2 — SLEEP
+  ───────────────────────────────────────── -->
+  <rect x="250" y="135" width="200" height="28" rx="5" fill="#0369a1"/>
+  <text x="350" y="154" text-anchor="middle" class="section-label">2 · SLEEP</text>
+
+  <rect x="250" y="172" width="190" height="34" rx="4" fill="#fff" stroke="#cbd5e1"/>
+  <rect x="250" y="172" width="28" height="34" rx="4" fill="#ede9fe"/>
+  <text x="264" y="193" text-anchor="middle" class="badge" fill="#7c3aed">2x</text>
+  <text x="286" y="184" class="q-id">sleep_hours</text>
+  <text x="286" y="196" class="q-type">weekdays / weekends hrs</text>
+
+  <rect x="250" y="214" width="190" height="34" rx="4" fill="#fff" stroke="#cbd5e1"/>
+  <rect x="250" y="214" width="28" height="34" rx="4" fill="#e0f2fe"/>
+  <text x="264" y="235" text-anchor="middle" class="badge" fill="#0284c7">ord</text>
+  <text x="286" y="226" class="q-id">slq030</text>
+  <text x="286" y="238" class="q-type">how often snore?</text>
+
+  <rect x="250" y="256" width="190" height="34" rx="4" fill="#fff" stroke="#cbd5e1"/>
+  <rect x="250" y="256" width="28" height="34" rx="4" fill="#dcfce7"/>
+  <text x="264" y="277" text-anchor="middle" class="badge" fill="#16a34a">bin</text>
+  <text x="286" y="268" class="q-id">slq050</text>
+  <text x="286" y="280" class="q-type">told had trouble sleeping</text>
+
+  <line x1="345" y1="206" x2="345" y2="214" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <line x1="345" y1="248" x2="345" y2="256" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+  <!-- ─────────────────────────────────────────
+       MODULE 3 — ACTIVITY & WORK
+  ───────────────────────────────────────── -->
+  <rect x="470" y="135" width="200" height="28" rx="5" fill="#065f46"/>
+  <text x="570" y="154" text-anchor="middle" class="section-label">3 · ACTIVITY &amp; WORK</text>
+
+  <rect x="470" y="172" width="190" height="34" rx="4" fill="#fff" stroke="#cbd5e1"/>
+  <rect x="470" y="172" width="28" height="34" rx="4" fill="#fef9c3"/>
+  <text x="484" y="193" text-anchor="middle" class="badge" fill="#ca8a04">cat</text>
+  <text x="506" y="184" class="q-id">ocq670</text>
+  <text x="506" y="196" class="q-type">work schedule past 3 mo</text>
+
+  <!-- ocq180 conditional on ocq670 -->
+  <rect x="470" y="214" width="190" height="34" rx="4" fill="#fffbeb" stroke="#f59e0b" stroke-dasharray="4,2"/>
+  <rect x="470" y="214" width="28" height="34" rx="4" fill="#fef3c7"/>
+  <text x="484" y="235" text-anchor="middle" class="badge" fill="#d97706">num</text>
+  <text x="506" y="226" class="q-id">ocq180</text>
+  <text x="506" y="238" class="q-type">hours worked last week</text>
+
+  <rect x="470" y="256" width="190" height="34" rx="4" fill="#fff" stroke="#cbd5e1"/>
+  <rect x="470" y="256" width="28" height="34" rx="4" fill="#dcfce7"/>
+  <text x="484" y="277" text-anchor="middle" class="badge" fill="#16a34a">bin</text>
+  <text x="506" y="268" class="q-id">paq620</text>
+  <text x="506" y="280" class="q-type">moderate work activity</text>
+
+  <rect x="470" y="298" width="190" height="34" rx="4" fill="#fff" stroke="#cbd5e1"/>
+  <rect x="470" y="298" width="28" height="34" rx="4" fill="#ede9fe"/>
+  <text x="484" y="319" text-anchor="middle" class="badge" fill="#7c3aed">2x</text>
+  <text x="506" y="310" class="q-id">free_time_activity</text>
+  <text x="506" y="322" class="q-type">moderate / vigorous rec min</text>
+
+  <!-- flow -->
+  <line x1="565" y1="206" x2="565" y2="214" stroke="#f59e0b" stroke-width="1.5" stroke-dasharray="4,2" marker-end="url(#arrow-cond)"/>
+  <text x="568" y="212" class="arrow-label">IF working</text>
+  <line x1="565" y1="248" x2="565" y2="256" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <line x1="565" y1="290" x2="565" y2="298" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+  <!-- ─────────────────────────────────────────
+       MODULE 4 — LIFESTYLE
+  ───────────────────────────────────────── -->
+  <rect x="690" y="135" width="200" height="28" rx="5" fill="#7c3aed"/>
+  <text x="790" y="154" text-anchor="middle" class="section-label">4 · LIFESTYLE</text>
+
+  <rect x="690" y="172" width="190" height="34" rx="4" fill="#fff" stroke="#cbd5e1"/>
+  <rect x="690" y="172" width="28" height="34" rx="4" fill="#fce7f3"/>
+  <text x="704" y="193" text-anchor="middle" class="badge" fill="#db2777">num</text>
+  <text x="726" y="184" class="q-id">alq130</text>
+  <text x="726" y="196" class="q-type">avg drinks/day past 12 mo</text>
+
+  <rect x="690" y="214" width="190" height="34" rx="4" fill="#fff" stroke="#cbd5e1"/>
+  <rect x="690" y="214" width="28" height="34" rx="4" fill="#dcfce7"/>
+  <text x="704" y="235" text-anchor="middle" class="badge" fill="#16a34a">bin</text>
+  <text x="726" y="226" class="q-id">alq151</text>
+  <text x="726" y="238" class="q-type">ever 4/5+ drinks daily?</text>
+
+  <rect x="690" y="256" width="190" height="34" rx="4" fill="#fff" stroke="#cbd5e1"/>
+  <rect x="690" y="256" width="28" height="34" rx="4" fill="#dcfce7"/>
+  <text x="704" y="277" text-anchor="middle" class="badge" fill="#16a34a">bin</text>
+  <text x="726" y="268" class="q-id">smq020</text>
+  <text x="726" y="280" class="q-type">smoked 100+ cigarettes ever</text>
+
+  <!-- smq040 conditional -->
+  <rect x="690" y="298" width="190" height="34" rx="4" fill="#fffbeb" stroke="#f59e0b" stroke-dasharray="4,2"/>
+  <rect x="690" y="298" width="28" height="34" rx="4" fill="#fef3c7"/>
+  <text x="704" y="319" text-anchor="middle" class="badge" fill="#d97706">cat</text>
+  <text x="726" y="310" class="q-id">smq040</text>
+  <text x="726" y="322" class="q-type">smoke now?</text>
+
+  <!-- smd650 conditional -->
+  <rect x="690" y="340" width="190" height="34" rx="4" fill="#fffbeb" stroke="#f59e0b" stroke-dasharray="4,2"/>
+  <rect x="690" y="340" width="28" height="34" rx="4" fill="#fef3c7"/>
+  <text x="704" y="361" text-anchor="middle" class="badge" fill="#d97706">num</text>
+  <text x="726" y="352" class="q-id">smd650</text>
+  <text x="726" y="364" class="q-type">cigarettes/day past 30 d</text>
+
+  <!-- smq078 conditional -->
+  <rect x="690" y="382" width="190" height="34" rx="4" fill="#fffbeb" stroke="#f59e0b" stroke-dasharray="4,2"/>
+  <rect x="690" y="382" width="28" height="34" rx="4" fill="#fef3c7"/>
+  <text x="704" y="403" text-anchor="middle" class="badge" fill="#d97706">ord</text>
+  <text x="726" y="394" class="q-id">smq078</text>
+  <text x="726" y="406" class="q-type">how soon smoke after waking</text>
+
+  <!-- flow -->
+  <line x1="785" y1="206" x2="785" y2="214" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <line x1="785" y1="248" x2="785" y2="256" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <line x1="785" y1="290" x2="785" y2="298" stroke="#f59e0b" stroke-width="1.5" stroke-dasharray="4,2" marker-end="url(#arrow-cond)"/>
+  <text x="788" y="296" class="arrow-label">IF smoked ever</text>
+  <line x1="785" y1="332" x2="785" y2="340" stroke="#f59e0b" stroke-width="1.5" stroke-dasharray="4,2" marker-end="url(#arrow-cond)"/>
+  <text x="788" y="338" class="arrow-label">IF currently smokes</text>
+  <line x1="785" y1="374" x2="785" y2="382" stroke="#f59e0b" stroke-width="1.5" stroke-dasharray="4,2" marker-end="url(#arrow-cond)"/>
+
+  <!-- ─────────────────────────────────────────
+       MODULE 5 — HEALTH HISTORY
+  ───────────────────────────────────────── -->
+  <rect x="910" y="135" width="240" height="28" rx="5" fill="#9f1239"/>
+  <text x="1030" y="154" text-anchor="middle" class="section-label">5 · MEDICAL HISTORY</text>
+
+  <!-- conditions_diagnosed multi-select -->
+  <rect x="910" y="172" width="230" height="34" rx="4" fill="#fff" stroke="#cbd5e1"/>
+  <rect x="910" y="172" width="28" height="34" rx="4" fill="#ffedd5"/>
+  <text x="924" y="193" text-anchor="middle" class="badge" fill="#ea580c">ms</text>
+  <text x="946" y="184" class="q-id">conditions_diagnosed</text>
+  <text x="946" y="196" class="q-type">HTN · diabetes · asthma · arthritis · etc.</text>
+
+  <!-- bpq040a conditional -->
+  <rect x="910" y="214" width="230" height="34" rx="4" fill="#fffbeb" stroke="#f59e0b" stroke-dasharray="4,2"/>
+  <rect x="910" y="214" width="28" height="34" rx="4" fill="#fef3c7"/>
+  <text x="924" y="235" text-anchor="middle" class="badge" fill="#d97706">bin</text>
+  <text x="946" y="226" class="q-id">bpq040a</text>
+  <text x="946" y="238" class="q-type">taking Rx for hypertension?</text>
+
+  <!-- diq050 conditional -->
+  <rect x="910" y="256" width="230" height="34" rx="4" fill="#fffbeb" stroke="#f59e0b" stroke-dasharray="4,2"/>
+  <rect x="910" y="256" width="28" height="34" rx="4" fill="#fef3c7"/>
+  <text x="924" y="277" text-anchor="middle" class="badge" fill="#d97706">bin</text>
+  <text x="946" y="268" class="q-id">diq050</text>
+  <text x="946" y="280" class="q-type">taking insulin now?</text>
+
+  <!-- diq070 conditional -->
+  <rect x="910" y="298" width="230" height="34" rx="4" fill="#fffbeb" stroke="#f59e0b" stroke-dasharray="4,2"/>
+  <rect x="910" y="298" width="28" height="34" rx="4" fill="#fef3c7"/>
+  <text x="924" y="319" text-anchor="middle" class="badge" fill="#d97706">bin</text>
+  <text x="946" y="310" class="q-id">diq070</text>
+  <text x="946" y="322" class="q-type">diabetic pills to lower sugar?</text>
+
+  <!-- bpq030 conditional -->
+  <rect x="910" y="340" width="230" height="34" rx="4" fill="#fffbeb" stroke="#f59e0b" stroke-dasharray="4,2"/>
+  <rect x="910" y="340" width="28" height="34" rx="4" fill="#fef3c7"/>
+  <text x="924" y="361" text-anchor="middle" class="badge" fill="#d97706">bin</text>
+  <text x="946" y="352" class="q-id">bpq030</text>
+  <text x="946" y="364" class="q-type">told HTN 2+ times?</text>
+
+  <!-- mcq040 conditional -->
+  <rect x="910" y="382" width="230" height="34" rx="4" fill="#fffbeb" stroke="#f59e0b" stroke-dasharray="4,2"/>
+  <rect x="910" y="382" width="28" height="34" rx="4" fill="#fef3c7"/>
+  <text x="924" y="403" text-anchor="middle" class="badge" fill="#d97706">bin</text>
+  <text x="946" y="394" class="q-id">mcq040</text>
+  <text x="946" y="406" class="q-type">asthma attack past year?</text>
+
+  <!-- mcq195 conditional -->
+  <rect x="910" y="424" width="230" height="34" rx="4" fill="#fffbeb" stroke="#f59e0b" stroke-dasharray="4,2"/>
+  <rect x="910" y="424" width="28" height="34" rx="4" fill="#fef3c7"/>
+  <text x="924" y="445" text-anchor="middle" class="badge" fill="#d97706">cat</text>
+  <text x="946" y="436" class="q-id">mcq195</text>
+  <text x="946" y="448" class="q-type">which type of arthritis?</text>
+
+  <!-- remaining unconditional -->
+  <rect x="910" y="466" width="230" height="34" rx="4" fill="#fff" stroke="#cbd5e1"/>
+  <rect x="910" y="466" width="28" height="34" rx="4" fill="#dcfce7"/>
+  <text x="924" y="487" text-anchor="middle" class="badge" fill="#16a34a">bin</text>
+  <text x="946" y="478" class="q-id">whq070</text>
+  <text x="946" y="490" class="q-type">tried to lose weight past year</text>
+
+  <rect x="910" y="508" width="230" height="34" rx="4" fill="#fff" stroke="#cbd5e1"/>
+  <rect x="910" y="508" width="28" height="34" rx="4" fill="#dcfce7"/>
+  <text x="924" y="529" text-anchor="middle" class="badge" fill="#16a34a">bin</text>
+  <text x="946" y="520" class="q-id">mcq300c</text>
+  <text x="946" y="532" class="q-type">close relative had diabetes</text>
+
+  <rect x="910" y="550" width="230" height="34" rx="4" fill="#fff" stroke="#cbd5e1"/>
+  <rect x="910" y="550" width="28" height="34" rx="4" fill="#e0f2fe"/>
+  <text x="924" y="571" text-anchor="middle" class="badge" fill="#0284c7">ord</text>
+  <text x="946" y="562" class="q-id">huq051</text>
+  <text x="946" y="574" class="q-type">times healthcare past year</text>
+
+  <rect x="910" y="592" width="230" height="34" rx="4" fill="#fff" stroke="#cbd5e1"/>
+  <rect x="910" y="592" width="28" height="34" rx="4" fill="#dcfce7"/>
+  <text x="924" y="613" text-anchor="middle" class="badge" fill="#16a34a">bin</text>
+  <text x="946" y="604" class="q-id">mcq366d</text>
+  <text x="946" y="616" class="q-type">told to reduce fat in diet</text>
+
+  <rect x="910" y="634" width="230" height="34" rx="4" fill="#fff" stroke="#cbd5e1"/>
+  <rect x="910" y="634" width="28" height="34" rx="4" fill="#fef9c3"/>
+  <text x="924" y="655" text-anchor="middle" class="badge" fill="#ca8a04">cat</text>
+  <text x="946" y="646" class="q-id">whq040</text>
+  <text x="946" y="658" class="q-type">like to weigh more/less/same</text>
+
+  <!-- flow arrows module 5 -->
+  <line x1="1025" y1="206" x2="1025" y2="214" stroke="#f59e0b" stroke-width="1.5" stroke-dasharray="4,2" marker-end="url(#arrow-cond)"/>
+  <text x="1028" y="212" class="arrow-label">IF HTN selected</text>
+  <line x1="1025" y1="248" x2="1025" y2="256" stroke="#f59e0b" stroke-width="1.5" stroke-dasharray="4,2" marker-end="url(#arrow-cond)"/>
+  <text x="1028" y="254" class="arrow-label">IF diabetes selected</text>
+  <line x1="1025" y1="290" x2="1025" y2="298" stroke="#f59e0b" stroke-width="1.5" stroke-dasharray="4,2" marker-end="url(#arrow-cond)"/>
+  <line x1="1025" y1="332" x2="1025" y2="340" stroke="#f59e0b" stroke-width="1.5" stroke-dasharray="4,2" marker-end="url(#arrow-cond)"/>
+  <text x="1028" y="338" class="arrow-label">IF HTN selected</text>
+  <line x1="1025" y1="374" x2="1025" y2="382" stroke="#f59e0b" stroke-width="1.5" stroke-dasharray="4,2" marker-end="url(#arrow-cond)"/>
+  <text x="1028" y="380" class="arrow-label">IF asthma selected</text>
+  <line x1="1025" y1="416" x2="1025" y2="424" stroke="#f59e0b" stroke-width="1.5" stroke-dasharray="4,2" marker-end="url(#arrow-cond)"/>
+  <text x="1028" y="422" class="arrow-label">IF arthritis selected</text>
+  <line x1="1025" y1="458" x2="1025" y2="466" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <line x1="1025" y1="500" x2="1025" y2="508" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <line x1="1025" y1="542" x2="1025" y2="550" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <line x1="1025" y1="584" x2="1025" y2="592" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <line x1="1025" y1="626" x2="1025" y2="634" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+  <!-- ─────────────────────────────────────────
+       MODULE 6 — SYMPTOMS
+  ───────────────────────────────────────── -->
+  <rect x="30" y="720" width="200" height="28" rx="5" fill="#b45309"/>
+  <text x="130" y="739" text-anchor="middle" class="section-label">6 · SYMPTOMS</text>
+
+  <!-- kiq480 -->
+  <rect x="30" y="757" width="190" height="34" rx="4" fill="#fff" stroke="#cbd5e1"/>
+  <rect x="30" y="757" width="28" height="34" rx="4" fill="#e0f2fe"/>
+  <text x="44" y="778" text-anchor="middle" class="badge" fill="#0284c7">ord</text>
+  <text x="66" y="769" class="q-id">kiq480</text>
+  <text x="66" y="781" class="q-type">times urinate at night</text>
+
+  <!-- kiq005 -->
+  <rect x="30" y="799" width="190" height="34" rx="4" fill="#fff" stroke="#cbd5e1"/>
+  <rect x="30" y="799" width="28" height="34" rx="4" fill="#e0f2fe"/>
+  <text x="44" y="820" text-anchor="middle" class="badge" fill="#0284c7">ord</text>
+  <text x="66" y="811" class="q-id">kiq005</text>
+  <text x="66" y="823" class="q-type">how often urinary leakage?</text>
+
+  <!-- kiq044 conditional -->
+  <rect x="30" y="841" width="190" height="34" rx="4" fill="#fffbeb" stroke="#f59e0b" stroke-dasharray="4,2"/>
+  <rect x="30" y="841" width="28" height="34" rx="4" fill="#fef3c7"/>
+  <text x="44" y="862" text-anchor="middle" class="badge" fill="#d97706">bin</text>
+  <text x="66" y="853" class="q-id">kiq044</text>
+  <text x="66" y="865" class="q-type">leaked before reaching toilet?</text>
+
+  <!-- kiq450 conditional (on kiq044) -->
+  <rect x="30" y="883" width="190" height="34" rx="4" fill="#fffbeb" stroke="#f59e0b" stroke-dasharray="4,2"/>
+  <rect x="30" y="883" width="28" height="34" rx="4" fill="#fef3c7"/>
+  <text x="44" y="904" text-anchor="middle" class="badge" fill="#d97706">ord</text>
+  <text x="66" y="895" class="q-id">kiq450</text>
+  <text x="66" y="907" class="q-type">how frequently (urgency)?</text>
+
+  <!-- kiq010 conditional -->
+  <rect x="30" y="925" width="190" height="34" rx="4" fill="#fffbeb" stroke="#f59e0b" stroke-dasharray="4,2"/>
+  <rect x="30" y="925" width="28" height="34" rx="4" fill="#fef3c7"/>
+  <text x="44" y="946" text-anchor="middle" class="badge" fill="#d97706">ord</text>
+  <text x="66" y="937" class="q-id">kiq010</text>
+  <text x="66" y="949" class="q-type">how much urine lost?</text>
+
+  <!-- kiq042 conditional -->
+  <rect x="30" y="967" width="190" height="34" rx="4" fill="#fffbeb" stroke="#f59e0b" stroke-dasharray="4,2"/>
+  <rect x="30" y="967" width="28" height="34" rx="4" fill="#fef3c7"/>
+  <text x="44" y="988" text-anchor="middle" class="badge" fill="#d97706">bin</text>
+  <text x="66" y="979" class="q-id">kiq042</text>
+  <text x="66" y="991" class="q-type">leak during physical activity?</text>
+
+  <!-- kiq052 conditional -->
+  <rect x="30" y="1009" width="190" height="34" rx="4" fill="#fffbeb" stroke="#f59e0b" stroke-dasharray="4,2"/>
+  <rect x="30" y="1009" width="28" height="34" rx="4" fill="#fef3c7"/>
+  <text x="44" y="1030" text-anchor="middle" class="badge" fill="#d97706">ord</text>
+  <text x="66" y="1021" class="q-id">kiq052</text>
+  <text x="66" y="1033" class="q-type">daily activities affected?</text>
+
+  <!-- kiq430 conditional (on kiq042) -->
+  <rect x="30" y="1051" width="190" height="34" rx="4" fill="#fffbeb" stroke="#f59e0b" stroke-dasharray="4,2"/>
+  <rect x="30" y="1051" width="28" height="34" rx="4" fill="#fef3c7"/>
+  <text x="44" y="1072" text-anchor="middle" class="badge" fill="#d97706">ord</text>
+  <text x="66" y="1063" class="q-id">kiq430</text>
+  <text x="66" y="1075" class="q-type">how frequently (exertion)?</text>
+
+  <!-- symptoms_physical -->
+  <rect x="30" y="1093" width="190" height="34" rx="4" fill="#fff" stroke="#cbd5e1"/>
+  <rect x="30" y="1093" width="28" height="34" rx="4" fill="#ede9fe"/>
+  <text x="44" y="1114" text-anchor="middle" class="badge" fill="#7c3aed">2x</text>
+  <text x="66" y="1105" class="q-id">symptoms_physical</text>
+  <text x="66" y="1117" class="q-type">abdomen / joint pain score</text>
+
+  <!-- mcq540 conditional -->
+  <rect x="30" y="1135" width="190" height="34" rx="4" fill="#fffbeb" stroke="#f59e0b" stroke-dasharray="4,2"/>
+  <rect x="30" y="1135" width="28" height="34" rx="4" fill="#fef3c7"/>
+  <text x="44" y="1156" text-anchor="middle" class="badge" fill="#d97706">bin</text>
+  <text x="66" y="1147" class="q-id">mcq540</text>
+  <text x="66" y="1159" class="q-type">seen Dr for abdominal pain?</text>
+
+  <!-- flow arrows module 6 -->
+  <line x1="125" y1="791" x2="125" y2="799" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <line x1="125" y1="833" x2="125" y2="841" stroke="#f59e0b" stroke-width="1.5" stroke-dasharray="4,2" marker-end="url(#arrow-cond)"/>
+  <text x="128" y="839" class="arrow-label">IF leakage &gt; 0</text>
+  <line x1="125" y1="875" x2="125" y2="883" stroke="#f59e0b" stroke-width="1.5" stroke-dasharray="4,2" marker-end="url(#arrow-cond)"/>
+  <text x="128" y="881" class="arrow-label">IF kiq044 = yes</text>
+  <line x1="125" y1="917" x2="125" y2="925" stroke="#f59e0b" stroke-width="1.5" stroke-dasharray="4,2" marker-end="url(#arrow-cond)"/>
+  <line x1="125" y1="959" x2="125" y2="967" stroke="#f59e0b" stroke-width="1.5" stroke-dasharray="4,2" marker-end="url(#arrow-cond)"/>
+  <line x1="125" y1="1001" x2="125" y2="1009" stroke="#f59e0b" stroke-width="1.5" stroke-dasharray="4,2" marker-end="url(#arrow-cond)"/>
+  <line x1="125" y1="1043" x2="125" y2="1051" stroke="#f59e0b" stroke-width="1.5" stroke-dasharray="4,2" marker-end="url(#arrow-cond)"/>
+  <text x="128" y="1049" class="arrow-label">IF kiq042 = yes</text>
+  <line x1="125" y1="1085" x2="125" y2="1093" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <line x1="125" y1="1127" x2="125" y2="1135" stroke="#f59e0b" stroke-width="1.5" stroke-dasharray="4,2" marker-end="url(#arrow-cond)"/>
+  <text x="128" y="1133" class="arrow-label">IF abdominal pain</text>
+
+  <!-- ─────────────────────────────────────────
+       MODULE 7 — WOMEN'S HEALTH
+  ───────────────────────────────────────── -->
+  <rect x="250" y="720" width="200" height="28" rx="5" fill="#be185d"/>
+  <text x="350" y="739" text-anchor="middle" class="section-label">7 · WOMEN'S HEALTH</text>
+
+  <!-- pregnancy_status conditional on gender=female -->
+  <rect x="250" y="757" width="190" height="34" rx="4" fill="#fffbeb" stroke="#f59e0b" stroke-dasharray="4,2"/>
+  <rect x="250" y="757" width="28" height="34" rx="4" fill="#fef3c7"/>
+  <text x="264" y="778" text-anchor="middle" class="badge" fill="#d97706">cat</text>
+  <text x="286" y="769" class="q-id">pregnancy_status</text>
+  <text x="286" y="781" class="q-type">pregnant / trying / neither</text>
+
+  <rect x="250" y="799" width="190" height="34" rx="4" fill="#fffbeb" stroke="#f59e0b" stroke-dasharray="4,2"/>
+  <rect x="250" y="799" width="28" height="34" rx="4" fill="#fef3c7"/>
+  <text x="264" y="820" text-anchor="middle" class="badge" fill="#d97706">bin</text>
+  <text x="286" y="811" class="q-id">rhq131</text>
+  <text x="286" y="823" class="q-type">ever been pregnant?</text>
+
+  <rect x="250" y="841" width="190" height="34" rx="4" fill="#fffbeb" stroke="#f59e0b" stroke-dasharray="4,2"/>
+  <rect x="250" y="841" width="28" height="34" rx="4" fill="#fef3c7"/>
+  <text x="264" y="862" text-anchor="middle" class="badge" fill="#d97706">num</text>
+  <text x="286" y="853" class="q-id">rhq160</text>
+  <text x="286" y="865" class="q-type">how many times pregnant?</text>
+
+  <rect x="250" y="883" width="190" height="34" rx="4" fill="#fffbeb" stroke="#f59e0b" stroke-dasharray="4,2"/>
+  <rect x="250" y="883" width="28" height="34" rx="4" fill="#fef3c7"/>
+  <text x="264" y="904" text-anchor="middle" class="badge" fill="#d97706">bin</text>
+  <text x="286" y="895" class="q-id">rhq031</text>
+  <text x="286" y="907" class="q-type">regular periods past 12 mo?</text>
+
+  <rect x="250" y="925" width="190" height="34" rx="4" fill="#fffbeb" stroke="#f59e0b" stroke-dasharray="4,2"/>
+  <rect x="250" y="925" width="28" height="34" rx="4" fill="#fef3c7"/>
+  <text x="264" y="946" text-anchor="middle" class="badge" fill="#d97706">num</text>
+  <text x="286" y="937" class="q-id">rhq060</text>
+  <text x="286" y="949" class="q-type">age at last menstrual period</text>
+
+  <rect x="250" y="967" width="190" height="34" rx="4" fill="#fffbeb" stroke="#f59e0b" stroke-dasharray="4,2"/>
+  <rect x="250" y="967" width="28" height="34" rx="4" fill="#fef3c7"/>
+  <text x="264" y="988" text-anchor="middle" class="badge" fill="#d97706">bin</text>
+  <text x="286" y="979" class="q-id">rhq540</text>
+  <text x="286" y="991" class="q-type">ever used female hormones?</text>
+
+  <!-- flow all IF gender=female -->
+  <text x="300" y="749" class="arrow-label" fill="#f59e0b">all IF gender = female ↓</text>
+  <line x1="345" y1="791" x2="345" y2="799" stroke="#f59e0b" stroke-width="1.5" stroke-dasharray="4,2" marker-end="url(#arrow-cond)"/>
+  <line x1="345" y1="833" x2="345" y2="841" stroke="#f59e0b" stroke-width="1.5" stroke-dasharray="4,2" marker-end="url(#arrow-cond)"/>
+  <text x="348" y="839" class="arrow-label">IF rhq131=yes</text>
+  <line x1="345" y1="875" x2="345" y2="883" stroke="#f59e0b" stroke-width="1.5" stroke-dasharray="4,2" marker-end="url(#arrow-cond)"/>
+  <line x1="345" y1="917" x2="345" y2="925" stroke="#f59e0b" stroke-width="1.5" stroke-dasharray="4,2" marker-end="url(#arrow-cond)"/>
+  <text x="348" y="923" class="arrow-label">IF no regular periods</text>
+  <line x1="345" y1="959" x2="345" y2="967" stroke="#f59e0b" stroke-width="1.5" stroke-dasharray="4,2" marker-end="url(#arrow-cond)"/>
+
+  <!-- ─────────────────────────────────────────
+       MODULE 8 — LABS
+  ───────────────────────────────────────── -->
+  <rect x="470" y="720" width="200" height="28" rx="5" fill="#0f766e"/>
+  <text x="570" y="739" text-anchor="middle" class="section-label">8 · LAB RESULTS</text>
+
+  <rect x="470" y="757" width="190" height="80" rx="4" fill="#fff" stroke="#cbd5e1"/>
+  <rect x="470" y="757" width="28" height="80" rx="4" fill="#e0fdf4"/>
+  <text x="484" y="800" text-anchor="middle" class="badge" fill="#0f766e">file</text>
+  <text x="506" y="775" class="q-id">lab_upload</text>
+  <text x="506" y="789" class="q-type">PDF / image upload</text>
+  <text x="506" y="801" class="q-type">→ MedGemma extraction</text>
+  <text x="506" y="813" class="q-type">→ regex fallback</text>
+  <text x="506" y="825" class="q-type">→ structuredValues → ML</text>
+
+  <!-- ─────────────────────────────────────────
+       ML PIPELINE BOX
+  ───────────────────────────────────────── -->
+  <rect x="690" y="720" width="660" height="200" rx="8" fill="#1e293b" stroke="#334155"/>
+  <text x="1020" y="746" text-anchor="middle" font-size="13" font-weight="700" fill="#f1f5f9">ML SCORING PIPELINE</text>
+
+  <!-- 11 models in 3 cols -->
+  <!-- col 1 -->
+  <rect x="706" y="756" width="130" height="22" rx="3" fill="#0f172a"/>
+  <text x="771" y="771" text-anchor="middle" font-size="10" fill="#86efac">anemia</text>
+  <rect x="706" y="784" width="130" height="22" rx="3" fill="#0f172a"/>
+  <text x="771" y="799" text-anchor="middle" font-size="10" fill="#86efac">iron_deficiency</text>
+  <rect x="706" y="812" width="130" height="22" rx="3" fill="#0f172a"/>
+  <text x="771" y="827" text-anchor="middle" font-size="10" fill="#86efac">thyroid</text>
+  <rect x="706" y="840" width="130" height="22" rx="3" fill="#0f172a"/>
+  <text x="771" y="855" text-anchor="middle" font-size="10" fill="#86efac">kidney</text>
+
+  <!-- col 2 -->
+  <rect x="846" y="756" width="130" height="22" rx="3" fill="#0f172a"/>
+  <text x="911" y="771" text-anchor="middle" font-size="10" fill="#86efac">sleep_disorder</text>
+  <rect x="846" y="784" width="130" height="22" rx="3" fill="#0f172a"/>
+  <text x="911" y="799" text-anchor="middle" font-size="10" fill="#86efac">liver</text>
+  <rect x="846" y="812" width="130" height="22" rx="3" fill="#0f172a"/>
+  <text x="911" y="827" text-anchor="middle" font-size="10" fill="#86efac">prediabetes</text>
+  <rect x="846" y="840" width="130" height="22" rx="3" fill="#0f172a"/>
+  <text x="911" y="855" text-anchor="middle" font-size="10" fill="#86efac">inflammation</text>
+
+  <!-- col 3 -->
+  <rect x="986" y="756" width="130" height="22" rx="3" fill="#0f172a"/>
+  <text x="1051" y="771" text-anchor="middle" font-size="10" fill="#86efac">electrolytes</text>
+  <rect x="986" y="784" width="130" height="22" rx="3" fill="#0f172a"/>
+  <text x="1051" y="799" text-anchor="middle" font-size="10" fill="#86efac">hepatitis</text>
+  <rect x="986" y="812" width="130" height="22" rx="3" fill="#0f172a"/>
+  <text x="1051" y="827" text-anchor="middle" font-size="10" fill="#86efac">perimenopause</text>
+
+  <!-- threshold note -->
+  <rect x="1130" y="756" width="210" height="84" rx="5" fill="#172033" stroke="#334155"/>
+  <text x="1235" y="775" text-anchor="middle" font-size="11" font-weight="700" fill="#fbbf24">selectTopConditions()</text>
+  <text x="1235" y="793" text-anchor="middle" font-size="10" fill="#94a3b8">P ≥ 0.40 threshold</text>
+  <text x="1235" y="809" text-anchor="middle" font-size="10" fill="#94a3b8">sorted descending</text>
+  <text x="1235" y="825" text-anchor="middle" font-size="10" fill="#94a3b8">capped at top-3</text>
+  <text x="1235" y="841" text-anchor="middle" font-size="10" fill="#64748b">(mlConfig.ts)</text>
+
+  <!-- output to MedGemma -->
+  <text x="1020" y="890" text-anchor="middle" font-size="11" fill="#cbd5e1">top-3 flagged conditions → MedGemma (HF endpoint)</text>
+  <line x1="1020" y1="895" x2="1020" y2="910" stroke="#fbbf24" stroke-width="2" marker-end="url(#arrow)"/>
+  <text x="1020" y="910" text-anchor="middle" font-size="10" fill="#94a3b8">▸ generate-followup  ▸ analyze  ▸ deep-analyze</text>
+
+  <!-- ─────────────────────────────────────────
+       FLOW: end of modules → ML
+  ───────────────────────────────────────── -->
+  <!-- arrow from labs to ML box -->
+  <line x1="660" y1="797" x2="690" y2="797" stroke="#0f766e" stroke-width="2" marker-end="url(#arrow)"/>
+  <text x="672" y="793" class="arrow-label">labs</text>
+
+  <!-- big bracket indicating all answers feed ML -->
+  <line x1="230" y1="584" x2="690" y2="720" stroke="#94a3b8" stroke-width="1" stroke-dasharray="3,3"/>
+  <text x="420" y="660" class="note">all answers → score_answers.py → features</text>
+
+  <!-- ─────────────────────────────────────────
+       FEATURE MAPPING LEGEND
+  ───────────────────────────────────────── -->
+  <rect x="30" y="1210" width="1340" height="220" rx="8" fill="#fff" stroke="#e2e8f0"/>
+  <text x="700" y="1232" text-anchor="middle" font-size="13" font-weight="700" fill="#0f172a">Feature → Quiz Question Mapping (key ML features)</text>
+
+  <!-- 3 columns -->
+  <!-- col 1 -->
+  <text x="50" y="1258" font-size="11" font-weight="600" fill="#334155">Condition Models</text>
+  <text x="50" y="1276" font-size="10" fill="#475569">kidney</text>
+  <text x="50" y="1292" font-size="10" fill="#475569">hepatitis</text>
+  <text x="50" y="1308" font-size="10" fill="#475569">inflammation</text>
+  <text x="50" y="1324" font-size="10" fill="#475569">perimenopause</text>
+  <text x="50" y="1340" font-size="10" fill="#475569">prediabetes</text>
+  <text x="50" y="1356" font-size="10" fill="#475569">anemia / iron</text>
+
+  <!-- col 2 -->
+  <text x="200" y="1258" font-size="11" font-weight="600" fill="#334155">ML Feature</text>
+  <text x="200" y="1276" font-size="10" fill="#64748b">sbp_mean, dbp_mean, huq051</text>
+  <text x="200" y="1292" font-size="10" fill="#64748b">sbp_mean, dbp_mean, dmdeduc2</text>
+  <text x="200" y="1308" font-size="10" fill="#64748b">sbp_mean, dbp_mean, ocq670</text>
+  <text x="200" y="1324" font-size="10" fill="#64748b">kiq042, kiq052, kiq430, waist_cm, bpq050a</text>
+  <text x="200" y="1340" font-size="10" fill="#64748b">bmi, fasting_glucose, bpq020, mcq300c</text>
+  <text x="200" y="1356" font-size="10" fill="#64748b">wbc, hdl, ldl, total_protein, mcq053</text>
+
+  <!-- col 3 -->
+  <text x="540" y="1258" font-size="11" font-weight="600" fill="#334155">Quiz Question ID</text>
+  <text x="540" y="1276" font-size="10" fill="#64748b">blood_pressure (dual_numeric), huq051 (ordinal)</text>
+  <text x="540" y="1292" font-size="10" fill="#64748b">blood_pressure (dual_numeric), dmdeduc2 (ordinal)</text>
+  <text x="540" y="1308" font-size="10" fill="#64748b">blood_pressure (dual_numeric), ocq670 (categorical)</text>
+  <text x="540" y="1324" font-size="10" fill="#64748b">kiq042/052/430 (conditional on kiq005), waist_cm, bpq040a</text>
+  <text x="540" y="1340" font-size="10" fill="#64748b">height_weight→BMI, lab_upload→glucose, bpq020 in ms</text>
+  <text x="540" y="1356" font-size="10" fill="#64748b">lab_upload (structured PDF extraction)</text>
+
+  <!-- col 4 lab biomarkers -->
+  <text x="900" y="1258" font-size="11" font-weight="600" fill="#334155">Lab Biomarkers (extract-labs)</text>
+  <text x="900" y="1276" font-size="10" fill="#64748b">total_cholesterol_mg_dl</text>
+  <text x="900" y="1292" font-size="10" fill="#64748b">hdl_cholesterol_mg_dl</text>
+  <text x="900" y="1308" font-size="10" fill="#64748b">ldl_cholesterol_mg_dl</text>
+  <text x="900" y="1324" font-size="10" fill="#64748b">triglycerides_mg_dl</text>
+  <text x="900" y="1340" font-size="10" fill="#64748b">fasting_glucose_mg_dl</text>
+  <text x="900" y="1356" font-size="10" fill="#64748b">wbc_1000_cells_ul · total_protein_g_dl</text>
+
+  <text x="1100" y="1258" font-size="11" font-weight="600" fill="#334155">Extraction Method</text>
+  <text x="1100" y="1276" font-size="10" fill="#64748b">MedGemma STRUCTURED_PROMPT</text>
+  <text x="1100" y="1292" font-size="10" fill="#64748b">→ JSON parse</text>
+  <text x="1100" y="1308" font-size="10" fill="#64748b">→ regex fallback fills gaps</text>
+  <text x="1100" y="1324" font-size="10" fill="#64748b">→ structuredValues in answer dict</text>
+  <text x="1100" y="1340" font-size="10" fill="#64748b">→ score_answers.py merges</text>
+  <text x="1100" y="1356" font-size="10" fill="#64748b">→ questionnaire_to_model_features.py</text>
+
+  <!-- divider -->
+  <line x1="50" y1="1370" x2="1360" y2="1370" stroke="#e2e8f0"/>
+  <text x="700" y="1390" text-anchor="middle" font-size="10" fill="#94a3b8">bpq050a aliased from bpq040a in questionnaire_to_model_features.py · work_schedule aliased from ocq670</text>
+  <text x="700" y="1406" text-anchor="middle" font-size="10" fill="#94a3b8">score_answers.py: lab_upload dict check moved BEFORE generic dict handler (dead-code fix)</text>
+  <text x="700" y="1422" text-anchor="middle" font-size="10" fill="#94a3b8">52 total questions · 22 conditional branches · 8 modules · 11 ML classifiers</text>
+
+  <!-- footer -->
+  <text x="700" y="1460" text-anchor="middle" font-size="10" fill="#cbd5e1">halfFull · questionnaire v2 · generated 2026-03-20</text>
+</svg>

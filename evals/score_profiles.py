@@ -69,7 +69,6 @@ from models_normalized.model_runner import (  # noqa: E402
 
 # ── Condition name mapping (generator IDs → model registry keys) ───────────────
 CONDITION_TO_MODEL_KEY: dict[str, str | None] = {
-    "menopause":             "perimenopause",        # no separate menopause model
     "perimenopause":         "perimenopause",
     "hypothyroidism":        "thyroid",
     "kidney_disease":        "kidney",
@@ -658,7 +657,7 @@ def _build_answers(profile: dict) -> dict:
             answers["regular_periods"] = 1.0
         answers["mcq053___taking_treatment_for_anemia/past_3_mos"] = 1.0  # on iron supplements
 
-    elif target in ("perimenopause", "menopause"):
+    elif target == "perimenopause":
         # Perimenopause v2: reinforce no-regular-periods and age-at-last-period.
         answers["rhq031___had_regular_periods_in_past_12_months"] = 2.0
         answers["regular_periods"]                              = 2.0

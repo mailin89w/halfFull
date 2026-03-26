@@ -46,23 +46,41 @@ OUT_DIR         = ROOT / "data/processed/cluster"
 # Config
 # ---------------------------------------------------------------------------
 KNN_K            = 50      # number of nearest neighbours
-# Default: lab must be abnormal in this fraction of neighbours to surface.
-# K=50 at 15% = 7-8 neighbours must agree — validated against known-condition users.
-MIN_NEIGHBOUR_FRACTION = 0.15
+# Stricter default threshold for broad/noisy markers. Keep looser thresholds for
+# highly specific organ markers and core kidney/CBC/iron signals.
+MIN_NEIGHBOUR_FRACTION = 0.20
 
-# Lower absolute threshold for liver enzymes (more organ-specific signal per instance)
 LAB_SPECIFIC_THRESHOLDS: dict[str, float] = {
     "alt_u_l":               0.10,
     "ast_u_l":               0.10,
     "ggt_u_l":               0.10,
     "alp_u_l":               0.10,
     "total_bilirubin_mg_dl": 0.10,
+    "serum_creatinine_mg_dl": 0.15,
+    "bun_mg_dl":              0.15,
+    "LBXSC3SI_bicarbonate_mmol_l": 0.15,
+    "LBXHGB_hemoglobin_g_dl": 0.15,
+    "LBXHCT_hematocrit":      0.15,
+    "LBXRBCSI_red_blood_cell_count_million_cells_ul": 0.15,
+    "LBXMCVSI_mean_cell_volume_fl": 0.15,
+    "LBXMCHSI_mean_cell_hemoglobin_pg": 0.15,
+    "ferritin_ng_ml":         0.15,
+    "serum_iron_ug_dl":       0.15,
+    "tibc_ug_dl":             0.15,
+    "transferrin_saturation_pct": 0.15,
+    "fasting_glucose_mg_dl":  0.25,
+    "LBXGH_glycohemoglobin":  0.25,
+    "triglycerides_mg_dl":    0.25,
+    "hdl_cholesterol_mg_dl":  0.25,
+    "LBDLDL_ldl_cholesterol_friedewald_mg_dl": 0.25,
+    "total_cholesterol_mg_dl": 0.25,
+    "LBXHSCRP_hs_c_reactive_protein_mg_l": 0.25,
+    "LBXWBCSI_white_blood_cell_count_1000_cells_ul": 0.25,
 }
 
 # Lift gate: neighbourhood rate must be >= MIN_LIFT × population baseline rate.
-# Prevents common-population findings (high LDL 58%, high glucose 53%, high SBP 45%)
-# from surfacing as if they were meaningful neighbourhood signals.
-MIN_LIFT = 1.5
+# Tightened to suppress common broad metabolic findings unless they are clearly enriched.
+MIN_LIFT = 2.0
 
 # Population baseline rates file (built by cluster_knn_inference.py first pass)
 POP_RATES_FILE = ROOT / "data/processed/cluster/artifacts/lab_population_rates.json"

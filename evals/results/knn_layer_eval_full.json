@@ -1,0 +1,685 @@
+{
+  "profiles_path": "/Users/annaesakova/aipm/halfFull/evals/cohort/profiles_v2_latent.json",
+  "skip_reasons": {
+    "unsupported_conditions": 193,
+    "no_expected_conditions": 150,
+    "no_abnormal_ground_truth_labs": 2
+  },
+  "summary": {
+    "n_profiles": 203,
+    "control_hit_rate": 0.7143,
+    "treatment_hit_rate": 0.9163,
+    "delta_hit_rate": 0.202,
+    "control_exact_coverage": 0.1773,
+    "treatment_exact_coverage": 0.3793,
+    "delta_exact_coverage": 0.202,
+    "control_mean_recall": 0.4433,
+    "treatment_mean_recall": 0.6765,
+    "delta_mean_recall": 0.2332,
+    "control_mean_precision": 0.4651,
+    "treatment_mean_precision": 0.5003,
+    "delta_mean_precision": 0.0352,
+    "profiles_with_knn_signal": 199,
+    "profiles_improved_by_knn": 94,
+    "by_profile_type": {
+      "borderline": {
+        "count": 92,
+        "control_hit_rate": 0.6848,
+        "treatment_hit_rate": 0.9239,
+        "improved_rate": 0.4783
+      },
+      "edge": {
+        "count": 15,
+        "control_hit_rate": 0.6667,
+        "treatment_hit_rate": 0.8,
+        "improved_rate": 0.3333
+      },
+      "positive": {
+        "count": 96,
+        "control_hit_rate": 0.75,
+        "treatment_hit_rate": 0.9271,
+        "improved_rate": 0.4688
+      }
+    }
+  },
+  "sample_improvements": [
+    {
+      "profile_id": "SYN-THY00002",
+      "profile_type": "positive",
+      "expected_conditions": [
+        "hypothyroidism"
+      ],
+      "top_conditions": [
+        "sleep_disorder",
+        "hypothyroidism",
+        "electrolyte_imbalance"
+      ],
+      "ground_truth_groups": [
+        "glycemic",
+        "thyroid"
+      ],
+      "expected_groups": [
+        "thyroid"
+      ],
+      "control_groups": [
+        "thyroid"
+      ],
+      "knn_groups": [
+        "glycemic",
+        "lipids"
+      ],
+      "treatment_groups": [
+        "glycemic",
+        "lipids",
+        "thyroid"
+      ]
+    },
+    {
+      "profile_id": "SYN-THY00004",
+      "profile_type": "positive",
+      "expected_conditions": [
+        "hypothyroidism"
+      ],
+      "top_conditions": [
+        "hypothyroidism",
+        "sleep_disorder",
+        "electrolyte_imbalance"
+      ],
+      "ground_truth_groups": [
+        "glycemic",
+        "lipids",
+        "thyroid"
+      ],
+      "expected_groups": [
+        "thyroid"
+      ],
+      "control_groups": [
+        "thyroid"
+      ],
+      "knn_groups": [
+        "glycemic",
+        "lipids"
+      ],
+      "treatment_groups": [
+        "glycemic",
+        "lipids",
+        "thyroid"
+      ]
+    },
+    {
+      "profile_id": "SYN-THY00007",
+      "profile_type": "positive",
+      "expected_conditions": [
+        "hypothyroidism"
+      ],
+      "top_conditions": [
+        "hypothyroidism",
+        "sleep_disorder",
+        "electrolyte_imbalance"
+      ],
+      "ground_truth_groups": [
+        "glycemic",
+        "thyroid"
+      ],
+      "expected_groups": [
+        "thyroid"
+      ],
+      "control_groups": [
+        "thyroid"
+      ],
+      "knn_groups": [
+        "glycemic",
+        "lipids"
+      ],
+      "treatment_groups": [
+        "glycemic",
+        "lipids",
+        "thyroid"
+      ]
+    },
+    {
+      "profile_id": "SYN-THY00008",
+      "profile_type": "positive",
+      "expected_conditions": [
+        "hypothyroidism"
+      ],
+      "top_conditions": [
+        "hypothyroidism",
+        "sleep_disorder",
+        "electrolyte_imbalance"
+      ],
+      "ground_truth_groups": [
+        "lipids",
+        "thyroid"
+      ],
+      "expected_groups": [
+        "thyroid"
+      ],
+      "control_groups": [
+        "thyroid"
+      ],
+      "knn_groups": [
+        "glycemic",
+        "lipids"
+      ],
+      "treatment_groups": [
+        "glycemic",
+        "lipids",
+        "thyroid"
+      ]
+    },
+    {
+      "profile_id": "SYN-THY00009",
+      "profile_type": "positive",
+      "expected_conditions": [
+        "hypothyroidism"
+      ],
+      "top_conditions": [
+        "sleep_disorder",
+        "hypothyroidism",
+        "electrolyte_imbalance"
+      ],
+      "ground_truth_groups": [
+        "glycemic",
+        "thyroid"
+      ],
+      "expected_groups": [
+        "thyroid"
+      ],
+      "control_groups": [
+        "thyroid"
+      ],
+      "knn_groups": [
+        "glycemic",
+        "lipids"
+      ],
+      "treatment_groups": [
+        "glycemic",
+        "lipids",
+        "thyroid"
+      ]
+    },
+    {
+      "profile_id": "SYN-THY00010",
+      "profile_type": "positive",
+      "expected_conditions": [
+        "hypothyroidism"
+      ],
+      "top_conditions": [
+        "hypothyroidism",
+        "sleep_disorder",
+        "electrolyte_imbalance"
+      ],
+      "ground_truth_groups": [
+        "glycemic",
+        "lipids",
+        "thyroid"
+      ],
+      "expected_groups": [
+        "thyroid"
+      ],
+      "control_groups": [
+        "thyroid"
+      ],
+      "knn_groups": [
+        "glycemic",
+        "lipids"
+      ],
+      "treatment_groups": [
+        "glycemic",
+        "lipids",
+        "thyroid"
+      ]
+    },
+    {
+      "profile_id": "SYN-THY00011",
+      "profile_type": "positive",
+      "expected_conditions": [
+        "hypothyroidism"
+      ],
+      "top_conditions": [
+        "hypothyroidism",
+        "sleep_disorder",
+        "electrolyte_imbalance"
+      ],
+      "ground_truth_groups": [
+        "glycemic",
+        "inflammation",
+        "lipids",
+        "thyroid"
+      ],
+      "expected_groups": [
+        "thyroid"
+      ],
+      "control_groups": [
+        "thyroid"
+      ],
+      "knn_groups": [
+        "glycemic",
+        "lipids"
+      ],
+      "treatment_groups": [
+        "glycemic",
+        "lipids",
+        "thyroid"
+      ]
+    },
+    {
+      "profile_id": "SYN-THY00012",
+      "profile_type": "positive",
+      "expected_conditions": [
+        "hypothyroidism"
+      ],
+      "top_conditions": [
+        "sleep_disorder",
+        "hypothyroidism",
+        "anemia"
+      ],
+      "ground_truth_groups": [
+        "glycemic",
+        "inflammation",
+        "lipids",
+        "thyroid"
+      ],
+      "expected_groups": [
+        "thyroid"
+      ],
+      "control_groups": [
+        "cbc",
+        "iron_studies",
+        "thyroid"
+      ],
+      "knn_groups": [
+        "glycemic",
+        "lipids"
+      ],
+      "treatment_groups": [
+        "cbc",
+        "glycemic",
+        "iron_studies",
+        "lipids",
+        "thyroid"
+      ]
+    },
+    {
+      "profile_id": "SYN-THY00015",
+      "profile_type": "positive",
+      "expected_conditions": [
+        "hypothyroidism"
+      ],
+      "top_conditions": [
+        "inflammation",
+        "sleep_disorder",
+        "hypothyroidism"
+      ],
+      "ground_truth_groups": [
+        "glycemic",
+        "lipids",
+        "thyroid"
+      ],
+      "expected_groups": [
+        "thyroid"
+      ],
+      "control_groups": [
+        "inflammation",
+        "thyroid"
+      ],
+      "knn_groups": [
+        "lipids"
+      ],
+      "treatment_groups": [
+        "inflammation",
+        "lipids",
+        "thyroid"
+      ]
+    },
+    {
+      "profile_id": "SYN-THY00016",
+      "profile_type": "positive",
+      "expected_conditions": [
+        "hypothyroidism"
+      ],
+      "top_conditions": [
+        "sleep_disorder",
+        "hypothyroidism",
+        "electrolyte_imbalance"
+      ],
+      "ground_truth_groups": [
+        "glycemic",
+        "thyroid"
+      ],
+      "expected_groups": [
+        "thyroid"
+      ],
+      "control_groups": [
+        "thyroid"
+      ],
+      "knn_groups": [
+        "glycemic",
+        "lipids"
+      ],
+      "treatment_groups": [
+        "glycemic",
+        "lipids",
+        "thyroid"
+      ]
+    },
+    {
+      "profile_id": "SYN-THY00020",
+      "profile_type": "positive",
+      "expected_conditions": [
+        "hypothyroidism"
+      ],
+      "top_conditions": [
+        "hypothyroidism",
+        "sleep_disorder",
+        "electrolyte_imbalance"
+      ],
+      "ground_truth_groups": [
+        "glycemic",
+        "thyroid"
+      ],
+      "expected_groups": [
+        "thyroid"
+      ],
+      "control_groups": [
+        "thyroid"
+      ],
+      "knn_groups": [
+        "glycemic",
+        "lipids"
+      ],
+      "treatment_groups": [
+        "glycemic",
+        "lipids",
+        "thyroid"
+      ]
+    },
+    {
+      "profile_id": "SYN-THY00021",
+      "profile_type": "borderline",
+      "expected_conditions": [
+        "hypothyroidism"
+      ],
+      "top_conditions": [
+        "sleep_disorder",
+        "hypothyroidism",
+        "electrolyte_imbalance"
+      ],
+      "ground_truth_groups": [
+        "glycemic",
+        "inflammation",
+        "thyroid"
+      ],
+      "expected_groups": [
+        "thyroid"
+      ],
+      "control_groups": [
+        "thyroid"
+      ],
+      "knn_groups": [
+        "glycemic",
+        "lipids"
+      ],
+      "treatment_groups": [
+        "glycemic",
+        "lipids",
+        "thyroid"
+      ]
+    },
+    {
+      "profile_id": "SYN-THY00022",
+      "profile_type": "borderline",
+      "expected_conditions": [
+        "hypothyroidism"
+      ],
+      "top_conditions": [
+        "sleep_disorder",
+        "hypothyroidism",
+        "inflammation"
+      ],
+      "ground_truth_groups": [
+        "glycemic",
+        "lipids",
+        "thyroid"
+      ],
+      "expected_groups": [
+        "thyroid"
+      ],
+      "control_groups": [
+        "inflammation",
+        "thyroid"
+      ],
+      "knn_groups": [
+        "glycemic",
+        "lipids"
+      ],
+      "treatment_groups": [
+        "glycemic",
+        "inflammation",
+        "lipids",
+        "thyroid"
+      ]
+    },
+    {
+      "profile_id": "SYN-THY00025",
+      "profile_type": "borderline",
+      "expected_conditions": [
+        "hypothyroidism"
+      ],
+      "top_conditions": [
+        "sleep_disorder",
+        "hypothyroidism",
+        "electrolyte_imbalance"
+      ],
+      "ground_truth_groups": [
+        "glycemic",
+        "thyroid"
+      ],
+      "expected_groups": [
+        "thyroid"
+      ],
+      "control_groups": [
+        "thyroid"
+      ],
+      "knn_groups": [
+        "glycemic",
+        "lipids"
+      ],
+      "treatment_groups": [
+        "glycemic",
+        "lipids",
+        "thyroid"
+      ]
+    },
+    {
+      "profile_id": "SYN-THY00029",
+      "profile_type": "borderline",
+      "expected_conditions": [
+        "hypothyroidism"
+      ],
+      "top_conditions": [
+        "sleep_disorder",
+        "hypothyroidism",
+        "inflammation"
+      ],
+      "ground_truth_groups": [
+        "lipids",
+        "thyroid"
+      ],
+      "expected_groups": [
+        "thyroid"
+      ],
+      "control_groups": [
+        "inflammation",
+        "thyroid"
+      ],
+      "knn_groups": [
+        "glycemic",
+        "lipids"
+      ],
+      "treatment_groups": [
+        "glycemic",
+        "inflammation",
+        "lipids",
+        "thyroid"
+      ]
+    },
+    {
+      "profile_id": "SYN-THY00031",
+      "profile_type": "borderline",
+      "expected_conditions": [
+        "hypothyroidism"
+      ],
+      "top_conditions": [
+        "sleep_disorder",
+        "inflammation",
+        "electrolyte_imbalance"
+      ],
+      "ground_truth_groups": [
+        "glycemic",
+        "inflammation",
+        "thyroid"
+      ],
+      "expected_groups": [
+        "thyroid"
+      ],
+      "control_groups": [
+        "inflammation"
+      ],
+      "knn_groups": [
+        "glycemic",
+        "lipids"
+      ],
+      "treatment_groups": [
+        "glycemic",
+        "inflammation",
+        "lipids"
+      ]
+    },
+    {
+      "profile_id": "SYN-THY00032",
+      "profile_type": "borderline",
+      "expected_conditions": [
+        "hypothyroidism"
+      ],
+      "top_conditions": [
+        "hypothyroidism",
+        "sleep_disorder",
+        "electrolyte_imbalance"
+      ],
+      "ground_truth_groups": [
+        "glycemic",
+        "inflammation"
+      ],
+      "expected_groups": [
+        "thyroid"
+      ],
+      "control_groups": [
+        "thyroid"
+      ],
+      "knn_groups": [
+        "glycemic",
+        "lipids"
+      ],
+      "treatment_groups": [
+        "glycemic",
+        "lipids",
+        "thyroid"
+      ]
+    },
+    {
+      "profile_id": "SYN-THY00033",
+      "profile_type": "borderline",
+      "expected_conditions": [
+        "hypothyroidism"
+      ],
+      "top_conditions": [
+        "sleep_disorder",
+        "hypothyroidism",
+        "electrolyte_imbalance"
+      ],
+      "ground_truth_groups": [
+        "glycemic",
+        "thyroid"
+      ],
+      "expected_groups": [
+        "thyroid"
+      ],
+      "control_groups": [
+        "thyroid"
+      ],
+      "knn_groups": [
+        "glycemic",
+        "lipids"
+      ],
+      "treatment_groups": [
+        "glycemic",
+        "lipids",
+        "thyroid"
+      ]
+    },
+    {
+      "profile_id": "SYN-THY00036",
+      "profile_type": "borderline",
+      "expected_conditions": [
+        "hypothyroidism"
+      ],
+      "top_conditions": [
+        "sleep_disorder",
+        "hypothyroidism",
+        "electrolyte_imbalance"
+      ],
+      "ground_truth_groups": [
+        "lipids",
+        "thyroid"
+      ],
+      "expected_groups": [
+        "thyroid"
+      ],
+      "control_groups": [
+        "thyroid"
+      ],
+      "knn_groups": [
+        "glycemic",
+        "lipids"
+      ],
+      "treatment_groups": [
+        "glycemic",
+        "lipids",
+        "thyroid"
+      ]
+    },
+    {
+      "profile_id": "SYN-THY00037",
+      "profile_type": "borderline",
+      "expected_conditions": [
+        "hypothyroidism"
+      ],
+      "top_conditions": [
+        "hypothyroidism",
+        "sleep_disorder",
+        "kidney_disease"
+      ],
+      "ground_truth_groups": [
+        "glycemic",
+        "lipids"
+      ],
+      "expected_groups": [
+        "thyroid"
+      ],
+      "control_groups": [
+        "thyroid"
+      ],
+      "knn_groups": [
+        "glycemic",
+        "lipids"
+      ],
+      "treatment_groups": [
+        "glycemic",
+        "lipids",
+        "thyroid"
+      ]
+    }
+  ]
+}

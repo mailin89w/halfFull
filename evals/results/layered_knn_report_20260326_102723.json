@@ -1,0 +1,2923 @@
+{
+  "cohort_paths": [
+    "/Users/annaesakova/aipm/halfFull/evals/cohort/knn_overlap_pack.json",
+    "/Users/annaesakova/aipm/halfFull/evals/cohort/knn_liver_pack.json"
+  ],
+  "knn_max_groups": 1,
+  "summary": {
+    "n_profiles": 22,
+    "ml_only": {
+      "hit_rate": 0.6364,
+      "exact_coverage": 0.2273,
+      "mean_recall": 0.4242,
+      "mean_precision": 0.4545
+    },
+    "ml_plus_bayesian": {
+      "hit_rate": 0.5909,
+      "exact_coverage": 0.2273,
+      "mean_recall": 0.447,
+      "mean_precision": 0.4924
+    },
+    "ml_plus_bayesian_plus_knn": {
+      "hit_rate": 0.6818,
+      "exact_coverage": 0.3182,
+      "mean_recall": 0.5455,
+      "mean_precision": 0.4886
+    },
+    "bayesian_gain_over_ml": {
+      "hit_rate": -0.0455,
+      "exact_coverage": 0.0,
+      "mean_recall": 0.0228,
+      "mean_precision": 0.0379
+    },
+    "knn_gain_over_ml_plus_bayesian": {
+      "hit_rate": 0.0909,
+      "exact_coverage": 0.0909,
+      "mean_recall": 0.0985,
+      "mean_precision": -0.0038
+    },
+    "total_gain_over_ml": {
+      "hit_rate": 0.0454,
+      "exact_coverage": 0.0909,
+      "mean_recall": 0.1213,
+      "mean_precision": 0.0341
+    }
+  },
+  "per_condition": {
+    "anemia": {
+      "condition_routing_ml": {
+        "n": 1,
+        "top1_accuracy": 0.0,
+        "top3_coverage": 1.0
+      },
+      "condition_routing_bayesian": {
+        "n": 1,
+        "top1_accuracy": 1.0,
+        "top3_coverage": 1.0
+      },
+      "lab_coverage_ml": {
+        "n": 1,
+        "hit_rate": 1.0,
+        "exact_coverage": 0.0,
+        "mean_recall": 0.6667,
+        "mean_precision": 1.0
+      },
+      "lab_coverage_bayesian": {
+        "n": 1,
+        "hit_rate": 1.0,
+        "exact_coverage": 0.0,
+        "mean_recall": 0.6667,
+        "mean_precision": 1.0
+      },
+      "lab_coverage_full": {
+        "n": 1,
+        "hit_rate": 1.0,
+        "exact_coverage": 0.0,
+        "mean_recall": 0.6667,
+        "mean_precision": 1.0
+      }
+    },
+    "hepatitis": {
+      "condition_routing_ml": {
+        "n": 6,
+        "top1_accuracy": 0.0,
+        "top3_coverage": 0.8333
+      },
+      "condition_routing_bayesian": {
+        "n": 6,
+        "top1_accuracy": 0.5,
+        "top3_coverage": 0.8333
+      },
+      "lab_coverage_ml": {
+        "n": 6,
+        "hit_rate": 1.0,
+        "exact_coverage": 0.3333,
+        "mean_recall": 0.6389,
+        "mean_precision": 0.6944
+      },
+      "lab_coverage_bayesian": {
+        "n": 6,
+        "hit_rate": 0.8333,
+        "exact_coverage": 0.5,
+        "mean_recall": 0.6389,
+        "mean_precision": 0.5556
+      },
+      "lab_coverage_full": {
+        "n": 6,
+        "hit_rate": 0.8333,
+        "exact_coverage": 0.5,
+        "mean_recall": 0.6944,
+        "mean_precision": 0.5139
+      }
+    },
+    "hypothyroidism": {
+      "condition_routing_ml": {
+        "n": 1,
+        "top1_accuracy": 0.0,
+        "top3_coverage": 0.0
+      },
+      "condition_routing_bayesian": {
+        "n": 1,
+        "top1_accuracy": 0.0,
+        "top3_coverage": 0.0
+      },
+      "lab_coverage_ml": {
+        "n": 1,
+        "hit_rate": 0.0,
+        "exact_coverage": 0.0,
+        "mean_recall": 0.0,
+        "mean_precision": 0.0
+      },
+      "lab_coverage_bayesian": {
+        "n": 1,
+        "hit_rate": 1.0,
+        "exact_coverage": 0.0,
+        "mean_recall": 0.6667,
+        "mean_precision": 1.0
+      },
+      "lab_coverage_full": {
+        "n": 1,
+        "hit_rate": 1.0,
+        "exact_coverage": 0.0,
+        "mean_recall": 0.6667,
+        "mean_precision": 1.0
+      }
+    },
+    "iron_deficiency": {
+      "condition_routing_ml": {
+        "n": 1,
+        "top1_accuracy": 0.0,
+        "top3_coverage": 0.0
+      },
+      "condition_routing_bayesian": {
+        "n": 1,
+        "top1_accuracy": 0.0,
+        "top3_coverage": 0.0
+      },
+      "lab_coverage_ml": {
+        "n": 1,
+        "hit_rate": 1.0,
+        "exact_coverage": 1.0,
+        "mean_recall": 1.0,
+        "mean_precision": 0.5
+      },
+      "lab_coverage_bayesian": {
+        "n": 1,
+        "hit_rate": 1.0,
+        "exact_coverage": 1.0,
+        "mean_recall": 1.0,
+        "mean_precision": 0.5
+      },
+      "lab_coverage_full": {
+        "n": 1,
+        "hit_rate": 1.0,
+        "exact_coverage": 1.0,
+        "mean_recall": 1.0,
+        "mean_precision": 0.5
+      }
+    },
+    "kidney_disease": {
+      "condition_routing_ml": {
+        "n": 4,
+        "top1_accuracy": 0.0,
+        "top3_coverage": 0.0
+      },
+      "condition_routing_bayesian": {
+        "n": 4,
+        "top1_accuracy": 0.0,
+        "top3_coverage": 0.0
+      },
+      "lab_coverage_ml": {
+        "n": 4,
+        "hit_rate": 0.25,
+        "exact_coverage": 0.0,
+        "mean_recall": 0.1667,
+        "mean_precision": 0.25
+      },
+      "lab_coverage_bayesian": {
+        "n": 4,
+        "hit_rate": 0.25,
+        "exact_coverage": 0.0,
+        "mean_recall": 0.1667,
+        "mean_precision": 0.25
+      },
+      "lab_coverage_full": {
+        "n": 4,
+        "hit_rate": 0.75,
+        "exact_coverage": 0.5,
+        "mean_recall": 0.625,
+        "mean_precision": 0.4167
+      }
+    },
+    "liver": {
+      "condition_routing_ml": {
+        "n": 8,
+        "top1_accuracy": 0.0,
+        "top3_coverage": 0.0
+      },
+      "condition_routing_bayesian": {
+        "n": 8,
+        "top1_accuracy": 0.0,
+        "top3_coverage": 0.0
+      },
+      "lab_coverage_ml": {
+        "n": 8,
+        "hit_rate": 0.5,
+        "exact_coverage": 0.25,
+        "mean_recall": 0.3542,
+        "mean_precision": 0.2917
+      },
+      "lab_coverage_bayesian": {
+        "n": 8,
+        "hit_rate": 0.375,
+        "exact_coverage": 0.125,
+        "mean_recall": 0.2917,
+        "mean_precision": 0.375
+      },
+      "lab_coverage_full": {
+        "n": 8,
+        "hit_rate": 0.375,
+        "exact_coverage": 0.125,
+        "mean_recall": 0.2917,
+        "mean_precision": 0.3125
+      }
+    },
+    "prediabetes": {
+      "condition_routing_ml": {
+        "n": 1,
+        "top1_accuracy": 0.0,
+        "top3_coverage": 0.0
+      },
+      "condition_routing_bayesian": {
+        "n": 1,
+        "top1_accuracy": 0.0,
+        "top3_coverage": 1.0
+      },
+      "lab_coverage_ml": {
+        "n": 1,
+        "hit_rate": 1.0,
+        "exact_coverage": 0.0,
+        "mean_recall": 0.3333,
+        "mean_precision": 1.0
+      },
+      "lab_coverage_bayesian": {
+        "n": 1,
+        "hit_rate": 1.0,
+        "exact_coverage": 0.0,
+        "mean_recall": 0.6667,
+        "mean_precision": 1.0
+      },
+      "lab_coverage_full": {
+        "n": 1,
+        "hit_rate": 1.0,
+        "exact_coverage": 0.0,
+        "mean_recall": 0.6667,
+        "mean_precision": 1.0
+      }
+    }
+  },
+  "rows": [
+    {
+      "profile_id": "KNN-OVR-001",
+      "profile_type": "positive",
+      "primary_condition": "kidney_disease",
+      "expected_conditions": [
+        "kidney_disease"
+      ],
+      "ground_truth_groups": [
+        "kidney"
+      ],
+      "ml": {
+        "top_conditions": [
+          "sleep_disorder",
+          "thyroid",
+          "prediabetes"
+        ],
+        "groups": [
+          "glycemic",
+          "lipids"
+        ],
+        "hit": false,
+        "exact": false,
+        "recall": 0.0,
+        "precision": 0.0
+      },
+      "bayes": {
+        "top_conditions": [
+          "sleep_disorder",
+          "thyroid",
+          "prediabetes"
+        ],
+        "groups": [
+          "glycemic",
+          "lipids"
+        ],
+        "hit": false,
+        "exact": false,
+        "recall": 0.0,
+        "precision": 0.0
+      },
+      "full": {
+        "top_conditions": [
+          "sleep_disorder",
+          "thyroid",
+          "prediabetes"
+        ],
+        "groups": [
+          "glycemic",
+          "kidney",
+          "lipids"
+        ],
+        "knn_groups": [
+          "kidney"
+        ],
+        "hit": true,
+        "exact": true,
+        "recall": 1.0,
+        "precision": 0.3333333333333333
+      }
+    },
+    {
+      "profile_id": "KNN-OVR-002",
+      "profile_type": "edge",
+      "primary_condition": "kidney_disease",
+      "expected_conditions": [
+        "kidney_disease",
+        "anemia"
+      ],
+      "ground_truth_groups": [
+        "cbc",
+        "kidney"
+      ],
+      "ml": {
+        "top_conditions": [
+          "sleep_disorder",
+          "thyroid",
+          "prediabetes"
+        ],
+        "groups": [
+          "glycemic",
+          "lipids"
+        ],
+        "hit": false,
+        "exact": false,
+        "recall": 0.0,
+        "precision": 0.0
+      },
+      "bayes": {
+        "top_conditions": [
+          "kidney",
+          "thyroid",
+          "prediabetes"
+        ],
+        "groups": [
+          "glycemic",
+          "lipids"
+        ],
+        "hit": false,
+        "exact": false,
+        "recall": 0.0,
+        "precision": 0.0
+      },
+      "full": {
+        "top_conditions": [
+          "kidney",
+          "thyroid",
+          "prediabetes"
+        ],
+        "groups": [
+          "glycemic",
+          "lipids"
+        ],
+        "knn_groups": [],
+        "hit": false,
+        "exact": false,
+        "recall": 0.0,
+        "precision": 0.0
+      }
+    },
+    {
+      "profile_id": "KNN-OVR-003",
+      "profile_type": "edge",
+      "primary_condition": "kidney_disease",
+      "expected_conditions": [
+        "kidney_disease",
+        "prediabetes"
+      ],
+      "ground_truth_groups": [
+        "glycemic",
+        "kidney",
+        "lipids"
+      ],
+      "ml": {
+        "top_conditions": [
+          "sleep_disorder",
+          "thyroid",
+          "prediabetes"
+        ],
+        "groups": [
+          "glycemic",
+          "lipids"
+        ],
+        "hit": true,
+        "exact": false,
+        "recall": 0.6666666666666666,
+        "precision": 1.0
+      },
+      "bayes": {
+        "top_conditions": [
+          "kidney",
+          "sleep_disorder",
+          "prediabetes"
+        ],
+        "groups": [
+          "glycemic",
+          "lipids"
+        ],
+        "hit": true,
+        "exact": false,
+        "recall": 0.6666666666666666,
+        "precision": 1.0
+      },
+      "full": {
+        "top_conditions": [
+          "kidney",
+          "sleep_disorder",
+          "prediabetes"
+        ],
+        "groups": [
+          "glycemic",
+          "kidney",
+          "lipids"
+        ],
+        "knn_groups": [
+          "kidney"
+        ],
+        "hit": true,
+        "exact": true,
+        "recall": 1.0,
+        "precision": 1.0
+      }
+    },
+    {
+      "profile_id": "KNN-OVR-004",
+      "profile_type": "positive",
+      "primary_condition": "liver",
+      "expected_conditions": [
+        "liver"
+      ],
+      "ground_truth_groups": [
+        "liver_panel"
+      ],
+      "ml": {
+        "top_conditions": [
+          "sleep_disorder",
+          "hepatitis",
+          "inflammation"
+        ],
+        "groups": [
+          "inflammation",
+          "liver_panel"
+        ],
+        "hit": true,
+        "exact": true,
+        "recall": 1.0,
+        "precision": 0.5
+      },
+      "bayes": {
+        "top_conditions": [
+          "sleep_disorder",
+          "thyroid",
+          "electrolytes"
+        ],
+        "groups": [],
+        "hit": false,
+        "exact": false,
+        "recall": 0.0,
+        "precision": 0.0
+      },
+      "full": {
+        "top_conditions": [
+          "sleep_disorder",
+          "thyroid",
+          "electrolytes"
+        ],
+        "groups": [
+          "lipids"
+        ],
+        "knn_groups": [
+          "lipids"
+        ],
+        "hit": false,
+        "exact": false,
+        "recall": 0.0,
+        "precision": 0.0
+      }
+    },
+    {
+      "profile_id": "KNN-OVR-005",
+      "profile_type": "positive",
+      "primary_condition": "hepatitis",
+      "expected_conditions": [
+        "hepatitis"
+      ],
+      "ground_truth_groups": [
+        "liver_panel"
+      ],
+      "ml": {
+        "top_conditions": [
+          "sleep_disorder",
+          "hepatitis",
+          "anemia"
+        ],
+        "groups": [
+          "cbc",
+          "iron_studies",
+          "liver_panel"
+        ],
+        "hit": true,
+        "exact": true,
+        "recall": 1.0,
+        "precision": 0.3333333333333333
+      },
+      "bayes": {
+        "top_conditions": [
+          "hepatitis",
+          "liver",
+          "sleep_disorder"
+        ],
+        "groups": [
+          "liver_panel"
+        ],
+        "hit": true,
+        "exact": true,
+        "recall": 1.0,
+        "precision": 1.0
+      },
+      "full": {
+        "top_conditions": [
+          "hepatitis",
+          "liver",
+          "sleep_disorder"
+        ],
+        "groups": [
+          "liver_panel"
+        ],
+        "knn_groups": [],
+        "hit": true,
+        "exact": true,
+        "recall": 1.0,
+        "precision": 1.0
+      }
+    },
+    {
+      "profile_id": "KNN-OVR-006",
+      "profile_type": "edge",
+      "primary_condition": "liver",
+      "expected_conditions": [
+        "liver",
+        "inflammation"
+      ],
+      "ground_truth_groups": [
+        "inflammation",
+        "liver_panel"
+      ],
+      "ml": {
+        "top_conditions": [
+          "sleep_disorder",
+          "anemia",
+          "thyroid"
+        ],
+        "groups": [
+          "cbc",
+          "iron_studies"
+        ],
+        "hit": false,
+        "exact": false,
+        "recall": 0.0,
+        "precision": 0.0
+      },
+      "bayes": {
+        "top_conditions": [
+          "prediabetes",
+          "sleep_disorder",
+          "thyroid"
+        ],
+        "groups": [
+          "glycemic",
+          "lipids"
+        ],
+        "hit": false,
+        "exact": false,
+        "recall": 0.0,
+        "precision": 0.0
+      },
+      "full": {
+        "top_conditions": [
+          "prediabetes",
+          "sleep_disorder",
+          "thyroid"
+        ],
+        "groups": [
+          "glycemic",
+          "lipids"
+        ],
+        "knn_groups": [],
+        "hit": false,
+        "exact": false,
+        "recall": 0.0,
+        "precision": 0.0
+      }
+    },
+    {
+      "profile_id": "KNN-OVR-007",
+      "profile_type": "edge",
+      "primary_condition": "anemia",
+      "expected_conditions": [
+        "anemia",
+        "kidney_disease"
+      ],
+      "ground_truth_groups": [
+        "cbc",
+        "iron_studies",
+        "kidney"
+      ],
+      "ml": {
+        "top_conditions": [
+          "perimenopause",
+          "sleep_disorder",
+          "anemia"
+        ],
+        "groups": [
+          "cbc",
+          "iron_studies"
+        ],
+        "hit": true,
+        "exact": false,
+        "recall": 0.6666666666666666,
+        "precision": 1.0
+      },
+      "bayes": {
+        "top_conditions": [
+          "anemia",
+          "sleep_disorder",
+          "thyroid"
+        ],
+        "groups": [
+          "cbc",
+          "iron_studies"
+        ],
+        "hit": true,
+        "exact": false,
+        "recall": 0.6666666666666666,
+        "precision": 1.0
+      },
+      "full": {
+        "top_conditions": [
+          "anemia",
+          "sleep_disorder",
+          "thyroid"
+        ],
+        "groups": [
+          "cbc",
+          "iron_studies"
+        ],
+        "knn_groups": [],
+        "hit": true,
+        "exact": false,
+        "recall": 0.6666666666666666,
+        "precision": 1.0
+      }
+    },
+    {
+      "profile_id": "KNN-OVR-008",
+      "profile_type": "edge",
+      "primary_condition": "iron_deficiency",
+      "expected_conditions": [
+        "iron_deficiency",
+        "perimenopause"
+      ],
+      "ground_truth_groups": [
+        "cbc",
+        "iron_studies"
+      ],
+      "ml": {
+        "top_conditions": [
+          "sleep_disorder",
+          "anemia",
+          "prediabetes"
+        ],
+        "groups": [
+          "cbc",
+          "glycemic",
+          "iron_studies",
+          "lipids"
+        ],
+        "hit": true,
+        "exact": true,
+        "recall": 1.0,
+        "precision": 0.5
+      },
+      "bayes": {
+        "top_conditions": [
+          "anemia",
+          "sleep_disorder",
+          "prediabetes"
+        ],
+        "groups": [
+          "cbc",
+          "glycemic",
+          "iron_studies",
+          "lipids"
+        ],
+        "hit": true,
+        "exact": true,
+        "recall": 1.0,
+        "precision": 0.5
+      },
+      "full": {
+        "top_conditions": [
+          "anemia",
+          "sleep_disorder",
+          "prediabetes"
+        ],
+        "groups": [
+          "cbc",
+          "glycemic",
+          "iron_studies",
+          "lipids"
+        ],
+        "knn_groups": [],
+        "hit": true,
+        "exact": true,
+        "recall": 1.0,
+        "precision": 0.5
+      }
+    },
+    {
+      "profile_id": "KNN-OVR-009",
+      "profile_type": "edge",
+      "primary_condition": "hypothyroidism",
+      "expected_conditions": [
+        "hypothyroidism",
+        "prediabetes"
+      ],
+      "ground_truth_groups": [
+        "glycemic",
+        "lipids",
+        "thyroid"
+      ],
+      "ml": {
+        "top_conditions": [
+          "sleep_disorder",
+          "perimenopause",
+          "thyroid"
+        ],
+        "groups": [],
+        "hit": false,
+        "exact": false,
+        "recall": 0.0,
+        "precision": 0.0
+      },
+      "bayes": {
+        "top_conditions": [
+          "thyroid",
+          "sleep_disorder",
+          "prediabetes"
+        ],
+        "groups": [
+          "glycemic",
+          "lipids"
+        ],
+        "hit": true,
+        "exact": false,
+        "recall": 0.6666666666666666,
+        "precision": 1.0
+      },
+      "full": {
+        "top_conditions": [
+          "thyroid",
+          "sleep_disorder",
+          "prediabetes"
+        ],
+        "groups": [
+          "glycemic",
+          "lipids"
+        ],
+        "knn_groups": [],
+        "hit": true,
+        "exact": false,
+        "recall": 0.6666666666666666,
+        "precision": 1.0
+      }
+    },
+    {
+      "profile_id": "KNN-OVR-010",
+      "profile_type": "edge",
+      "primary_condition": "prediabetes",
+      "expected_conditions": [
+        "prediabetes",
+        "inflammation"
+      ],
+      "ground_truth_groups": [
+        "glycemic",
+        "inflammation",
+        "lipids"
+      ],
+      "ml": {
+        "top_conditions": [
+          "sleep_disorder",
+          "inflammation",
+          "thyroid"
+        ],
+        "groups": [
+          "inflammation"
+        ],
+        "hit": true,
+        "exact": false,
+        "recall": 0.3333333333333333,
+        "precision": 1.0
+      },
+      "bayes": {
+        "top_conditions": [
+          "sleep_disorder",
+          "prediabetes",
+          "thyroid"
+        ],
+        "groups": [
+          "glycemic",
+          "lipids"
+        ],
+        "hit": true,
+        "exact": false,
+        "recall": 0.6666666666666666,
+        "precision": 1.0
+      },
+      "full": {
+        "top_conditions": [
+          "sleep_disorder",
+          "prediabetes",
+          "thyroid"
+        ],
+        "groups": [
+          "glycemic",
+          "lipids"
+        ],
+        "knn_groups": [],
+        "hit": true,
+        "exact": false,
+        "recall": 0.6666666666666666,
+        "precision": 1.0
+      }
+    },
+    {
+      "profile_id": "KNN-OVR-011",
+      "profile_type": "edge",
+      "primary_condition": "liver",
+      "expected_conditions": [
+        "liver",
+        "prediabetes"
+      ],
+      "ground_truth_groups": [
+        "glycemic",
+        "lipids",
+        "liver_panel"
+      ],
+      "ml": {
+        "top_conditions": [
+          "sleep_disorder",
+          "hepatitis",
+          "kidney"
+        ],
+        "groups": [
+          "liver_panel"
+        ],
+        "hit": true,
+        "exact": false,
+        "recall": 0.3333333333333333,
+        "precision": 1.0
+      },
+      "bayes": {
+        "top_conditions": [
+          "sleep_disorder",
+          "prediabetes",
+          "thyroid"
+        ],
+        "groups": [
+          "glycemic",
+          "lipids"
+        ],
+        "hit": true,
+        "exact": false,
+        "recall": 0.6666666666666666,
+        "precision": 1.0
+      },
+      "full": {
+        "top_conditions": [
+          "sleep_disorder",
+          "prediabetes",
+          "thyroid"
+        ],
+        "groups": [
+          "glycemic",
+          "lipids"
+        ],
+        "knn_groups": [
+          "lipids"
+        ],
+        "hit": true,
+        "exact": false,
+        "recall": 0.6666666666666666,
+        "precision": 1.0
+      }
+    },
+    {
+      "profile_id": "KNN-OVR-012",
+      "profile_type": "edge",
+      "primary_condition": "kidney_disease",
+      "expected_conditions": [
+        "kidney_disease",
+        "inflammation"
+      ],
+      "ground_truth_groups": [
+        "inflammation",
+        "kidney"
+      ],
+      "ml": {
+        "top_conditions": [
+          "perimenopause",
+          "sleep_disorder",
+          "thyroid"
+        ],
+        "groups": [],
+        "hit": false,
+        "exact": false,
+        "recall": 0.0,
+        "precision": 0.0
+      },
+      "bayes": {
+        "top_conditions": [
+          "sleep_disorder",
+          "prediabetes",
+          "perimenopause"
+        ],
+        "groups": [
+          "glycemic",
+          "lipids"
+        ],
+        "hit": false,
+        "exact": false,
+        "recall": 0.0,
+        "precision": 0.0
+      },
+      "full": {
+        "top_conditions": [
+          "sleep_disorder",
+          "prediabetes",
+          "perimenopause"
+        ],
+        "groups": [
+          "glycemic",
+          "kidney",
+          "lipids"
+        ],
+        "knn_groups": [
+          "kidney"
+        ],
+        "hit": true,
+        "exact": false,
+        "recall": 0.5,
+        "precision": 0.3333333333333333
+      }
+    },
+    {
+      "profile_id": "KNN-LVR-001",
+      "profile_type": "positive",
+      "primary_condition": "liver",
+      "expected_conditions": [
+        "liver"
+      ],
+      "ground_truth_groups": [
+        "liver_panel"
+      ],
+      "ml": {
+        "top_conditions": [
+          "sleep_disorder",
+          "hepatitis",
+          "prediabetes"
+        ],
+        "groups": [
+          "glycemic",
+          "lipids",
+          "liver_panel"
+        ],
+        "hit": true,
+        "exact": true,
+        "recall": 1.0,
+        "precision": 0.3333333333333333
+      },
+      "bayes": {
+        "top_conditions": [
+          "hepatitis",
+          "sleep_disorder",
+          "electrolytes"
+        ],
+        "groups": [
+          "liver_panel"
+        ],
+        "hit": true,
+        "exact": true,
+        "recall": 1.0,
+        "precision": 1.0
+      },
+      "full": {
+        "top_conditions": [
+          "hepatitis",
+          "sleep_disorder",
+          "electrolytes"
+        ],
+        "groups": [
+          "lipids",
+          "liver_panel"
+        ],
+        "knn_groups": [
+          "lipids"
+        ],
+        "hit": true,
+        "exact": true,
+        "recall": 1.0,
+        "precision": 0.5
+      }
+    },
+    {
+      "profile_id": "KNN-LVR-002",
+      "profile_type": "positive",
+      "primary_condition": "hepatitis",
+      "expected_conditions": [
+        "hepatitis"
+      ],
+      "ground_truth_groups": [
+        "liver_panel"
+      ],
+      "ml": {
+        "top_conditions": [
+          "sleep_disorder",
+          "hepatitis",
+          "anemia"
+        ],
+        "groups": [
+          "cbc",
+          "iron_studies",
+          "liver_panel"
+        ],
+        "hit": true,
+        "exact": true,
+        "recall": 1.0,
+        "precision": 0.3333333333333333
+      },
+      "bayes": {
+        "top_conditions": [
+          "hepatitis",
+          "sleep_disorder",
+          "prediabetes"
+        ],
+        "groups": [
+          "glycemic",
+          "lipids",
+          "liver_panel"
+        ],
+        "hit": true,
+        "exact": true,
+        "recall": 1.0,
+        "precision": 0.3333333333333333
+      },
+      "full": {
+        "top_conditions": [
+          "hepatitis",
+          "sleep_disorder",
+          "prediabetes"
+        ],
+        "groups": [
+          "glycemic",
+          "lipids",
+          "liver_panel"
+        ],
+        "knn_groups": [],
+        "hit": true,
+        "exact": true,
+        "recall": 1.0,
+        "precision": 0.3333333333333333
+      }
+    },
+    {
+      "profile_id": "KNN-LVR-003",
+      "profile_type": "edge",
+      "primary_condition": "liver",
+      "expected_conditions": [
+        "liver",
+        "inflammation"
+      ],
+      "ground_truth_groups": [
+        "inflammation",
+        "liver_panel"
+      ],
+      "ml": {
+        "top_conditions": [
+          "perimenopause",
+          "anemia",
+          "sleep_disorder"
+        ],
+        "groups": [
+          "cbc",
+          "iron_studies"
+        ],
+        "hit": false,
+        "exact": false,
+        "recall": 0.0,
+        "precision": 0.0
+      },
+      "bayes": {
+        "top_conditions": [
+          "thyroid",
+          "prediabetes",
+          "sleep_disorder"
+        ],
+        "groups": [
+          "glycemic",
+          "lipids"
+        ],
+        "hit": false,
+        "exact": false,
+        "recall": 0.0,
+        "precision": 0.0
+      },
+      "full": {
+        "top_conditions": [
+          "thyroid",
+          "prediabetes",
+          "sleep_disorder"
+        ],
+        "groups": [
+          "glycemic",
+          "lipids"
+        ],
+        "knn_groups": [],
+        "hit": false,
+        "exact": false,
+        "recall": 0.0,
+        "precision": 0.0
+      }
+    },
+    {
+      "profile_id": "KNN-LVR-004",
+      "profile_type": "edge",
+      "primary_condition": "hepatitis",
+      "expected_conditions": [
+        "hepatitis",
+        "prediabetes"
+      ],
+      "ground_truth_groups": [
+        "glycemic",
+        "lipids",
+        "liver_panel"
+      ],
+      "ml": {
+        "top_conditions": [
+          "sleep_disorder",
+          "hepatitis",
+          "thyroid"
+        ],
+        "groups": [
+          "liver_panel"
+        ],
+        "hit": true,
+        "exact": false,
+        "recall": 0.3333333333333333,
+        "precision": 1.0
+      },
+      "bayes": {
+        "top_conditions": [
+          "sleep_disorder",
+          "hepatitis",
+          "liver"
+        ],
+        "groups": [
+          "liver_panel"
+        ],
+        "hit": true,
+        "exact": false,
+        "recall": 0.3333333333333333,
+        "precision": 1.0
+      },
+      "full": {
+        "top_conditions": [
+          "sleep_disorder",
+          "hepatitis",
+          "liver"
+        ],
+        "groups": [
+          "lipids",
+          "liver_panel"
+        ],
+        "knn_groups": [
+          "lipids"
+        ],
+        "hit": true,
+        "exact": false,
+        "recall": 0.6666666666666666,
+        "precision": 1.0
+      }
+    },
+    {
+      "profile_id": "KNN-LVR-005",
+      "profile_type": "edge",
+      "primary_condition": "liver",
+      "expected_conditions": [
+        "liver",
+        "prediabetes"
+      ],
+      "ground_truth_groups": [
+        "glycemic",
+        "lipids",
+        "liver_panel"
+      ],
+      "ml": {
+        "top_conditions": [
+          "sleep_disorder",
+          "anemia",
+          "thyroid"
+        ],
+        "groups": [
+          "cbc",
+          "iron_studies"
+        ],
+        "hit": false,
+        "exact": false,
+        "recall": 0.0,
+        "precision": 0.0
+      },
+      "bayes": {
+        "top_conditions": [
+          "prediabetes",
+          "sleep_disorder",
+          "thyroid"
+        ],
+        "groups": [
+          "glycemic",
+          "lipids"
+        ],
+        "hit": true,
+        "exact": false,
+        "recall": 0.6666666666666666,
+        "precision": 1.0
+      },
+      "full": {
+        "top_conditions": [
+          "prediabetes",
+          "sleep_disorder",
+          "thyroid"
+        ],
+        "groups": [
+          "glycemic",
+          "lipids"
+        ],
+        "knn_groups": [],
+        "hit": true,
+        "exact": false,
+        "recall": 0.6666666666666666,
+        "precision": 1.0
+      }
+    },
+    {
+      "profile_id": "KNN-LVR-006",
+      "profile_type": "edge",
+      "primary_condition": "hepatitis",
+      "expected_conditions": [
+        "hepatitis",
+        "inflammation"
+      ],
+      "ground_truth_groups": [
+        "inflammation",
+        "liver_panel"
+      ],
+      "ml": {
+        "top_conditions": [
+          "sleep_disorder",
+          "hepatitis",
+          "thyroid"
+        ],
+        "groups": [
+          "liver_panel"
+        ],
+        "hit": true,
+        "exact": false,
+        "recall": 0.5,
+        "precision": 1.0
+      },
+      "bayes": {
+        "top_conditions": [
+          "sleep_disorder",
+          "hepatitis",
+          "prediabetes"
+        ],
+        "groups": [
+          "glycemic",
+          "lipids",
+          "liver_panel"
+        ],
+        "hit": true,
+        "exact": false,
+        "recall": 0.5,
+        "precision": 0.3333333333333333
+      },
+      "full": {
+        "top_conditions": [
+          "sleep_disorder",
+          "hepatitis",
+          "prediabetes"
+        ],
+        "groups": [
+          "glycemic",
+          "kidney",
+          "lipids",
+          "liver_panel"
+        ],
+        "knn_groups": [
+          "kidney"
+        ],
+        "hit": true,
+        "exact": false,
+        "recall": 0.5,
+        "precision": 0.25
+      }
+    },
+    {
+      "profile_id": "KNN-LVR-007",
+      "profile_type": "edge",
+      "primary_condition": "liver",
+      "expected_conditions": [
+        "liver",
+        "kidney_disease"
+      ],
+      "ground_truth_groups": [
+        "kidney",
+        "liver_panel"
+      ],
+      "ml": {
+        "top_conditions": [
+          "sleep_disorder",
+          "hepatitis",
+          "inflammation"
+        ],
+        "groups": [
+          "inflammation",
+          "liver_panel"
+        ],
+        "hit": true,
+        "exact": false,
+        "recall": 0.5,
+        "precision": 0.5
+      },
+      "bayes": {
+        "top_conditions": [
+          "inflammation",
+          "prediabetes",
+          "sleep_disorder"
+        ],
+        "groups": [
+          "glycemic",
+          "inflammation",
+          "lipids"
+        ],
+        "hit": false,
+        "exact": false,
+        "recall": 0.0,
+        "precision": 0.0
+      },
+      "full": {
+        "top_conditions": [
+          "inflammation",
+          "prediabetes",
+          "sleep_disorder"
+        ],
+        "groups": [
+          "glycemic",
+          "inflammation",
+          "lipids"
+        ],
+        "knn_groups": [
+          "lipids"
+        ],
+        "hit": false,
+        "exact": false,
+        "recall": 0.0,
+        "precision": 0.0
+      }
+    },
+    {
+      "profile_id": "KNN-LVR-008",
+      "profile_type": "edge",
+      "primary_condition": "hepatitis",
+      "expected_conditions": [
+        "hepatitis",
+        "anemia"
+      ],
+      "ground_truth_groups": [
+        "cbc",
+        "liver_panel"
+      ],
+      "ml": {
+        "top_conditions": [
+          "sleep_disorder",
+          "anemia",
+          "thyroid"
+        ],
+        "groups": [
+          "cbc",
+          "iron_studies"
+        ],
+        "hit": true,
+        "exact": false,
+        "recall": 0.5,
+        "precision": 0.5
+      },
+      "bayes": {
+        "top_conditions": [
+          "sleep_disorder",
+          "thyroid",
+          "prediabetes"
+        ],
+        "groups": [
+          "glycemic",
+          "lipids"
+        ],
+        "hit": false,
+        "exact": false,
+        "recall": 0.0,
+        "precision": 0.0
+      },
+      "full": {
+        "top_conditions": [
+          "sleep_disorder",
+          "thyroid",
+          "prediabetes"
+        ],
+        "groups": [
+          "glycemic",
+          "lipids"
+        ],
+        "knn_groups": [],
+        "hit": false,
+        "exact": false,
+        "recall": 0.0,
+        "precision": 0.0
+      }
+    },
+    {
+      "profile_id": "KNN-LVR-009",
+      "profile_type": "positive",
+      "primary_condition": "liver",
+      "expected_conditions": [
+        "liver"
+      ],
+      "ground_truth_groups": [
+        "liver_panel"
+      ],
+      "ml": {
+        "top_conditions": [
+          "anemia",
+          "perimenopause",
+          "sleep_disorder"
+        ],
+        "groups": [
+          "cbc",
+          "iron_studies"
+        ],
+        "hit": false,
+        "exact": false,
+        "recall": 0.0,
+        "precision": 0.0
+      },
+      "bayes": {
+        "top_conditions": [
+          "anemia",
+          "thyroid",
+          "sleep_disorder"
+        ],
+        "groups": [
+          "cbc",
+          "iron_studies"
+        ],
+        "hit": false,
+        "exact": false,
+        "recall": 0.0,
+        "precision": 0.0
+      },
+      "full": {
+        "top_conditions": [
+          "anemia",
+          "thyroid",
+          "sleep_disorder"
+        ],
+        "groups": [
+          "cbc",
+          "iron_studies",
+          "lipids"
+        ],
+        "knn_groups": [
+          "lipids"
+        ],
+        "hit": false,
+        "exact": false,
+        "recall": 0.0,
+        "precision": 0.0
+      }
+    },
+    {
+      "profile_id": "KNN-LVR-010",
+      "profile_type": "edge",
+      "primary_condition": "hepatitis",
+      "expected_conditions": [
+        "hepatitis",
+        "prediabetes"
+      ],
+      "ground_truth_groups": [
+        "glycemic",
+        "liver_panel"
+      ],
+      "ml": {
+        "top_conditions": [
+          "sleep_disorder",
+          "hepatitis",
+          "thyroid"
+        ],
+        "groups": [
+          "liver_panel"
+        ],
+        "hit": true,
+        "exact": false,
+        "recall": 0.5,
+        "precision": 1.0
+      },
+      "bayes": {
+        "top_conditions": [
+          "hepatitis",
+          "sleep_disorder",
+          "prediabetes"
+        ],
+        "groups": [
+          "glycemic",
+          "lipids",
+          "liver_panel"
+        ],
+        "hit": true,
+        "exact": true,
+        "recall": 1.0,
+        "precision": 0.6666666666666666
+      },
+      "full": {
+        "top_conditions": [
+          "hepatitis",
+          "sleep_disorder",
+          "prediabetes"
+        ],
+        "groups": [
+          "glycemic",
+          "kidney",
+          "lipids",
+          "liver_panel"
+        ],
+        "knn_groups": [
+          "kidney"
+        ],
+        "hit": true,
+        "exact": true,
+        "recall": 1.0,
+        "precision": 0.5
+      }
+    }
+  ],
+  "improved_by_knn": [
+    {
+      "profile_id": "KNN-OVR-001",
+      "profile_type": "positive",
+      "primary_condition": "kidney_disease",
+      "expected_conditions": [
+        "kidney_disease"
+      ],
+      "ground_truth_groups": [
+        "kidney"
+      ],
+      "ml": {
+        "top_conditions": [
+          "sleep_disorder",
+          "thyroid",
+          "prediabetes"
+        ],
+        "groups": [
+          "glycemic",
+          "lipids"
+        ],
+        "hit": false,
+        "exact": false,
+        "recall": 0.0,
+        "precision": 0.0
+      },
+      "bayes": {
+        "top_conditions": [
+          "sleep_disorder",
+          "thyroid",
+          "prediabetes"
+        ],
+        "groups": [
+          "glycemic",
+          "lipids"
+        ],
+        "hit": false,
+        "exact": false,
+        "recall": 0.0,
+        "precision": 0.0
+      },
+      "full": {
+        "top_conditions": [
+          "sleep_disorder",
+          "thyroid",
+          "prediabetes"
+        ],
+        "groups": [
+          "glycemic",
+          "kidney",
+          "lipids"
+        ],
+        "knn_groups": [
+          "kidney"
+        ],
+        "hit": true,
+        "exact": true,
+        "recall": 1.0,
+        "precision": 0.3333333333333333
+      }
+    },
+    {
+      "profile_id": "KNN-OVR-003",
+      "profile_type": "edge",
+      "primary_condition": "kidney_disease",
+      "expected_conditions": [
+        "kidney_disease",
+        "prediabetes"
+      ],
+      "ground_truth_groups": [
+        "glycemic",
+        "kidney",
+        "lipids"
+      ],
+      "ml": {
+        "top_conditions": [
+          "sleep_disorder",
+          "thyroid",
+          "prediabetes"
+        ],
+        "groups": [
+          "glycemic",
+          "lipids"
+        ],
+        "hit": true,
+        "exact": false,
+        "recall": 0.6666666666666666,
+        "precision": 1.0
+      },
+      "bayes": {
+        "top_conditions": [
+          "kidney",
+          "sleep_disorder",
+          "prediabetes"
+        ],
+        "groups": [
+          "glycemic",
+          "lipids"
+        ],
+        "hit": true,
+        "exact": false,
+        "recall": 0.6666666666666666,
+        "precision": 1.0
+      },
+      "full": {
+        "top_conditions": [
+          "kidney",
+          "sleep_disorder",
+          "prediabetes"
+        ],
+        "groups": [
+          "glycemic",
+          "kidney",
+          "lipids"
+        ],
+        "knn_groups": [
+          "kidney"
+        ],
+        "hit": true,
+        "exact": true,
+        "recall": 1.0,
+        "precision": 1.0
+      }
+    },
+    {
+      "profile_id": "KNN-OVR-012",
+      "profile_type": "edge",
+      "primary_condition": "kidney_disease",
+      "expected_conditions": [
+        "kidney_disease",
+        "inflammation"
+      ],
+      "ground_truth_groups": [
+        "inflammation",
+        "kidney"
+      ],
+      "ml": {
+        "top_conditions": [
+          "perimenopause",
+          "sleep_disorder",
+          "thyroid"
+        ],
+        "groups": [],
+        "hit": false,
+        "exact": false,
+        "recall": 0.0,
+        "precision": 0.0
+      },
+      "bayes": {
+        "top_conditions": [
+          "sleep_disorder",
+          "prediabetes",
+          "perimenopause"
+        ],
+        "groups": [
+          "glycemic",
+          "lipids"
+        ],
+        "hit": false,
+        "exact": false,
+        "recall": 0.0,
+        "precision": 0.0
+      },
+      "full": {
+        "top_conditions": [
+          "sleep_disorder",
+          "prediabetes",
+          "perimenopause"
+        ],
+        "groups": [
+          "glycemic",
+          "kidney",
+          "lipids"
+        ],
+        "knn_groups": [
+          "kidney"
+        ],
+        "hit": true,
+        "exact": false,
+        "recall": 0.5,
+        "precision": 0.3333333333333333
+      }
+    },
+    {
+      "profile_id": "KNN-LVR-004",
+      "profile_type": "edge",
+      "primary_condition": "hepatitis",
+      "expected_conditions": [
+        "hepatitis",
+        "prediabetes"
+      ],
+      "ground_truth_groups": [
+        "glycemic",
+        "lipids",
+        "liver_panel"
+      ],
+      "ml": {
+        "top_conditions": [
+          "sleep_disorder",
+          "hepatitis",
+          "thyroid"
+        ],
+        "groups": [
+          "liver_panel"
+        ],
+        "hit": true,
+        "exact": false,
+        "recall": 0.3333333333333333,
+        "precision": 1.0
+      },
+      "bayes": {
+        "top_conditions": [
+          "sleep_disorder",
+          "hepatitis",
+          "liver"
+        ],
+        "groups": [
+          "liver_panel"
+        ],
+        "hit": true,
+        "exact": false,
+        "recall": 0.3333333333333333,
+        "precision": 1.0
+      },
+      "full": {
+        "top_conditions": [
+          "sleep_disorder",
+          "hepatitis",
+          "liver"
+        ],
+        "groups": [
+          "lipids",
+          "liver_panel"
+        ],
+        "knn_groups": [
+          "lipids"
+        ],
+        "hit": true,
+        "exact": false,
+        "recall": 0.6666666666666666,
+        "precision": 1.0
+      }
+    }
+  ],
+  "unchanged_after_knn": [
+    {
+      "profile_id": "KNN-OVR-002",
+      "profile_type": "edge",
+      "primary_condition": "kidney_disease",
+      "expected_conditions": [
+        "kidney_disease",
+        "anemia"
+      ],
+      "ground_truth_groups": [
+        "cbc",
+        "kidney"
+      ],
+      "ml": {
+        "top_conditions": [
+          "sleep_disorder",
+          "thyroid",
+          "prediabetes"
+        ],
+        "groups": [
+          "glycemic",
+          "lipids"
+        ],
+        "hit": false,
+        "exact": false,
+        "recall": 0.0,
+        "precision": 0.0
+      },
+      "bayes": {
+        "top_conditions": [
+          "kidney",
+          "thyroid",
+          "prediabetes"
+        ],
+        "groups": [
+          "glycemic",
+          "lipids"
+        ],
+        "hit": false,
+        "exact": false,
+        "recall": 0.0,
+        "precision": 0.0
+      },
+      "full": {
+        "top_conditions": [
+          "kidney",
+          "thyroid",
+          "prediabetes"
+        ],
+        "groups": [
+          "glycemic",
+          "lipids"
+        ],
+        "knn_groups": [],
+        "hit": false,
+        "exact": false,
+        "recall": 0.0,
+        "precision": 0.0
+      }
+    },
+    {
+      "profile_id": "KNN-OVR-004",
+      "profile_type": "positive",
+      "primary_condition": "liver",
+      "expected_conditions": [
+        "liver"
+      ],
+      "ground_truth_groups": [
+        "liver_panel"
+      ],
+      "ml": {
+        "top_conditions": [
+          "sleep_disorder",
+          "hepatitis",
+          "inflammation"
+        ],
+        "groups": [
+          "inflammation",
+          "liver_panel"
+        ],
+        "hit": true,
+        "exact": true,
+        "recall": 1.0,
+        "precision": 0.5
+      },
+      "bayes": {
+        "top_conditions": [
+          "sleep_disorder",
+          "thyroid",
+          "electrolytes"
+        ],
+        "groups": [],
+        "hit": false,
+        "exact": false,
+        "recall": 0.0,
+        "precision": 0.0
+      },
+      "full": {
+        "top_conditions": [
+          "sleep_disorder",
+          "thyroid",
+          "electrolytes"
+        ],
+        "groups": [
+          "lipids"
+        ],
+        "knn_groups": [
+          "lipids"
+        ],
+        "hit": false,
+        "exact": false,
+        "recall": 0.0,
+        "precision": 0.0
+      }
+    },
+    {
+      "profile_id": "KNN-OVR-005",
+      "profile_type": "positive",
+      "primary_condition": "hepatitis",
+      "expected_conditions": [
+        "hepatitis"
+      ],
+      "ground_truth_groups": [
+        "liver_panel"
+      ],
+      "ml": {
+        "top_conditions": [
+          "sleep_disorder",
+          "hepatitis",
+          "anemia"
+        ],
+        "groups": [
+          "cbc",
+          "iron_studies",
+          "liver_panel"
+        ],
+        "hit": true,
+        "exact": true,
+        "recall": 1.0,
+        "precision": 0.3333333333333333
+      },
+      "bayes": {
+        "top_conditions": [
+          "hepatitis",
+          "liver",
+          "sleep_disorder"
+        ],
+        "groups": [
+          "liver_panel"
+        ],
+        "hit": true,
+        "exact": true,
+        "recall": 1.0,
+        "precision": 1.0
+      },
+      "full": {
+        "top_conditions": [
+          "hepatitis",
+          "liver",
+          "sleep_disorder"
+        ],
+        "groups": [
+          "liver_panel"
+        ],
+        "knn_groups": [],
+        "hit": true,
+        "exact": true,
+        "recall": 1.0,
+        "precision": 1.0
+      }
+    },
+    {
+      "profile_id": "KNN-OVR-006",
+      "profile_type": "edge",
+      "primary_condition": "liver",
+      "expected_conditions": [
+        "liver",
+        "inflammation"
+      ],
+      "ground_truth_groups": [
+        "inflammation",
+        "liver_panel"
+      ],
+      "ml": {
+        "top_conditions": [
+          "sleep_disorder",
+          "anemia",
+          "thyroid"
+        ],
+        "groups": [
+          "cbc",
+          "iron_studies"
+        ],
+        "hit": false,
+        "exact": false,
+        "recall": 0.0,
+        "precision": 0.0
+      },
+      "bayes": {
+        "top_conditions": [
+          "prediabetes",
+          "sleep_disorder",
+          "thyroid"
+        ],
+        "groups": [
+          "glycemic",
+          "lipids"
+        ],
+        "hit": false,
+        "exact": false,
+        "recall": 0.0,
+        "precision": 0.0
+      },
+      "full": {
+        "top_conditions": [
+          "prediabetes",
+          "sleep_disorder",
+          "thyroid"
+        ],
+        "groups": [
+          "glycemic",
+          "lipids"
+        ],
+        "knn_groups": [],
+        "hit": false,
+        "exact": false,
+        "recall": 0.0,
+        "precision": 0.0
+      }
+    },
+    {
+      "profile_id": "KNN-OVR-007",
+      "profile_type": "edge",
+      "primary_condition": "anemia",
+      "expected_conditions": [
+        "anemia",
+        "kidney_disease"
+      ],
+      "ground_truth_groups": [
+        "cbc",
+        "iron_studies",
+        "kidney"
+      ],
+      "ml": {
+        "top_conditions": [
+          "perimenopause",
+          "sleep_disorder",
+          "anemia"
+        ],
+        "groups": [
+          "cbc",
+          "iron_studies"
+        ],
+        "hit": true,
+        "exact": false,
+        "recall": 0.6666666666666666,
+        "precision": 1.0
+      },
+      "bayes": {
+        "top_conditions": [
+          "anemia",
+          "sleep_disorder",
+          "thyroid"
+        ],
+        "groups": [
+          "cbc",
+          "iron_studies"
+        ],
+        "hit": true,
+        "exact": false,
+        "recall": 0.6666666666666666,
+        "precision": 1.0
+      },
+      "full": {
+        "top_conditions": [
+          "anemia",
+          "sleep_disorder",
+          "thyroid"
+        ],
+        "groups": [
+          "cbc",
+          "iron_studies"
+        ],
+        "knn_groups": [],
+        "hit": true,
+        "exact": false,
+        "recall": 0.6666666666666666,
+        "precision": 1.0
+      }
+    },
+    {
+      "profile_id": "KNN-OVR-008",
+      "profile_type": "edge",
+      "primary_condition": "iron_deficiency",
+      "expected_conditions": [
+        "iron_deficiency",
+        "perimenopause"
+      ],
+      "ground_truth_groups": [
+        "cbc",
+        "iron_studies"
+      ],
+      "ml": {
+        "top_conditions": [
+          "sleep_disorder",
+          "anemia",
+          "prediabetes"
+        ],
+        "groups": [
+          "cbc",
+          "glycemic",
+          "iron_studies",
+          "lipids"
+        ],
+        "hit": true,
+        "exact": true,
+        "recall": 1.0,
+        "precision": 0.5
+      },
+      "bayes": {
+        "top_conditions": [
+          "anemia",
+          "sleep_disorder",
+          "prediabetes"
+        ],
+        "groups": [
+          "cbc",
+          "glycemic",
+          "iron_studies",
+          "lipids"
+        ],
+        "hit": true,
+        "exact": true,
+        "recall": 1.0,
+        "precision": 0.5
+      },
+      "full": {
+        "top_conditions": [
+          "anemia",
+          "sleep_disorder",
+          "prediabetes"
+        ],
+        "groups": [
+          "cbc",
+          "glycemic",
+          "iron_studies",
+          "lipids"
+        ],
+        "knn_groups": [],
+        "hit": true,
+        "exact": true,
+        "recall": 1.0,
+        "precision": 0.5
+      }
+    },
+    {
+      "profile_id": "KNN-OVR-009",
+      "profile_type": "edge",
+      "primary_condition": "hypothyroidism",
+      "expected_conditions": [
+        "hypothyroidism",
+        "prediabetes"
+      ],
+      "ground_truth_groups": [
+        "glycemic",
+        "lipids",
+        "thyroid"
+      ],
+      "ml": {
+        "top_conditions": [
+          "sleep_disorder",
+          "perimenopause",
+          "thyroid"
+        ],
+        "groups": [],
+        "hit": false,
+        "exact": false,
+        "recall": 0.0,
+        "precision": 0.0
+      },
+      "bayes": {
+        "top_conditions": [
+          "thyroid",
+          "sleep_disorder",
+          "prediabetes"
+        ],
+        "groups": [
+          "glycemic",
+          "lipids"
+        ],
+        "hit": true,
+        "exact": false,
+        "recall": 0.6666666666666666,
+        "precision": 1.0
+      },
+      "full": {
+        "top_conditions": [
+          "thyroid",
+          "sleep_disorder",
+          "prediabetes"
+        ],
+        "groups": [
+          "glycemic",
+          "lipids"
+        ],
+        "knn_groups": [],
+        "hit": true,
+        "exact": false,
+        "recall": 0.6666666666666666,
+        "precision": 1.0
+      }
+    },
+    {
+      "profile_id": "KNN-OVR-010",
+      "profile_type": "edge",
+      "primary_condition": "prediabetes",
+      "expected_conditions": [
+        "prediabetes",
+        "inflammation"
+      ],
+      "ground_truth_groups": [
+        "glycemic",
+        "inflammation",
+        "lipids"
+      ],
+      "ml": {
+        "top_conditions": [
+          "sleep_disorder",
+          "inflammation",
+          "thyroid"
+        ],
+        "groups": [
+          "inflammation"
+        ],
+        "hit": true,
+        "exact": false,
+        "recall": 0.3333333333333333,
+        "precision": 1.0
+      },
+      "bayes": {
+        "top_conditions": [
+          "sleep_disorder",
+          "prediabetes",
+          "thyroid"
+        ],
+        "groups": [
+          "glycemic",
+          "lipids"
+        ],
+        "hit": true,
+        "exact": false,
+        "recall": 0.6666666666666666,
+        "precision": 1.0
+      },
+      "full": {
+        "top_conditions": [
+          "sleep_disorder",
+          "prediabetes",
+          "thyroid"
+        ],
+        "groups": [
+          "glycemic",
+          "lipids"
+        ],
+        "knn_groups": [],
+        "hit": true,
+        "exact": false,
+        "recall": 0.6666666666666666,
+        "precision": 1.0
+      }
+    },
+    {
+      "profile_id": "KNN-OVR-011",
+      "profile_type": "edge",
+      "primary_condition": "liver",
+      "expected_conditions": [
+        "liver",
+        "prediabetes"
+      ],
+      "ground_truth_groups": [
+        "glycemic",
+        "lipids",
+        "liver_panel"
+      ],
+      "ml": {
+        "top_conditions": [
+          "sleep_disorder",
+          "hepatitis",
+          "kidney"
+        ],
+        "groups": [
+          "liver_panel"
+        ],
+        "hit": true,
+        "exact": false,
+        "recall": 0.3333333333333333,
+        "precision": 1.0
+      },
+      "bayes": {
+        "top_conditions": [
+          "sleep_disorder",
+          "prediabetes",
+          "thyroid"
+        ],
+        "groups": [
+          "glycemic",
+          "lipids"
+        ],
+        "hit": true,
+        "exact": false,
+        "recall": 0.6666666666666666,
+        "precision": 1.0
+      },
+      "full": {
+        "top_conditions": [
+          "sleep_disorder",
+          "prediabetes",
+          "thyroid"
+        ],
+        "groups": [
+          "glycemic",
+          "lipids"
+        ],
+        "knn_groups": [
+          "lipids"
+        ],
+        "hit": true,
+        "exact": false,
+        "recall": 0.6666666666666666,
+        "precision": 1.0
+      }
+    },
+    {
+      "profile_id": "KNN-LVR-001",
+      "profile_type": "positive",
+      "primary_condition": "liver",
+      "expected_conditions": [
+        "liver"
+      ],
+      "ground_truth_groups": [
+        "liver_panel"
+      ],
+      "ml": {
+        "top_conditions": [
+          "sleep_disorder",
+          "hepatitis",
+          "prediabetes"
+        ],
+        "groups": [
+          "glycemic",
+          "lipids",
+          "liver_panel"
+        ],
+        "hit": true,
+        "exact": true,
+        "recall": 1.0,
+        "precision": 0.3333333333333333
+      },
+      "bayes": {
+        "top_conditions": [
+          "hepatitis",
+          "sleep_disorder",
+          "electrolytes"
+        ],
+        "groups": [
+          "liver_panel"
+        ],
+        "hit": true,
+        "exact": true,
+        "recall": 1.0,
+        "precision": 1.0
+      },
+      "full": {
+        "top_conditions": [
+          "hepatitis",
+          "sleep_disorder",
+          "electrolytes"
+        ],
+        "groups": [
+          "lipids",
+          "liver_panel"
+        ],
+        "knn_groups": [
+          "lipids"
+        ],
+        "hit": true,
+        "exact": true,
+        "recall": 1.0,
+        "precision": 0.5
+      }
+    },
+    {
+      "profile_id": "KNN-LVR-002",
+      "profile_type": "positive",
+      "primary_condition": "hepatitis",
+      "expected_conditions": [
+        "hepatitis"
+      ],
+      "ground_truth_groups": [
+        "liver_panel"
+      ],
+      "ml": {
+        "top_conditions": [
+          "sleep_disorder",
+          "hepatitis",
+          "anemia"
+        ],
+        "groups": [
+          "cbc",
+          "iron_studies",
+          "liver_panel"
+        ],
+        "hit": true,
+        "exact": true,
+        "recall": 1.0,
+        "precision": 0.3333333333333333
+      },
+      "bayes": {
+        "top_conditions": [
+          "hepatitis",
+          "sleep_disorder",
+          "prediabetes"
+        ],
+        "groups": [
+          "glycemic",
+          "lipids",
+          "liver_panel"
+        ],
+        "hit": true,
+        "exact": true,
+        "recall": 1.0,
+        "precision": 0.3333333333333333
+      },
+      "full": {
+        "top_conditions": [
+          "hepatitis",
+          "sleep_disorder",
+          "prediabetes"
+        ],
+        "groups": [
+          "glycemic",
+          "lipids",
+          "liver_panel"
+        ],
+        "knn_groups": [],
+        "hit": true,
+        "exact": true,
+        "recall": 1.0,
+        "precision": 0.3333333333333333
+      }
+    },
+    {
+      "profile_id": "KNN-LVR-003",
+      "profile_type": "edge",
+      "primary_condition": "liver",
+      "expected_conditions": [
+        "liver",
+        "inflammation"
+      ],
+      "ground_truth_groups": [
+        "inflammation",
+        "liver_panel"
+      ],
+      "ml": {
+        "top_conditions": [
+          "perimenopause",
+          "anemia",
+          "sleep_disorder"
+        ],
+        "groups": [
+          "cbc",
+          "iron_studies"
+        ],
+        "hit": false,
+        "exact": false,
+        "recall": 0.0,
+        "precision": 0.0
+      },
+      "bayes": {
+        "top_conditions": [
+          "thyroid",
+          "prediabetes",
+          "sleep_disorder"
+        ],
+        "groups": [
+          "glycemic",
+          "lipids"
+        ],
+        "hit": false,
+        "exact": false,
+        "recall": 0.0,
+        "precision": 0.0
+      },
+      "full": {
+        "top_conditions": [
+          "thyroid",
+          "prediabetes",
+          "sleep_disorder"
+        ],
+        "groups": [
+          "glycemic",
+          "lipids"
+        ],
+        "knn_groups": [],
+        "hit": false,
+        "exact": false,
+        "recall": 0.0,
+        "precision": 0.0
+      }
+    },
+    {
+      "profile_id": "KNN-LVR-005",
+      "profile_type": "edge",
+      "primary_condition": "liver",
+      "expected_conditions": [
+        "liver",
+        "prediabetes"
+      ],
+      "ground_truth_groups": [
+        "glycemic",
+        "lipids",
+        "liver_panel"
+      ],
+      "ml": {
+        "top_conditions": [
+          "sleep_disorder",
+          "anemia",
+          "thyroid"
+        ],
+        "groups": [
+          "cbc",
+          "iron_studies"
+        ],
+        "hit": false,
+        "exact": false,
+        "recall": 0.0,
+        "precision": 0.0
+      },
+      "bayes": {
+        "top_conditions": [
+          "prediabetes",
+          "sleep_disorder",
+          "thyroid"
+        ],
+        "groups": [
+          "glycemic",
+          "lipids"
+        ],
+        "hit": true,
+        "exact": false,
+        "recall": 0.6666666666666666,
+        "precision": 1.0
+      },
+      "full": {
+        "top_conditions": [
+          "prediabetes",
+          "sleep_disorder",
+          "thyroid"
+        ],
+        "groups": [
+          "glycemic",
+          "lipids"
+        ],
+        "knn_groups": [],
+        "hit": true,
+        "exact": false,
+        "recall": 0.6666666666666666,
+        "precision": 1.0
+      }
+    },
+    {
+      "profile_id": "KNN-LVR-006",
+      "profile_type": "edge",
+      "primary_condition": "hepatitis",
+      "expected_conditions": [
+        "hepatitis",
+        "inflammation"
+      ],
+      "ground_truth_groups": [
+        "inflammation",
+        "liver_panel"
+      ],
+      "ml": {
+        "top_conditions": [
+          "sleep_disorder",
+          "hepatitis",
+          "thyroid"
+        ],
+        "groups": [
+          "liver_panel"
+        ],
+        "hit": true,
+        "exact": false,
+        "recall": 0.5,
+        "precision": 1.0
+      },
+      "bayes": {
+        "top_conditions": [
+          "sleep_disorder",
+          "hepatitis",
+          "prediabetes"
+        ],
+        "groups": [
+          "glycemic",
+          "lipids",
+          "liver_panel"
+        ],
+        "hit": true,
+        "exact": false,
+        "recall": 0.5,
+        "precision": 0.3333333333333333
+      },
+      "full": {
+        "top_conditions": [
+          "sleep_disorder",
+          "hepatitis",
+          "prediabetes"
+        ],
+        "groups": [
+          "glycemic",
+          "kidney",
+          "lipids",
+          "liver_panel"
+        ],
+        "knn_groups": [
+          "kidney"
+        ],
+        "hit": true,
+        "exact": false,
+        "recall": 0.5,
+        "precision": 0.25
+      }
+    },
+    {
+      "profile_id": "KNN-LVR-007",
+      "profile_type": "edge",
+      "primary_condition": "liver",
+      "expected_conditions": [
+        "liver",
+        "kidney_disease"
+      ],
+      "ground_truth_groups": [
+        "kidney",
+        "liver_panel"
+      ],
+      "ml": {
+        "top_conditions": [
+          "sleep_disorder",
+          "hepatitis",
+          "inflammation"
+        ],
+        "groups": [
+          "inflammation",
+          "liver_panel"
+        ],
+        "hit": true,
+        "exact": false,
+        "recall": 0.5,
+        "precision": 0.5
+      },
+      "bayes": {
+        "top_conditions": [
+          "inflammation",
+          "prediabetes",
+          "sleep_disorder"
+        ],
+        "groups": [
+          "glycemic",
+          "inflammation",
+          "lipids"
+        ],
+        "hit": false,
+        "exact": false,
+        "recall": 0.0,
+        "precision": 0.0
+      },
+      "full": {
+        "top_conditions": [
+          "inflammation",
+          "prediabetes",
+          "sleep_disorder"
+        ],
+        "groups": [
+          "glycemic",
+          "inflammation",
+          "lipids"
+        ],
+        "knn_groups": [
+          "lipids"
+        ],
+        "hit": false,
+        "exact": false,
+        "recall": 0.0,
+        "precision": 0.0
+      }
+    },
+    {
+      "profile_id": "KNN-LVR-008",
+      "profile_type": "edge",
+      "primary_condition": "hepatitis",
+      "expected_conditions": [
+        "hepatitis",
+        "anemia"
+      ],
+      "ground_truth_groups": [
+        "cbc",
+        "liver_panel"
+      ],
+      "ml": {
+        "top_conditions": [
+          "sleep_disorder",
+          "anemia",
+          "thyroid"
+        ],
+        "groups": [
+          "cbc",
+          "iron_studies"
+        ],
+        "hit": true,
+        "exact": false,
+        "recall": 0.5,
+        "precision": 0.5
+      },
+      "bayes": {
+        "top_conditions": [
+          "sleep_disorder",
+          "thyroid",
+          "prediabetes"
+        ],
+        "groups": [
+          "glycemic",
+          "lipids"
+        ],
+        "hit": false,
+        "exact": false,
+        "recall": 0.0,
+        "precision": 0.0
+      },
+      "full": {
+        "top_conditions": [
+          "sleep_disorder",
+          "thyroid",
+          "prediabetes"
+        ],
+        "groups": [
+          "glycemic",
+          "lipids"
+        ],
+        "knn_groups": [],
+        "hit": false,
+        "exact": false,
+        "recall": 0.0,
+        "precision": 0.0
+      }
+    },
+    {
+      "profile_id": "KNN-LVR-009",
+      "profile_type": "positive",
+      "primary_condition": "liver",
+      "expected_conditions": [
+        "liver"
+      ],
+      "ground_truth_groups": [
+        "liver_panel"
+      ],
+      "ml": {
+        "top_conditions": [
+          "anemia",
+          "perimenopause",
+          "sleep_disorder"
+        ],
+        "groups": [
+          "cbc",
+          "iron_studies"
+        ],
+        "hit": false,
+        "exact": false,
+        "recall": 0.0,
+        "precision": 0.0
+      },
+      "bayes": {
+        "top_conditions": [
+          "anemia",
+          "thyroid",
+          "sleep_disorder"
+        ],
+        "groups": [
+          "cbc",
+          "iron_studies"
+        ],
+        "hit": false,
+        "exact": false,
+        "recall": 0.0,
+        "precision": 0.0
+      },
+      "full": {
+        "top_conditions": [
+          "anemia",
+          "thyroid",
+          "sleep_disorder"
+        ],
+        "groups": [
+          "cbc",
+          "iron_studies",
+          "lipids"
+        ],
+        "knn_groups": [
+          "lipids"
+        ],
+        "hit": false,
+        "exact": false,
+        "recall": 0.0,
+        "precision": 0.0
+      }
+    },
+    {
+      "profile_id": "KNN-LVR-010",
+      "profile_type": "edge",
+      "primary_condition": "hepatitis",
+      "expected_conditions": [
+        "hepatitis",
+        "prediabetes"
+      ],
+      "ground_truth_groups": [
+        "glycemic",
+        "liver_panel"
+      ],
+      "ml": {
+        "top_conditions": [
+          "sleep_disorder",
+          "hepatitis",
+          "thyroid"
+        ],
+        "groups": [
+          "liver_panel"
+        ],
+        "hit": true,
+        "exact": false,
+        "recall": 0.5,
+        "precision": 1.0
+      },
+      "bayes": {
+        "top_conditions": [
+          "hepatitis",
+          "sleep_disorder",
+          "prediabetes"
+        ],
+        "groups": [
+          "glycemic",
+          "lipids",
+          "liver_panel"
+        ],
+        "hit": true,
+        "exact": true,
+        "recall": 1.0,
+        "precision": 0.6666666666666666
+      },
+      "full": {
+        "top_conditions": [
+          "hepatitis",
+          "sleep_disorder",
+          "prediabetes"
+        ],
+        "groups": [
+          "glycemic",
+          "kidney",
+          "lipids",
+          "liver_panel"
+        ],
+        "knn_groups": [
+          "kidney"
+        ],
+        "hit": true,
+        "exact": true,
+        "recall": 1.0,
+        "precision": 0.5
+      }
+    }
+  ]
+}

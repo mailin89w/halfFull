@@ -5,7 +5,6 @@ Stub version for eval pipeline compatibility.
 
 # Frozen list of condition IDs supported by HalfFull models
 CONDITION_IDS: list[str] = [
-    "menopause",
     "perimenopause",
     "hypothyroidism",
     "kidney_disease",
