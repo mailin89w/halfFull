@@ -6,6 +6,8 @@ interface Field {
   sub_type?: 'binary' | 'numeric';
   help_text?: string;
   unit?: string;
+  min?: number;
+  max?: number;
 }
 
 interface Props {
