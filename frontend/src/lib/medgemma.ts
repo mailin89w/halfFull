@@ -381,7 +381,7 @@ export async function fetchDeepAnalysis(
     fetch('/api/deep-analyze', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ answers, mlScores, rawMlScores, clarificationQA, confirmedConditions, privacy: includePrivacy ? privacy : null }),
+      body: JSON.stringify({ answers, mlScores, rawMlScores, clarificationQA, confirmedConditions, useKNN: true, privacy: includePrivacy ? privacy : null }),
     });
 
   let response = await makeRequest(true);

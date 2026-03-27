@@ -456,31 +456,79 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'Groq synthesis unavailable' }, { status: 503 });
     }
 
-    // ── Build deterministic personalizedSummary from top Bayesian keySymptoms ──
-    // Pull the top keySymptom from each top Bayesian condition (in confirming-signal order),
-    // then fill remaining slots from other supported suspicions if needed.
-    const topSymptoms: string[] = [];
-    for (const condId of topBayesianConditionIds) {
-      if (topSymptoms.length >= 3) break;
-      const susp = groundingResult.supportedSuspicions.find((s) => s.diagnosisId === condId);
-      const sym = susp?.keySymptoms?.[0];
-      if (sym && !topSymptoms.includes(sym)) topSymptoms.push(sym);
+    // ── Build deterministic personalizedSummary from top Bayesian confirming questions ──
+    const SYMPTOM_BLACKLIST = [
+      /\bfatigu/i, /\btired/i, /\btiredness/i, /\bexhaust/i, /\benergy\b/i,
+      /\beducation/i, /\bincome/i, /\bbmi\b/i,
+      /\bmedication/i, /\bsupplement/i, /\bvitamin\b/i,
+      /\bfamily history/i, /\brelative\b/i,
+      /several days/i, /over the past/i, /\bweeks?\b.*ago/i,
+      /how (often|many|much|long)/i,
+    ];
+    const isSymptomBlacklisted = (text: string) => SYMPTOM_BLACKLIST.some((r) => r.test(text));
+
+    function extractSymptomFromQuestion(question: string): string | null {
+      const stripped = question
+        .replace(/^do you (experience|have|feel|notice|get|suffer from|tend to get)\s+/i, '')
+        .replace(/^have you (been experiencing|been having|noticed|had)\s+/i, '')
+        .replace(/^are you (experiencing|having|suffering from)\s+/i, '')
+        .replace(/^does (your\s+\w+\s+)?(feel|seem|appear|become)\s+/i, '')
+        .replace(/^is your\s+\w+\s+/i, '')
+        .replace(/\?$/, '')
+        .trim();
+      if (!stripped || isSymptomBlacklisted(stripped) || stripped.length < 3 || stripped.length > 70) return null;
+      return stripped.charAt(0).toLowerCase() + stripped.slice(1);
     }
-    for (const susp of groundingResult.supportedSuspicions) {
+
+    const topSymptoms: string[] = [];
+
+    // Primary: confirming Bayesian QA questions, sorted by Bayesian gain (highest first)
+    const confirmingQA = (clarificationQA ?? []).filter((qa) => {
+      const al = (qa.answer ?? '').toLowerCase();
+      return ['yes', 'often', 'always', 'severe', 'daily', 'frequent', 'regularly', 'every night', 'constantly'].some(
+        (w) => al.includes(w)
+      );
+    });
+    const sortedQA = [...confirmingQA].sort(
+      (a, b) => (bayesianGainMap[b.group] ?? 0) - (bayesianGainMap[a.group] ?? 0)
+    );
+    for (const qa of sortedQA) {
       if (topSymptoms.length >= 3) break;
-      const sym = susp.keySymptoms?.[0];
+      const sym = extractSymptomFromQuestion(qa.question);
       if (sym && !topSymptoms.includes(sym)) topSymptoms.push(sym);
     }
 
+    // Secondary: keySymptoms from MedGemma grounding (with blacklist), ordered by Bayesian rank
+    if (topSymptoms.length < 3 && groundingResult) {
+      const orderedCondIds = [
+        ...topBayesianConditionIds,
+        ...groundingResult.supportedSuspicions.map((s) => s.diagnosisId),
+      ];
+      const seen = new Set<string>();
+      for (const condId of orderedCondIds) {
+        if (topSymptoms.length >= 3) break;
+        if (seen.has(condId)) continue;
+        seen.add(condId);
+        const susp = groundingResult.supportedSuspicions.find((s) => s.diagnosisId === condId);
+        for (const sym of (susp?.keySymptoms ?? [])) {
+          if (topSymptoms.length >= 3) break;
+          if (!isSymptomBlacklisted(sym) && sym.length < 70) {
+            const normalized = sym.charAt(0).toLowerCase() + sym.slice(1);
+            if (!topSymptoms.includes(normalized)) topSymptoms.push(normalized);
+          }
+        }
+      }
+    }
+
     let personalizedSummary = synthesisResult.personalizedSummary;
-    if (topSymptoms.length > 0) {
-      const lower = topSymptoms.map((s) => s.charAt(0).toLowerCase() + s.slice(1));
+    if (topSymptoms.length >= 2) {
       const phrase =
-        lower.length === 1 ? lower[0]
-        : lower.length === 2 ? `${lower[0]} and ${lower[1]}`
-        : `${lower[0]}, ${lower[1]}, and ${lower[2]}`;
+        topSymptoms.length === 2
+          ? `${topSymptoms[0]} and ${topSymptoms[1]}`
+          : `${topSymptoms[0]}, ${topSymptoms[1]}, and ${topSymptoms[2]}`;
       personalizedSummary = `From what you shared, your fatigue is connected to the ${phrase}. This is worth investigating further. Below you can see some hypotheses on the root causes and which doctors to see first, and how to prepare for your visit.`;
     }
+    // If < 2 valid symptoms found, keep Groq's synthesised version unchanged
 
     const coveredResult = {
       ...synthesisResult,
