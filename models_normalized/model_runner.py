@@ -97,45 +97,71 @@ RECOMMENDED_THRESHOLDS = {
     "iron_deficiency":       0.15,
 }
 
-# Per-disease filtering criteria
+# Per-disease user-facing filtering criteria
 # ─────────────────────────────────────────────────────────────────────────────
 # A model score at or above this value is considered worth:
-#   (a) passing to the Bayesian update step, and
-#   (b) potentially surfacing in user recommendations.
+#   (a) surfacing in user recommendations.
 #
 # All 11 models always run regardless of this value — it only controls which
-# scores are elevated to the next pipeline stage.
+# scores are elevated to the user-visible shortlist.
+#
+# Bayesian question triggering now uses a separate, lower threshold map so
+# borderline-but-plausible conditions can still enter follow-up questions
+# without automatically being surfaced to the user.
 #
 # Calibration rationale (severity × test cost × model precision × flag rate):
 #   0.10  liver / hepatitis_bc  — serious diseases, cheap confirmatory tests,
 #                                  low flag rate; borderline scores still warrant Bayesian update
-#   0.15  iron_deficiency       — common (esp. women), trivial test, Bayesian refines
+#   0.20  iron_deficiency       — optional stricter cleanup from 2026-03-26 sweep
 #   0.20  kidney                — serious; lower filter lets Bayesian work on
 #                                  borderline CKD signals before surfacing
-#   0.30  anemia / hidden_inflammation
-#                               — moderate severity, very cheap tests; anemia flags
-#                                  41% at rec_thr so small downward nudge; inflammation
-#                                  is a risk marker — Bayesian adds value at lower scores
+#   0.40  hidden_inflammation   — current 600-profile benchmark showed a clear
+#                                  quick win at 0.40 vs 0.30: much lower flag burden
+#                                  and healthy over-alert with only modest recall loss
+#   0.60  anemia                — current 600-profile benchmark showed a moderate
+#                                  quick win at 0.60 vs 0.50: better precision and lower
+#                                  flag burden with acceptable recall loss
 #   0.35  prediabetes / thyroid — reversible / manageable; weakest models in group;
 #                                  need reasonable confidence before surfacing
 #   0.40  electrolyte_imbalance / perimenopause
 #                               — weakest model (EI AUC 0.717) or high cohort base
 #                                  rate (perimenopause 23%) → need clearer signal
-#   0.55  sleep_disorder        — 32% prevalence + expensive downstream test
+#   0.75  sleep_disorder        — optional stricter cleanup from 2026-03-26 sweep;
 #                                  (polysomnography); only surface strong signals
-FILTER_CRITERIA = {
+USER_FACING_THRESHOLDS = {
+    "hepatitis_bc":          0.10,
+    "liver":                 0.10,
+    "iron_deficiency":       0.20,
+    "kidney":                0.35,   # raised 0.25→0.35 on 2026-03-27 second-pass tightening: trade recall for materially lower user-facing alert burden
+    "anemia":                0.60,   # raised 0.50→0.60 on 2026-03-26 quick-win sweep: precision 16.9%→21.8%, flag 41.3%→26.0%, recall 62.7%→50.7%
+    "hidden_inflammation":   0.40,   # raised 0.30→0.40 on 2026-03-26 quick-win sweep: precision 6.3%→8.2%, flag 55.3%→36.5%, recall 46.7%→40.0%
+    "prediabetes":           0.45,   # raised 0.40→0.45 on 2026-03-27 second-pass tightening: high-recall yellow model still over-flagged
+    "thyroid":               0.60,   # raised 0.55→0.60 on 2026-03-27 second-pass tightening: high-recall yellow model still over-flagged
+    "electrolyte_imbalance": 0.46,   # raised 0.40→0.46: flag 54%→34%, recall 40%→15%
+    "perimenopause":         0.40,
+    "sleep_disorder":        0.75,   # raised 0.70→0.75 on 2026-03-26 optional cleanup: precision 10.9%→13.1%, flag 24.5%→16.5%, recall 25.0%→20.3%
+}
+
+# Lower thresholds used only to decide which conditions enter Bayesian review.
+# This keeps borderline cases alive for follow-up questions without forcing
+# them into the user-facing shortlist.
+BAYESIAN_TRIGGER_THRESHOLDS = {
     "hepatitis_bc":          0.10,
     "liver":                 0.10,
     "iron_deficiency":       0.15,
-    "kidney":                0.25,   # raised 0.20→0.25: flag 51%→28%, recall 73%→~40%
-    "anemia":                0.50,   # raised 0.30→0.50: flag 53%→23%, recall 85%→85%
-    "hidden_inflammation":   0.30,   # raised 0.20→0.30: flag 54%→32%, recall 78%→56%
-    "prediabetes":           0.40,   # raised 0.35→0.40: flag 66%→42%, recall 61%→44%
-    "thyroid":               0.55,   # raised 0.35→0.55: flag 81%→47%, recall 100%→90%
-    "electrolyte_imbalance": 0.46,   # raised 0.40→0.46: flag 54%→34%, recall 40%→15%
+    "kidney":                0.25,
+    "anemia":                0.50,
+    "hidden_inflammation":   0.30,
+    "prediabetes":           0.40,
+    "thyroid":               0.55,
+    "electrolyte_imbalance": 0.46,
     "perimenopause":         0.40,
-    "sleep_disorder":        0.70,   # raised 0.55→0.70: flag 73%→30%, recall 100%→70%
+    "sleep_disorder":        0.70,
 }
+
+# Backward-compatible alias: existing eval/report code expects FILTER_CRITERIA
+# to mean the user-facing surfacing threshold.
+FILTER_CRITERIA = USER_FACING_THRESHOLDS
 
 # ── Score normalization for fair cross-model ranking ───────────────────────────
 #
@@ -834,12 +860,13 @@ class ModelRunner:
         patient_context: dict[str, Any] | None = None,
     ) -> list[dict]:
         """
-        Apply per-disease filtering criteria, rank descending, return top N.
+        Apply per-disease user-facing filtering criteria, rank descending, return top N.
 
-        Each disease has its own minimum score (FILTER_CRITERIA) that reflects
+        Each disease has its own minimum score (USER_FACING_THRESHOLDS / FILTER_CRITERIA) that reflects
         disease severity, confirmatory test cost, model precision, and flag rate.
         All 11 model scores are always computed before this step — filtering only
-        controls which scores advance to Bayesian update / user display.
+        controls which scores advance to the user-visible shortlist. Bayesian
+        question triggering uses BAYESIAN_TRIGGER_THRESHOLDS separately.
 
         When ``RANK_NORMALIZE`` is ``True`` (default), sorting uses a per-model
         normalised rank key rather than the raw probability.  This corrects for

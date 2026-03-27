@@ -1,6 +1,5 @@
 {
   "condition_ids": [
-    "menopause",
     "perimenopause",
     "hypothyroidism",
     "kidney_disease",
@@ -8,6 +7,7 @@
     "anemia",
     "iron_deficiency",
     "hepatitis",
+    "liver",
     "prediabetes",
     "inflammation",
     "electrolyte_imbalance"

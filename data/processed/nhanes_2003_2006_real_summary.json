@@ -1,0 +1,24 @@
+{
+  "rows": 36406,
+  "profiles": 17671,
+  "cycles": {
+    "C": 18401,
+    "D": 18005
+  },
+  "label_prevalence": {
+    "anemia": 0.04694281162445751,
+    "thyroid": 0.08605724331154205,
+    "sleep_disorder": 0.3704967766401214,
+    "kidney": 0.07677305938581552,
+    "hepatitis_bc": 0.018909549322407817,
+    "liver": 0.04834428973908783,
+    "menopause": 0.21202549030379608,
+    "iron_deficiency": 0.05213426358292589,
+    "electrolyte_imbalance": 0.09190792726473658,
+    "infection_inflammation": 0.4168293503870751,
+    "hidden_inflammation": 0.13107451403887688,
+    "CFS_suspect": 0.000384551996923584,
+    "prediabetes": 0.05122357687922112,
+    "perimenopause_proxy_probable": 0.0035955056179775282
+  }
+}

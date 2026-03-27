@@ -33,7 +33,7 @@ EVALS_DIR = Path(__file__).resolve().parent
 PROJECT_ROOT = EVALS_DIR.parent
 RESULTS_DIR = EVALS_DIR / "results"
 REPORTS_DIR = EVALS_DIR / "reports"
-PROFILES_PATH = EVALS_DIR / "cohort" / "profiles.json"
+PROFILES_PATH = EVALS_DIR / "cohort" / "profiles_v3_three_layer.json"
 
 sys.path.insert(0, str(PROJECT_ROOT))
 sys.path.insert(0, str(EVALS_DIR))
@@ -66,6 +66,7 @@ TARGET_TO_LEGACY = {
     "kidney_disease": "kidney",
     "sleep_disorder": "sleep_disorder",
     "hepatitis": "hepatitis",
+    "liver": "liver",
     "prediabetes": "prediabetes",
     "inflammation": "inflammation",
     "electrolyte_imbalance": "electrolytes",

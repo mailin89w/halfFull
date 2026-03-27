@@ -1,0 +1,3616 @@
+{
+  "current_thresholds": {
+    "anemia": 0.5,
+    "electrolyte_imbalance": 0.46,
+    "hepatitis": 0.1,
+    "hypothyroidism": 0.55,
+    "inflammation": 0.3,
+    "iron_deficiency": 0.15,
+    "kidney_disease": 0.25,
+    "liver": 0.1,
+    "perimenopause": 0.4,
+    "prediabetes": 0.4,
+    "sleep_disorder": 0.7
+  },
+  "recommendations": [
+    {
+      "condition": "anemia",
+      "current": {
+        "threshold": 0.5,
+        "precision": 0.1514,
+        "recall": 0.4578,
+        "f1": 0.2275,
+        "flag_rate": 0.4183,
+        "healthy_flag_rate": 0.0,
+        "flagged": 251,
+        "tp": 38,
+        "n_pos": 83
+      },
+      "best_candidates": [
+        {
+          "threshold": 0.6,
+          "precision_gain": 0.0436,
+          "recall_loss": 0.0843,
+          "flag_drop": 0.1533,
+          "healthy_drop": 0.0,
+          "label": "quick_win",
+          "score": 0.2405,
+          "metrics": {
+            "threshold": 0.6,
+            "precision": 0.195,
+            "recall": 0.3735,
+            "f1": 0.2562,
+            "flag_rate": 0.265,
+            "healthy_flag_rate": 0.0,
+            "flagged": 159,
+            "tp": 31,
+            "n_pos": 83
+          }
+        },
+        {
+          "threshold": 0.85,
+          "precision_gain": 0.8486,
+          "recall_loss": 0.4458,
+          "flag_drop": 0.4166,
+          "healthy_drop": 0.0,
+          "label": "hold",
+          "score": 1.0764,
+          "metrics": {
+            "threshold": 0.85,
+            "precision": 1.0,
+            "recall": 0.012,
+            "f1": 0.0238,
+            "flag_rate": 0.0017,
+            "healthy_flag_rate": 0.0,
+            "flagged": 1,
+            "tp": 1,
+            "n_pos": 83
+          }
+        },
+        {
+          "threshold": 0.75,
+          "precision_gain": 0.4486,
+          "recall_loss": 0.3132,
+          "flag_drop": 0.385,
+          "healthy_drop": 0.0,
+          "label": "hold",
+          "score": 0.6426,
+          "metrics": {
+            "threshold": 0.75,
+            "precision": 0.6,
+            "recall": 0.1446,
+            "f1": 0.233,
+            "flag_rate": 0.0333,
+            "healthy_flag_rate": 0.0,
+            "flagged": 20,
+            "tp": 12,
+            "n_pos": 83
+          }
+        },
+        {
+          "threshold": 0.8,
+          "precision_gain": 0.5153,
+          "recall_loss": 0.4096,
+          "flag_drop": 0.4083,
+          "healthy_drop": 0.0,
+          "label": "hold",
+          "score": 0.5101,
+          "metrics": {
+            "threshold": 0.8,
+            "precision": 0.6667,
+            "recall": 0.0482,
+            "f1": 0.0899,
+            "flag_rate": 0.01,
+            "healthy_flag_rate": 0.0,
+            "flagged": 6,
+            "tp": 4,
+            "n_pos": 83
+          }
+        },
+        {
+          "threshold": 0.7,
+          "precision_gain": 0.214,
+          "recall_loss": 0.2289,
+          "flag_drop": 0.3316,
+          "healthy_drop": 0.0,
+          "label": "hold",
+          "score": 0.3729,
+          "metrics": {
+            "threshold": 0.7,
+            "precision": 0.3654,
+            "recall": 0.2289,
+            "f1": 0.2815,
+            "flag_rate": 0.0867,
+            "healthy_flag_rate": 0.0,
+            "flagged": 52,
+            "tp": 19,
+            "n_pos": 83
+          }
+        }
+      ]
+    },
+    {
+      "condition": "electrolyte_imbalance",
+      "current": {
+        "threshold": 0.46,
+        "precision": 0.2156,
+        "recall": 0.5373,
+        "f1": 0.3077,
+        "flag_rate": 0.5567,
+        "healthy_flag_rate": 0.1667,
+        "flagged": 334,
+        "tp": 72,
+        "n_pos": 134
+      },
+      "best_candidates": [
+        {
+          "threshold": 0.75,
+          "precision_gain": 0.7844,
+          "recall_loss": 0.5298,
+          "flag_drop": 0.555,
+          "healthy_drop": 0.1667,
+          "label": "hold",
+          "score": 1.0011,
+          "metrics": {
+            "threshold": 0.75,
+            "precision": 1.0,
+            "recall": 0.0075,
+            "f1": 0.0148,
+            "flag_rate": 0.0017,
+            "healthy_flag_rate": 0.0,
+            "flagged": 1,
+            "tp": 1,
+            "n_pos": 134
+          }
+        },
+        {
+          "threshold": 0.5,
+          "precision_gain": 0.0046,
+          "recall_loss": 0.0821,
+          "flag_drop": 0.095,
+          "healthy_drop": 0.0417,
+          "label": "hold",
+          "score": 0.1459,
+          "metrics": {
+            "threshold": 0.5,
+            "precision": 0.2202,
+            "recall": 0.4552,
+            "f1": 0.2968,
+            "flag_rate": 0.4617,
+            "healthy_flag_rate": 0.125,
+            "flagged": 277,
+            "tp": 61,
+            "n_pos": 134
+          }
+        },
+        {
+          "threshold": 0.46,
+          "precision_gain": 0.0,
+          "recall_loss": 0.0,
+          "flag_drop": 0.0,
+          "healthy_drop": 0.0,
+          "label": "hold",
+          "score": 0.0,
+          "metrics": {
+            "threshold": 0.46,
+            "precision": 0.2156,
+            "recall": 0.5373,
+            "f1": 0.3077,
+            "flag_rate": 0.5567,
+            "healthy_flag_rate": 0.1667,
+            "flagged": 334,
+            "tp": 72,
+            "n_pos": 134
+          }
+        },
+        {
+          "threshold": 0.6,
+          "precision_gain": 0.1125,
+          "recall_loss": 0.3806,
+          "flag_drop": 0.45,
+          "healthy_drop": 0.125,
+          "label": "hold",
+          "score": -0.0418,
+          "metrics": {
+            "threshold": 0.6,
+            "precision": 0.3281,
+            "recall": 0.1567,
+            "f1": 0.2121,
+            "flag_rate": 0.1067,
+            "healthy_flag_rate": 0.0417,
+            "flagged": 64,
+            "tp": 21,
+            "n_pos": 134
+          }
+        },
+        {
+          "threshold": 0.7,
+          "precision_gain": 0.2288,
+          "recall_loss": 0.5074,
+          "flag_drop": 0.5417,
+          "healthy_drop": 0.1667,
+          "label": "hold",
+          "score": -0.0562,
+          "metrics": {
+            "threshold": 0.7,
+            "precision": 0.4444,
+            "recall": 0.0299,
+            "f1": 0.0559,
+            "flag_rate": 0.015,
+            "healthy_flag_rate": 0.0,
+            "flagged": 9,
+            "tp": 4,
+            "n_pos": 134
+          }
+        }
+      ]
+    },
+    {
+      "condition": "hepatitis",
+      "current": {
+        "threshold": 0.1,
+        "precision": 0.9091,
+        "recall": 0.6557,
+        "f1": 0.7619,
+        "flag_rate": 0.0733,
+        "healthy_flag_rate": 0.0,
+        "flagged": 44,
+        "tp": 40,
+        "n_pos": 61
+      },
+      "best_candidates": [
+        {
+          "threshold": 0.1,
+          "precision_gain": 0.0,
+          "recall_loss": 0.0,
+          "flag_drop": 0.0,
+          "healthy_drop": 0.0,
+          "label": "hold",
+          "score": 0.0,
+          "metrics": {
+            "threshold": 0.1,
+            "precision": 0.9091,
+            "recall": 0.6557,
+            "f1": 0.7619,
+            "flag_rate": 0.0733,
+            "healthy_flag_rate": 0.0,
+            "flagged": 44,
+            "tp": 40,
+            "n_pos": 61
+          }
+        },
+        {
+          "threshold": 0.15,
+          "precision_gain": -0.0067,
+          "recall_loss": 0.0491,
+          "flag_drop": 0.005,
+          "healthy_drop": 0.0,
+          "label": "hold",
+          "score": -0.0084,
+          "metrics": {
+            "threshold": 0.15,
+            "precision": 0.9024,
+            "recall": 0.6066,
+            "f1": 0.7255,
+            "flag_rate": 0.0683,
+            "healthy_flag_rate": 0.0,
+            "flagged": 41,
+            "tp": 37,
+            "n_pos": 61
+          }
+        },
+        {
+          "threshold": 0.2,
+          "precision_gain": -0.0234,
+          "recall_loss": 0.1475,
+          "flag_drop": 0.015,
+          "healthy_drop": 0.0,
+          "label": "hold",
+          "score": -0.1743,
+          "metrics": {
+            "threshold": 0.2,
+            "precision": 0.8857,
+            "recall": 0.5082,
+            "f1": 0.6458,
+            "flag_rate": 0.0583,
+            "healthy_flag_rate": 0.0,
+            "flagged": 35,
+            "tp": 31,
+            "n_pos": 61
+          }
+        },
+        {
+          "threshold": 0.25,
+          "precision_gain": -0.0341,
+          "recall_loss": 0.1967,
+          "flag_drop": 0.02,
+          "healthy_drop": 0.0,
+          "label": "hold",
+          "score": -0.3383,
+          "metrics": {
+            "threshold": 0.25,
+            "precision": 0.875,
+            "recall": 0.459,
+            "f1": 0.6022,
+            "flag_rate": 0.0533,
+            "healthy_flag_rate": 0.0,
+            "flagged": 32,
+            "tp": 28,
+            "n_pos": 61
+          }
+        },
+        {
+          "threshold": 0.4,
+          "precision_gain": -0.0162,
+          "recall_loss": 0.2459,
+          "flag_drop": 0.0266,
+          "healthy_drop": 0.0,
+          "label": "hold",
+          "score": -0.4435,
+          "metrics": {
+            "threshold": 0.4,
+            "precision": 0.8929,
+            "recall": 0.4098,
+            "f1": 0.5618,
+            "flag_rate": 0.0467,
+            "healthy_flag_rate": 0.0,
+            "flagged": 28,
+            "tp": 25,
+            "n_pos": 61
+          }
+        }
+      ]
+    },
+    {
+      "condition": "hypothyroidism",
+      "current": {
+        "threshold": 0.55,
+        "precision": 0.1731,
+        "recall": 0.0796,
+        "f1": 0.1091,
+        "flag_rate": 0.0867,
+        "healthy_flag_rate": 0.0,
+        "flagged": 52,
+        "tp": 9,
+        "n_pos": 113
+      },
+      "best_candidates": [
+        {
+          "threshold": 0.95,
+          "precision_gain": 0.2269,
+          "recall_loss": 0.0619,
+          "flag_drop": 0.0784,
+          "healthy_drop": 0.0,
+          "label": "quick_win",
+          "score": 0.5322,
+          "metrics": {
+            "threshold": 0.95,
+            "precision": 0.4,
+            "recall": 0.0177,
+            "f1": 0.0339,
+            "flag_rate": 0.0083,
+            "healthy_flag_rate": 0.0,
+            "flagged": 5,
+            "tp": 2,
+            "n_pos": 113
+          }
+        },
+        {
+          "threshold": 0.85,
+          "precision_gain": 0.1269,
+          "recall_loss": 0.0531,
+          "flag_drop": 0.07,
+          "healthy_drop": 0.0,
+          "label": "quick_win",
+          "score": 0.3238,
+          "metrics": {
+            "threshold": 0.85,
+            "precision": 0.3,
+            "recall": 0.0265,
+            "f1": 0.0488,
+            "flag_rate": 0.0167,
+            "healthy_flag_rate": 0.0,
+            "flagged": 10,
+            "tp": 3,
+            "n_pos": 113
+          }
+        },
+        {
+          "threshold": 0.9,
+          "precision_gain": 0.1126,
+          "recall_loss": 0.0619,
+          "flag_drop": 0.075,
+          "healthy_drop": 0.0,
+          "label": "quick_win",
+          "score": 0.3002,
+          "metrics": {
+            "threshold": 0.9,
+            "precision": 0.2857,
+            "recall": 0.0177,
+            "f1": 0.0333,
+            "flag_rate": 0.0117,
+            "healthy_flag_rate": 0.0,
+            "flagged": 7,
+            "tp": 2,
+            "n_pos": 113
+          }
+        },
+        {
+          "threshold": 0.7,
+          "precision_gain": 0.1028,
+          "recall_loss": 0.0088,
+          "flag_drop": 0.0384,
+          "healthy_drop": 0.0,
+          "label": "quick_win",
+          "score": 0.244,
+          "metrics": {
+            "threshold": 0.7,
+            "precision": 0.2759,
+            "recall": 0.0708,
+            "f1": 0.1127,
+            "flag_rate": 0.0483,
+            "healthy_flag_rate": 0.0,
+            "flagged": 29,
+            "tp": 8,
+            "n_pos": 113
+          }
+        },
+        {
+          "threshold": 0.75,
+          "precision_gain": 0.0878,
+          "recall_loss": 0.0265,
+          "flag_drop": 0.0484,
+          "healthy_drop": 0.0,
+          "label": "quick_win",
+          "score": 0.224,
+          "metrics": {
+            "threshold": 0.75,
+            "precision": 0.2609,
+            "recall": 0.0531,
+            "f1": 0.0882,
+            "flag_rate": 0.0383,
+            "healthy_flag_rate": 0.0,
+            "flagged": 23,
+            "tp": 6,
+            "n_pos": 113
+          }
+        }
+      ]
+    },
+    {
+      "condition": "inflammation",
+      "current": {
+        "threshold": 0.3,
+        "precision": 0.2083,
+        "recall": 0.625,
+        "f1": 0.3125,
+        "flag_rate": 0.56,
+        "healthy_flag_rate": 0.0833,
+        "flagged": 336,
+        "tp": 70,
+        "n_pos": 112
+      },
+      "best_candidates": [
+        {
+          "threshold": 0.35,
+          "precision_gain": 0.0202,
+          "recall_loss": 0.0804,
+          "flag_drop": 0.115,
+          "healthy_drop": 0.0833,
+          "label": "hold",
+          "score": 0.2387,
+          "metrics": {
+            "threshold": 0.35,
+            "precision": 0.2285,
+            "recall": 0.5446,
+            "f1": 0.3219,
+            "flag_rate": 0.445,
+            "healthy_flag_rate": 0.0,
+            "flagged": 267,
+            "tp": 61,
+            "n_pos": 112
+          }
+        },
+        {
+          "threshold": 0.3,
+          "precision_gain": 0.0,
+          "recall_loss": 0.0,
+          "flag_drop": 0.0,
+          "healthy_drop": 0.0,
+          "label": "hold",
+          "score": 0.0,
+          "metrics": {
+            "threshold": 0.3,
+            "precision": 0.2083,
+            "recall": 0.625,
+            "f1": 0.3125,
+            "flag_rate": 0.56,
+            "healthy_flag_rate": 0.0833,
+            "flagged": 336,
+            "tp": 70,
+            "n_pos": 112
+          }
+        },
+        {
+          "threshold": 0.4,
+          "precision_gain": 0.0044,
+          "recall_loss": 0.2054,
+          "flag_drop": 0.1917,
+          "healthy_drop": 0.0833,
+          "label": "hold",
+          "score": -0.0324,
+          "metrics": {
+            "threshold": 0.4,
+            "precision": 0.2127,
+            "recall": 0.4196,
+            "f1": 0.2823,
+            "flag_rate": 0.3683,
+            "healthy_flag_rate": 0.0,
+            "flagged": 221,
+            "tp": 47,
+            "n_pos": 112
+          }
+        },
+        {
+          "threshold": 0.8,
+          "precision_gain": 0.3211,
+          "recall_loss": 0.5446,
+          "flag_drop": 0.5317,
+          "healthy_drop": 0.0833,
+          "label": "hold",
+          "score": -0.0766,
+          "metrics": {
+            "threshold": 0.8,
+            "precision": 0.5294,
+            "recall": 0.0804,
+            "f1": 0.1395,
+            "flag_rate": 0.0283,
+            "healthy_flag_rate": 0.0,
+            "flagged": 17,
+            "tp": 9,
+            "n_pos": 112
+          }
+        },
+        {
+          "threshold": 0.46,
+          "precision_gain": 0.0071,
+          "recall_loss": 0.25,
+          "flag_drop": 0.235,
+          "healthy_drop": 0.0833,
+          "label": "hold",
+          "score": -0.1175,
+          "metrics": {
+            "threshold": 0.46,
+            "precision": 0.2154,
+            "recall": 0.375,
+            "f1": 0.2736,
+            "flag_rate": 0.325,
+            "healthy_flag_rate": 0.0,
+            "flagged": 195,
+            "tp": 42,
+            "n_pos": 112
+          }
+        }
+      ]
+    },
+    {
+      "condition": "iron_deficiency",
+      "current": {
+        "threshold": 0.15,
+        "precision": 0.5625,
+        "recall": 0.8036,
+        "f1": 0.6618,
+        "flag_rate": 0.1333,
+        "healthy_flag_rate": 0.0,
+        "flagged": 80,
+        "tp": 45,
+        "n_pos": 56
+      },
+      "best_candidates": [
+        {
+          "threshold": 0.2,
+          "precision_gain": 0.3486,
+          "recall_loss": 0.0715,
+          "flag_drop": 0.0583,
+          "healthy_drop": 0.0,
+          "label": "quick_win",
+          "score": 0.7555,
+          "metrics": {
+            "threshold": 0.2,
+            "precision": 0.9111,
+            "recall": 0.7321,
+            "f1": 0.8119,
+            "flag_rate": 0.075,
+            "healthy_flag_rate": 0.0,
+            "flagged": 45,
+            "tp": 41,
+            "n_pos": 56
+          }
+        },
+        {
+          "threshold": 0.25,
+          "precision_gain": 0.4375,
+          "recall_loss": 0.1072,
+          "flag_drop": 0.0683,
+          "healthy_drop": 0.0,
+          "label": "possible",
+          "score": 0.9217,
+          "metrics": {
+            "threshold": 0.25,
+            "precision": 1.0,
+            "recall": 0.6964,
+            "f1": 0.8211,
+            "flag_rate": 0.065,
+            "healthy_flag_rate": 0.0,
+            "flagged": 39,
+            "tp": 39,
+            "n_pos": 56
+          }
+        },
+        {
+          "threshold": 0.3,
+          "precision_gain": 0.4375,
+          "recall_loss": 0.3036,
+          "flag_drop": 0.0866,
+          "healthy_drop": 0.0,
+          "label": "hold",
+          "score": 0.3508,
+          "metrics": {
+            "threshold": 0.3,
+            "precision": 1.0,
+            "recall": 0.5,
+            "f1": 0.6667,
+            "flag_rate": 0.0467,
+            "healthy_flag_rate": 0.0,
+            "flagged": 28,
+            "tp": 28,
+            "n_pos": 56
+          }
+        },
+        {
+          "threshold": 0.35,
+          "precision_gain": 0.4375,
+          "recall_loss": 0.4107,
+          "flag_drop": 0.0966,
+          "healthy_drop": 0.0,
+          "label": "hold",
+          "score": 0.0395,
+          "metrics": {
+            "threshold": 0.35,
+            "precision": 1.0,
+            "recall": 0.3929,
+            "f1": 0.5641,
+            "flag_rate": 0.0367,
+            "healthy_flag_rate": 0.0,
+            "flagged": 22,
+            "tp": 22,
+            "n_pos": 56
+          }
+        },
+        {
+          "threshold": 0.15,
+          "precision_gain": 0.0,
+          "recall_loss": 0.0,
+          "flag_drop": 0.0,
+          "healthy_drop": 0.0,
+          "label": "hold",
+          "score": 0.0,
+          "metrics": {
+            "threshold": 0.15,
+            "precision": 0.5625,
+            "recall": 0.8036,
+            "f1": 0.6618,
+            "flag_rate": 0.1333,
+            "healthy_flag_rate": 0.0,
+            "flagged": 80,
+            "tp": 45,
+            "n_pos": 56
+          }
+        }
+      ]
+    },
+    {
+      "condition": "kidney_disease",
+      "current": {
+        "threshold": 0.25,
+        "precision": 0.2462,
+        "recall": 0.8522,
+        "f1": 0.3821,
+        "flag_rate": 0.6633,
+        "healthy_flag_rate": 0.25,
+        "flagged": 398,
+        "tp": 98,
+        "n_pos": 115
+      },
+      "best_candidates": [
+        {
+          "threshold": 0.35,
+          "precision_gain": 0.0648,
+          "recall_loss": 0.1652,
+          "flag_drop": 0.24,
+          "healthy_drop": 0.125,
+          "label": "hold",
+          "score": 0.299,
+          "metrics": {
+            "threshold": 0.35,
+            "precision": 0.311,
+            "recall": 0.687,
+            "f1": 0.4282,
+            "flag_rate": 0.4233,
+            "healthy_flag_rate": 0.125,
+            "flagged": 254,
+            "tp": 79,
+            "n_pos": 115
+          }
+        },
+        {
+          "threshold": 0.85,
+          "precision_gain": 0.7538,
+          "recall_loss": 0.8435,
+          "flag_drop": 0.6616,
+          "healthy_drop": 0.25,
+          "label": "hold",
+          "score": 0.1887,
+          "metrics": {
+            "threshold": 0.85,
+            "precision": 1.0,
+            "recall": 0.0087,
+            "f1": 0.0172,
+            "flag_rate": 0.0017,
+            "healthy_flag_rate": 0.0,
+            "flagged": 1,
+            "tp": 1,
+            "n_pos": 115
+          }
+        },
+        {
+          "threshold": 0.3,
+          "precision_gain": 0.0074,
+          "recall_loss": 0.087,
+          "flag_drop": 0.085,
+          "healthy_drop": 0.0417,
+          "label": "hold",
+          "score": 0.1415,
+          "metrics": {
+            "threshold": 0.3,
+            "precision": 0.2536,
+            "recall": 0.7652,
+            "f1": 0.381,
+            "flag_rate": 0.5783,
+            "healthy_flag_rate": 0.2083,
+            "flagged": 347,
+            "tp": 88,
+            "n_pos": 115
+          }
+        },
+        {
+          "threshold": 0.25,
+          "precision_gain": 0.0,
+          "recall_loss": 0.0,
+          "flag_drop": 0.0,
+          "healthy_drop": 0.0,
+          "label": "hold",
+          "score": 0.0,
+          "metrics": {
+            "threshold": 0.25,
+            "precision": 0.2462,
+            "recall": 0.8522,
+            "f1": 0.3821,
+            "flag_rate": 0.6633,
+            "healthy_flag_rate": 0.25,
+            "flagged": 398,
+            "tp": 98,
+            "n_pos": 115
+          }
+        },
+        {
+          "threshold": 0.4,
+          "precision_gain": 0.0742,
+          "recall_loss": 0.3479,
+          "flag_drop": 0.3616,
+          "healthy_drop": 0.125,
+          "label": "hold",
+          "score": -0.1087,
+          "metrics": {
+            "threshold": 0.4,
+            "precision": 0.3204,
+            "recall": 0.5043,
+            "f1": 0.3919,
+            "flag_rate": 0.3017,
+            "healthy_flag_rate": 0.125,
+            "flagged": 181,
+            "tp": 58,
+            "n_pos": 115
+          }
+        }
+      ]
+    },
+    {
+      "condition": "liver",
+      "current": {
+        "threshold": 0.1,
+        "precision": 0.3421,
+        "recall": 0.1413,
+        "f1": 0.2,
+        "flag_rate": 0.0633,
+        "healthy_flag_rate": 0.0,
+        "flagged": 38,
+        "tp": 13,
+        "n_pos": 92
+      },
+      "best_candidates": [
+        {
+          "threshold": 0.25,
+          "precision_gain": 0.0579,
+          "recall_loss": 0.0978,
+          "flag_drop": 0.0466,
+          "healthy_drop": 0.0,
+          "label": "quick_win",
+          "score": 0.1624,
+          "metrics": {
+            "threshold": 0.25,
+            "precision": 0.4,
+            "recall": 0.0435,
+            "f1": 0.0784,
+            "flag_rate": 0.0167,
+            "healthy_flag_rate": 0.0,
+            "flagged": 10,
+            "tp": 4,
+            "n_pos": 92
+          }
+        },
+        {
+          "threshold": 0.3,
+          "precision_gain": 0.0579,
+          "recall_loss": 0.0978,
+          "flag_drop": 0.0466,
+          "healthy_drop": 0.0,
+          "label": "quick_win",
+          "score": 0.1624,
+          "metrics": {
+            "threshold": 0.3,
+            "precision": 0.4,
+            "recall": 0.0435,
+            "f1": 0.0784,
+            "flag_rate": 0.0167,
+            "healthy_flag_rate": 0.0,
+            "flagged": 10,
+            "tp": 4,
+            "n_pos": 92
+          }
+        },
+        {
+          "threshold": 0.35,
+          "precision_gain": 0.0865,
+          "recall_loss": 0.1087,
+          "flag_drop": 0.0516,
+          "healthy_drop": 0.0,
+          "label": "possible",
+          "score": 0.1985,
+          "metrics": {
+            "threshold": 0.35,
+            "precision": 0.4286,
+            "recall": 0.0326,
+            "f1": 0.0606,
+            "flag_rate": 0.0117,
+            "healthy_flag_rate": 0.0,
+            "flagged": 7,
+            "tp": 3,
+            "n_pos": 92
+          }
+        },
+        {
+          "threshold": 0.15,
+          "precision_gain": 0.0468,
+          "recall_loss": 0.0652,
+          "flag_drop": 0.0333,
+          "healthy_drop": 0.0,
+          "label": "possible",
+          "score": 0.1269,
+          "metrics": {
+            "threshold": 0.15,
+            "precision": 0.3889,
+            "recall": 0.0761,
+            "f1": 0.1273,
+            "flag_rate": 0.03,
+            "healthy_flag_rate": 0.0,
+            "flagged": 18,
+            "tp": 7,
+            "n_pos": 92
+          }
+        },
+        {
+          "threshold": 0.2,
+          "precision_gain": 0.0425,
+          "recall_loss": 0.087,
+          "flag_drop": 0.0416,
+          "healthy_drop": 0.0,
+          "label": "possible",
+          "score": 0.1266,
+          "metrics": {
+            "threshold": 0.2,
+            "precision": 0.3846,
+            "recall": 0.0543,
+            "f1": 0.0952,
+            "flag_rate": 0.0217,
+            "healthy_flag_rate": 0.0,
+            "flagged": 13,
+            "tp": 5,
+            "n_pos": 92
+          }
+        }
+      ]
+    },
+    {
+      "condition": "perimenopause",
+      "current": {
+        "threshold": 0.4,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0,
+        "flag_rate": 0.0,
+        "healthy_flag_rate": 0.0,
+        "flagged": 0,
+        "tp": 0,
+        "n_pos": 72
+      },
+      "best_candidates": [
+        {
+          "threshold": 0.4,
+          "precision_gain": 0.0,
+          "recall_loss": 0.0,
+          "flag_drop": 0.0,
+          "healthy_drop": 0.0,
+          "label": "hold",
+          "score": 0.0,
+          "metrics": {
+            "threshold": 0.4,
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0,
+            "flag_rate": 0.0,
+            "healthy_flag_rate": 0.0,
+            "flagged": 0,
+            "tp": 0,
+            "n_pos": 72
+          }
+        },
+        {
+          "threshold": 0.45,
+          "precision_gain": 0.0,
+          "recall_loss": 0.0,
+          "flag_drop": 0.0,
+          "healthy_drop": 0.0,
+          "label": "hold",
+          "score": 0.0,
+          "metrics": {
+            "threshold": 0.45,
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0,
+            "flag_rate": 0.0,
+            "healthy_flag_rate": 0.0,
+            "flagged": 0,
+            "tp": 0,
+            "n_pos": 72
+          }
+        },
+        {
+          "threshold": 0.46,
+          "precision_gain": 0.0,
+          "recall_loss": 0.0,
+          "flag_drop": 0.0,
+          "healthy_drop": 0.0,
+          "label": "hold",
+          "score": 0.0,
+          "metrics": {
+            "threshold": 0.46,
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0,
+            "flag_rate": 0.0,
+            "healthy_flag_rate": 0.0,
+            "flagged": 0,
+            "tp": 0,
+            "n_pos": 72
+          }
+        },
+        {
+          "threshold": 0.5,
+          "precision_gain": 0.0,
+          "recall_loss": 0.0,
+          "flag_drop": 0.0,
+          "healthy_drop": 0.0,
+          "label": "hold",
+          "score": 0.0,
+          "metrics": {
+            "threshold": 0.5,
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0,
+            "flag_rate": 0.0,
+            "healthy_flag_rate": 0.0,
+            "flagged": 0,
+            "tp": 0,
+            "n_pos": 72
+          }
+        },
+        {
+          "threshold": 0.55,
+          "precision_gain": 0.0,
+          "recall_loss": 0.0,
+          "flag_drop": 0.0,
+          "healthy_drop": 0.0,
+          "label": "hold",
+          "score": 0.0,
+          "metrics": {
+            "threshold": 0.55,
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0,
+            "flag_rate": 0.0,
+            "healthy_flag_rate": 0.0,
+            "flagged": 0,
+            "tp": 0,
+            "n_pos": 72
+          }
+        }
+      ]
+    },
+    {
+      "condition": "prediabetes",
+      "current": {
+        "threshold": 0.4,
+        "precision": 0.1498,
+        "recall": 0.6615,
+        "f1": 0.2443,
+        "flag_rate": 0.4783,
+        "healthy_flag_rate": 0.125,
+        "flagged": 287,
+        "tp": 43,
+        "n_pos": 65
+      },
+      "best_candidates": [
+        {
+          "threshold": 0.4,
+          "precision_gain": 0.0,
+          "recall_loss": 0.0,
+          "flag_drop": 0.0,
+          "healthy_drop": 0.0,
+          "label": "hold",
+          "score": 0.0,
+          "metrics": {
+            "threshold": 0.4,
+            "precision": 0.1498,
+            "recall": 0.6615,
+            "f1": 0.2443,
+            "flag_rate": 0.4783,
+            "healthy_flag_rate": 0.125,
+            "flagged": 287,
+            "tp": 43,
+            "n_pos": 65
+          }
+        },
+        {
+          "threshold": 0.45,
+          "precision_gain": -0.0134,
+          "recall_loss": 0.2461,
+          "flag_drop": 0.1483,
+          "healthy_drop": 0.0833,
+          "label": "hold",
+          "score": -0.2335,
+          "metrics": {
+            "threshold": 0.45,
+            "precision": 0.1364,
+            "recall": 0.4154,
+            "f1": 0.2053,
+            "flag_rate": 0.33,
+            "healthy_flag_rate": 0.0417,
+            "flagged": 198,
+            "tp": 27,
+            "n_pos": 65
+          }
+        },
+        {
+          "threshold": 0.46,
+          "precision_gain": -0.0109,
+          "recall_loss": 0.2769,
+          "flag_drop": 0.1783,
+          "healthy_drop": 0.125,
+          "label": "hold",
+          "score": -0.2492,
+          "metrics": {
+            "threshold": 0.46,
+            "precision": 0.1389,
+            "recall": 0.3846,
+            "f1": 0.2041,
+            "flag_rate": 0.3,
+            "healthy_flag_rate": 0.0,
+            "flagged": 180,
+            "tp": 25,
+            "n_pos": 65
+          }
+        },
+        {
+          "threshold": 0.5,
+          "precision_gain": 0.0216,
+          "recall_loss": 0.3846,
+          "flag_drop": 0.3033,
+          "healthy_drop": 0.125,
+          "label": "hold",
+          "score": -0.3823,
+          "metrics": {
+            "threshold": 0.5,
+            "precision": 0.1714,
+            "recall": 0.2769,
+            "f1": 0.2118,
+            "flag_rate": 0.175,
+            "healthy_flag_rate": 0.0,
+            "flagged": 105,
+            "tp": 18,
+            "n_pos": 65
+          }
+        },
+        {
+          "threshold": 0.55,
+          "precision_gain": -0.1212,
+          "recall_loss": 0.6461,
+          "flag_drop": 0.42,
+          "healthy_drop": 0.125,
+          "label": "hold",
+          "score": -1.3357,
+          "metrics": {
+            "threshold": 0.55,
+            "precision": 0.0286,
+            "recall": 0.0154,
+            "f1": 0.02,
+            "flag_rate": 0.0583,
+            "healthy_flag_rate": 0.0,
+            "flagged": 35,
+            "tp": 1,
+            "n_pos": 65
+          }
+        }
+      ]
+    },
+    {
+      "condition": "sleep_disorder",
+      "current": {
+        "threshold": 0.7,
+        "precision": 0.6528,
+        "recall": 0.3966,
+        "f1": 0.4934,
+        "flag_rate": 0.24,
+        "healthy_flag_rate": 0.0,
+        "flagged": 144,
+        "tp": 94,
+        "n_pos": 237
+      },
+      "best_candidates": [
+        {
+          "threshold": 0.75,
+          "precision_gain": 0.0411,
+          "recall_loss": 0.1097,
+          "flag_drop": 0.0767,
+          "healthy_drop": 0.0,
+          "label": "possible",
+          "score": 0.1298,
+          "metrics": {
+            "threshold": 0.75,
+            "precision": 0.6939,
+            "recall": 0.2869,
+            "f1": 0.406,
+            "flag_rate": 0.1633,
+            "healthy_flag_rate": 0.0,
+            "flagged": 98,
+            "tp": 68,
+            "n_pos": 237
+          }
+        },
+        {
+          "threshold": 0.8,
+          "precision_gain": 0.0972,
+          "recall_loss": 0.1941,
+          "flag_drop": 0.1333,
+          "healthy_drop": 0.0,
+          "label": "hold",
+          "score": 0.0454,
+          "metrics": {
+            "threshold": 0.8,
+            "precision": 0.75,
+            "recall": 0.2025,
+            "f1": 0.3189,
+            "flag_rate": 0.1067,
+            "healthy_flag_rate": 0.0,
+            "flagged": 64,
+            "tp": 48,
+            "n_pos": 237
+          }
+        },
+        {
+          "threshold": 0.7,
+          "precision_gain": 0.0,
+          "recall_loss": 0.0,
+          "flag_drop": 0.0,
+          "healthy_drop": 0.0,
+          "label": "hold",
+          "score": 0.0,
+          "metrics": {
+            "threshold": 0.7,
+            "precision": 0.6528,
+            "recall": 0.3966,
+            "f1": 0.4934,
+            "flag_rate": 0.24,
+            "healthy_flag_rate": 0.0,
+            "flagged": 144,
+            "tp": 94,
+            "n_pos": 237
+          }
+        },
+        {
+          "threshold": 0.85,
+          "precision_gain": 0.0819,
+          "recall_loss": 0.2447,
+          "flag_drop": 0.1583,
+          "healthy_drop": 0.0,
+          "label": "hold",
+          "score": -0.112,
+          "metrics": {
+            "threshold": 0.85,
+            "precision": 0.7347,
+            "recall": 0.1519,
+            "f1": 0.2517,
+            "flag_rate": 0.0817,
+            "healthy_flag_rate": 0.0,
+            "flagged": 49,
+            "tp": 36,
+            "n_pos": 237
+          }
+        },
+        {
+          "threshold": 0.9,
+          "precision_gain": 0.0472,
+          "recall_loss": 0.3375,
+          "flag_drop": 0.2067,
+          "healthy_drop": 0.0,
+          "label": "hold",
+          "score": -0.4114,
+          "metrics": {
+            "threshold": 0.9,
+            "precision": 0.7,
+            "recall": 0.0591,
+            "f1": 0.1089,
+            "flag_rate": 0.0333,
+            "healthy_flag_rate": 0.0,
+            "flagged": 20,
+            "tp": 14,
+            "n_pos": 237
+          }
+        }
+      ]
+    }
+  ],
+  "full_sweep": {
+    "anemia": [
+      {
+        "threshold": 0.1,
+        "precision": 0.1448,
+        "recall": 0.8795,
+        "f1": 0.2487,
+        "flag_rate": 0.84,
+        "healthy_flag_rate": 0.25,
+        "flagged": 504,
+        "tp": 73,
+        "n_pos": 83
+      },
+      {
+        "threshold": 0.15,
+        "precision": 0.1485,
+        "recall": 0.8193,
+        "f1": 0.2514,
+        "flag_rate": 0.7633,
+        "healthy_flag_rate": 0.1667,
+        "flagged": 458,
+        "tp": 68,
+        "n_pos": 83
+      },
+      {
+        "threshold": 0.2,
+        "precision": 0.1375,
+        "recall": 0.7108,
+        "f1": 0.2305,
+        "flag_rate": 0.715,
+        "healthy_flag_rate": 0.1667,
+        "flagged": 429,
+        "tp": 59,
+        "n_pos": 83
+      },
+      {
+        "threshold": 0.25,
+        "precision": 0.1394,
+        "recall": 0.6867,
+        "f1": 0.2317,
+        "flag_rate": 0.6817,
+        "healthy_flag_rate": 0.1667,
+        "flagged": 409,
+        "tp": 57,
+        "n_pos": 83
+      },
+      {
+        "threshold": 0.3,
+        "precision": 0.1392,
+        "recall": 0.6506,
+        "f1": 0.2293,
+        "flag_rate": 0.6467,
+        "healthy_flag_rate": 0.125,
+        "flagged": 388,
+        "tp": 54,
+        "n_pos": 83
+      },
+      {
+        "threshold": 0.35,
+        "precision": 0.1436,
+        "recall": 0.6265,
+        "f1": 0.2337,
+        "flag_rate": 0.6033,
+        "healthy_flag_rate": 0.0833,
+        "flagged": 362,
+        "tp": 52,
+        "n_pos": 83
+      },
+      {
+        "threshold": 0.4,
+        "precision": 0.1398,
+        "recall": 0.5542,
+        "f1": 0.2233,
+        "flag_rate": 0.5483,
+        "healthy_flag_rate": 0.0833,
+        "flagged": 329,
+        "tp": 46,
+        "n_pos": 83
+      },
+      {
+        "threshold": 0.45,
+        "precision": 0.1463,
+        "recall": 0.506,
+        "f1": 0.227,
+        "flag_rate": 0.4783,
+        "healthy_flag_rate": 0.0417,
+        "flagged": 287,
+        "tp": 42,
+        "n_pos": 83
+      },
+      {
+        "threshold": 0.46,
+        "precision": 0.1464,
+        "recall": 0.494,
+        "f1": 0.2259,
+        "flag_rate": 0.4667,
+        "healthy_flag_rate": 0.0417,
+        "flagged": 280,
+        "tp": 41,
+        "n_pos": 83
+      },
+      {
+        "threshold": 0.5,
+        "precision": 0.1514,
+        "recall": 0.4578,
+        "f1": 0.2275,
+        "flag_rate": 0.4183,
+        "healthy_flag_rate": 0.0,
+        "flagged": 251,
+        "tp": 38,
+        "n_pos": 83
+      },
+      {
+        "threshold": 0.55,
+        "precision": 0.1635,
+        "recall": 0.4096,
+        "f1": 0.2337,
+        "flag_rate": 0.3467,
+        "healthy_flag_rate": 0.0,
+        "flagged": 208,
+        "tp": 34,
+        "n_pos": 83
+      },
+      {
+        "threshold": 0.6,
+        "precision": 0.195,
+        "recall": 0.3735,
+        "f1": 0.2562,
+        "flag_rate": 0.265,
+        "healthy_flag_rate": 0.0,
+        "flagged": 159,
+        "tp": 31,
+        "n_pos": 83
+      },
+      {
+        "threshold": 0.65,
+        "precision": 0.25,
+        "recall": 0.3012,
+        "f1": 0.2732,
+        "flag_rate": 0.1667,
+        "healthy_flag_rate": 0.0,
+        "flagged": 100,
+        "tp": 25,
+        "n_pos": 83
+      },
+      {
+        "threshold": 0.7,
+        "precision": 0.3654,
+        "recall": 0.2289,
+        "f1": 0.2815,
+        "flag_rate": 0.0867,
+        "healthy_flag_rate": 0.0,
+        "flagged": 52,
+        "tp": 19,
+        "n_pos": 83
+      },
+      {
+        "threshold": 0.75,
+        "precision": 0.6,
+        "recall": 0.1446,
+        "f1": 0.233,
+        "flag_rate": 0.0333,
+        "healthy_flag_rate": 0.0,
+        "flagged": 20,
+        "tp": 12,
+        "n_pos": 83
+      },
+      {
+        "threshold": 0.8,
+        "precision": 0.6667,
+        "recall": 0.0482,
+        "f1": 0.0899,
+        "flag_rate": 0.01,
+        "healthy_flag_rate": 0.0,
+        "flagged": 6,
+        "tp": 4,
+        "n_pos": 83
+      },
+      {
+        "threshold": 0.85,
+        "precision": 1.0,
+        "recall": 0.012,
+        "f1": 0.0238,
+        "flag_rate": 0.0017,
+        "healthy_flag_rate": 0.0,
+        "flagged": 1,
+        "tp": 1,
+        "n_pos": 83
+      },
+      {
+        "threshold": 0.9,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0,
+        "flag_rate": 0.0,
+        "healthy_flag_rate": 0.0,
+        "flagged": 0,
+        "tp": 0,
+        "n_pos": 83
+      },
+      {
+        "threshold": 0.95,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0,
+        "flag_rate": 0.0,
+        "healthy_flag_rate": 0.0,
+        "flagged": 0,
+        "tp": 0,
+        "n_pos": 83
+      }
+    ],
+    "electrolyte_imbalance": [
+      {
+        "threshold": 0.1,
+        "precision": 0.2147,
+        "recall": 0.8507,
+        "f1": 0.3429,
+        "flag_rate": 0.885,
+        "healthy_flag_rate": 0.2917,
+        "flagged": 531,
+        "tp": 114,
+        "n_pos": 134
+      },
+      {
+        "threshold": 0.15,
+        "precision": 0.2082,
+        "recall": 0.7985,
+        "f1": 0.3302,
+        "flag_rate": 0.8567,
+        "healthy_flag_rate": 0.2917,
+        "flagged": 514,
+        "tp": 107,
+        "n_pos": 134
+      },
+      {
+        "threshold": 0.2,
+        "precision": 0.2082,
+        "recall": 0.7985,
+        "f1": 0.3302,
+        "flag_rate": 0.8567,
+        "healthy_flag_rate": 0.2917,
+        "flagged": 514,
+        "tp": 107,
+        "n_pos": 134
+      },
+      {
+        "threshold": 0.25,
+        "precision": 0.2082,
+        "recall": 0.7985,
+        "f1": 0.3302,
+        "flag_rate": 0.8567,
+        "healthy_flag_rate": 0.2917,
+        "flagged": 514,
+        "tp": 107,
+        "n_pos": 134
+      },
+      {
+        "threshold": 0.3,
+        "precision": 0.2082,
+        "recall": 0.7985,
+        "f1": 0.3302,
+        "flag_rate": 0.8567,
+        "healthy_flag_rate": 0.2917,
+        "flagged": 514,
+        "tp": 107,
+        "n_pos": 134
+      },
+      {
+        "threshold": 0.35,
+        "precision": 0.2082,
+        "recall": 0.7985,
+        "f1": 0.3302,
+        "flag_rate": 0.8567,
+        "healthy_flag_rate": 0.2917,
+        "flagged": 514,
+        "tp": 107,
+        "n_pos": 134
+      },
+      {
+        "threshold": 0.4,
+        "precision": 0.2032,
+        "recall": 0.6567,
+        "f1": 0.3104,
+        "flag_rate": 0.7217,
+        "healthy_flag_rate": 0.25,
+        "flagged": 433,
+        "tp": 88,
+        "n_pos": 134
+      },
+      {
+        "threshold": 0.45,
+        "precision": 0.2188,
+        "recall": 0.5896,
+        "f1": 0.3192,
+        "flag_rate": 0.6017,
+        "healthy_flag_rate": 0.2083,
+        "flagged": 361,
+        "tp": 79,
+        "n_pos": 134
+      },
+      {
+        "threshold": 0.46,
+        "precision": 0.2156,
+        "recall": 0.5373,
+        "f1": 0.3077,
+        "flag_rate": 0.5567,
+        "healthy_flag_rate": 0.1667,
+        "flagged": 334,
+        "tp": 72,
+        "n_pos": 134
+      },
+      {
+        "threshold": 0.5,
+        "precision": 0.2202,
+        "recall": 0.4552,
+        "f1": 0.2968,
+        "flag_rate": 0.4617,
+        "healthy_flag_rate": 0.125,
+        "flagged": 277,
+        "tp": 61,
+        "n_pos": 134
+      },
+      {
+        "threshold": 0.55,
+        "precision": 0.2235,
+        "recall": 0.2985,
+        "f1": 0.2556,
+        "flag_rate": 0.2983,
+        "healthy_flag_rate": 0.0833,
+        "flagged": 179,
+        "tp": 40,
+        "n_pos": 134
+      },
+      {
+        "threshold": 0.6,
+        "precision": 0.3281,
+        "recall": 0.1567,
+        "f1": 0.2121,
+        "flag_rate": 0.1067,
+        "healthy_flag_rate": 0.0417,
+        "flagged": 64,
+        "tp": 21,
+        "n_pos": 134
+      },
+      {
+        "threshold": 0.65,
+        "precision": 0.3333,
+        "recall": 0.0672,
+        "f1": 0.1118,
+        "flag_rate": 0.045,
+        "healthy_flag_rate": 0.0,
+        "flagged": 27,
+        "tp": 9,
+        "n_pos": 134
+      },
+      {
+        "threshold": 0.7,
+        "precision": 0.4444,
+        "recall": 0.0299,
+        "f1": 0.0559,
+        "flag_rate": 0.015,
+        "healthy_flag_rate": 0.0,
+        "flagged": 9,
+        "tp": 4,
+        "n_pos": 134
+      },
+      {
+        "threshold": 0.75,
+        "precision": 1.0,
+        "recall": 0.0075,
+        "f1": 0.0148,
+        "flag_rate": 0.0017,
+        "healthy_flag_rate": 0.0,
+        "flagged": 1,
+        "tp": 1,
+        "n_pos": 134
+      },
+      {
+        "threshold": 0.8,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0,
+        "flag_rate": 0.0,
+        "healthy_flag_rate": 0.0,
+        "flagged": 0,
+        "tp": 0,
+        "n_pos": 134
+      },
+      {
+        "threshold": 0.85,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0,
+        "flag_rate": 0.0,
+        "healthy_flag_rate": 0.0,
+        "flagged": 0,
+        "tp": 0,
+        "n_pos": 134
+      },
+      {
+        "threshold": 0.9,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0,
+        "flag_rate": 0.0,
+        "healthy_flag_rate": 0.0,
+        "flagged": 0,
+        "tp": 0,
+        "n_pos": 134
+      },
+      {
+        "threshold": 0.95,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0,
+        "flag_rate": 0.0,
+        "healthy_flag_rate": 0.0,
+        "flagged": 0,
+        "tp": 0,
+        "n_pos": 134
+      }
+    ],
+    "hepatitis": [
+      {
+        "threshold": 0.1,
+        "precision": 0.9091,
+        "recall": 0.6557,
+        "f1": 0.7619,
+        "flag_rate": 0.0733,
+        "healthy_flag_rate": 0.0,
+        "flagged": 44,
+        "tp": 40,
+        "n_pos": 61
+      },
+      {
+        "threshold": 0.15,
+        "precision": 0.9024,
+        "recall": 0.6066,
+        "f1": 0.7255,
+        "flag_rate": 0.0683,
+        "healthy_flag_rate": 0.0,
+        "flagged": 41,
+        "tp": 37,
+        "n_pos": 61
+      },
+      {
+        "threshold": 0.2,
+        "precision": 0.8857,
+        "recall": 0.5082,
+        "f1": 0.6458,
+        "flag_rate": 0.0583,
+        "healthy_flag_rate": 0.0,
+        "flagged": 35,
+        "tp": 31,
+        "n_pos": 61
+      },
+      {
+        "threshold": 0.25,
+        "precision": 0.875,
+        "recall": 0.459,
+        "f1": 0.6022,
+        "flag_rate": 0.0533,
+        "healthy_flag_rate": 0.0,
+        "flagged": 32,
+        "tp": 28,
+        "n_pos": 61
+      },
+      {
+        "threshold": 0.3,
+        "precision": 0.8621,
+        "recall": 0.4098,
+        "f1": 0.5556,
+        "flag_rate": 0.0483,
+        "healthy_flag_rate": 0.0,
+        "flagged": 29,
+        "tp": 25,
+        "n_pos": 61
+      },
+      {
+        "threshold": 0.35,
+        "precision": 0.8621,
+        "recall": 0.4098,
+        "f1": 0.5556,
+        "flag_rate": 0.0483,
+        "healthy_flag_rate": 0.0,
+        "flagged": 29,
+        "tp": 25,
+        "n_pos": 61
+      },
+      {
+        "threshold": 0.4,
+        "precision": 0.8929,
+        "recall": 0.4098,
+        "f1": 0.5618,
+        "flag_rate": 0.0467,
+        "healthy_flag_rate": 0.0,
+        "flagged": 28,
+        "tp": 25,
+        "n_pos": 61
+      },
+      {
+        "threshold": 0.45,
+        "precision": 0.9167,
+        "recall": 0.3607,
+        "f1": 0.5176,
+        "flag_rate": 0.04,
+        "healthy_flag_rate": 0.0,
+        "flagged": 24,
+        "tp": 22,
+        "n_pos": 61
+      },
+      {
+        "threshold": 0.46,
+        "precision": 0.9167,
+        "recall": 0.3607,
+        "f1": 0.5176,
+        "flag_rate": 0.04,
+        "healthy_flag_rate": 0.0,
+        "flagged": 24,
+        "tp": 22,
+        "n_pos": 61
+      },
+      {
+        "threshold": 0.5,
+        "precision": 0.9091,
+        "recall": 0.3279,
+        "f1": 0.4819,
+        "flag_rate": 0.0367,
+        "healthy_flag_rate": 0.0,
+        "flagged": 22,
+        "tp": 20,
+        "n_pos": 61
+      },
+      {
+        "threshold": 0.55,
+        "precision": 1.0,
+        "recall": 0.0164,
+        "f1": 0.0323,
+        "flag_rate": 0.0017,
+        "healthy_flag_rate": 0.0,
+        "flagged": 1,
+        "tp": 1,
+        "n_pos": 61
+      },
+      {
+        "threshold": 0.6,
+        "precision": 1.0,
+        "recall": 0.0164,
+        "f1": 0.0323,
+        "flag_rate": 0.0017,
+        "healthy_flag_rate": 0.0,
+        "flagged": 1,
+        "tp": 1,
+        "n_pos": 61
+      },
+      {
+        "threshold": 0.65,
+        "precision": 1.0,
+        "recall": 0.0164,
+        "f1": 0.0323,
+        "flag_rate": 0.0017,
+        "healthy_flag_rate": 0.0,
+        "flagged": 1,
+        "tp": 1,
+        "n_pos": 61
+      },
+      {
+        "threshold": 0.7,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0,
+        "flag_rate": 0.0,
+        "healthy_flag_rate": 0.0,
+        "flagged": 0,
+        "tp": 0,
+        "n_pos": 61
+      },
+      {
+        "threshold": 0.75,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0,
+        "flag_rate": 0.0,
+        "healthy_flag_rate": 0.0,
+        "flagged": 0,
+        "tp": 0,
+        "n_pos": 61
+      },
+      {
+        "threshold": 0.8,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0,
+        "flag_rate": 0.0,
+        "healthy_flag_rate": 0.0,
+        "flagged": 0,
+        "tp": 0,
+        "n_pos": 61
+      },
+      {
+        "threshold": 0.85,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0,
+        "flag_rate": 0.0,
+        "healthy_flag_rate": 0.0,
+        "flagged": 0,
+        "tp": 0,
+        "n_pos": 61
+      },
+      {
+        "threshold": 0.9,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0,
+        "flag_rate": 0.0,
+        "healthy_flag_rate": 0.0,
+        "flagged": 0,
+        "tp": 0,
+        "n_pos": 61
+      },
+      {
+        "threshold": 0.95,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0,
+        "flag_rate": 0.0,
+        "healthy_flag_rate": 0.0,
+        "flagged": 0,
+        "tp": 0,
+        "n_pos": 61
+      }
+    ],
+    "hypothyroidism": [
+      {
+        "threshold": 0.1,
+        "precision": 0.2055,
+        "recall": 0.9912,
+        "f1": 0.3404,
+        "flag_rate": 0.9083,
+        "healthy_flag_rate": 0.3333,
+        "flagged": 545,
+        "tp": 112,
+        "n_pos": 113
+      },
+      {
+        "threshold": 0.15,
+        "precision": 0.2215,
+        "recall": 0.9646,
+        "f1": 0.3603,
+        "flag_rate": 0.82,
+        "healthy_flag_rate": 0.3333,
+        "flagged": 492,
+        "tp": 109,
+        "n_pos": 113
+      },
+      {
+        "threshold": 0.2,
+        "precision": 0.2465,
+        "recall": 0.9292,
+        "f1": 0.3896,
+        "flag_rate": 0.71,
+        "healthy_flag_rate": 0.25,
+        "flagged": 426,
+        "tp": 105,
+        "n_pos": 113
+      },
+      {
+        "threshold": 0.25,
+        "precision": 0.289,
+        "recall": 0.7699,
+        "f1": 0.4203,
+        "flag_rate": 0.5017,
+        "healthy_flag_rate": 0.25,
+        "flagged": 301,
+        "tp": 87,
+        "n_pos": 113
+      },
+      {
+        "threshold": 0.3,
+        "precision": 0.2788,
+        "recall": 0.5133,
+        "f1": 0.3614,
+        "flag_rate": 0.3467,
+        "healthy_flag_rate": 0.1667,
+        "flagged": 208,
+        "tp": 58,
+        "n_pos": 113
+      },
+      {
+        "threshold": 0.35,
+        "precision": 0.2615,
+        "recall": 0.3009,
+        "f1": 0.2798,
+        "flag_rate": 0.2167,
+        "healthy_flag_rate": 0.0833,
+        "flagged": 130,
+        "tp": 34,
+        "n_pos": 113
+      },
+      {
+        "threshold": 0.4,
+        "precision": 0.15,
+        "recall": 0.0796,
+        "f1": 0.104,
+        "flag_rate": 0.1,
+        "healthy_flag_rate": 0.0,
+        "flagged": 60,
+        "tp": 9,
+        "n_pos": 113
+      },
+      {
+        "threshold": 0.45,
+        "precision": 0.1579,
+        "recall": 0.0796,
+        "f1": 0.1059,
+        "flag_rate": 0.095,
+        "healthy_flag_rate": 0.0,
+        "flagged": 57,
+        "tp": 9,
+        "n_pos": 113
+      },
+      {
+        "threshold": 0.46,
+        "precision": 0.1579,
+        "recall": 0.0796,
+        "f1": 0.1059,
+        "flag_rate": 0.095,
+        "healthy_flag_rate": 0.0,
+        "flagged": 57,
+        "tp": 9,
+        "n_pos": 113
+      },
+      {
+        "threshold": 0.5,
+        "precision": 0.1636,
+        "recall": 0.0796,
+        "f1": 0.1071,
+        "flag_rate": 0.0917,
+        "healthy_flag_rate": 0.0,
+        "flagged": 55,
+        "tp": 9,
+        "n_pos": 113
+      },
+      {
+        "threshold": 0.55,
+        "precision": 0.1731,
+        "recall": 0.0796,
+        "f1": 0.1091,
+        "flag_rate": 0.0867,
+        "healthy_flag_rate": 0.0,
+        "flagged": 52,
+        "tp": 9,
+        "n_pos": 113
+      },
+      {
+        "threshold": 0.6,
+        "precision": 0.1837,
+        "recall": 0.0796,
+        "f1": 0.1111,
+        "flag_rate": 0.0817,
+        "healthy_flag_rate": 0.0,
+        "flagged": 49,
+        "tp": 9,
+        "n_pos": 113
+      },
+      {
+        "threshold": 0.65,
+        "precision": 0.2093,
+        "recall": 0.0796,
+        "f1": 0.1154,
+        "flag_rate": 0.0717,
+        "healthy_flag_rate": 0.0,
+        "flagged": 43,
+        "tp": 9,
+        "n_pos": 113
+      },
+      {
+        "threshold": 0.7,
+        "precision": 0.2759,
+        "recall": 0.0708,
+        "f1": 0.1127,
+        "flag_rate": 0.0483,
+        "healthy_flag_rate": 0.0,
+        "flagged": 29,
+        "tp": 8,
+        "n_pos": 113
+      },
+      {
+        "threshold": 0.75,
+        "precision": 0.2609,
+        "recall": 0.0531,
+        "f1": 0.0882,
+        "flag_rate": 0.0383,
+        "healthy_flag_rate": 0.0,
+        "flagged": 23,
+        "tp": 6,
+        "n_pos": 113
+      },
+      {
+        "threshold": 0.8,
+        "precision": 0.2105,
+        "recall": 0.0354,
+        "f1": 0.0606,
+        "flag_rate": 0.0317,
+        "healthy_flag_rate": 0.0,
+        "flagged": 19,
+        "tp": 4,
+        "n_pos": 113
+      },
+      {
+        "threshold": 0.85,
+        "precision": 0.3,
+        "recall": 0.0265,
+        "f1": 0.0488,
+        "flag_rate": 0.0167,
+        "healthy_flag_rate": 0.0,
+        "flagged": 10,
+        "tp": 3,
+        "n_pos": 113
+      },
+      {
+        "threshold": 0.9,
+        "precision": 0.2857,
+        "recall": 0.0177,
+        "f1": 0.0333,
+        "flag_rate": 0.0117,
+        "healthy_flag_rate": 0.0,
+        "flagged": 7,
+        "tp": 2,
+        "n_pos": 113
+      },
+      {
+        "threshold": 0.95,
+        "precision": 0.4,
+        "recall": 0.0177,
+        "f1": 0.0339,
+        "flag_rate": 0.0083,
+        "healthy_flag_rate": 0.0,
+        "flagged": 5,
+        "tp": 2,
+        "n_pos": 113
+      }
+    ],
+    "inflammation": [
+      {
+        "threshold": 0.1,
+        "precision": 0.1897,
+        "recall": 0.9821,
+        "f1": 0.3179,
+        "flag_rate": 0.9667,
+        "healthy_flag_rate": 0.3333,
+        "flagged": 580,
+        "tp": 110,
+        "n_pos": 112
+      },
+      {
+        "threshold": 0.15,
+        "precision": 0.1861,
+        "recall": 0.8839,
+        "f1": 0.3075,
+        "flag_rate": 0.8867,
+        "healthy_flag_rate": 0.2917,
+        "flagged": 532,
+        "tp": 99,
+        "n_pos": 112
+      },
+      {
+        "threshold": 0.2,
+        "precision": 0.1932,
+        "recall": 0.8125,
+        "f1": 0.3122,
+        "flag_rate": 0.785,
+        "healthy_flag_rate": 0.2083,
+        "flagged": 471,
+        "tp": 91,
+        "n_pos": 112
+      },
+      {
+        "threshold": 0.25,
+        "precision": 0.201,
+        "recall": 0.7411,
+        "f1": 0.3162,
+        "flag_rate": 0.6883,
+        "healthy_flag_rate": 0.0833,
+        "flagged": 413,
+        "tp": 83,
+        "n_pos": 112
+      },
+      {
+        "threshold": 0.3,
+        "precision": 0.2083,
+        "recall": 0.625,
+        "f1": 0.3125,
+        "flag_rate": 0.56,
+        "healthy_flag_rate": 0.0833,
+        "flagged": 336,
+        "tp": 70,
+        "n_pos": 112
+      },
+      {
+        "threshold": 0.35,
+        "precision": 0.2285,
+        "recall": 0.5446,
+        "f1": 0.3219,
+        "flag_rate": 0.445,
+        "healthy_flag_rate": 0.0,
+        "flagged": 267,
+        "tp": 61,
+        "n_pos": 112
+      },
+      {
+        "threshold": 0.4,
+        "precision": 0.2127,
+        "recall": 0.4196,
+        "f1": 0.2823,
+        "flag_rate": 0.3683,
+        "healthy_flag_rate": 0.0,
+        "flagged": 221,
+        "tp": 47,
+        "n_pos": 112
+      },
+      {
+        "threshold": 0.45,
+        "precision": 0.21,
+        "recall": 0.375,
+        "f1": 0.2692,
+        "flag_rate": 0.3333,
+        "healthy_flag_rate": 0.0,
+        "flagged": 200,
+        "tp": 42,
+        "n_pos": 112
+      },
+      {
+        "threshold": 0.46,
+        "precision": 0.2154,
+        "recall": 0.375,
+        "f1": 0.2736,
+        "flag_rate": 0.325,
+        "healthy_flag_rate": 0.0,
+        "flagged": 195,
+        "tp": 42,
+        "n_pos": 112
+      },
+      {
+        "threshold": 0.5,
+        "precision": 0.2321,
+        "recall": 0.3482,
+        "f1": 0.2786,
+        "flag_rate": 0.28,
+        "healthy_flag_rate": 0.0,
+        "flagged": 168,
+        "tp": 39,
+        "n_pos": 112
+      },
+      {
+        "threshold": 0.55,
+        "precision": 0.254,
+        "recall": 0.2857,
+        "f1": 0.2689,
+        "flag_rate": 0.21,
+        "healthy_flag_rate": 0.0,
+        "flagged": 126,
+        "tp": 32,
+        "n_pos": 112
+      },
+      {
+        "threshold": 0.6,
+        "precision": 0.3103,
+        "recall": 0.2411,
+        "f1": 0.2714,
+        "flag_rate": 0.145,
+        "healthy_flag_rate": 0.0,
+        "flagged": 87,
+        "tp": 27,
+        "n_pos": 112
+      },
+      {
+        "threshold": 0.65,
+        "precision": 0.3382,
+        "recall": 0.2054,
+        "f1": 0.2556,
+        "flag_rate": 0.1133,
+        "healthy_flag_rate": 0.0,
+        "flagged": 68,
+        "tp": 23,
+        "n_pos": 112
+      },
+      {
+        "threshold": 0.7,
+        "precision": 0.375,
+        "recall": 0.1339,
+        "f1": 0.1974,
+        "flag_rate": 0.0667,
+        "healthy_flag_rate": 0.0,
+        "flagged": 40,
+        "tp": 15,
+        "n_pos": 112
+      },
+      {
+        "threshold": 0.75,
+        "precision": 0.4583,
+        "recall": 0.0982,
+        "f1": 0.1618,
+        "flag_rate": 0.04,
+        "healthy_flag_rate": 0.0,
+        "flagged": 24,
+        "tp": 11,
+        "n_pos": 112
+      },
+      {
+        "threshold": 0.8,
+        "precision": 0.5294,
+        "recall": 0.0804,
+        "f1": 0.1395,
+        "flag_rate": 0.0283,
+        "healthy_flag_rate": 0.0,
+        "flagged": 17,
+        "tp": 9,
+        "n_pos": 112
+      },
+      {
+        "threshold": 0.85,
+        "precision": 0.5,
+        "recall": 0.0536,
+        "f1": 0.0968,
+        "flag_rate": 0.02,
+        "healthy_flag_rate": 0.0,
+        "flagged": 12,
+        "tp": 6,
+        "n_pos": 112
+      },
+      {
+        "threshold": 0.9,
+        "precision": 0.5,
+        "recall": 0.0179,
+        "f1": 0.0345,
+        "flag_rate": 0.0067,
+        "healthy_flag_rate": 0.0,
+        "flagged": 4,
+        "tp": 2,
+        "n_pos": 112
+      },
+      {
+        "threshold": 0.95,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0,
+        "flag_rate": 0.0017,
+        "healthy_flag_rate": 0.0,
+        "flagged": 1,
+        "tp": 0,
+        "n_pos": 112
+      }
+    ],
+    "iron_deficiency": [
+      {
+        "threshold": 0.1,
+        "precision": 0.2626,
+        "recall": 0.9286,
+        "f1": 0.4094,
+        "flag_rate": 0.33,
+        "healthy_flag_rate": 0.0,
+        "flagged": 198,
+        "tp": 52,
+        "n_pos": 56
+      },
+      {
+        "threshold": 0.15,
+        "precision": 0.5625,
+        "recall": 0.8036,
+        "f1": 0.6618,
+        "flag_rate": 0.1333,
+        "healthy_flag_rate": 0.0,
+        "flagged": 80,
+        "tp": 45,
+        "n_pos": 56
+      },
+      {
+        "threshold": 0.2,
+        "precision": 0.9111,
+        "recall": 0.7321,
+        "f1": 0.8119,
+        "flag_rate": 0.075,
+        "healthy_flag_rate": 0.0,
+        "flagged": 45,
+        "tp": 41,
+        "n_pos": 56
+      },
+      {
+        "threshold": 0.25,
+        "precision": 1.0,
+        "recall": 0.6964,
+        "f1": 0.8211,
+        "flag_rate": 0.065,
+        "healthy_flag_rate": 0.0,
+        "flagged": 39,
+        "tp": 39,
+        "n_pos": 56
+      },
+      {
+        "threshold": 0.3,
+        "precision": 1.0,
+        "recall": 0.5,
+        "f1": 0.6667,
+        "flag_rate": 0.0467,
+        "healthy_flag_rate": 0.0,
+        "flagged": 28,
+        "tp": 28,
+        "n_pos": 56
+      },
+      {
+        "threshold": 0.35,
+        "precision": 1.0,
+        "recall": 0.3929,
+        "f1": 0.5641,
+        "flag_rate": 0.0367,
+        "healthy_flag_rate": 0.0,
+        "flagged": 22,
+        "tp": 22,
+        "n_pos": 56
+      },
+      {
+        "threshold": 0.4,
+        "precision": 1.0,
+        "recall": 0.2143,
+        "f1": 0.3529,
+        "flag_rate": 0.02,
+        "healthy_flag_rate": 0.0,
+        "flagged": 12,
+        "tp": 12,
+        "n_pos": 56
+      },
+      {
+        "threshold": 0.45,
+        "precision": 1.0,
+        "recall": 0.1071,
+        "f1": 0.1935,
+        "flag_rate": 0.01,
+        "healthy_flag_rate": 0.0,
+        "flagged": 6,
+        "tp": 6,
+        "n_pos": 56
+      },
+      {
+        "threshold": 0.46,
+        "precision": 1.0,
+        "recall": 0.0357,
+        "f1": 0.069,
+        "flag_rate": 0.0033,
+        "healthy_flag_rate": 0.0,
+        "flagged": 2,
+        "tp": 2,
+        "n_pos": 56
+      },
+      {
+        "threshold": 0.5,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0,
+        "flag_rate": 0.0,
+        "healthy_flag_rate": 0.0,
+        "flagged": 0,
+        "tp": 0,
+        "n_pos": 56
+      },
+      {
+        "threshold": 0.55,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0,
+        "flag_rate": 0.0,
+        "healthy_flag_rate": 0.0,
+        "flagged": 0,
+        "tp": 0,
+        "n_pos": 56
+      },
+      {
+        "threshold": 0.6,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0,
+        "flag_rate": 0.0,
+        "healthy_flag_rate": 0.0,
+        "flagged": 0,
+        "tp": 0,
+        "n_pos": 56
+      },
+      {
+        "threshold": 0.65,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0,
+        "flag_rate": 0.0,
+        "healthy_flag_rate": 0.0,
+        "flagged": 0,
+        "tp": 0,
+        "n_pos": 56
+      },
+      {
+        "threshold": 0.7,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0,
+        "flag_rate": 0.0,
+        "healthy_flag_rate": 0.0,
+        "flagged": 0,
+        "tp": 0,
+        "n_pos": 56
+      },
+      {
+        "threshold": 0.75,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0,
+        "flag_rate": 0.0,
+        "healthy_flag_rate": 0.0,
+        "flagged": 0,
+        "tp": 0,
+        "n_pos": 56
+      },
+      {
+        "threshold": 0.8,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0,
+        "flag_rate": 0.0,
+        "healthy_flag_rate": 0.0,
+        "flagged": 0,
+        "tp": 0,
+        "n_pos": 56
+      },
+      {
+        "threshold": 0.85,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0,
+        "flag_rate": 0.0,
+        "healthy_flag_rate": 0.0,
+        "flagged": 0,
+        "tp": 0,
+        "n_pos": 56
+      },
+      {
+        "threshold": 0.9,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0,
+        "flag_rate": 0.0,
+        "healthy_flag_rate": 0.0,
+        "flagged": 0,
+        "tp": 0,
+        "n_pos": 56
+      },
+      {
+        "threshold": 0.95,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0,
+        "flag_rate": 0.0,
+        "healthy_flag_rate": 0.0,
+        "flagged": 0,
+        "tp": 0,
+        "n_pos": 56
+      }
+    ],
+    "kidney_disease": [
+      {
+        "threshold": 0.1,
+        "precision": 0.2062,
+        "recall": 0.9826,
+        "f1": 0.3409,
+        "flag_rate": 0.9133,
+        "healthy_flag_rate": 0.375,
+        "flagged": 548,
+        "tp": 113,
+        "n_pos": 115
+      },
+      {
+        "threshold": 0.15,
+        "precision": 0.222,
+        "recall": 0.9652,
+        "f1": 0.361,
+        "flag_rate": 0.8333,
+        "healthy_flag_rate": 0.3333,
+        "flagged": 500,
+        "tp": 111,
+        "n_pos": 115
+      },
+      {
+        "threshold": 0.2,
+        "precision": 0.2367,
+        "recall": 0.9304,
+        "f1": 0.3774,
+        "flag_rate": 0.7533,
+        "healthy_flag_rate": 0.2917,
+        "flagged": 452,
+        "tp": 107,
+        "n_pos": 115
+      },
+      {
+        "threshold": 0.25,
+        "precision": 0.2462,
+        "recall": 0.8522,
+        "f1": 0.3821,
+        "flag_rate": 0.6633,
+        "healthy_flag_rate": 0.25,
+        "flagged": 398,
+        "tp": 98,
+        "n_pos": 115
+      },
+      {
+        "threshold": 0.3,
+        "precision": 0.2536,
+        "recall": 0.7652,
+        "f1": 0.381,
+        "flag_rate": 0.5783,
+        "healthy_flag_rate": 0.2083,
+        "flagged": 347,
+        "tp": 88,
+        "n_pos": 115
+      },
+      {
+        "threshold": 0.35,
+        "precision": 0.311,
+        "recall": 0.687,
+        "f1": 0.4282,
+        "flag_rate": 0.4233,
+        "healthy_flag_rate": 0.125,
+        "flagged": 254,
+        "tp": 79,
+        "n_pos": 115
+      },
+      {
+        "threshold": 0.4,
+        "precision": 0.3204,
+        "recall": 0.5043,
+        "f1": 0.3919,
+        "flag_rate": 0.3017,
+        "healthy_flag_rate": 0.125,
+        "flagged": 181,
+        "tp": 58,
+        "n_pos": 115
+      },
+      {
+        "threshold": 0.45,
+        "precision": 0.3465,
+        "recall": 0.3826,
+        "f1": 0.3636,
+        "flag_rate": 0.2117,
+        "healthy_flag_rate": 0.125,
+        "flagged": 127,
+        "tp": 44,
+        "n_pos": 115
+      },
+      {
+        "threshold": 0.46,
+        "precision": 0.3445,
+        "recall": 0.3565,
+        "f1": 0.3504,
+        "flag_rate": 0.1983,
+        "healthy_flag_rate": 0.0833,
+        "flagged": 119,
+        "tp": 41,
+        "n_pos": 115
+      },
+      {
+        "threshold": 0.5,
+        "precision": 0.3605,
+        "recall": 0.2696,
+        "f1": 0.3085,
+        "flag_rate": 0.1433,
+        "healthy_flag_rate": 0.0417,
+        "flagged": 86,
+        "tp": 31,
+        "n_pos": 115
+      },
+      {
+        "threshold": 0.55,
+        "precision": 0.3571,
+        "recall": 0.1739,
+        "f1": 0.2339,
+        "flag_rate": 0.0933,
+        "healthy_flag_rate": 0.0,
+        "flagged": 56,
+        "tp": 20,
+        "n_pos": 115
+      },
+      {
+        "threshold": 0.6,
+        "precision": 0.3333,
+        "recall": 0.1043,
+        "f1": 0.1589,
+        "flag_rate": 0.06,
+        "healthy_flag_rate": 0.0,
+        "flagged": 36,
+        "tp": 12,
+        "n_pos": 115
+      },
+      {
+        "threshold": 0.65,
+        "precision": 0.32,
+        "recall": 0.0696,
+        "f1": 0.1143,
+        "flag_rate": 0.0417,
+        "healthy_flag_rate": 0.0,
+        "flagged": 25,
+        "tp": 8,
+        "n_pos": 115
+      },
+      {
+        "threshold": 0.7,
+        "precision": 0.3636,
+        "recall": 0.0348,
+        "f1": 0.0635,
+        "flag_rate": 0.0183,
+        "healthy_flag_rate": 0.0,
+        "flagged": 11,
+        "tp": 4,
+        "n_pos": 115
+      },
+      {
+        "threshold": 0.75,
+        "precision": 0.375,
+        "recall": 0.0261,
+        "f1": 0.0488,
+        "flag_rate": 0.0133,
+        "healthy_flag_rate": 0.0,
+        "flagged": 8,
+        "tp": 3,
+        "n_pos": 115
+      },
+      {
+        "threshold": 0.8,
+        "precision": 0.5,
+        "recall": 0.0087,
+        "f1": 0.0171,
+        "flag_rate": 0.0033,
+        "healthy_flag_rate": 0.0,
+        "flagged": 2,
+        "tp": 1,
+        "n_pos": 115
+      },
+      {
+        "threshold": 0.85,
+        "precision": 1.0,
+        "recall": 0.0087,
+        "f1": 0.0172,
+        "flag_rate": 0.0017,
+        "healthy_flag_rate": 0.0,
+        "flagged": 1,
+        "tp": 1,
+        "n_pos": 115
+      },
+      {
+        "threshold": 0.9,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0,
+        "flag_rate": 0.0,
+        "healthy_flag_rate": 0.0,
+        "flagged": 0,
+        "tp": 0,
+        "n_pos": 115
+      },
+      {
+        "threshold": 0.95,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0,
+        "flag_rate": 0.0,
+        "healthy_flag_rate": 0.0,
+        "flagged": 0,
+        "tp": 0,
+        "n_pos": 115
+      }
+    ],
+    "liver": [
+      {
+        "threshold": 0.1,
+        "precision": 0.3421,
+        "recall": 0.1413,
+        "f1": 0.2,
+        "flag_rate": 0.0633,
+        "healthy_flag_rate": 0.0,
+        "flagged": 38,
+        "tp": 13,
+        "n_pos": 92
+      },
+      {
+        "threshold": 0.15,
+        "precision": 0.3889,
+        "recall": 0.0761,
+        "f1": 0.1273,
+        "flag_rate": 0.03,
+        "healthy_flag_rate": 0.0,
+        "flagged": 18,
+        "tp": 7,
+        "n_pos": 92
+      },
+      {
+        "threshold": 0.2,
+        "precision": 0.3846,
+        "recall": 0.0543,
+        "f1": 0.0952,
+        "flag_rate": 0.0217,
+        "healthy_flag_rate": 0.0,
+        "flagged": 13,
+        "tp": 5,
+        "n_pos": 92
+      },
+      {
+        "threshold": 0.25,
+        "precision": 0.4,
+        "recall": 0.0435,
+        "f1": 0.0784,
+        "flag_rate": 0.0167,
+        "healthy_flag_rate": 0.0,
+        "flagged": 10,
+        "tp": 4,
+        "n_pos": 92
+      },
+      {
+        "threshold": 0.3,
+        "precision": 0.4,
+        "recall": 0.0435,
+        "f1": 0.0784,
+        "flag_rate": 0.0167,
+        "healthy_flag_rate": 0.0,
+        "flagged": 10,
+        "tp": 4,
+        "n_pos": 92
+      },
+      {
+        "threshold": 0.35,
+        "precision": 0.4286,
+        "recall": 0.0326,
+        "f1": 0.0606,
+        "flag_rate": 0.0117,
+        "healthy_flag_rate": 0.0,
+        "flagged": 7,
+        "tp": 3,
+        "n_pos": 92
+      },
+      {
+        "threshold": 0.4,
+        "precision": 0.3333,
+        "recall": 0.0109,
+        "f1": 0.0211,
+        "flag_rate": 0.005,
+        "healthy_flag_rate": 0.0,
+        "flagged": 3,
+        "tp": 1,
+        "n_pos": 92
+      },
+      {
+        "threshold": 0.45,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0,
+        "flag_rate": 0.0,
+        "healthy_flag_rate": 0.0,
+        "flagged": 0,
+        "tp": 0,
+        "n_pos": 92
+      },
+      {
+        "threshold": 0.46,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0,
+        "flag_rate": 0.0,
+        "healthy_flag_rate": 0.0,
+        "flagged": 0,
+        "tp": 0,
+        "n_pos": 92
+      },
+      {
+        "threshold": 0.5,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0,
+        "flag_rate": 0.0,
+        "healthy_flag_rate": 0.0,
+        "flagged": 0,
+        "tp": 0,
+        "n_pos": 92
+      },
+      {
+        "threshold": 0.55,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0,
+        "flag_rate": 0.0,
+        "healthy_flag_rate": 0.0,
+        "flagged": 0,
+        "tp": 0,
+        "n_pos": 92
+      },
+      {
+        "threshold": 0.6,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0,
+        "flag_rate": 0.0,
+        "healthy_flag_rate": 0.0,
+        "flagged": 0,
+        "tp": 0,
+        "n_pos": 92
+      },
+      {
+        "threshold": 0.65,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0,
+        "flag_rate": 0.0,
+        "healthy_flag_rate": 0.0,
+        "flagged": 0,
+        "tp": 0,
+        "n_pos": 92
+      },
+      {
+        "threshold": 0.7,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0,
+        "flag_rate": 0.0,
+        "healthy_flag_rate": 0.0,
+        "flagged": 0,
+        "tp": 0,
+        "n_pos": 92
+      },
+      {
+        "threshold": 0.75,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0,
+        "flag_rate": 0.0,
+        "healthy_flag_rate": 0.0,
+        "flagged": 0,
+        "tp": 0,
+        "n_pos": 92
+      },
+      {
+        "threshold": 0.8,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0,
+        "flag_rate": 0.0,
+        "healthy_flag_rate": 0.0,
+        "flagged": 0,
+        "tp": 0,
+        "n_pos": 92
+      },
+      {
+        "threshold": 0.85,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0,
+        "flag_rate": 0.0,
+        "healthy_flag_rate": 0.0,
+        "flagged": 0,
+        "tp": 0,
+        "n_pos": 92
+      },
+      {
+        "threshold": 0.9,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0,
+        "flag_rate": 0.0,
+        "healthy_flag_rate": 0.0,
+        "flagged": 0,
+        "tp": 0,
+        "n_pos": 92
+      },
+      {
+        "threshold": 0.95,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0,
+        "flag_rate": 0.0,
+        "healthy_flag_rate": 0.0,
+        "flagged": 0,
+        "tp": 0,
+        "n_pos": 92
+      }
+    ],
+    "perimenopause": [
+      {
+        "threshold": 0.1,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0,
+        "flag_rate": 0.0,
+        "healthy_flag_rate": 0.0,
+        "flagged": 0,
+        "tp": 0,
+        "n_pos": 72
+      },
+      {
+        "threshold": 0.15,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0,
+        "flag_rate": 0.0,
+        "healthy_flag_rate": 0.0,
+        "flagged": 0,
+        "tp": 0,
+        "n_pos": 72
+      },
+      {
+        "threshold": 0.2,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0,
+        "flag_rate": 0.0,
+        "healthy_flag_rate": 0.0,
+        "flagged": 0,
+        "tp": 0,
+        "n_pos": 72
+      },
+      {
+        "threshold": 0.25,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0,
+        "flag_rate": 0.0,
+        "healthy_flag_rate": 0.0,
+        "flagged": 0,
+        "tp": 0,
+        "n_pos": 72
+      },
+      {
+        "threshold": 0.3,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0,
+        "flag_rate": 0.0,
+        "healthy_flag_rate": 0.0,
+        "flagged": 0,
+        "tp": 0,
+        "n_pos": 72
+      },
+      {
+        "threshold": 0.35,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0,
+        "flag_rate": 0.0,
+        "healthy_flag_rate": 0.0,
+        "flagged": 0,
+        "tp": 0,
+        "n_pos": 72
+      },
+      {
+        "threshold": 0.4,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0,
+        "flag_rate": 0.0,
+        "healthy_flag_rate": 0.0,
+        "flagged": 0,
+        "tp": 0,
+        "n_pos": 72
+      },
+      {
+        "threshold": 0.45,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0,
+        "flag_rate": 0.0,
+        "healthy_flag_rate": 0.0,
+        "flagged": 0,
+        "tp": 0,
+        "n_pos": 72
+      },
+      {
+        "threshold": 0.46,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0,
+        "flag_rate": 0.0,
+        "healthy_flag_rate": 0.0,
+        "flagged": 0,
+        "tp": 0,
+        "n_pos": 72
+      },
+      {
+        "threshold": 0.5,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0,
+        "flag_rate": 0.0,
+        "healthy_flag_rate": 0.0,
+        "flagged": 0,
+        "tp": 0,
+        "n_pos": 72
+      },
+      {
+        "threshold": 0.55,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0,
+        "flag_rate": 0.0,
+        "healthy_flag_rate": 0.0,
+        "flagged": 0,
+        "tp": 0,
+        "n_pos": 72
+      },
+      {
+        "threshold": 0.6,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0,
+        "flag_rate": 0.0,
+        "healthy_flag_rate": 0.0,
+        "flagged": 0,
+        "tp": 0,
+        "n_pos": 72
+      },
+      {
+        "threshold": 0.65,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0,
+        "flag_rate": 0.0,
+        "healthy_flag_rate": 0.0,
+        "flagged": 0,
+        "tp": 0,
+        "n_pos": 72
+      },
+      {
+        "threshold": 0.7,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0,
+        "flag_rate": 0.0,
+        "healthy_flag_rate": 0.0,
+        "flagged": 0,
+        "tp": 0,
+        "n_pos": 72
+      },
+      {
+        "threshold": 0.75,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0,
+        "flag_rate": 0.0,
+        "healthy_flag_rate": 0.0,
+        "flagged": 0,
+        "tp": 0,
+        "n_pos": 72
+      },
+      {
+        "threshold": 0.8,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0,
+        "flag_rate": 0.0,
+        "healthy_flag_rate": 0.0,
+        "flagged": 0,
+        "tp": 0,
+        "n_pos": 72
+      },
+      {
+        "threshold": 0.85,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0,
+        "flag_rate": 0.0,
+        "healthy_flag_rate": 0.0,
+        "flagged": 0,
+        "tp": 0,
+        "n_pos": 72
+      },
+      {
+        "threshold": 0.9,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0,
+        "flag_rate": 0.0,
+        "healthy_flag_rate": 0.0,
+        "flagged": 0,
+        "tp": 0,
+        "n_pos": 72
+      },
+      {
+        "threshold": 0.95,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0,
+        "flag_rate": 0.0,
+        "healthy_flag_rate": 0.0,
+        "flagged": 0,
+        "tp": 0,
+        "n_pos": 72
+      }
+    ],
+    "prediabetes": [
+      {
+        "threshold": 0.1,
+        "precision": 0.1083,
+        "recall": 1.0,
+        "f1": 0.1955,
+        "flag_rate": 1.0,
+        "healthy_flag_rate": 0.4167,
+        "flagged": 600,
+        "tp": 65,
+        "n_pos": 65
+      },
+      {
+        "threshold": 0.15,
+        "precision": 0.1083,
+        "recall": 1.0,
+        "f1": 0.1955,
+        "flag_rate": 1.0,
+        "healthy_flag_rate": 0.4167,
+        "flagged": 600,
+        "tp": 65,
+        "n_pos": 65
+      },
+      {
+        "threshold": 0.2,
+        "precision": 0.1091,
+        "recall": 1.0,
+        "f1": 0.1967,
+        "flag_rate": 0.9933,
+        "healthy_flag_rate": 0.375,
+        "flagged": 596,
+        "tp": 65,
+        "n_pos": 65
+      },
+      {
+        "threshold": 0.25,
+        "precision": 0.1133,
+        "recall": 0.9846,
+        "f1": 0.2032,
+        "flag_rate": 0.9417,
+        "healthy_flag_rate": 0.375,
+        "flagged": 565,
+        "tp": 64,
+        "n_pos": 65
+      },
+      {
+        "threshold": 0.3,
+        "precision": 0.1189,
+        "recall": 0.8615,
+        "f1": 0.209,
+        "flag_rate": 0.785,
+        "healthy_flag_rate": 0.2917,
+        "flagged": 471,
+        "tp": 56,
+        "n_pos": 65
+      },
+      {
+        "threshold": 0.35,
+        "precision": 0.117,
+        "recall": 0.6769,
+        "f1": 0.1995,
+        "flag_rate": 0.6267,
+        "healthy_flag_rate": 0.25,
+        "flagged": 376,
+        "tp": 44,
+        "n_pos": 65
+      },
+      {
+        "threshold": 0.4,
+        "precision": 0.1498,
+        "recall": 0.6615,
+        "f1": 0.2443,
+        "flag_rate": 0.4783,
+        "healthy_flag_rate": 0.125,
+        "flagged": 287,
+        "tp": 43,
+        "n_pos": 65
+      },
+      {
+        "threshold": 0.45,
+        "precision": 0.1364,
+        "recall": 0.4154,
+        "f1": 0.2053,
+        "flag_rate": 0.33,
+        "healthy_flag_rate": 0.0417,
+        "flagged": 198,
+        "tp": 27,
+        "n_pos": 65
+      },
+      {
+        "threshold": 0.46,
+        "precision": 0.1389,
+        "recall": 0.3846,
+        "f1": 0.2041,
+        "flag_rate": 0.3,
+        "healthy_flag_rate": 0.0,
+        "flagged": 180,
+        "tp": 25,
+        "n_pos": 65
+      },
+      {
+        "threshold": 0.5,
+        "precision": 0.1714,
+        "recall": 0.2769,
+        "f1": 0.2118,
+        "flag_rate": 0.175,
+        "healthy_flag_rate": 0.0,
+        "flagged": 105,
+        "tp": 18,
+        "n_pos": 65
+      },
+      {
+        "threshold": 0.55,
+        "precision": 0.0286,
+        "recall": 0.0154,
+        "f1": 0.02,
+        "flag_rate": 0.0583,
+        "healthy_flag_rate": 0.0,
+        "flagged": 35,
+        "tp": 1,
+        "n_pos": 65
+      },
+      {
+        "threshold": 0.6,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0,
+        "flag_rate": 0.0083,
+        "healthy_flag_rate": 0.0,
+        "flagged": 5,
+        "tp": 0,
+        "n_pos": 65
+      },
+      {
+        "threshold": 0.65,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0,
+        "flag_rate": 0.0,
+        "healthy_flag_rate": 0.0,
+        "flagged": 0,
+        "tp": 0,
+        "n_pos": 65
+      },
+      {
+        "threshold": 0.7,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0,
+        "flag_rate": 0.0,
+        "healthy_flag_rate": 0.0,
+        "flagged": 0,
+        "tp": 0,
+        "n_pos": 65
+      },
+      {
+        "threshold": 0.75,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0,
+        "flag_rate": 0.0,
+        "healthy_flag_rate": 0.0,
+        "flagged": 0,
+        "tp": 0,
+        "n_pos": 65
+      },
+      {
+        "threshold": 0.8,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0,
+        "flag_rate": 0.0,
+        "healthy_flag_rate": 0.0,
+        "flagged": 0,
+        "tp": 0,
+        "n_pos": 65
+      },
+      {
+        "threshold": 0.85,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0,
+        "flag_rate": 0.0,
+        "healthy_flag_rate": 0.0,
+        "flagged": 0,
+        "tp": 0,
+        "n_pos": 65
+      },
+      {
+        "threshold": 0.9,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0,
+        "flag_rate": 0.0,
+        "healthy_flag_rate": 0.0,
+        "flagged": 0,
+        "tp": 0,
+        "n_pos": 65
+      },
+      {
+        "threshold": 0.95,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0,
+        "flag_rate": 0.0,
+        "healthy_flag_rate": 0.0,
+        "flagged": 0,
+        "tp": 0,
+        "n_pos": 65
+      }
+    ],
+    "sleep_disorder": [
+      {
+        "threshold": 0.1,
+        "precision": 0.395,
+        "recall": 1.0,
+        "f1": 0.5663,
+        "flag_rate": 1.0,
+        "healthy_flag_rate": 0.4167,
+        "flagged": 600,
+        "tp": 237,
+        "n_pos": 237
+      },
+      {
+        "threshold": 0.15,
+        "precision": 0.395,
+        "recall": 1.0,
+        "f1": 0.5663,
+        "flag_rate": 1.0,
+        "healthy_flag_rate": 0.4167,
+        "flagged": 600,
+        "tp": 237,
+        "n_pos": 237
+      },
+      {
+        "threshold": 0.2,
+        "precision": 0.395,
+        "recall": 1.0,
+        "f1": 0.5663,
+        "flag_rate": 1.0,
+        "healthy_flag_rate": 0.4167,
+        "flagged": 600,
+        "tp": 237,
+        "n_pos": 237
+      },
+      {
+        "threshold": 0.25,
+        "precision": 0.3953,
+        "recall": 0.9958,
+        "f1": 0.5659,
+        "flag_rate": 0.995,
+        "healthy_flag_rate": 0.4167,
+        "flagged": 597,
+        "tp": 236,
+        "n_pos": 237
+      },
+      {
+        "threshold": 0.3,
+        "precision": 0.3986,
+        "recall": 0.9873,
+        "f1": 0.568,
+        "flag_rate": 0.9783,
+        "healthy_flag_rate": 0.4167,
+        "flagged": 587,
+        "tp": 234,
+        "n_pos": 237
+      },
+      {
+        "threshold": 0.35,
+        "precision": 0.3997,
+        "recall": 0.9662,
+        "f1": 0.5654,
+        "flag_rate": 0.955,
+        "healthy_flag_rate": 0.4167,
+        "flagged": 573,
+        "tp": 229,
+        "n_pos": 237
+      },
+      {
+        "threshold": 0.4,
+        "precision": 0.4144,
+        "recall": 0.9198,
+        "f1": 0.5714,
+        "flag_rate": 0.8767,
+        "healthy_flag_rate": 0.375,
+        "flagged": 526,
+        "tp": 218,
+        "n_pos": 237
+      },
+      {
+        "threshold": 0.45,
+        "precision": 0.4239,
+        "recall": 0.8692,
+        "f1": 0.5698,
+        "flag_rate": 0.81,
+        "healthy_flag_rate": 0.375,
+        "flagged": 486,
+        "tp": 206,
+        "n_pos": 237
+      },
+      {
+        "threshold": 0.46,
+        "precision": 0.4232,
+        "recall": 0.8608,
+        "f1": 0.5675,
+        "flag_rate": 0.8033,
+        "healthy_flag_rate": 0.375,
+        "flagged": 482,
+        "tp": 204,
+        "n_pos": 237
+      },
+      {
+        "threshold": 0.5,
+        "precision": 0.4352,
+        "recall": 0.7932,
+        "f1": 0.562,
+        "flag_rate": 0.72,
+        "healthy_flag_rate": 0.25,
+        "flagged": 432,
+        "tp": 188,
+        "n_pos": 237
+      },
+      {
+        "threshold": 0.55,
+        "precision": 0.4781,
+        "recall": 0.692,
+        "f1": 0.5655,
+        "flag_rate": 0.5717,
+        "healthy_flag_rate": 0.1667,
+        "flagged": 343,
+        "tp": 164,
+        "n_pos": 237
+      },
+      {
+        "threshold": 0.6,
+        "precision": 0.5522,
+        "recall": 0.6245,
+        "f1": 0.5861,
+        "flag_rate": 0.4467,
+        "healthy_flag_rate": 0.0833,
+        "flagged": 268,
+        "tp": 148,
+        "n_pos": 237
+      },
+      {
+        "threshold": 0.65,
+        "precision": 0.6329,
+        "recall": 0.5527,
+        "f1": 0.5901,
+        "flag_rate": 0.345,
+        "healthy_flag_rate": 0.0417,
+        "flagged": 207,
+        "tp": 131,
+        "n_pos": 237
+      },
+      {
+        "threshold": 0.7,
+        "precision": 0.6528,
+        "recall": 0.3966,
+        "f1": 0.4934,
+        "flag_rate": 0.24,
+        "healthy_flag_rate": 0.0,
+        "flagged": 144,
+        "tp": 94,
+        "n_pos": 237
+      },
+      {
+        "threshold": 0.75,
+        "precision": 0.6939,
+        "recall": 0.2869,
+        "f1": 0.406,
+        "flag_rate": 0.1633,
+        "healthy_flag_rate": 0.0,
+        "flagged": 98,
+        "tp": 68,
+        "n_pos": 237
+      },
+      {
+        "threshold": 0.8,
+        "precision": 0.75,
+        "recall": 0.2025,
+        "f1": 0.3189,
+        "flag_rate": 0.1067,
+        "healthy_flag_rate": 0.0,
+        "flagged": 64,
+        "tp": 48,
+        "n_pos": 237
+      },
+      {
+        "threshold": 0.85,
+        "precision": 0.7347,
+        "recall": 0.1519,
+        "f1": 0.2517,
+        "flag_rate": 0.0817,
+        "healthy_flag_rate": 0.0,
+        "flagged": 49,
+        "tp": 36,
+        "n_pos": 237
+      },
+      {
+        "threshold": 0.9,
+        "precision": 0.7,
+        "recall": 0.0591,
+        "f1": 0.1089,
+        "flag_rate": 0.0333,
+        "healthy_flag_rate": 0.0,
+        "flagged": 20,
+        "tp": 14,
+        "n_pos": 237
+      },
+      {
+        "threshold": 0.95,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0,
+        "flag_rate": 0.0,
+        "healthy_flag_rate": 0.0,
+        "flagged": 0,
+        "tp": 0,
+        "n_pos": 237
+      }
+    ]
+  }
+}

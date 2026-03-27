@@ -1,0 +1,12 @@
+Condition,Recall_pct,Precision_pct,Status
+Hepatitis,97,65,green
+Iron Deficiency,100,40,green
+Hypothyroidism,83,7,yellow
+Kidney,93,7,yellow
+Prediabetes,70,7,yellow
+Anemia,60,7,yellow
+Electrolytes,53,5,red
+Inflammation,45,4,red
+Sleep Disorder,31,6,red
+Perimenopause,18,9,red
+Liver,0,0,red

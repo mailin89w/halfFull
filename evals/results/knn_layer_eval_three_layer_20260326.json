@@ -1,0 +1,753 @@
+{
+  "profiles_path": "evals/cohort/profiles_v3_three_layer.json",
+  "skip_reasons": {
+    "no_abnormal_ground_truth_labs": 118,
+    "unsupported_conditions": 140,
+    "no_expected_conditions": 24
+  },
+  "summary": {
+    "n_profiles": 340,
+    "control_hit_rate": 0.5441,
+    "treatment_hit_rate": 0.5971,
+    "delta_hit_rate": 0.0529,
+    "control_exact_coverage": 0.2441,
+    "treatment_exact_coverage": 0.2853,
+    "delta_exact_coverage": 0.0412,
+    "control_mean_recall": 0.3773,
+    "treatment_mean_recall": 0.4291,
+    "delta_mean_recall": 0.0518,
+    "control_mean_precision": 0.3316,
+    "treatment_mean_precision": 0.2648,
+    "delta_mean_precision": -0.0669,
+    "profiles_with_knn_signal": 226,
+    "profiles_improved_by_knn": 28,
+    "by_profile_type": {
+      "borderline": {
+        "count": 78,
+        "control_hit_rate": 0.5513,
+        "treatment_hit_rate": 0.5769,
+        "improved_rate": 0.0256
+      },
+      "edge": {
+        "count": 17,
+        "control_hit_rate": 0.7647,
+        "treatment_hit_rate": 0.7647,
+        "improved_rate": 0.0
+      },
+      "negative": {
+        "count": 48,
+        "control_hit_rate": 0.5417,
+        "treatment_hit_rate": 0.6042,
+        "improved_rate": 0.1042
+      },
+      "positive": {
+        "count": 197,
+        "control_hit_rate": 0.5228,
+        "treatment_hit_rate": 0.5888,
+        "improved_rate": 0.1066
+      }
+    }
+  },
+  "sample_improvements": [
+    {
+      "profile_id": "SYN-R0000031",
+      "profile_type": "positive",
+      "expected_conditions": [
+        "hepatitis",
+        "kidney_disease"
+      ],
+      "top_conditions": [
+        "sleep_disorder",
+        "prediabetes",
+        "anemia"
+      ],
+      "ground_truth_groups": [
+        "kidney"
+      ],
+      "expected_groups": [
+        "kidney",
+        "liver_panel"
+      ],
+      "control_groups": [
+        "cbc",
+        "glycemic",
+        "iron_studies",
+        "lipids"
+      ],
+      "knn_groups": [
+        "kidney",
+        "lipids"
+      ],
+      "treatment_groups": [
+        "cbc",
+        "glycemic",
+        "iron_studies",
+        "kidney",
+        "lipids"
+      ]
+    },
+    {
+      "profile_id": "SYN-R0000039",
+      "profile_type": "positive",
+      "expected_conditions": [
+        "hepatitis",
+        "kidney_disease"
+      ],
+      "top_conditions": [
+        "electrolyte_imbalance",
+        "hepatitis",
+        "sleep_disorder"
+      ],
+      "ground_truth_groups": [
+        "kidney",
+        "liver_panel"
+      ],
+      "expected_groups": [
+        "kidney",
+        "liver_panel"
+      ],
+      "control_groups": [
+        "liver_panel"
+      ],
+      "knn_groups": [
+        "kidney",
+        "lipids"
+      ],
+      "treatment_groups": [
+        "kidney",
+        "lipids",
+        "liver_panel"
+      ]
+    },
+    {
+      "profile_id": "SYN-R0000055",
+      "profile_type": "positive",
+      "expected_conditions": [
+        "hepatitis"
+      ],
+      "top_conditions": [
+        "hepatitis",
+        "sleep_disorder",
+        "prediabetes"
+      ],
+      "ground_truth_groups": [
+        "glycemic",
+        "kidney",
+        "liver_panel"
+      ],
+      "expected_groups": [
+        "liver_panel"
+      ],
+      "control_groups": [
+        "glycemic",
+        "lipids",
+        "liver_panel"
+      ],
+      "knn_groups": [
+        "kidney",
+        "lipids"
+      ],
+      "treatment_groups": [
+        "glycemic",
+        "kidney",
+        "lipids",
+        "liver_panel"
+      ]
+    },
+    {
+      "profile_id": "SYN-R0000094",
+      "profile_type": "positive",
+      "expected_conditions": [
+        "liver",
+        "anemia",
+        "kidney_disease"
+      ],
+      "top_conditions": [
+        "electrolyte_imbalance",
+        "sleep_disorder",
+        "anemia"
+      ],
+      "ground_truth_groups": [
+        "kidney"
+      ],
+      "expected_groups": [
+        "cbc",
+        "iron_studies",
+        "kidney",
+        "liver_panel"
+      ],
+      "control_groups": [
+        "cbc",
+        "iron_studies"
+      ],
+      "knn_groups": [
+        "kidney",
+        "lipids"
+      ],
+      "treatment_groups": [
+        "cbc",
+        "iron_studies",
+        "kidney",
+        "lipids"
+      ]
+    },
+    {
+      "profile_id": "SYN-R0000108",
+      "profile_type": "positive",
+      "expected_conditions": [
+        "liver"
+      ],
+      "top_conditions": [
+        "electrolyte_imbalance",
+        "sleep_disorder",
+        "prediabetes"
+      ],
+      "ground_truth_groups": [
+        "inflammation",
+        "kidney"
+      ],
+      "expected_groups": [
+        "liver_panel"
+      ],
+      "control_groups": [
+        "glycemic",
+        "lipids"
+      ],
+      "knn_groups": [
+        "kidney",
+        "lipids"
+      ],
+      "treatment_groups": [
+        "glycemic",
+        "kidney",
+        "lipids"
+      ]
+    },
+    {
+      "profile_id": "SYN-R0000119",
+      "profile_type": "positive",
+      "expected_conditions": [
+        "liver"
+      ],
+      "top_conditions": [
+        "electrolyte_imbalance",
+        "sleep_disorder",
+        "prediabetes"
+      ],
+      "ground_truth_groups": [
+        "inflammation",
+        "kidney"
+      ],
+      "expected_groups": [
+        "liver_panel"
+      ],
+      "control_groups": [
+        "glycemic",
+        "lipids"
+      ],
+      "knn_groups": [
+        "kidney",
+        "lipids"
+      ],
+      "treatment_groups": [
+        "glycemic",
+        "kidney",
+        "lipids"
+      ]
+    },
+    {
+      "profile_id": "SYN-C0000069",
+      "profile_type": "negative",
+      "expected_conditions": [
+        "sleep_disorder",
+        "inflammation"
+      ],
+      "top_conditions": [
+        "sleep_disorder",
+        "inflammation",
+        "electrolyte_imbalance"
+      ],
+      "ground_truth_groups": [
+        "glycemic",
+        "inflammation",
+        "kidney"
+      ],
+      "expected_groups": [
+        "inflammation"
+      ],
+      "control_groups": [
+        "inflammation"
+      ],
+      "knn_groups": [
+        "kidney",
+        "lipids"
+      ],
+      "treatment_groups": [
+        "inflammation",
+        "kidney",
+        "lipids"
+      ]
+    },
+    {
+      "profile_id": "SYN-R0000126",
+      "profile_type": "positive",
+      "expected_conditions": [
+        "sleep_disorder",
+        "hypothyroidism",
+        "kidney_disease"
+      ],
+      "top_conditions": [
+        "sleep_disorder",
+        "electrolyte_imbalance",
+        "prediabetes"
+      ],
+      "ground_truth_groups": [
+        "kidney"
+      ],
+      "expected_groups": [
+        "kidney",
+        "thyroid"
+      ],
+      "control_groups": [
+        "glycemic",
+        "lipids"
+      ],
+      "knn_groups": [
+        "kidney",
+        "lipids"
+      ],
+      "treatment_groups": [
+        "glycemic",
+        "kidney",
+        "lipids"
+      ]
+    },
+    {
+      "profile_id": "SYN-C0000082",
+      "profile_type": "negative",
+      "expected_conditions": [
+        "anemia"
+      ],
+      "top_conditions": [
+        "sleep_disorder",
+        "inflammation",
+        "anemia"
+      ],
+      "ground_truth_groups": [
+        "cbc",
+        "glycemic",
+        "kidney"
+      ],
+      "expected_groups": [
+        "cbc",
+        "iron_studies"
+      ],
+      "control_groups": [
+        "cbc",
+        "inflammation",
+        "iron_studies"
+      ],
+      "knn_groups": [
+        "kidney"
+      ],
+      "treatment_groups": [
+        "cbc",
+        "inflammation",
+        "iron_studies",
+        "kidney"
+      ]
+    },
+    {
+      "profile_id": "SYN-R0000151",
+      "profile_type": "positive",
+      "expected_conditions": [
+        "kidney_disease",
+        "hepatitis"
+      ],
+      "top_conditions": [
+        "electrolyte_imbalance",
+        "inflammation",
+        "sleep_disorder"
+      ],
+      "ground_truth_groups": [
+        "kidney"
+      ],
+      "expected_groups": [
+        "kidney",
+        "liver_panel"
+      ],
+      "control_groups": [
+        "inflammation"
+      ],
+      "knn_groups": [
+        "kidney",
+        "lipids"
+      ],
+      "treatment_groups": [
+        "inflammation",
+        "kidney",
+        "lipids"
+      ]
+    },
+    {
+      "profile_id": "SYN-R0000158",
+      "profile_type": "positive",
+      "expected_conditions": [
+        "kidney_disease",
+        "sleep_disorder"
+      ],
+      "top_conditions": [
+        "electrolyte_imbalance",
+        "sleep_disorder",
+        "prediabetes"
+      ],
+      "ground_truth_groups": [
+        "glycemic",
+        "inflammation",
+        "kidney",
+        "liver_panel"
+      ],
+      "expected_groups": [
+        "kidney"
+      ],
+      "control_groups": [
+        "glycemic",
+        "lipids"
+      ],
+      "knn_groups": [
+        "kidney",
+        "lipids"
+      ],
+      "treatment_groups": [
+        "glycemic",
+        "kidney",
+        "lipids"
+      ]
+    },
+    {
+      "profile_id": "SYN-R0000170",
+      "profile_type": "positive",
+      "expected_conditions": [
+        "kidney_disease"
+      ],
+      "top_conditions": [
+        "sleep_disorder",
+        "electrolyte_imbalance",
+        "anemia"
+      ],
+      "ground_truth_groups": [
+        "kidney"
+      ],
+      "expected_groups": [
+        "kidney"
+      ],
+      "control_groups": [
+        "cbc",
+        "iron_studies"
+      ],
+      "knn_groups": [
+        "kidney",
+        "lipids"
+      ],
+      "treatment_groups": [
+        "cbc",
+        "iron_studies",
+        "kidney",
+        "lipids"
+      ]
+    },
+    {
+      "profile_id": "SYN-R0000178",
+      "profile_type": "positive",
+      "expected_conditions": [
+        "kidney_disease",
+        "electrolyte_imbalance"
+      ],
+      "top_conditions": [
+        "anemia",
+        "sleep_disorder",
+        "prediabetes"
+      ],
+      "ground_truth_groups": [
+        "cbc",
+        "glycemic",
+        "inflammation",
+        "kidney"
+      ],
+      "expected_groups": [
+        "kidney"
+      ],
+      "control_groups": [
+        "cbc",
+        "glycemic",
+        "iron_studies",
+        "lipids"
+      ],
+      "knn_groups": [
+        "kidney"
+      ],
+      "treatment_groups": [
+        "cbc",
+        "glycemic",
+        "iron_studies",
+        "kidney",
+        "lipids"
+      ]
+    },
+    {
+      "profile_id": "SYN-R0000179",
+      "profile_type": "positive",
+      "expected_conditions": [
+        "kidney_disease",
+        "hypothyroidism"
+      ],
+      "top_conditions": [
+        "electrolyte_imbalance",
+        "sleep_disorder",
+        "prediabetes"
+      ],
+      "ground_truth_groups": [
+        "kidney"
+      ],
+      "expected_groups": [
+        "kidney",
+        "thyroid"
+      ],
+      "control_groups": [
+        "glycemic",
+        "lipids"
+      ],
+      "knn_groups": [
+        "kidney",
+        "lipids"
+      ],
+      "treatment_groups": [
+        "glycemic",
+        "kidney",
+        "lipids"
+      ]
+    },
+    {
+      "profile_id": "SYN-C0000100",
+      "profile_type": "borderline",
+      "expected_conditions": [
+        "kidney_disease"
+      ],
+      "top_conditions": [
+        "sleep_disorder",
+        "electrolyte_imbalance",
+        "anemia"
+      ],
+      "ground_truth_groups": [
+        "kidney"
+      ],
+      "expected_groups": [
+        "kidney"
+      ],
+      "control_groups": [
+        "cbc",
+        "iron_studies"
+      ],
+      "knn_groups": [
+        "kidney"
+      ],
+      "treatment_groups": [
+        "cbc",
+        "iron_studies",
+        "kidney"
+      ]
+    },
+    {
+      "profile_id": "SYN-R0000229",
+      "profile_type": "positive",
+      "expected_conditions": [
+        "prediabetes",
+        "hypothyroidism",
+        "sleep_disorder",
+        "inflammation",
+        "electrolyte_imbalance"
+      ],
+      "top_conditions": [
+        "sleep_disorder",
+        "electrolyte_imbalance",
+        "prediabetes"
+      ],
+      "ground_truth_groups": [
+        "inflammation",
+        "kidney"
+      ],
+      "expected_groups": [
+        "glycemic",
+        "inflammation",
+        "lipids",
+        "thyroid"
+      ],
+      "control_groups": [
+        "glycemic",
+        "lipids"
+      ],
+      "knn_groups": [
+        "kidney",
+        "lipids"
+      ],
+      "treatment_groups": [
+        "glycemic",
+        "kidney",
+        "lipids"
+      ]
+    },
+    {
+      "profile_id": "SYN-R0000231",
+      "profile_type": "positive",
+      "expected_conditions": [
+        "prediabetes",
+        "sleep_disorder",
+        "kidney_disease"
+      ],
+      "top_conditions": [
+        "anemia",
+        "prediabetes",
+        "electrolyte_imbalance"
+      ],
+      "ground_truth_groups": [
+        "kidney"
+      ],
+      "expected_groups": [
+        "glycemic",
+        "kidney",
+        "lipids"
+      ],
+      "control_groups": [
+        "cbc",
+        "glycemic",
+        "iron_studies",
+        "lipids"
+      ],
+      "knn_groups": [
+        "kidney"
+      ],
+      "treatment_groups": [
+        "cbc",
+        "glycemic",
+        "iron_studies",
+        "kidney",
+        "lipids"
+      ]
+    },
+    {
+      "profile_id": "SYN-R0000233",
+      "profile_type": "positive",
+      "expected_conditions": [
+        "prediabetes",
+        "sleep_disorder",
+        "kidney_disease"
+      ],
+      "top_conditions": [
+        "anemia",
+        "prediabetes",
+        "electrolyte_imbalance"
+      ],
+      "ground_truth_groups": [
+        "kidney"
+      ],
+      "expected_groups": [
+        "glycemic",
+        "kidney",
+        "lipids"
+      ],
+      "control_groups": [
+        "cbc",
+        "glycemic",
+        "iron_studies",
+        "lipids"
+      ],
+      "knn_groups": [
+        "kidney"
+      ],
+      "treatment_groups": [
+        "cbc",
+        "glycemic",
+        "iron_studies",
+        "kidney",
+        "lipids"
+      ]
+    },
+    {
+      "profile_id": "SYN-R0000246",
+      "profile_type": "positive",
+      "expected_conditions": [
+        "inflammation",
+        "sleep_disorder",
+        "kidney_disease",
+        "electrolyte_imbalance"
+      ],
+      "top_conditions": [
+        "sleep_disorder",
+        "inflammation",
+        "prediabetes"
+      ],
+      "ground_truth_groups": [
+        "cbc",
+        "glycemic",
+        "inflammation",
+        "kidney"
+      ],
+      "expected_groups": [
+        "inflammation",
+        "kidney"
+      ],
+      "control_groups": [
+        "glycemic",
+        "inflammation",
+        "lipids"
+      ],
+      "knn_groups": [
+        "kidney"
+      ],
+      "treatment_groups": [
+        "glycemic",
+        "inflammation",
+        "kidney",
+        "lipids"
+      ]
+    },
+    {
+      "profile_id": "SYN-R0000247",
+      "profile_type": "positive",
+      "expected_conditions": [
+        "inflammation",
+        "hypothyroidism",
+        "kidney_disease"
+      ],
+      "top_conditions": [
+        "inflammation",
+        "prediabetes",
+        "sleep_disorder"
+      ],
+      "ground_truth_groups": [
+        "glycemic",
+        "inflammation",
+        "kidney"
+      ],
+      "expected_groups": [
+        "inflammation",
+        "kidney",
+        "thyroid"
+      ],
+      "control_groups": [
+        "glycemic",
+        "inflammation",
+        "lipids"
+      ],
+      "knn_groups": [
+        "kidney"
+      ],
+      "treatment_groups": [
+        "glycemic",
+        "inflammation",
+        "kidney",
+        "lipids"
+      ]
+    }
+  ]
+}

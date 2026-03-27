@@ -47,7 +47,7 @@ sys.path.insert(0, PROJECT_ROOT)
 
 from bayesian.bayesian_updater import BayesianUpdater  # noqa: E402
 from bayesian.quiz_to_bayesian_map import get_prefilled_answers  # noqa: E402
-from models_normalized.model_runner import FILTER_CRITERIA  # noqa: E402
+from models_normalized.model_runner import BAYESIAN_TRIGGER_THRESHOLDS  # noqa: E402
 
 NORMALIZED_TO_LEGACY_KEYS = {
     "anemia": "anemia",
@@ -64,9 +64,9 @@ NORMALIZED_TO_LEGACY_KEYS = {
 }
 
 LEGACY_FILTER_CRITERIA = {
-    legacy_key: FILTER_CRITERIA[normalized_key]
+    legacy_key: BAYESIAN_TRIGGER_THRESHOLDS[normalized_key]
     for normalized_key, legacy_key in NORMALIZED_TO_LEGACY_KEYS.items()
-    if normalized_key in FILTER_CRITERIA
+    if normalized_key in BAYESIAN_TRIGGER_THRESHOLDS
 }
 
 DISABLED_QUESTION_IDS = {

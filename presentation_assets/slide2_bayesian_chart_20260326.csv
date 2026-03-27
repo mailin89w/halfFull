@@ -1,0 +1,3 @@
+Stage,Top1_pct,Top3_pct,Top5_pct
+ML only,14.2,38.7,59.7
+ML + Bayesian,36.1,55.9,66.5

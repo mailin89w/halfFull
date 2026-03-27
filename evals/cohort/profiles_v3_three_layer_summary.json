@@ -1,0 +1,41 @@
+{
+  "seed": 42,
+  "total_profiles": 622,
+  "layer_counts": {
+    "primary": 354,
+    "secondary_borderline": 118,
+    "secondary_negative": 94,
+    "tertiary_edge": 24,
+    "tertiary_healthy": 24,
+    "must_pass": 8
+  },
+  "per_type": {
+    "positive": 354,
+    "borderline": 120,
+    "negative": 100,
+    "edge": 24,
+    "healthy": 24
+  },
+  "per_target_condition": {
+    "perimenopause": 79,
+    "anemia": 67,
+    "sleep_disorder": 67,
+    "hypothyroidism": 64,
+    "inflammation": 47,
+    "hepatitis": 46,
+    "liver": 46,
+    "kidney_disease": 46,
+    "iron_deficiency": 46,
+    "prediabetes": 45,
+    "electrolyte_imbalance": 45
+  },
+  "notes": [
+    "Primary layer uses real NHANES anchors only.",
+    "Secondary layer uses counterfactual edits on real rows and hard negative mimics from real rows.",
+    "Tertiary layer uses a small stress-test slice with contradictions and multi-condition cases.",
+    "A fixed must-pass regression pack is appended with deterministic profile IDs.",
+    "Perimenopause is used; menopause is excluded from the benchmark.",
+    "Inflammation is benchmarked using the stricter chronic hidden-inflammation definition rather than broad acute inflammation.",
+    "No model-derived coefficients are used to create eval truth."
+  ]
+}

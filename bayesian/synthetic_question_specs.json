@@ -1,0 +1,72 @@
+{
+  "version": 1,
+  "notes": [
+    "Structured specs for synthetic Bayesian answer generation from real NHANES anchors.",
+    "Questions are sampled from latent clinical states plus direct row evidence rather than target-label-plus-noise.",
+    "Durations use the exact answer values expected by bayesian/lr_tables.json."
+  ],
+  "questions": {
+    "anemia_q1": {"kind": "binary", "state": "bleeding_burden", "yes_mid": 0.55, "base_yes": 0.04, "base_no": 0.96},
+    "anemia_q2": {"kind": "binary", "state": "blood_loss_burden", "yes_mid": 0.52, "base_yes": 0.05, "base_no": 0.95},
+    "anemia_q3": {"kind": "binary", "state": "donation_exposure", "yes_mid": 0.58, "base_yes": 0.08, "base_no": 0.92},
+    "anemia_q4": {"kind": "binary", "state": "low_iron_intake", "yes_mid": 0.56, "base_yes": 0.07, "base_no": 0.93},
+    "anemia_q5": {"kind": "duration", "state": "anemia_fatigue_duration"},
+
+    "iron_q1": {"kind": "binary", "state": "bleeding_burden", "yes_mid": 0.54, "base_yes": 0.05, "base_no": 0.95},
+    "iron_q2": {"kind": "binary", "state": "low_iron_intake", "yes_mid": 0.56, "base_yes": 0.07, "base_no": 0.93},
+    "iron_q3": {"kind": "binary", "state": "blood_loss_burden", "yes_mid": 0.54, "base_yes": 0.05, "base_no": 0.95},
+    "iron_q4": {"kind": "binary", "state": "donation_exposure", "yes_mid": 0.60, "base_yes": 0.08, "base_no": 0.92},
+    "iron_q5": {"kind": "binary", "state": "pica_proxy", "yes_mid": 0.60, "base_yes": 0.03, "base_no": 0.97},
+
+    "thyroid_q1": {"kind": "categorical", "state": "thyroid_weight_pattern"},
+    "thyroid_q2": {"kind": "binary", "state": "thyroid_cold_pattern", "yes_mid": 0.52, "base_yes": 0.05, "base_no": 0.95},
+    "thyroid_q3": {"kind": "binary", "state": "thyroid_dryskin_pattern", "yes_mid": 0.52, "base_yes": 0.06, "base_no": 0.94},
+    "thyroid_q4": {"kind": "binary", "state": "thyroid_constipation_pattern", "yes_mid": 0.50, "base_yes": 0.06, "base_no": 0.94},
+    "thyroid_q5": {"kind": "duration", "state": "thyroid_duration"},
+
+    "kidney_q1": {"kind": "binary", "state": "known_kidney_history", "yes_mid": 0.45, "base_yes": 0.02, "base_no": 0.98},
+    "kidney_q2": {"kind": "binary", "state": "kidney_bp_or_diabetes_context", "yes_mid": 0.52, "base_yes": 0.06, "base_no": 0.94},
+    "kidney_q3": {"kind": "binary", "state": "nocturia_burden", "yes_mid": 0.48, "base_yes": 0.05, "base_no": 0.95},
+    "kidney_q4": {"kind": "categorical", "state": "weight_loss_flag"},
+
+    "sleep_q1": {"kind": "binary", "state": "apnea_signal", "yes_mid": 0.48, "base_yes": 0.05, "base_no": 0.95},
+    "sleep_q2": {"kind": "binary", "state": "snoring_signal", "yes_mid": 0.44, "base_yes": 0.08, "base_no": 0.92},
+    "sleep_q3": {"kind": "binary", "state": "sleep_daytime_sleepiness", "yes_mid": 0.52, "base_yes": 0.06, "base_no": 0.94},
+    "sleep_q4": {"kind": "binary", "state": "sleep_fragmentation", "yes_mid": 0.48, "base_yes": 0.06, "base_no": 0.94},
+    "sleep_q5": {"kind": "binary", "state": "insomnia_pattern", "yes_mid": 0.50, "base_yes": 0.08, "base_no": 0.92},
+
+    "liver_q1": {"kind": "categorical", "state": "alcohol_risk_liver"},
+    "liver_q2": {"kind": "binary", "state": "spider_angioma_proxy", "yes_mid": 0.64, "base_yes": 0.02, "base_no": 0.98},
+    "liver_q3": {"kind": "binary", "state": "ascites_proxy", "yes_mid": 0.68, "base_yes": 0.01, "base_no": 0.99},
+    "liver_q4": {"kind": "binary", "state": "jaundice_proxy", "yes_mid": 0.62, "base_yes": 0.02, "base_no": 0.98},
+    "liver_q5": {"kind": "binary", "state": "catabolic_weight_loss", "yes_mid": 0.58, "base_yes": 0.04, "base_no": 0.96},
+
+    "prediabetes_q1": {"kind": "binary", "state": "weight_gain_burden", "yes_mid": 0.50, "base_yes": 0.08, "base_no": 0.92},
+    "prediabetes_q2": {"kind": "binary", "state": "glycemic_signal", "yes_mid": 0.46, "base_yes": 0.05, "base_no": 0.95},
+    "prediabetes_q3": {"kind": "binary", "state": "nocturia_burden", "yes_mid": 0.52, "base_yes": 0.05, "base_no": 0.95},
+    "prediabetes_q4": {"kind": "categorical", "state": "activity_pattern"},
+
+    "inflam_q1": {"kind": "binary", "state": "catabolic_weight_loss", "yes_mid": 0.55, "base_yes": 0.04, "base_no": 0.96},
+    "inflam_q2": {"kind": "binary", "state": "acute_infection_recent", "yes_mid": 0.56, "base_yes": 0.08, "base_no": 0.92},
+    "inflam_q3": {"kind": "binary", "state": "joint_inflammation_pattern", "yes_mid": 0.46, "base_yes": 0.08, "base_no": 0.92},
+    "inflam_q4": {"kind": "duration", "state": "chronic_inflammation_duration"},
+
+    "elec_q1": {"kind": "categorical", "state": "alcohol_risk_general"},
+    "elec_q2": {"kind": "binary", "state": "gi_loss_recent", "yes_mid": 0.52, "base_yes": 0.06, "base_no": 0.94},
+    "elec_q3": {"kind": "binary", "state": "muscle_irritability_pattern", "yes_mid": 0.48, "base_yes": 0.07, "base_no": 0.93},
+    "elec_q4": {"kind": "binary", "state": "electrolyte_medication_exposure", "yes_mid": 0.48, "base_yes": 0.08, "base_no": 0.92},
+
+    "hep_q1": {"kind": "categorical", "state": "alcohol_risk_hepatitis"},
+    "hep_q2": {"kind": "binary", "state": "jaundice_proxy", "yes_mid": 0.62, "base_yes": 0.02, "base_no": 0.98},
+    "hep_q3": {"kind": "binary", "state": "hepatitis_exposure_risk", "yes_mid": 0.44, "base_yes": 0.04, "base_no": 0.96},
+    "hep_q4": {"kind": "binary", "state": "catabolic_weight_loss", "yes_mid": 0.56, "base_yes": 0.04, "base_no": 0.96},
+
+    "peri_q1": {"kind": "binary", "state": "perimenopause_self_assessment", "yes_mid": 0.42, "base_yes": 0.03, "base_no": 0.97},
+    "peri_q2": {"kind": "binary", "state": "vasomotor_burden", "yes_mid": 0.48, "base_yes": 0.05, "base_no": 0.95},
+    "peri_q2b": {"kind": "binary", "state": "night_sweat_burden", "yes_mid": 0.50, "base_yes": 0.04, "base_no": 0.96},
+    "peri_q2c": {"kind": "binary", "state": "age_transition_context", "yes_mid": 0.44, "base_yes": 0.05, "base_no": 0.95},
+    "peri_q3": {"kind": "binary", "state": "menstrual_irregularity", "yes_mid": 0.40, "base_yes": 0.04, "base_no": 0.96},
+    "peri_q4": {"kind": "binary", "state": "bleeding_burden", "yes_mid": 0.56, "base_yes": 0.06, "base_no": 0.94},
+    "peri_q5": {"kind": "binary", "state": "perimenopause_mood_burden", "yes_mid": 0.48, "base_yes": 0.08, "base_no": 0.92}
+  }
+}

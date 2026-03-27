@@ -1,0 +1,12 @@
+Condition,N,HitRate_Before_pct,HitRate_After_pct,HitRate_Delta_pp,MeanRecall_Before_pct,MeanRecall_After_pct,MeanRecall_Delta_pp
+Kidney,39,53.8,66.7,12.8,34.2,48.3,14.1
+Liver,22,36.4,50.0,13.6,23.5,32.6,9.1
+Electrolytes,10,50.0,60.0,10.0,35.0,40.0,5.0
+Prediabetes,32,43.8,53.1,9.4,25.5,33.3,7.8
+Sleep Disorder,26,53.8,61.5,7.7,32.4,39.4,7.1
+Inflammation,48,58.3,62.5,4.2,32.5,38.0,5.5
+Anemia,33,60.6,63.6,3.0,42.4,44.9,2.5
+Hepatitis,35,40.0,42.9,2.9,27.1,32.4,5.2
+Hypothyroidism,41,46.3,46.3,0.0,30.7,30.7,0.0
+Iron Deficiency,44,95.5,95.5,0.0,86.4,86.4,0.0
+Perimenopause,10,0.0,0.0,0.0,0.0,0.0,0.0

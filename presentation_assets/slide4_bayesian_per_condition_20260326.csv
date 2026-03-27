@@ -1,0 +1,12 @@
+Condition,Top1_Pre_pct,Top1_Post_pct,Top3_Pre_pct,Top3_Post_pct,Top5_Pre_pct,Top5_Post_pct
+Hepatitis,11.1,53.3,28.9,71.1,51.1,84.4
+Iron Deficiency,0.0,70.0,15.0,87.5,55.0,87.5
+Kidney,0.0,44.4,22.2,75.6,71.1,84.4
+Hypothyroidism,65.0,83.3,80.0,93.3,96.7,98.3
+Prediabetes,2.2,17.8,22.2,75.6,77.8,95.6
+Electrolytes,0.0,42.2,46.7,60.0,64.4,68.9
+Anemia,11.9,38.8,53.7,56.7,73.1,70.1
+Inflammation,15.6,37.8,31.1,40.0,42.2,48.9
+Sleep Disorder,29.7,21.9,95.3,57.8,100.0,92.2
+Perimenopause,4.0,2.7,5.3,14.7,17.3,14.7
+Liver,0.0,0.0,0.0,0.0,0.0,0.0

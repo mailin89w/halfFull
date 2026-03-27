@@ -1,0 +1,3 @@
+Stage,HitRate_pct,ExactCoverage_pct,MeanRecall_pct,MeanPrecision_pct
+Condition-driven panels only,54.4,24.4,37.7,33.2
++ KNN similarity,59.7,28.5,42.9,26.5

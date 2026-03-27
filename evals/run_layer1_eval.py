@@ -84,7 +84,7 @@ except ImportError as exc:
 # ---------------------------------------------------------------------------
 # Paths
 # ---------------------------------------------------------------------------
-PROFILES_PATH = EVALS_DIR / "cohort" / "profiles_v2_latent.json"
+PROFILES_PATH = EVALS_DIR / "cohort" / "profiles_v3_three_layer.json"
 SCHEMA_PATH   = EVALS_DIR / "schema"  / "profile_schema.json"
 RESULTS_DIR   = EVALS_DIR / "results"
 REPORTS_DIR   = EVALS_DIR / "reports"
@@ -109,6 +109,7 @@ CONDITION_TO_MODEL_KEY: dict[str, str | None] = {
     "inflammation":          "hidden_inflammation",
     "iron_deficiency":       "iron_deficiency",
     "kidney_disease":        "kidney",
+    "liver":                 "liver",
     "perimenopause":         "perimenopause",
     "prediabetes":           "prediabetes",
     "sleep_disorder":        "sleep_disorder",
@@ -122,7 +123,7 @@ MODEL_KEY_TO_CONDITION: dict[str, str | None] = {
     "hidden_inflammation":   "inflammation",
     "iron_deficiency":       "iron_deficiency",
     "kidney":                "kidney_disease",
-    "liver":                 None,          # not evaluated (no ground-truth condition)
+    "liver":                 "liver",
     "perimenopause":         "perimenopause",
     "prediabetes":           "prediabetes",
     "sleep_disorder":        "sleep_disorder",

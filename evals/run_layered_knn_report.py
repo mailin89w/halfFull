@@ -35,6 +35,7 @@ logging.getLogger("bayesian_updater").setLevel(logging.WARNING)
 
 from bayesian.bayesian_updater import BayesianUpdater
 from bayesian.run_bayesian import handle_questions, handle_update
+from evals.pipeline.knn_condition_reranker import rerank_condition_scores_with_knn
 from evals.run_bayesian_eval import simulated_bayesian_answer
 from evals.run_knn_layer_eval import (
     CONDITION_TO_LAB_GROUPS,
@@ -208,6 +209,9 @@ def main() -> int:
         bayes_groups = layer_groups_from_conditions(bayes_top)
 
         knn_only_groups = knn_groups(raw_inputs, scorer, max_groups=(args.knn_max_groups or None))
+        reranked = rerank_condition_scores_with_knn(bayes_scores, knn_only_groups)
+        full_top = reranked["top_conditions"]
+        full_condition_groups = layer_groups_from_conditions(full_top)
         full_groups = bayes_groups | knn_only_groups
 
         rows.append({
@@ -227,9 +231,11 @@ def main() -> int:
                 **metric_row(bayes_groups, gt_groups),
             },
             "full": {
-                "top_conditions": bayes_top,
+                "top_conditions": full_top,
+                "condition_groups": sorted(full_condition_groups),
                 "groups": sorted(full_groups),
                 "knn_groups": sorted(knn_only_groups),
+                "bonuses": reranked["bonuses"],
                 **metric_row(full_groups, gt_groups),
             },
         })
@@ -259,6 +265,7 @@ def main() -> int:
         per_condition[condition] = {
             "condition_routing_ml": aggregate_condition_metric(rows, "ml", 3, condition),
             "condition_routing_bayesian": aggregate_condition_metric(rows, "bayes", 3, condition),
+            "condition_routing_full": aggregate_condition_metric(rows, "full", 3, condition),
             "lab_coverage_ml": aggregate_lab_metric(rows, "ml", condition),
             "lab_coverage_bayesian": aggregate_lab_metric(rows, "bayes", condition),
             "lab_coverage_full": aggregate_lab_metric(rows, "full", condition),
@@ -333,17 +340,18 @@ def main() -> int:
     lines.append("")
     lines.append("## Per Condition")
     lines.append("")
-    lines.append("| Condition | N | ML Top-1 | Bayesian Top-1 | ML Lab Hit | Bayes Lab Hit | Full Lab Hit | Full Exact |")
-    lines.append("|---|---:|---:|---:|---:|---:|---:|---:|")
+    lines.append("| Condition | N | ML Top-1 | Bayesian Top-1 | Full Top-1 | ML Lab Hit | Bayes Lab Hit | Full Lab Hit | Full Exact |")
+    lines.append("|---|---:|---:|---:|---:|---:|---:|---:|---:|")
     for condition in condition_keys:
         cond = per_condition[condition]
         ml_route = cond["condition_routing_ml"]
         bayes_route = cond["condition_routing_bayesian"]
+        full_route = cond["condition_routing_full"]
         ml_lab = cond["lab_coverage_ml"]
         bayes_lab = cond["lab_coverage_bayesian"]
         full_lab = cond["lab_coverage_full"]
         lines.append(
-            f"| {condition} | {full_lab.get('n', 0)} | {ml_route.get('top1_accuracy', 0.0):.1%} | {bayes_route.get('top1_accuracy', 0.0):.1%} | {ml_lab.get('hit_rate', 0.0):.1%} | {bayes_lab.get('hit_rate', 0.0):.1%} | {full_lab.get('hit_rate', 0.0):.1%} | {full_lab.get('exact_coverage', 0.0):.1%} |"
+            f"| {condition} | {full_lab.get('n', 0)} | {ml_route.get('top1_accuracy', 0.0):.1%} | {bayes_route.get('top1_accuracy', 0.0):.1%} | {full_route.get('top1_accuracy', 0.0):.1%} | {ml_lab.get('hit_rate', 0.0):.1%} | {bayes_lab.get('hit_rate', 0.0):.1%} | {full_lab.get('hit_rate', 0.0):.1%} | {full_lab.get('exact_coverage', 0.0):.1%} |"
         )
     lines.append("")
     lines.append("## KNN Wins")
