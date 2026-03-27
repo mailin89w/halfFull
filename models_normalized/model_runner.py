@@ -80,7 +80,7 @@ MODEL_REGISTRY = {
     "hepatitis_bc":          "hepatitis_bc_rf_cal_deduped20_v2.joblib",
     "iron_deficiency":       "iron_deficiency_rf_cal_deduped35_v4.joblib",
     "vitamin_b12_deficiency": "vitamin_b12_deficiency_2003_2006_lr_roadmap.joblib",
-    "vitamin_d_deficiency":   "vitamin_d_deficiency_2003_2006_lr_roadmap.joblib",
+    "vitamin_d_deficiency":   "vitamin_d_deficiency_2017_2018_rf_cal_aligned.joblib",
 }
 
 # Per-model recommended operating thresholds
@@ -98,7 +98,7 @@ RECOMMENDED_THRESHOLDS = {
     "hepatitis_bc":          0.15,
     "iron_deficiency":       0.15,
     "vitamin_b12_deficiency": 0.80,
-    "vitamin_d_deficiency":   0.40,
+    "vitamin_d_deficiency":   0.25,
 }
 
 # Per-disease user-facing filtering criteria
@@ -135,8 +135,8 @@ RECOMMENDED_THRESHOLDS = {
 #   0.80  vitamin_b12_deficiency — very low-prevalence model; only surface the
 #                                  strongest scores until we have product-side
 #                                  validation on real user traffic
-#   0.40  vitamin_d_deficiency   — moderate-prevalence model; best current F1 on
-#                                  the 2003-2006 roadmap-constrained sweep
+#   0.25  vitamin_d_deficiency   — NHANES 2017–2018 aligned RF+cal model;
+#                                  best OOF F1 on the clean blood-lab sweep
 USER_FACING_THRESHOLDS = {
     "hepatitis_bc":          0.10,
     "liver":                 0.10,
@@ -150,7 +150,7 @@ USER_FACING_THRESHOLDS = {
     "perimenopause":         0.40,
     "sleep_disorder":        0.75,   # raised 0.70→0.75 on 2026-03-26 optional cleanup: precision 10.9%→13.1%, flag 24.5%→16.5%, recall 25.0%→20.3%
     "vitamin_b12_deficiency": 0.80,
-    "vitamin_d_deficiency":   0.40,
+    "vitamin_d_deficiency":   0.25,
 }
 
 # Lower thresholds used only to decide which conditions enter Bayesian review.
@@ -169,7 +169,7 @@ BAYESIAN_TRIGGER_THRESHOLDS = {
     "perimenopause":         0.40,
     "sleep_disorder":        0.70,
     "vitamin_b12_deficiency": 0.60,
-    "vitamin_d_deficiency":   0.35,
+    "vitamin_d_deficiency":   0.20,
 }
 
 # Backward-compatible alias: existing eval/report code expects FILTER_CRITERIA
@@ -222,7 +222,7 @@ SCORE_RANGES: dict[str, tuple[float, float]] = {
     "hepatitis_bc":          (0.005, 0.524),
     "iron_deficiency":       (0.006, 0.451),   # v4 — 35 feats, no CBC markers (600-profile cohort: min 0.0056, max 0.4511)
     "vitamin_b12_deficiency": (0.000, 0.976),  # NHANES 2003-2006 roadmap LR model
-    "vitamin_d_deficiency":   (0.021, 1.000),  # NHANES 2003-2006 roadmap LR model
+    "vitamin_d_deficiency":   (0.000, 0.942),  # NHANES 2017-2018 aligned RF+cal model
 }
 
 # Population-mean score across ALL profiles (positive + negative + healthy).
@@ -245,7 +245,7 @@ SCORE_MEANS: dict[str, float] = {
     "hepatitis_bc":          0.044,
     "iron_deficiency":       0.082,  # v4 — 600-profile cohort mean (was 0.038 v3 with CBC features)
     "vitamin_b12_deficiency": 0.125,  # NHANES 2003-2006 roadmap LR model mean score
-    "vitamin_d_deficiency":   0.495,  # NHANES 2003-2006 roadmap LR model mean score
+    "vitamin_d_deficiency":   0.283,  # NHANES 2017-2018 aligned RF+cal model mean score
 }
 
 # Sex-specific floors for iron_deficiency.
