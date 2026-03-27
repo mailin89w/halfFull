@@ -1,0 +1,1471 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HalfFull · Capstone Tickets</title>
+<style>
+  :root {
+    --bg: #0f1117;
+    --surface: #161b27;
+    --surface2: #1e2536;
+    --border: #2a3347;
+    --accent-p0: #ff4d6d;
+    --accent-p1: #ff922b;
+    --accent-p2: #4dabf7;
+    --accent-p3: #69db7c;
+    --text: #c9d1d9;
+    --text-dim: #6e7a8a;
+    --text-bright: #f0f6fc;
+    --tag-ml: #7c3aed;
+    --tag-bayesian: #0891b2;
+    --tag-knn: #059669;
+    --tag-llm: #b45309;
+    --tag-eval: #475569;
+    --mono: 'SF Mono', 'Fira Code', 'Cascadia Code', monospace;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+    font-size: 14px;
+    line-height: 1.6;
+  }
+
+  /* ── Header ── */
+  .site-header {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 28px 40px;
+    display: flex;
+    align-items: baseline;
+    gap: 16px;
+  }
+  .site-header h1 {
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--text-bright);
+    letter-spacing: -0.5px;
+  }
+  .site-header .subtitle {
+    color: var(--text-dim);
+    font-size: 13px;
+  }
+  .header-meta {
+    margin-left: auto;
+    display: flex;
+    gap: 20px;
+    font-size: 12px;
+    color: var(--text-dim);
+  }
+  .header-meta span { display: flex; align-items: center; gap: 6px; }
+  .dot { width: 8px; height: 8px; border-radius: 50%; }
+
+  /* ── Layout ── */
+  .main { max-width: 1280px; margin: 0 auto; padding: 32px 40px 80px; }
+
+  /* ── Stats bar ── */
+  .stats-bar {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 12px;
+    margin-bottom: 40px;
+  }
+  .stat-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px 20px;
+  }
+  .stat-card .label { font-size: 11px; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.8px; }
+  .stat-card .value { font-size: 28px; font-weight: 700; color: var(--text-bright); line-height: 1.2; margin-top: 4px; }
+  .stat-card .delta { font-size: 12px; margin-top: 4px; }
+  .red { color: var(--accent-p0); }
+  .orange { color: var(--accent-p1); }
+  .blue { color: var(--accent-p2); }
+  .green { color: var(--accent-p3); }
+
+  /* ── Benchmark table ── */
+  .section-title {
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--text-dim);
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .section-title::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  .bench-wrap { overflow-x: auto; margin-bottom: 40px; }
+  table.bench {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+  }
+  table.bench th {
+    background: var(--surface2);
+    color: var(--text-dim);
+    font-weight: 600;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    padding: 8px 12px;
+    text-align: right;
+    border-bottom: 1px solid var(--border);
+  }
+  table.bench th:first-child { text-align: left; }
+  table.bench td {
+    padding: 8px 12px;
+    border-bottom: 1px solid var(--border);
+    text-align: right;
+    font-family: var(--mono);
+    font-size: 12px;
+  }
+  table.bench td:first-child { text-align: left; font-family: inherit; font-weight: 500; color: var(--text-bright); }
+  table.bench tr:last-child td { border-bottom: none; }
+  table.bench tr:hover td { background: var(--surface); }
+
+  .cell-bad { color: var(--accent-p0); }
+  .cell-warn { color: var(--accent-p1); }
+  .cell-ok { color: var(--accent-p3); }
+  .cell-dim { color: var(--text-dim); }
+
+  .bar-wrap { display: inline-flex; align-items: center; gap: 6px; width: 100%; justify-content: flex-end; }
+  .bar { height: 4px; border-radius: 2px; min-width: 2px; }
+
+  /* ── Priority groups ── */
+  .priority-group { margin-bottom: 48px; }
+  .priority-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 20px;
+    padding: 12px 16px;
+    border-radius: 8px;
+  }
+  .p0-header { background: rgba(255, 77, 109, 0.08); border-left: 3px solid var(--accent-p0); }
+  .p1-header { background: rgba(255, 146, 43, 0.08); border-left: 3px solid var(--accent-p1); }
+  .p2-header { background: rgba(77, 171, 247, 0.08); border-left: 3px solid var(--accent-p2); }
+
+  .priority-badge {
+    font-size: 11px;
+    font-weight: 700;
+    padding: 3px 8px;
+    border-radius: 4px;
+    letter-spacing: 0.5px;
+  }
+  .badge-p0 { background: rgba(255,77,109,0.2); color: var(--accent-p0); }
+  .badge-p1 { background: rgba(255,146,43,0.2); color: var(--accent-p1); }
+  .badge-p2 { background: rgba(77,171,247,0.2); color: var(--accent-p2); }
+
+  .priority-label { font-weight: 700; font-size: 15px; color: var(--text-bright); }
+  .priority-desc { color: var(--text-dim); font-size: 13px; }
+  .priority-count { margin-left: auto; font-size: 12px; color: var(--text-dim); }
+
+  /* ── Ticket cards ── */
+  .ticket {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    margin-bottom: 20px;
+    overflow: hidden;
+  }
+
+  .ticket-header {
+    padding: 20px 24px 16px;
+    cursor: pointer;
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    user-select: none;
+  }
+  .ticket-header:hover { background: rgba(255,255,255,0.02); }
+
+  .ticket-id {
+    font-family: var(--mono);
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--text-dim);
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    padding: 2px 8px;
+    border-radius: 4px;
+    white-space: nowrap;
+    margin-top: 2px;
+  }
+
+  .ticket-title-block { flex: 1; }
+  .ticket-title {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--text-bright);
+    line-height: 1.35;
+    margin-bottom: 8px;
+  }
+  .ticket-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    align-items: center;
+  }
+
+  .tag {
+    font-size: 11px;
+    font-weight: 600;
+    padding: 2px 8px;
+    border-radius: 4px;
+    letter-spacing: 0.3px;
+  }
+  .tag-ml     { background: rgba(124,58,237,0.2); color: #a78bfa; }
+  .tag-bayes  { background: rgba(8,145,178,0.2);  color: #38bdf8; }
+  .tag-knn    { background: rgba(5,150,105,0.2);  color: #34d399; }
+  .tag-llm    { background: rgba(180,83,9,0.2);   color: #fb923c; }
+  .tag-eval   { background: rgba(71,85,105,0.2);  color: #94a3b8; }
+
+  .effort-tag {
+    font-size: 11px;
+    color: var(--text-dim);
+    background: var(--surface2);
+    padding: 2px 8px;
+    border-radius: 4px;
+    border: 1px solid var(--border);
+  }
+
+  .impact-tag {
+    font-size: 11px;
+    font-weight: 600;
+    padding: 2px 8px;
+    border-radius: 4px;
+  }
+  .impact-critical { background: rgba(255,77,109,0.15); color: var(--accent-p0); }
+  .impact-high     { background: rgba(255,146,43,0.15); color: var(--accent-p1); }
+  .impact-medium   { background: rgba(77,171,247,0.15); color: var(--accent-p2); }
+
+  .chevron {
+    color: var(--text-dim);
+    font-size: 16px;
+    margin-top: 2px;
+    transition: transform 0.2s;
+    flex-shrink: 0;
+  }
+
+  .ticket-body {
+    border-top: 1px solid var(--border);
+    padding: 24px;
+    display: none;
+  }
+  .ticket.open .ticket-body { display: block; }
+  .ticket.open .chevron { transform: rotate(90deg); }
+
+  /* ── Ticket body internals ── */
+  .body-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+  }
+  .body-grid.wide { grid-template-columns: 1fr; }
+
+  .section {
+    margin-bottom: 20px;
+  }
+  .section h4 {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    color: var(--text-dim);
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .section h4 svg { flex-shrink: 0; }
+
+  .section p {
+    color: var(--text);
+    line-height: 1.7;
+    font-size: 13.5px;
+  }
+
+  ul.checklist {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  ul.checklist li {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    font-size: 13px;
+    color: var(--text);
+    line-height: 1.5;
+  }
+  ul.checklist li::before {
+    content: '☐';
+    color: var(--text-dim);
+    font-size: 14px;
+    flex-shrink: 0;
+    margin-top: 0;
+  }
+  ul.checklist.dod li::before {
+    content: '◇';
+    color: var(--accent-p2);
+  }
+  ul.checklist.start li::before {
+    content: '→';
+    color: var(--accent-p3);
+  }
+
+  .code-ref {
+    display: inline-block;
+    font-family: var(--mono);
+    font-size: 11px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    color: var(--accent-p2);
+    padding: 1px 6px;
+    border-radius: 4px;
+    text-decoration: none;
+    white-space: nowrap;
+  }
+
+  .files-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  .metric-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 7px 0;
+    border-bottom: 1px solid var(--border);
+    font-size: 12.5px;
+  }
+  .metric-row:last-child { border-bottom: none; }
+  .metric-name { color: var(--text-dim); }
+  .metric-val { font-family: var(--mono); font-weight: 600; }
+
+  .callout {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-left: 3px solid;
+    border-radius: 6px;
+    padding: 12px 16px;
+    font-size: 13px;
+    line-height: 1.6;
+    margin-top: 12px;
+  }
+  .callout-red  { border-left-color: var(--accent-p0); }
+  .callout-orange { border-left-color: var(--accent-p1); }
+  .callout-blue { border-left-color: var(--accent-p2); }
+  .callout-green { border-left-color: var(--accent-p3); }
+
+  .best-practice {
+    background: rgba(5,150,105,0.06);
+    border: 1px solid rgba(52,211,153,0.2);
+    border-radius: 8px;
+    padding: 14px 16px;
+    margin-top: 12px;
+  }
+  .best-practice .bp-label {
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: #34d399;
+    margin-bottom: 6px;
+  }
+  .best-practice p { font-size: 13px; color: var(--text); line-height: 1.6; }
+
+  table.inline-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 12.5px;
+    margin-top: 8px;
+  }
+  table.inline-table th {
+    text-align: left;
+    color: var(--text-dim);
+    font-weight: 600;
+    font-size: 11px;
+    text-transform: uppercase;
+    padding: 6px 8px;
+    border-bottom: 1px solid var(--border);
+  }
+  table.inline-table td {
+    padding: 6px 8px;
+    border-bottom: 1px solid rgba(42,51,71,0.6);
+    vertical-align: top;
+  }
+  table.inline-table tr:last-child td { border-bottom: none; }
+  table.inline-table td:first-child { font-family: var(--mono); color: var(--accent-p2); font-size: 11px; }
+
+  /* ── Responsive ── */
+  @media (max-width: 900px) {
+    .body-grid { grid-template-columns: 1fr; }
+    .stats-bar { grid-template-columns: repeat(2, 1fr); }
+    .main { padding: 20px 16px 60px; }
+    .site-header { padding: 20px 16px; flex-wrap: wrap; }
+  }
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <h1>HalfFull · Capstone Tickets</h1>
+  <span class="subtitle">Synthesised from evals · All layers</span>
+  <div class="header-meta">
+    <span><span class="dot" style="background:var(--accent-p0)"></span>P0 Critical: 3</span>
+    <span><span class="dot" style="background:var(--accent-p1)"></span>P1 High: 4</span>
+    <span><span class="dot" style="background:var(--accent-p2)"></span>P2 Polish: 3</span>
+    <span style="color:var(--text-dim)">Generated 2026-03-27</span>
+  </div>
+</header>
+
+<main class="main">
+
+  <!-- ── Benchmark snapshot ── -->
+  <div class="section-title">Current benchmark · per-condition · all layers · 600 profiles (seed 42)</div>
+  <div class="bench-wrap">
+    <table class="bench">
+      <thead>
+        <tr>
+          <th>Condition</th>
+          <th>N</th>
+          <th>ML Top-1</th>
+          <th>ML Top-3</th>
+          <th>Bayesian Top-1</th>
+          <th>Bayesian Top-3</th>
+          <th>Final Top-1</th>
+          <th>Final Top-3</th>
+          <th>Bayes Δ Top-3</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Hypothyroidism</td>
+          <td>68</td>
+          <td class="cell-ok">70.6%</td>
+          <td class="cell-ok">92.6%</td>
+          <td class="cell-ok">79.4%</td>
+          <td class="cell-ok">98.5%</td>
+          <td class="cell-ok">79.4%</td>
+          <td class="cell-ok">98.5%</td>
+          <td class="cell-ok">+5.9%</td>
+          <td>✅ Only strong model</td>
+        </tr>
+        <tr>
+          <td>Iron Deficiency</td>
+          <td>38</td>
+          <td class="cell-bad">0.0%</td>
+          <td class="cell-warn">15.8%</td>
+          <td class="cell-ok">73.7%</td>
+          <td class="cell-ok">92.1%</td>
+          <td class="cell-ok">73.7%</td>
+          <td class="cell-ok">92.1%</td>
+          <td class="cell-ok">+76.3%</td>
+          <td>⚠️ ML dead, Bayesian rescues</td>
+        </tr>
+        <tr>
+          <td>Hepatitis</td>
+          <td>43</td>
+          <td class="cell-bad">11.6%</td>
+          <td class="cell-warn">27.9%</td>
+          <td class="cell-ok">55.8%</td>
+          <td class="cell-ok">72.1%</td>
+          <td class="cell-ok">55.8%</td>
+          <td class="cell-ok">72.1%</td>
+          <td class="cell-ok">+44.2%</td>
+          <td>⚠️ ML weak, Bayesian rescues</td>
+        </tr>
+        <tr>
+          <td>Kidney Disease</td>
+          <td>43</td>
+          <td class="cell-bad">0.0%</td>
+          <td class="cell-warn">23.3%</td>
+          <td class="cell-warn">46.5%</td>
+          <td class="cell-warn">74.4%</td>
+          <td class="cell-warn">46.5%</td>
+          <td class="cell-warn">79.1%</td>
+          <td class="cell-ok">+51.2%</td>
+          <td>⚠️ ML dead, moderate Bayesian</td>
+        </tr>
+        <tr>
+          <td>Anemia</td>
+          <td>60</td>
+          <td class="cell-bad">10.0%</td>
+          <td class="cell-warn">46.7%</td>
+          <td class="cell-warn">46.7%</td>
+          <td class="cell-warn">56.7%</td>
+          <td class="cell-warn">46.7%</td>
+          <td class="cell-warn">58.3%</td>
+          <td class="cell-warn">+10.0%</td>
+          <td>⚠️ Gender bias, limited rescue</td>
+        </tr>
+        <tr>
+          <td>Electrolytes</td>
+          <td>44</td>
+          <td class="cell-bad">0.0%</td>
+          <td class="cell-warn">47.7%</td>
+          <td class="cell-warn">43.2%</td>
+          <td class="cell-warn">61.4%</td>
+          <td class="cell-warn">43.2%</td>
+          <td class="cell-warn">59.1%</td>
+          <td class="cell-warn">+13.6%</td>
+          <td>⚠️ Random top-1, low precision</td>
+        </tr>
+        <tr>
+          <td>Prediabetes</td>
+          <td>43</td>
+          <td class="cell-bad">2.3%</td>
+          <td class="cell-bad">25.6%</td>
+          <td class="cell-bad">18.6%</td>
+          <td class="cell-warn">79.1%</td>
+          <td class="cell-bad">18.6%</td>
+          <td class="cell-warn">86.0%</td>
+          <td class="cell-ok">+53.5%</td>
+          <td>🔴 Poor top-1, noisy</td>
+        </tr>
+        <tr>
+          <td>Inflammation</td>
+          <td>46</td>
+          <td class="cell-bad">15.2%</td>
+          <td class="cell-bad">28.3%</td>
+          <td class="cell-warn">37.0%</td>
+          <td class="cell-bad">39.1%</td>
+          <td class="cell-warn">37.0%</td>
+          <td class="cell-bad">39.1%</td>
+          <td class="cell-warn">+10.9%</td>
+          <td>🔴 Worst top-3 retention</td>
+        </tr>
+        <tr>
+          <td>Sleep Disorder</td>
+          <td>82</td>
+          <td class="cell-warn">32.9%</td>
+          <td class="cell-ok">90.2%</td>
+          <td class="cell-bad">19.5%</td>
+          <td class="cell-warn">56.1%</td>
+          <td class="cell-bad">19.5%</td>
+          <td class="cell-warn">56.1%</td>
+          <td class="cell-bad">-34.1%</td>
+          <td>🔴 Bayesian destroys ML gain</td>
+        </tr>
+        <tr>
+          <td>Perimenopause</td>
+          <td>68</td>
+          <td class="cell-bad">0.0%</td>
+          <td class="cell-bad">0.0%</td>
+          <td class="cell-bad">0.0%</td>
+          <td class="cell-bad">13.2%</td>
+          <td class="cell-bad">0.0%</td>
+          <td class="cell-bad">13.2%</td>
+          <td class="cell-warn">+13.2%</td>
+          <td>🔴 Structurally blocked</td>
+        </tr>
+        <tr>
+          <td><strong>Liver Disease</strong></td>
+          <td>41</td>
+          <td class="cell-bad">0.0%</td>
+          <td class="cell-bad">0.0%</td>
+          <td class="cell-bad">0.0%</td>
+          <td class="cell-bad">0.0%</td>
+          <td class="cell-bad">0.0%</td>
+          <td class="cell-bad">0.0%</td>
+          <td class="cell-dim">+0.0%</td>
+          <td>💀 Missing from pipeline entirely</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ── Stats bar ── -->
+  <div class="stats-bar" style="margin-bottom:48px">
+    <div class="stat-card">
+      <div class="label">Overall Top-1 (Final)</div>
+      <div class="value red">~34%</div>
+      <div class="delta red">Target: ≥ 70%</div>
+    </div>
+    <div class="stat-card">
+      <div class="label">Over-alert (Healthy)</div>
+      <div class="value red">79%</div>
+      <div class="delta red">Target: &lt; 10%</div>
+    </div>
+    <div class="stat-card">
+      <div class="label">Bayesian Δ Top-1 Gain</div>
+      <div class="value green">+21.9pp</div>
+      <div class="delta" style="color:var(--text-dim)">Main value driver</div>
+    </div>
+    <div class="stat-card">
+      <div class="label">KNN Net Top-3 Gain</div>
+      <div class="value blue">+4–7pp</div>
+      <div class="delta" style="color:var(--text-dim)">Top-1 frozen, limited</div>
+    </div>
+    <div class="stat-card">
+      <div class="label">LLM Live Parse Rate</div>
+      <div class="value red">0%</div>
+      <div class="delta red">Blocked (HTTP/schema)</div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════
+       P0 · CRITICAL
+  ═══════════════════════════════════ -->
+  <div class="priority-group">
+    <div class="priority-header p0-header">
+      <span class="priority-badge badge-p0">P0</span>
+      <span class="priority-label">Critical — Pipeline broken at data level</span>
+      <span class="priority-desc">These produce 0% accuracy or active regressions. No portfolio value without fixing.</span>
+      <span class="priority-count">3 tickets</span>
+    </div>
+
+    <!-- ── Ticket ML-01 ── -->
+    <div class="ticket" id="ml-01">
+      <div class="ticket-header" onclick="toggle('ml-01')">
+        <span class="ticket-id">ML-01</span>
+        <div class="ticket-title-block">
+          <div class="ticket-title">Liver Condition: Debug & Wire Missing Model into Pipeline</div>
+          <div class="ticket-meta">
+            <span class="tag tag-ml">ML Layer</span>
+            <span class="priority-badge badge-p0">P0</span>
+            <span class="impact-tag impact-critical">0% top-1 · 0% top-3 across all layers</span>
+            <span class="effort-tag">Effort: Medium (0.5–1 day)</span>
+          </div>
+        </div>
+        <span class="chevron">›</span>
+      </div>
+      <div class="ticket-body">
+        <div class="body-grid">
+          <div>
+            <div class="section">
+              <h4>Context</h4>
+              <p>Liver disease has 41 positive profiles in the benchmark cohort, yet scores <strong>0% top-1 and 0% top-3 across every layer</strong> — ML, Bayesian, and KNN. This is the only condition with complete zero coverage. The eval reports reference <em>"liver_panel"</em> as a KNN lab group, but the condition ID <code>liver_disease</code> appears absent from <code>CONDITION_IDS</code> in <code>model_runner.py</code>. Either the model was never registered, the condition key is mismatched, or a training artifact is missing. Until fixed, a common and clinically relevant condition is silently never suggested to users.</p>
+              <div class="callout callout-red">
+                <strong>Root cause hypothesis:</strong> Condition key mismatch between synthetic cohort generator and <code>CONDITION_IDS</code> registry, or liver model pkl file not deployed. Scoring runs without error but returns 0 because the condition is never scored.
+              </div>
+            </div>
+
+            <div class="section">
+              <h4>Relevant files</h4>
+              <div class="files-list">
+                <span class="code-ref">models_normalized/model_runner.py</span>
+                <span class="code-ref">models/predict.py</span>
+                <span class="code-ref">evals/cohort_generator_v2_latent.py</span>
+                <span class="code-ref">evals/cohort/profiles_v3_three_layer.json</span>
+                <span class="code-ref">evals/run_layer1_eval.py</span>
+                <span class="code-ref">evals/pipeline/knn_condition_reranker.py</span>
+              </div>
+            </div>
+
+            <div class="section">
+              <h4>Where to start</h4>
+              <ul class="checklist start">
+                <li>Print <code>CONDITION_IDS</code> from <code>model_runner.py</code> — confirm whether <code>liver_disease</code> or a variant is present</li>
+                <li>Search <code>models_normalized/</code> and <code>models/</code> for a liver pkl or training script</li>
+                <li>Check <code>evals/cohort_generator_v2_latent.py</code> to see what condition key is used when generating liver profiles</li>
+                <li>If model exists but key mismatches, add alias in runner; if model is missing, create a simple LR using NHANES lab markers (ALT, AST, ALP, GGT, bilirubin) as features</li>
+                <li>Re-run <code>evals/run_layer1_eval.py</code> and confirm liver top-3 &gt; 50%</li>
+              </ul>
+            </div>
+          </div>
+
+          <div>
+            <div class="section">
+              <h4>Current metrics</h4>
+              <div class="metric-row"><span class="metric-name">ML Top-1</span><span class="metric-val cell-bad">0.0%</span></div>
+              <div class="metric-row"><span class="metric-name">ML Top-3</span><span class="metric-val cell-bad">0.0%</span></div>
+              <div class="metric-row"><span class="metric-name">Bayesian Top-3</span><span class="metric-val cell-bad">0.0%</span></div>
+              <div class="metric-row"><span class="metric-name">Final Top-3</span><span class="metric-val cell-bad">0.0%</span></div>
+              <div class="metric-row"><span class="metric-name">Profiles in cohort</span><span class="metric-val">41</span></div>
+            </div>
+
+            <div class="section">
+              <h4>Definition of Done</h4>
+              <ul class="checklist dod">
+                <li>Liver condition key is present and resolves in <code>CONDITION_IDS</code></li>
+                <li>ML layer scores liver profiles (non-zero scores produced)</li>
+                <li>ML Top-3 ≥ 40% on liver-positive cohort subset</li>
+                <li>Bayesian questions cover at least 2 liver-specific signals (jaundice, RUQ pain, alcohol use, fatigue + nausea combo)</li>
+                <li>KNN lab group <code>liver_panel</code> correctly fires for liver neighbors</li>
+                <li>Full layer eval re-run confirms no regression on other conditions</li>
+              </ul>
+            </div>
+
+            <div class="best-practice">
+              <div class="bp-label">Industry best practice</div>
+              <p>Clinical decision support systems (Epic, Optum CDS) maintain a <em>condition registry</em> with explicit model IDs, version tags, and fallback rules. Any condition with a registered cohort but no scoring model triggers a CI alert. Add a <code>pytest</code> check that asserts every condition in <code>CONDITION_IDS</code> has a corresponding model artifact at startup.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── Ticket ML-02 ── -->
+    <div class="ticket" id="ml-02">
+      <div class="ticket-header" onclick="toggle('ml-02')">
+        <span class="ticket-id">ML-02</span>
+        <div class="ticket-title-block">
+          <div class="ticket-title">Perimenopause & Anemia: Remove Gender Bias, Lift Model Ceiling to Enable Female-Condition Rankings</div>
+          <div class="ticket-meta">
+            <span class="tag tag-ml">ML Layer</span>
+            <span class="priority-badge badge-p0">P0</span>
+            <span class="impact-tag impact-critical">Perimenopause 0% top-1 all layers · Anemia 10% ML</span>
+            <span class="effort-tag">Effort: High (full day)</span>
+          </div>
+        </div>
+        <span class="chevron">›</span>
+      </div>
+      <div class="ticket-body">
+        <div class="body-grid">
+          <div>
+            <div class="section">
+              <h4>Context</h4>
+              <p>Two interlocked problems make female-specific conditions undetectable:</p>
+              <p style="margin-top:10px"><strong>1. Anemia LR gender_female coefficient:</strong> v1 had +2.36, v3 reduced to +1.58 via L2 regularisation (C=0.05), but this weakens all features simultaneously — top-1 dropped from 32% (v2) to 10% (v3). The real fix is removing <code>gender_female</code> entirely and replacing it with reproductive-specific NHANES features: <code>rhq031</code> (regular periods), <code>rhq060</code> (age at last period), <code>rhd143</code> (pregnancy status).</p>
+              <p style="margin-top:10px"><strong>2. Perimenopause GBM model ceiling:</strong> The gradient-boosted model's maximum output score is capped at 0.40 by the probability calibration layer. Iron deficiency (female baseline ~0.63), anemia, and thyroid all outscore perimenopause by design — the condition is structurally unreachable in ranking. It requires retraining with a model that can produce probabilities in the full [0, 1] range.</p>
+              <div class="callout callout-orange">
+                <strong>Cascading effect:</strong> Until perimenopause can rank above iron deficiency, every female 35–55 with fatigue + cycle changes will receive an iron or thyroid recommendation instead of perimenopause. This is the most medically-inaccurate output pattern in the system.
+              </div>
+            </div>
+
+            <div class="section">
+              <h4>Relevant files</h4>
+              <div class="files-list">
+                <span class="code-ref">models_normalized/model_runner.py</span>
+                <span class="code-ref">models/anemia_combined_model.py</span>
+                <span class="code-ref">models/inference_preprocessor.py</span>
+                <span class="code-ref">models/questionnaire_to_model_features.py</span>
+                <span class="code-ref">evals/cohort/profiles_v3_three_layer.json</span>
+                <span class="code-ref">evals/run_layer1_eval.py</span>
+              </div>
+            </div>
+
+            <div class="section">
+              <h4>Where to start</h4>
+              <ul class="checklist start">
+                <li>In anemia model training: drop <code>gender_female</code> feature, add <code>rhq031</code>, <code>rhq060</code>, <code>rhd143</code>; retrain with default C=1.0 (restore coefficient strength)</li>
+                <li>Validate: female anemia profiles score ≥ 0.55, male anemia profiles still score ≥ 0.45, non-anemia females do not inflate</li>
+                <li>For perimenopause: inspect <code>CalibratedClassifierCV</code> or Platt scaling call — find where the [0, 0.40] clamp comes from; try <code>isotonic</code> calibration instead of <code>sigmoid</code> or remove post-hoc calibration entirely</li>
+                <li>If calibration is the ceiling: retrain as RF (not GBM) — RFs with balanced class weights produce wider probability spread on small-class conditions</li>
+                <li>Add perimenopause vs. anemia discrimination test to eval: 68 peri profiles should show peri ranked above anemia for females 35-55</li>
+              </ul>
+            </div>
+          </div>
+
+          <div>
+            <div class="section">
+              <h4>Current metrics</h4>
+              <div class="metric-row"><span class="metric-name">Perimenopause Final Top-1</span><span class="metric-val cell-bad">0.0%</span></div>
+              <div class="metric-row"><span class="metric-name">Perimenopause Final Top-3</span><span class="metric-val cell-bad">13.2%</span></div>
+              <div class="metric-row"><span class="metric-name">Anemia ML Top-1</span><span class="metric-val cell-bad">10.0%</span></div>
+              <div class="metric-row"><span class="metric-name">Anemia gender_female coeff</span><span class="metric-val cell-warn">+1.58</span></div>
+              <div class="metric-row"><span class="metric-name">Peri model max score</span><span class="metric-val cell-bad">0.40</span></div>
+              <div class="metric-row"><span class="metric-name">Iron def female floor</span><span class="metric-val cell-bad">0.63</span></div>
+            </div>
+
+            <div class="section">
+              <h4>Definition of Done</h4>
+              <ul class="checklist dod">
+                <li>Anemia model has no <code>gender_female</code> feature; reproductive NHANES proxies used instead</li>
+                <li>Anemia ML Top-1 ≥ 25% on anemia-positive cohort</li>
+                <li>Perimenopause model max output ≥ 0.70 (no calibration ceiling below iron_def baseline)</li>
+                <li>Perimenopause ML Top-3 ≥ 30% (up from 0%)</li>
+                <li>No regression on male-condition rankings (hepatitis, kidney)</li>
+                <li>Female profiles with strong cycle-change features rank peri in top-2 more than 40% of the time</li>
+              </ul>
+            </div>
+
+            <div class="best-practice">
+              <div class="bp-label">Industry best practice</div>
+              <p>Health ML fairness audits (e.g., Google Health's CheXpert study, NHS AI Lab guidelines) require <em>disaggregated evaluation by sex</em> before deployment. Add a <code>run_layer1_eval.py --stratify-by gender</code> flag so female-condition ranking is tracked as a first-class metric in every eval run.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── Ticket ML-03 ── -->
+    <div class="ticket" id="ml-03">
+      <div class="ticket-header" onclick="toggle('ml-03')">
+        <span class="ticket-id">ML-03</span>
+        <div class="ticket-title-block">
+          <div class="ticket-title">Sleep Disorder: Diagnose & Fix Bayesian Regression (−34pp Top-1 After Update)</div>
+          <div class="ticket-meta">
+            <span class="tag tag-ml">ML Layer</span>
+            <span class="tag tag-bayes">Bayesian</span>
+            <span class="priority-badge badge-p0">P0</span>
+            <span class="impact-tag impact-critical">32.9% ML Top-1 → 19.5% after Bayesian</span>
+            <span class="effort-tag">Effort: Medium (0.5–1 day)</span>
+          </div>
+        </div>
+        <span class="chevron">›</span>
+      </div>
+      <div class="ticket-body">
+        <div class="body-grid">
+          <div>
+            <div class="section">
+              <h4>Context</h4>
+              <p>Sleep disorder is the only condition where the Bayesian question layer actively <em>degrades</em> performance: ML Top-1 is 32.9%, but after Bayesian update it falls to 19.5% (−13.4pp). Top-3 drops from 90.2% to 56.1% (−34.1pp). This is a severe regression caused by the Bayesian questions providing <em>misleading evidence</em> — sleep-related questions likely fire for conditions that share the fatigue phenotype (thyroid, anemia, inflammation), pulling probability mass away from sleep disorder when it should be reinforced.</p>
+              <p style="margin-top:10px">Two hypotheses: (A) sleep questions have high likelihood ratios for <em>other</em> conditions, re-ranking them above sleep disorder; or (B) the prior for sleep disorder is set too low, so even mildly positive answers collapse the posterior. The 13 low-value questions flagged in evals include none from sleep disorder, but that does not mean sleep questions are well-calibrated.</p>
+              <div class="callout callout-red">
+                <strong>Metric:</strong> Bayesian Brier score improved overall (+0.0446 delta), but this masks sleep disorder's per-condition regression. Add per-condition Bayesian calibration tracking.
+              </div>
+            </div>
+
+            <div class="section">
+              <h4>Relevant files</h4>
+              <div class="files-list">
+                <span class="code-ref">frontend/app/api/bayesian-questions/route.ts</span>
+                <span class="code-ref">frontend/app/api/bayesian-update/route.ts</span>
+                <span class="code-ref">evals/run_bayesian_eval.py</span>
+                <span class="code-ref">evals/reports/bayesian_20260325_231751.md</span>
+                <span class="code-ref">evals/results/bayesian_20260325_231751.json</span>
+                <span class="code-ref">models_normalized/model_runner.py</span>
+              </div>
+            </div>
+
+            <div class="section">
+              <h4>Where to start</h4>
+              <ul class="checklist start">
+                <li>Run <code>evals/run_bayesian_eval.py</code> with per-condition posterior logging enabled; inspect P(sleep_disorder | answers) before vs. after for 10 sleep-positive profiles</li>
+                <li>Check sleep question likelihood ratios: which answers have LR &gt; 1.5 for <em>other</em> conditions (thyroid, inflammation)? These are contaminating the posterior</li>
+                <li>Check the sleep disorder prior — if it's below the cohort base rate (~14%), raise it to match prevalence in a fatigue-presenting population (~25-30%)</li>
+                <li>Test: set sleep questions to <em>sleep-only</em> conditioning (don't update priors for other conditions when sleep questions answered) — measure if regression resolves</li>
+                <li>Add per-condition top-1 tracking to Bayesian eval so future regressions are caught automatically</li>
+              </ul>
+            </div>
+          </div>
+
+          <div>
+            <div class="section">
+              <h4>Current metrics (sleep disorder)</h4>
+              <div class="metric-row"><span class="metric-name">ML Top-1</span><span class="metric-val cell-warn">32.9%</span></div>
+              <div class="metric-row"><span class="metric-name">ML Top-3</span><span class="metric-val cell-ok">90.2%</span></div>
+              <div class="metric-row"><span class="metric-name">Bayesian Top-1</span><span class="metric-val cell-bad">19.5%</span></div>
+              <div class="metric-row"><span class="metric-name">Bayesian Top-3</span><span class="metric-val cell-warn">56.1%</span></div>
+              <div class="metric-row"><span class="metric-name">Δ Top-1</span><span class="metric-val cell-bad">−13.4pp</span></div>
+              <div class="metric-row"><span class="metric-name">Δ Top-3</span><span class="metric-val cell-bad">−34.1pp</span></div>
+            </div>
+
+            <div class="section">
+              <h4>Definition of Done</h4>
+              <ul class="checklist dod">
+                <li>Per-condition Bayesian tracking added to eval pipeline</li>
+                <li>Root cause of sleep disorder posterior collapse documented</li>
+                <li>Sleep disorder Bayesian Top-1 ≥ ML Top-1 (≥ 32.9%) — at minimum, Bayesian must not hurt</li>
+                <li>Sleep disorder Bayesian Top-3 ≥ 80% (restoring previous advantage)</li>
+                <li>No regression on other conditions' Bayesian gains</li>
+                <li>Low-contamination sleep questions identified and likelihood ratios recalibrated or isolated</li>
+              </ul>
+            </div>
+
+            <div class="best-practice">
+              <div class="bp-label">Industry best practice</div>
+              <p>Bayesian clinical QA systems (e.g., Isabel DDx, DxPlain) validate each question's <em>specificity per condition</em> — a question should increase the target condition's rank, not competitors'. Implement a "question specificity score": for each Q, measure mean posterior lift for the target condition vs. lift for all others. Flag any question with negative specificity.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div><!-- /P0 group -->
+
+  <!-- ══════════════════════════════════
+       P1 · HIGH
+  ═══════════════════════════════════ -->
+  <div class="priority-group">
+    <div class="priority-header p1-header">
+      <span class="priority-badge badge-p1">P1</span>
+      <span class="priority-label">High — Significant accuracy or user-experience blockers</span>
+      <span class="priority-desc">Addressable within the existing architecture; high portfolio impact.</span>
+      <span class="priority-count">4 tickets</span>
+    </div>
+
+    <!-- ── Ticket ML-04 ── -->
+    <div class="ticket" id="ml-04">
+      <div class="ticket-header" onclick="toggle('ml-04')">
+        <span class="ticket-id">ML-04</span>
+        <div class="ticket-title-block">
+          <div class="ticket-title">Threshold Calibration & Healthy-User Suppression: Cut Over-Alert Rate from 79% to &lt;20%</div>
+          <div class="ticket-meta">
+            <span class="tag tag-ml">ML Layer</span>
+            <span class="priority-badge badge-p1">P1</span>
+            <span class="impact-tag impact-high">79% healthy users get false positives</span>
+            <span class="effort-tag">Effort: Low–Medium (4–6 hrs)</span>
+          </div>
+        </div>
+        <span class="chevron">›</span>
+      </div>
+      <div class="ticket-body">
+        <div class="body-grid">
+          <div>
+            <div class="section">
+              <h4>Context</h4>
+              <p>Three models fire on baseline fatigue for almost any user who fills out the questionnaire: <strong>hypothyroidism</strong> (46.5% flag rate, mean score 0.662, threshold 0.55 — below population mean), <strong>sleep disorder</strong> (29.9% flag rate, mean score 0.755), and <strong>prediabetes</strong> (41.8% flag rate, 3.5% precision). These are population-level screening models deployed in a personal symptom tracker without recalibration — they were designed to flag anyone at epidemiological risk, not to discriminate individual-level pathology.</p>
+              <p style="margin-top:10px">Current normalisation uses <code>RANK_NORMALIZE = True</code> with mean-floor normalisation, which improved healthy over-alert from 93.3% → 79.2%, but plateaued. The remaining 79% requires either (a) threshold raises above population means, or (b) pre-score gates that block scoring unless condition-specific anchor symptoms are present.</p>
+            </div>
+
+            <div class="section">
+              <h4>Per-condition threshold action plan</h4>
+              <table class="inline-table">
+                <thead><tr><th>Condition</th><th>Current threshold</th><th>Pop. mean</th><th>Flag rate</th><th>Proposed action</th></tr></thead>
+                <tbody>
+                  <tr><td>hypothyroidism</td><td>0.55</td><td>0.662</td><td>46.5%</td><td>Raise threshold to ≥0.72 OR add gate: must have cold intolerance + weight gain + bradycardia proxy</td></tr>
+                  <tr><td>sleep_disorder</td><td>~0.55</td><td>0.755</td><td>29.9%</td><td>Raise threshold to ≥0.85 OR require objective sleep proxy (nocturia ≥3/night, ESS score)</td></tr>
+                  <tr><td>prediabetes</td><td>0.40</td><td>~0.60</td><td>41.8%</td><td>Add gate: BMI ≥25 AND (family history OR sedentary lifestyle) before scoring</td></tr>
+                  <tr><td>electrolytes</td><td>0.46</td><td>high</td><td>34.3%</td><td>Add gate: must have cramps + palpitations + recent intense exercise or heat exposure</td></tr>
+                </tbody>
+              </table>
+
+              <div class="section" style="margin-top:16px">
+                <h4>Relevant files</h4>
+                <div class="files-list">
+                  <span class="code-ref">models_normalized/model_runner.py</span>
+                  <span class="code-ref">frontend/app/api/score/route.ts</span>
+                  <span class="code-ref">frontend/app/api/analyze/route.ts</span>
+                  <span class="code-ref">evals/run_layer1_eval.py</span>
+                  <span class="code-ref">evals/cohort/optimization_report_v3.md</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <div class="section">
+              <h4>Where to start</h4>
+              <ul class="checklist start">
+                <li>In <code>model_runner.py</code>, locate <code>FILTER_CRITERIA</code> dict — this controls per-model thresholds</li>
+                <li>For each of the 4 models above: raise threshold to 1 SD above population mean as a first pass</li>
+                <li>Add a <code>_pre_score_gate(profile, condition)</code> function that returns False if anchor symptoms absent; call before scoring to short-circuit</li>
+                <li>Re-run layer1 eval — target: over-alert rate &lt; 25% on healthy profiles subset</li>
+                <li>Add "healthy suppression" rule: if top-3 conditions all score below 0.50 posterior after Bayesian, return "No significant risk flags" instead of a ranked list</li>
+              </ul>
+            </div>
+
+            <div class="section">
+              <h4>Definition of Done</h4>
+              <ul class="checklist dod">
+                <li>Over-alert rate on healthy cohort (30 profiles) reduced from 79% to &lt; 25%</li>
+                <li>Thyroid flag rate across full cohort &lt; 20% (from 46.5%)</li>
+                <li>Prediabetes flag rate &lt; 20% (from 41.8%)</li>
+                <li>Top-1 accuracy for thyroid, prediabetes, sleep not reduced below current baseline (79.4%, 18.6%, 19.5%)</li>
+                <li>Healthy suppression rule in place with documented threshold</li>
+                <li>Threshold values and gate logic added to EVAL_FRAMEWORK.md as permanent reference</li>
+              </ul>
+            </div>
+
+            <div class="best-practice">
+              <div class="bp-label">Industry best practice</div>
+              <p>Clinical risk stratification tools (Framingham, QRISK) calibrate operating thresholds per <em>clinical action threshold</em>, not model output ranges. The threshold should be set where the expected benefit of detection outweighs the cost of a false positive workup. For a consumer app, this means high specificity (few false alarms) is more important than high sensitivity.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── Ticket ML-05 ── -->
+    <div class="ticket" id="ml-05">
+      <div class="ticket-header" onclick="toggle('ml-05')">
+        <span class="ticket-id">ML-05</span>
+        <div class="ticket-title-block">
+          <div class="ticket-title">Hard-Negative Retraining: Kidney, Prediabetes & Inflammation Model Discrimination Overhaul</div>
+          <div class="ticket-meta">
+            <span class="tag tag-ml">ML Layer</span>
+            <span class="priority-badge badge-p1">P1</span>
+            <span class="impact-tag impact-high">Kidney 0% top-1 · Inflammation worst top-3 (39%)</span>
+            <span class="effort-tag">Effort: High (full day)</span>
+          </div>
+        </div>
+        <span class="chevron">›</span>
+      </div>
+      <div class="ticket-body">
+        <div class="body-grid">
+          <div>
+            <div class="section">
+              <h4>Context</h4>
+              <p>Three models share the same structural problem: they were trained on class-imbalanced NHANES data with <em>generic fatigue as a shared feature</em>, making them unable to discriminate the target condition from other fatigue causes present in our app population.</p>
+              <p style="margin-top:10px"><strong>Kidney disease (0% top-1):</strong> Nocturia and general fatigue are present in thyroid, sleep disorder, and prediabetes profiles. The model fires weakly (recall 27% at threshold 0.25). Needs hard negatives: fatigue-only profiles, sleep-only profiles, and thyroid profiles must all score &lt; 0.30.</p>
+              <p style="margin-top:10px"><strong>Inflammation (15% top-1, 39% top-3):</strong> The model intercept is inflated to 0.897 due to <code>class_weight='balanced'</code> training — this creates a high baseline that compresses the effective score range. The BMI-driven feature creates systematic over-scoring for any overweight user. Calibration with <code>CalibratedClassifierCV(method='isotonic')</code> post-training would compress the range.</p>
+              <p style="margin-top:10px"><strong>Prediabetes (2.3% top-1):</strong> The metabolic cluster (prediabetes, inflammation, sleep disorder, kidney) is too similar in symptom space. The model lacks fasting glucose or A1C as features. Add a clinical anchor gate: BMI × family_history interaction term.</p>
+            </div>
+
+            <div class="section">
+              <h4>Relevant files</h4>
+              <div class="files-list">
+                <span class="code-ref">models_normalized/model_runner.py</span>
+                <span class="code-ref">models/kidney_predict.py</span>
+                <span class="code-ref">models/questionnaire_to_model_features.py</span>
+                <span class="code-ref">models_normalized/train_iron_deficiency_v4.py</span>
+                <span class="code-ref">evals/cohort_generator_v2_latent.py</span>
+                <span class="code-ref">evals/run_layer1_eval.py</span>
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <div class="section">
+              <h4>Where to start</h4>
+              <ul class="checklist start">
+                <li>For kidney: identify the 5 NHANES features with highest discriminative power vs. fatigue-only controls (proteinuria, nocturia frequency, eGFR proxy, uric acid, hypertension); retrain LR adding these; include 200 hard-negative fatigue profiles in training set</li>
+                <li>For inflammation: remove <code>class_weight='balanced'</code> from training; wrap in <code>CalibratedClassifierCV(cv=5, method='isotonic')</code>; add BMI × CRP interaction where available; test male/female waist cutoffs as sex-specific gates</li>
+                <li>For prediabetes: add <code>BMI × family_history_diabetes</code> interaction feature; add optional fasting glucose field to quiz (if answered, gate the model); consider XGBoost with scale_pos_weight instead of LR</li>
+                <li>After each retrain, run evaluation with hard-negative profiles: 100 fatigue-only controls should score &lt; 0.35 for all three models</li>
+              </ul>
+            </div>
+
+            <div class="section">
+              <h4>Definition of Done</h4>
+              <ul class="checklist dod">
+                <li>Kidney Top-1 ≥ 20% (from 0%), Top-3 ≥ 60% (from 23.3%)</li>
+                <li>Inflammation Top-3 ≥ 55% (from 39.1%); intercept reduced below 0.5</li>
+                <li>Prediabetes Top-1 ≥ 15% (from 2.3%); flag rate &lt; 20% (from 41.8%)</li>
+                <li>All three models: &lt; 5% false positive rate on fatigue-only hard negative profiles</li>
+                <li>Retraining script added to <code>models_normalized/</code> with reproducible seed and documented feature set</li>
+                <li>Per-model calibration plot (reliability diagram) added to eval output</li>
+              </ul>
+            </div>
+
+            <div class="best-practice">
+              <div class="bp-label">Industry best practice</div>
+              <p>Hard-negative mining is standard in medical NLP and radiology AI (e.g., CheXpert, RadBERT) — include "confuser" cases in training. For structured clinical ML, the equivalent is deliberately including profiles where the condition is <em>ruled out</em> but shares 80%+ of presenting symptoms. MIMIC-III-based studies show 20–30% hard negatives in training reduces false positive rate by 40% without recall loss when combined with appropriate calibration.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── Ticket KNN-01 ── -->
+    <div class="ticket" id="knn-01">
+      <div class="ticket-header" onclick="toggle('knn-01')">
+        <span class="ticket-id">KNN-01</span>
+        <div class="ticket-title-block">
+          <div class="ticket-title">KNN Rerank Experiment: Unfreeze Top-1 Under High-Confidence Conditions & Benchmark</div>
+          <div class="ticket-meta">
+            <span class="tag tag-knn">KNN Layer</span>
+            <span class="priority-badge badge-p1">P1</span>
+            <span class="impact-tag impact-high">Potential +10–15pp top-1 unlock</span>
+            <span class="effort-tag">Effort: Medium (5–7 hrs)</span>
+          </div>
+        </div>
+        <span class="chevron">›</span>
+      </div>
+      <div class="ticket-body">
+        <div class="body-grid">
+          <div>
+            <div class="section">
+              <h4>Context</h4>
+              <p>The current KNN implementation uses a <strong>frozen top-1 rule</strong>: the condition ranked first by the Bayesian layer can never be displaced by KNN neighbourhood evidence. This was a conservative safety choice to prevent noisy neighbours from overriding good Bayesian posteriors. However, the eval data shows this is leaving value on the table — particularly for kidney disease (0% ML top-1, Bayesian rescues to 46.5%) and prediabetes (18.6% final top-1 but 86.0% top-3).</p>
+              <p style="margin-top:10px">The experiment is: allow KNN to displace the top-1 slot when (a) the top-1 Bayesian posterior is below a confidence threshold (e.g., &lt; 0.60), AND (b) the KNN neighbourhood shows ≥ 70% support for a different condition, AND (c) the displaced condition's lab group is consistently abnormal in the neighbourhood. Measure the trade-off: how often does this improve vs. worsen top-1?</p>
+              <div class="callout callout-blue">
+                <strong>Three strategies to A/B test:</strong> (1) Freeze top-1 always (current), (2) Unfreeze top-1 for low-confidence Bayesian posteriors (&lt;0.60), (3) Unfreeze top-1 fully and rely on neighbourhood confidence alone.
+              </div>
+            </div>
+
+            <div class="section">
+              <h4>Relevant files</h4>
+              <div class="files-list">
+                <span class="code-ref">evals/pipeline/knn_condition_reranker.py</span>
+                <span class="code-ref">evals/run_knn_condition_rerank_eval.py</span>
+                <span class="code-ref">evals/run_knn_layer_eval.py</span>
+                <span class="code-ref">evals/run_layered_knn_report.py</span>
+                <span class="code-ref">evals/cohort/knn_overlap_pack.json</span>
+                <span class="code-ref">evals/cohort/knn_liver_pack.json</span>
+                <span class="code-ref">frontend/app/api/deep-analyze/route.ts</span>
+              </div>
+            </div>
+
+            <div class="section">
+              <h4>Where to start</h4>
+              <ul class="checklist start">
+                <li>In <code>knn_condition_reranker.py</code>, find the frozen top-1 guard — add a <code>confidence_threshold</code> parameter (default 1.0 = always frozen)</li>
+                <li>Run eval with confidence_threshold = [1.0, 0.75, 0.60, 0.50] — log top-1 accuracy and false-displacement rate for each</li>
+                <li>Define false-displacement: top-1 was correct before KNN, KNN displaced it with a wrong condition</li>
+                <li>Plot accuracy vs. false-displacement rate as an ROC-style trade-off curve — pick the threshold that maximises net gain</li>
+                <li>If net gain is positive, wire the winning threshold into <code>deep-analyze/route.ts</code></li>
+              </ul>
+            </div>
+          </div>
+
+          <div>
+            <div class="section">
+              <h4>Current KNN metrics (22-profile pack)</h4>
+              <div class="metric-row"><span class="metric-name">Hit rate (ML only)</span><span class="metric-val cell-warn">63.6%</span></div>
+              <div class="metric-row"><span class="metric-name">Hit rate (+ Bayesian)</span><span class="metric-val cell-warn">59.1%</span></div>
+              <div class="metric-row"><span class="metric-name">Hit rate (+ KNN)</span><span class="metric-val cell-ok">77.3%</span></div>
+              <div class="metric-row"><span class="metric-name">Exact coverage (+ KNN)</span><span class="metric-val cell-warn">40.9%</span></div>
+              <div class="metric-row"><span class="metric-name">Recall gain (KNN)</span><span class="metric-val cell-ok">+17.4pp</span></div>
+              <div class="metric-row"><span class="metric-name">Precision loss (KNN)</span><span class="metric-val cell-warn">−9.9pp</span></div>
+            </div>
+
+            <div class="section">
+              <h4>Definition of Done</h4>
+              <ul class="checklist dod">
+                <li>A/B eval run for all 3 freeze strategies documented with per-condition breakdown</li>
+                <li>Trade-off curve (accuracy vs. false-displacement) produced and saved to <code>evals/reports/</code></li>
+                <li>If unfreeze improves net top-1: winning threshold added to <code>knn_condition_reranker.py</code> with docstring explaining the calibration</li>
+                <li>Precision loss from KNN &lt; 5pp (vs. current 9.9pp loss)</li>
+                <li>KNN pipeline update reflected in <code>deep-analyze/route.ts</code></li>
+                <li>Eval report added to <code>evals/reports/</code> with methodology section</li>
+              </ul>
+            </div>
+
+            <div class="best-practice">
+              <div class="bp-label">Industry best practice</div>
+              <p>KNN reranking with confidence gating is used in Amazon Health's symptom checker and HealthTap's diagnostic assistant. The key insight from production systems: KNN is most valuable when the primary ranker's confidence is <em>spread across multiple conditions</em> (entropy &gt; threshold), not when it's confidently wrong. Measure posterior entropy as the gate criterion instead of raw top-1 score for better calibration.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── Ticket LLM-01 ── -->
+    <div class="ticket" id="llm-01">
+      <div class="ticket-header" onclick="toggle('llm-01')">
+        <span class="ticket-id">LLM-01</span>
+        <div class="ticket-title-block">
+          <div class="ticket-title">MedGemma Pipeline Hardening: Fix 0% Live Parse Rate, Schema Gaps & Output Quality</div>
+          <div class="ticket-meta">
+            <span class="tag tag-llm">LLM Layer</span>
+            <span class="priority-badge badge-p1">P1</span>
+            <span class="impact-tag impact-high">0% live parse success · Schema missing recovery_outlook</span>
+            <span class="effort-tag">Effort: Medium (6–8 hrs)</span>
+          </div>
+        </div>
+        <span class="chevron">›</span>
+      </div>
+      <div class="ticket-body">
+        <div class="body-grid">
+          <div>
+            <div class="section">
+              <h4>Context</h4>
+              <p>The LLM layer (MedGemma via Modal + Groq safety rewrite) has <strong>0% parse success on the most recent live 10-case batch</strong> due to HTTP/schema errors before content evaluation. Prior archived runs achieved 100% parse success, so this is a regression, not a fundamental design flaw.</p>
+              <p style="margin-top:10px">Three distinct failure classes:</p>
+              <p style="margin-top:6px"><strong>(1) Infrastructure:</strong> Modal MedGemma endpoint intermittently unavailable; Groq safety-rewrite hitting rate limits on batch runs; no retry / backoff logic.</p>
+              <p style="margin-top:6px"><strong>(2) Schema:</strong> Current live response schema missing <code>recovery_outlook</code> field (present in older runs, now gone); 10% of responses missing a required condition ID (hallucinated or absent).</p>
+              <p style="margin-top:6px"><strong>(3) Output quality:</strong> Symptom summaries return narrative prose (failing structured check), doctor recommendations are generic without condition-specific rationale, and lab recommendations are not linked per-condition.</p>
+              <div class="callout callout-orange">
+                <strong>Qualitative failure taxonomy from 16 curated cases:</strong> 37.5% wrong condition ranked first (upstream ML issue), 25% sparse data with high confidence (calibration), 18.8% overclaiming from weak evidence, 12.5% vague next steps.
+              </div>
+            </div>
+
+            <div class="section">
+              <h4>Relevant files</h4>
+              <div class="files-list">
+                <span class="code-ref">frontend/app/api/deep-analyze/route.ts</span>
+                <span class="code-ref">frontend/app/api/safety-rewrite/route.ts</span>
+                <span class="code-ref">deployment/modal_medgemma.py</span>
+                <span class="code-ref">evals/pipeline/medgemma_adapter.py</span>
+                <span class="code-ref">evals/pipeline/response_parser.py</span>
+                <span class="code-ref">evals/run_llm_layer_eval.py</span>
+                <span class="code-ref">evals/reports/llm_layer_combined_sections_20260326_161138.md</span>
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <div class="section">
+              <h4>Where to start</h4>
+              <ul class="checklist start">
+                <li>In <code>safety-rewrite/route.ts</code>: add exponential backoff with jitter (3 retries, 1s/2s/4s); add Groq rate limit header parsing to pause on 429</li>
+                <li>In <code>deep-analyze/route.ts</code>: add <code>recovery_outlook</code> field to response schema; add fallback to Claude claude-haiku-4-5-20251001 if Modal returns non-200</li>
+                <li>In MedGemma system prompt: replace "summarise the user's symptoms" with "list exactly 3–5 bullet points describing the user's key symptoms, each ≤ 15 words"</li>
+                <li>Add per-condition evidence linking: prompt should include "for each recommended test, state which condition it rules in or out"</li>
+                <li>Add allowlist enforcement: if generated condition IDs not in the system's <code>CONDITION_IDS</code>, strip them before returning (prevent hallucinated conditions)</li>
+                <li>Re-run <code>run_llm_layer_eval.py</code> on 10-profile batch and verify 100% parse success</li>
+              </ul>
+            </div>
+
+            <div class="section">
+              <h4>Definition of Done</h4>
+              <ul class="checklist dod">
+                <li>Live 10-case batch achieves 100% parse success (up from 0%)</li>
+                <li><code>recovery_outlook</code> field present and populated in all responses</li>
+                <li>Symptom summary structured check passes: ≥ 3 bullet points in ≥ 90% of responses</li>
+                <li>Condition ID hallucination rate = 0% (allowlist enforcement)</li>
+                <li>Groq rate limit handling: no hard failures on sequential 10+ request batches</li>
+                <li>Modal fallback logic in place with Claude fallback confirmed working</li>
+                <li>LLM eval manual review file updated with qualitative assessment of 10 new cases</li>
+              </ul>
+            </div>
+
+            <div class="best-practice">
+              <div class="bp-label">Industry best practice</div>
+              <p>Medical LLM wrappers in production (Epic Nebula, Nabla Copilot) use a <em>constrained decoding</em> approach: the model output is parsed against a strict JSON schema before being accepted; any deviation triggers a retry with an explicit correction prompt ("Your output was missing field X, please regenerate"). Implement schema-validated retry before falling back to a different model.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div><!-- /P1 group -->
+
+  <!-- ══════════════════════════════════
+       P2 · POLISH
+  ═══════════════════════════════════ -->
+  <div class="priority-group">
+    <div class="priority-header p2-header">
+      <span class="priority-badge badge-p2">P2</span>
+      <span class="priority-label">Polish — Portfolio impressiveness & system robustness</span>
+      <span class="priority-desc">Not blockers, but each adds a meaningful dimension to the portfolio story.</span>
+      <span class="priority-count">3 tickets</span>
+    </div>
+
+    <!-- ── Ticket KNN-02 ── -->
+    <div class="ticket" id="knn-02">
+      <div class="ticket-header" onclick="toggle('knn-02')">
+        <span class="ticket-id">KNN-02</span>
+        <div class="ticket-title-block">
+          <div class="ticket-title">KNN Feature Engineering: Weighted Multi-Space Similarity Beyond Cosine on Symptom Vectors</div>
+          <div class="ticket-meta">
+            <span class="tag tag-knn">KNN Layer</span>
+            <span class="priority-badge badge-p2">P2</span>
+            <span class="impact-tag impact-medium">Reduce false lab suggestions · +precision</span>
+            <span class="effort-tag">Effort: High (full day)</span>
+          </div>
+        </div>
+        <span class="chevron">›</span>
+      </div>
+      <div class="ticket-body">
+        <div class="body-grid">
+          <div>
+            <div class="section">
+              <h4>Context</h4>
+              <p>The current KNN finds the 50 most similar NHANES participants using cosine distance on a 10-dimensional symptom vector (fatigue, sleep, post_exertional_malaise, etc.). This has two known failure modes documented in the evals:</p>
+              <p style="margin-top:10px"><strong>(1) Neighbourhood skew:</strong> Liver profiles get neighbours with <code>glycemic</code> and <code>kidney</code> lab abnormalities (wrong), not <code>liver_panel</code> (correct), because the symptom space doesn't distinguish liver disease from metabolic syndrome.</p>
+              <p style="margin-top:10px"><strong>(2) Lab lift false positives:</strong> The 1.5× lift threshold surfaces noisy lab groups. For prediabetes, it correctly adds <code>glycemic</code> but also adds <code>kidney</code> and <code>lipids</code> unnecessarily (metabolic cluster contamination).</p>
+              <p style="margin-top:10px">Three improvements to explore: (A) add demographic weighting (age, sex, BMI) to the feature space with lower weight than clinical symptoms; (B) use Mahalanobis distance instead of cosine to account for feature covariance (fatigue and sleep are highly correlated — cosine double-counts them); (C) use separate KNN spaces per condition cluster (metabolic cluster: different space than thyroid/liver).</p>
+            </div>
+
+            <div class="section">
+              <h4>Relevant files</h4>
+              <div class="files-list">
+                <span class="code-ref">evals/pipeline/knn_condition_reranker.py</span>
+                <span class="code-ref">evals/run_knn_layer_eval.py</span>
+                <span class="code-ref">evals/cohort/knn_overlap_pack.json</span>
+                <span class="code-ref">evals/cohort/knn_liver_pack.json</span>
+                <span class="code-ref">evals/results/knn_layer_eval_full.json</span>
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <div class="section">
+              <h4>Where to start</h4>
+              <ul class="checklist start">
+                <li>Compute the feature covariance matrix for the 10-dim symptom vector across the 600-profile cohort; identify highly correlated pairs (fatigue ↔ post_exertional_malaise r=0.72 documented)</li>
+                <li>Implement Mahalanobis distance by computing the inverse covariance matrix; wrap as a drop-in replacement for cosine in the KNN search</li>
+                <li>Add age (±10yr bucket), sex, BMI quintile as additional features with 0.3× weight relative to symptom features</li>
+                <li>A/B: run both cosine and Mahalanobis on the knn_liver_pack.json — measure whether liver neighbours improve</li>
+                <li>Test lab lift threshold: try 1.8× and 2.0× instead of 1.5× and measure precision vs. recall trade-off</li>
+              </ul>
+            </div>
+
+            <div class="section">
+              <h4>Definition of Done</h4>
+              <ul class="checklist dod">
+                <li>Mahalanobis KNN implemented and benchmarked vs. cosine baseline</li>
+                <li>Liver-pack test shows liver_panel appearing in KNN lab suggestions for ≥ 70% of liver profiles (currently 0%)</li>
+                <li>KNN false lab group rate (wrong lab group for condition) reduced by ≥ 20%</li>
+                <li>Precision maintained (no worse than current −9.9pp vs. pure Bayesian)</li>
+                <li>Feature covariance matrix saved and documented in <code>evals/docs/</code></li>
+                <li>A/B comparison report in <code>evals/reports/</code></li>
+              </ul>
+            </div>
+
+            <div class="best-practice">
+              <div class="bp-label">Industry best practice</div>
+              <p>Clinical similarity engines (IBM Watson for Oncology, Flatiron Health's EHR matching) use <em>condition-stratified feature spaces</em> — different patient attributes are weighted differently depending on which condition is being investigated. For a lightweight implementation, this can be approximated with a Mahalanobis distance where the covariance matrix is condition-specific (estimated from NHANES stratified by condition label).</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── Ticket BAYES-01 ── -->
+    <div class="ticket" id="bayes-01">
+      <div class="ticket-header" onclick="toggle('bayes-01')">
+        <span class="ticket-id">BAYES-01</span>
+        <div class="ticket-title-block">
+          <div class="ticket-title">Bayesian Question Pruning & Specificity Scoring: Remove 13 Low-Value Questions</div>
+          <div class="ticket-meta">
+            <span class="tag tag-bayes">Bayesian</span>
+            <span class="priority-badge badge-p2">P2</span>
+            <span class="impact-tag impact-medium">Reduce user friction · fix negative-gain questions</span>
+            <span class="effort-tag">Effort: Low (3–4 hrs)</span>
+          </div>
+        </div>
+        <span class="chevron">›</span>
+      </div>
+      <div class="ticket-body">
+        <div class="body-grid">
+          <div>
+            <div class="section">
+              <h4>Context</h4>
+              <p>The Bayesian eval flagged 13 questions with information gain &lt; 0.02 bits. Two questions have <em>negative</em> information gain (they make the posterior worse after answering): <code>peri_q2b</code> (−0.0467 bits) and <code>peri_q5</code> (−0.0341 bits). Four electrolyte questions (<code>elec_q2</code>–<code>elec_q4</code>) contribute exactly 0.0 bits, and four inflammation questions (<code>inflam_q1</code>–<code>inflam_q4</code>) contribute 0.0 bits.</p>
+              <p style="margin-top:10px">These questions waste user time and — in the case of perimenopause — actively degrade accuracy. This also directly contributes to the sleep disorder Bayesian regression (ML-03): if inflammation questions fire 0 bits but pull posterior mass around, they may be cross-contaminating sleep disorder's probability.</p>
+              <p style="margin-top:10px">Additionally: the Bayesian layer is the biggest accuracy driver in the whole system (+21.9pp top-1). The question set should be treated as a first-class asset, with a <em>question ROI dashboard</em> that tracks information gain per question per condition after every eval run.</p>
+            </div>
+
+            <div class="section">
+              <h4>Relevant files</h4>
+              <div class="files-list">
+                <span class="code-ref">frontend/app/api/bayesian-questions/route.ts</span>
+                <span class="code-ref">frontend/app/api/bayesian-update/route.ts</span>
+                <span class="code-ref">evals/run_bayesian_eval.py</span>
+                <span class="code-ref">evals/reports/bayesian_20260325_231751.md</span>
+                <span class="code-ref">evals/results/bayesian_20260325_231751.json</span>
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <div class="section">
+              <h4>Questions to remove / replace</h4>
+              <table class="inline-table">
+                <thead><tr><th>Question ID</th><th>Condition</th><th>Info gain</th><th>Action</th></tr></thead>
+                <tbody>
+                  <tr><td>peri_q2b</td><td>Perimenopause</td><td>−0.047 bits</td><td>Remove; replace with menstrual cycle irregularity duration question</td></tr>
+                  <tr><td>peri_q5</td><td>Perimenopause</td><td>−0.034 bits</td><td>Remove; replace with vasomotor symptom frequency</td></tr>
+                  <tr><td>elec_q2–q4</td><td>Electrolytes</td><td>0.000 bits</td><td>Remove all 3; consider adding muscle cramp severity + palpitation frequency</td></tr>
+                  <tr><td>inflam_q1–q4</td><td>Inflammation</td><td>0.000 bits</td><td>Remove all 4; add BMI self-report + recent infection/illness question</td></tr>
+                  <tr><td>kidney_q4</td><td>Kidney</td><td>0.002 bits</td><td>Marginal; replace with nocturia frequency (≥3/night is highly specific)</td></tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="section">
+              <h4>Definition of Done</h4>
+              <ul class="checklist dod">
+                <li>All 13 flagged questions removed from question bank</li>
+                <li>Replacement questions added for perimenopause (2) and electrolytes (2)</li>
+                <li>Bayesian eval re-run shows no regression in overall Brier score improvement</li>
+                <li>Perimenopause Bayesian Top-3 improves (currently 13.2%)</li>
+                <li>Question information gain dashboard output added to Bayesian eval report</li>
+                <li>Sleep disorder Bayesian regression (ML-03) checked — if it improves after inflam questions removed, document the connection</li>
+              </ul>
+            </div>
+
+            <div class="best-practice">
+              <div class="bp-label">Industry best practice</div>
+              <p>Adaptive questionnaire systems (Mayo Clinic's symptom checker, Buoy Health) continuously retrain question weights using mutual information from incoming responses. Each question is assigned a <em>value of information (VOI)</em> score, and low-VOI questions are automatically flagged for human review every 30 days. Even without live retraining, maintaining an information gain leaderboard per question per condition — updated each eval run — creates this feedback loop manually.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── Ticket EVAL-01 ── -->
+    <div class="ticket" id="eval-01">
+      <div class="ticket-header" onclick="toggle('eval-01')">
+        <span class="ticket-id">EVAL-01</span>
+        <div class="ticket-title-block">
+          <div class="ticket-title">Eval Framework: Co-morbidity Cohort, Stratified Reporting & CI Integration</div>
+          <div class="ticket-meta">
+            <span class="tag tag-eval">Eval Infra</span>
+            <span class="priority-badge badge-p2">P2</span>
+            <span class="impact-tag impact-medium">Portfolio signal · catches regressions early</span>
+            <span class="effort-tag">Effort: Medium (6–8 hrs)</span>
+          </div>
+        </div>
+        <span class="chevron">›</span>
+      </div>
+      <div class="ticket-body">
+        <div class="body-grid">
+          <div>
+            <div class="section">
+              <h4>Context</h4>
+              <p>The current eval framework is strong — 600-profile synthetic cohort, per-layer tracking, per-condition breakdowns — but has three gaps that limit its value as a portfolio artefact and regression safety net:</p>
+              <p style="margin-top:10px"><strong>(1) No co-morbidity cohort:</strong> The 20 "edge case" co-morbid profiles in v3 are not systematically evaluated. Real users often have anemia + perimenopause, or prediabetes + inflammation, or thyroid + sleep disorder. The system's ability to handle co-morbid profiles — where two conditions should both appear in top-3 — is unmeasured.</p>
+              <p style="margin-top:10px"><strong>(2) No stratified reporting:</strong> Top-1 accuracy is not broken out by sex, age group, BMI group, or quiz path (symptom-only vs. with labs). The gender bias in anemia and perimenopause was discovered manually, not automatically.</p>
+              <p style="margin-top:10px"><strong>(3) No CI gate:</strong> Eval runs are manual. A regression (like the Bayesian sleep disorder −34pp) could be introduced undetected. A simple <code>pytest</code> or <code>make eval</code> check with hard thresholds per condition would catch this automatically.</p>
+            </div>
+
+            <div class="section">
+              <h4>Relevant files</h4>
+              <div class="files-list">
+                <span class="code-ref">evals/run_layer1_eval.py</span>
+                <span class="code-ref">evals/run_bayesian_eval.py</span>
+                <span class="code-ref">evals/build_three_layer_benchmark.py</span>
+                <span class="code-ref">evals/cohort_generator_v2_latent.py</span>
+                <span class="code-ref">evals/pipeline/metrics_aggregator.py</span>
+                <span class="code-ref">evals/cohort/profiles_v3_three_layer.json</span>
+                <span class="code-ref">evals/EVAL_FRAMEWORK.md</span>
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <div class="section">
+              <h4>Where to start</h4>
+              <ul class="checklist start">
+                <li>In <code>cohort_generator_v2_latent.py</code>: add <code>generate_comorbid_profiles(n=100)</code> — 5 common pairs: anemia+perimenopause, prediabetes+inflammation, thyroid+sleep, kidney+prediabetes, hepatitis+inflammation; blend scores from both condition centroids at 70% each</li>
+                <li>Add co-morbidity metric to eval: "both conditions in top-3" as a binary per profile, mean across co-morbid cohort</li>
+                <li>Add <code>--stratify-by gender,age_group,bmi_group,quiz_path</code> flag to all layer eval scripts; output per-stratum table to markdown</li>
+                <li>Write <code>evals/test_regression_gates.py</code>: assert per-condition minimums (thyroid top-1 ≥ 70%, sleep top-3 ≥ 55%, over-alert rate &lt; 30% etc.); run as part of CI</li>
+                <li>Add a single <code>make eval-full</code> target that runs all three layer evals and produces one combined markdown report</li>
+              </ul>
+            </div>
+
+            <div class="section">
+              <h4>Definition of Done</h4>
+              <ul class="checklist dod">
+                <li>100-profile co-morbidity cohort (5 pairs × 20 profiles) generated and saved</li>
+                <li>"Both conditions in top-3" metric defined and measured: target ≥ 50% for strong-signal pairs</li>
+                <li>Stratified reporting by sex added to layer1 eval output — table in every report</li>
+                <li><code>test_regression_gates.py</code> with per-condition hard minimums committed and passing</li>
+                <li><code>make eval-full</code> produces a single timestamped report in &lt; 5 minutes</li>
+                <li>EVAL_FRAMEWORK.md updated to reflect all new cohorts, metrics, and CI gates</li>
+              </ul>
+            </div>
+
+            <div class="best-practice">
+              <div class="bp-label">Industry best practice</div>
+              <p>FDA AI/ML SaMD guidance and the NHS AI Lab evaluation framework both require <em>subgroup performance reporting</em> before clinical deployment. Even for a student project, stratified eval by sex and age is a significant portfolio differentiator — it demonstrates that you understand clinical ML fairness, not just aggregate accuracy. The co-morbidity eval is equally powerful: most real patients present with more than one relevant condition, so a system that only handles single-condition profiles is unrealistic.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /P2 group -->
+
+  <!-- Footer note -->
+  <div style="border-top:1px solid var(--border); padding-top:24px; margin-top:16px; color:var(--text-dim); font-size:12px; line-height:1.7;">
+    <strong style="color:var(--text)">Source material:</strong>
+    evals/cohort/per_condition_topk_all_layers_20260327.md ·
+    evals/cohort/optimization_report_v3.md ·
+    evals/reports/ml_layer_performance_analysis_20260326.md ·
+    evals/reports/layered_knn_report_20260326_102723.md ·
+    evals/reports/llm_layer_combined_sections_20260326_161138.md ·
+    evals/reports/bayesian_20260325_231751.md ·
+    evals/evals_anna_handover.md ·
+    evals/EVAL_FRAMEWORK.md
+  </div>
+
+</main>
+
+<script>
+  function toggle(id) {
+    const el = document.getElementById(id);
+    el.classList.toggle('open');
+  }
+  // Open first ticket of each priority group by default
+  ['ml-01', 'ml-04', 'knn-02'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.classList.add('open');
+  });
+</script>
+</body>
+</html>

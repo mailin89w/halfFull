@@ -153,7 +153,7 @@ BAYESIAN_TRIGGER_THRESHOLDS = {
     "anemia":                0.50,
     "hidden_inflammation":   0.30,
     "prediabetes":           0.40,
-    "thyroid":               0.55,
+    "thyroid":               0.50,
     "electrolyte_imbalance": 0.46,
     "perimenopause":         0.40,
     "sleep_disorder":        0.70,

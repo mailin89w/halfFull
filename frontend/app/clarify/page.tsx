@@ -181,6 +181,25 @@ export default function ClarifyPage() {
   const select = (qId: string, val: string) =>
     setSelectedAnswers((prev) => ({ ...prev, [qId]: val }));
 
+  const skipCurrentCondition = () => {
+    if (!currentCondition || phase === 'submitting') return;
+
+    setSelectedAnswers((prev) => {
+      const next = { ...prev };
+      for (const question of currentQuestions) {
+        delete next[question.id];
+      }
+      return next;
+    });
+
+    if (isLastScreen) {
+      void handleSubmit();
+      return;
+    }
+
+    setCurrentScreenIndex((index) => Math.min(conditionQs.length - 1, index + 1));
+  };
+
   const handleSubmit = async () => {
     if (!allAnswered) return;
     setPhase('submitting');
@@ -319,9 +338,24 @@ export default function ClarifyPage() {
           </div>
 
           <section className="rounded-[2rem] bg-[var(--color-card)] px-5 py-5 shadow-[0_14px_30px_rgba(86,98,145,0.14)]">
-            <p className="mb-1 text-[11px] font-bold uppercase tracking-[0.18em] text-[var(--color-ink-soft)]">
-              Suspected pattern
-            </p>
+            <div className="mb-4 flex items-center justify-between gap-3">
+              <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-[var(--color-ink-soft)]">
+                Suspected pattern
+              </p>
+              <button
+                type="button"
+                disabled={phase === 'submitting'}
+                onClick={skipCurrentCondition}
+                className={[
+                  'rounded-full border px-3 py-1.5 text-[11px] font-bold uppercase tracking-[0.12em] transition-all',
+                  phase !== 'submitting'
+                    ? 'border-[rgba(151,166,210,0.35)] bg-white text-[var(--color-ink-soft)] hover:border-[var(--color-accent)] hover:text-[var(--color-accent)]'
+                    : 'border-[rgba(151,166,210,0.18)] bg-white/50 text-[rgba(9,9,15,0.34)]',
+                ].join(' ')}
+              >
+                Skip this hypothesis
+              </button>
+            </div>
             <h1 className="text-[1.75rem] font-bold leading-[1.05] tracking-[-0.05em] text-[var(--color-ink)]">
               {conditionLabel(currentCondition.condition)}
             </h1>
