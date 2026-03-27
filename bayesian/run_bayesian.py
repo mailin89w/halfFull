@@ -61,6 +61,8 @@ NORMALIZED_TO_LEGACY_KEYS = {
     "electrolyte_imbalance": "electrolytes",
     "hepatitis_bc": "hepatitis",
     "perimenopause": "perimenopause",
+    "vitamin_b12_deficiency": "vitamin_b12_deficiency",
+    "vitamin_d_deficiency": "vitamin_d_deficiency",
 }
 
 LEGACY_FILTER_CRITERIA = {

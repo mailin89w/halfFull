@@ -1,0 +1,18 @@
+feature_name,dataset_column,method,sex,age_min,age_max,lower,upper,scale,source_label,source_url,note
+serum_creatinine_mg_dl,serum_creatinine_mg_dl,interval,Male,18.0,69.0,0.6,1.2,,NIH Clinical Methods creatinine interval,https://www.ncbi.nlm.nih.gov/books/NBK305/,Adult sex-specific reference intervals; dataset age range is 18-65 so elderly rule is not used here.
+serum_creatinine_mg_dl,serum_creatinine_mg_dl,interval,Female,18.0,69.0,0.5,1.1,,NIH Clinical Methods creatinine interval,https://www.ncbi.nlm.nih.gov/books/NBK305/,Adult sex-specific reference intervals; dataset age range is 18-65 so elderly rule is not used here.
+serum_albumin_g_dl,serum_albumin_g_dl,interval,,,,3.4,5.4,,MedlinePlus albumin interval,https://medlineplus.gov/ency/article/003468.htm,General adult reference interval.
+alt_u_l,alt_u_l,interval,Male,,,7.0,56.0,,ACG abnormal liver chemistries guideline,https://pubmed.ncbi.nlm.nih.gov/27995906/,Lab upper-limit reference intervals used for transform.
+alt_u_l,alt_u_l,interval,Female,,,7.0,45.0,,ACG abnormal liver chemistries guideline,https://pubmed.ncbi.nlm.nih.gov/27995906/,Lab upper-limit reference intervals used for transform.
+ast_u_l,ast_u_l,interval,Male,,,10.0,40.0,,ACG abnormal liver chemistries guideline,https://pubmed.ncbi.nlm.nih.gov/27995906/,Sex-specific AST reference intervals.
+ast_u_l,ast_u_l,interval,Female,,,10.0,30.0,,ACG abnormal liver chemistries guideline,https://pubmed.ncbi.nlm.nih.gov/27995906/,Sex-specific AST reference intervals.
+ggt_u_l,ggt_u_l,interval,Male,,,8.0,50.0,,GGT reference review,https://pmc.ncbi.nlm.nih.gov/articles/PMC8637680/,Sex-specific adult GGT reference intervals.
+ggt_u_l,ggt_u_l,interval,Female,,,5.0,35.0,,GGT reference review,https://pmc.ncbi.nlm.nih.gov/articles/PMC8637680/,Sex-specific adult GGT reference intervals.
+ferritin_ng_ml,ferritin_ng_ml,interval,Male,18.0,120.0,12.0,300.0,,CDC Nutrition Report and WHO ferritin guidance,https://www.cdc.gov/nutrition-report/media/Trace.pdf,Premenopausal vs postmenopausal female split approximated with age 50 because menopause status is not consistently available.
+ferritin_ng_ml,ferritin_ng_ml,interval,Female,18.0,49.0,12.0,150.0,,CDC Nutrition Report and WHO ferritin guidance,https://www.cdc.gov/nutrition-report/media/Trace.pdf,Premenopausal vs postmenopausal female split approximated with age 50 because menopause status is not consistently available.
+ferritin_ng_ml,ferritin_ng_ml,interval,Female,50.0,120.0,12.0,200.0,,CDC Nutrition Report and WHO ferritin guidance,https://www.cdc.gov/nutrition-report/media/Trace.pdf,Premenopausal vs postmenopausal female split approximated with age 50 because menopause status is not consistently available.
+transferrin_saturation_pct,transferrin_saturation_pct,interval,Male,,,20.0,50.0,,Medscape transferrin saturation interval,https://emedicine.medscape.com/article/2087960-overview,Sex-specific adult transferrin saturation intervals.
+transferrin_saturation_pct,transferrin_saturation_pct,interval,Female,,,15.0,50.0,,Medscape transferrin saturation interval,https://emedicine.medscape.com/article/2087960-overview,Sex-specific adult transferrin saturation intervals.
+bmi_kg_m2,bmi,interval,,,,18.5,24.9,,WHO BMI categories,https://www.worldobesity.org/about/about-obesity/obesity-classification,Healthy BMI interval 18.5-24.9 kg/m^2.
+waist_cm,waist_cm,upper_only,Male,,,,102.0,102.0,NIH NHLBI waist circumference risk,https://www.nhlbi.nih.gov/health/educational/lose_wt/risk.htm,Sex-specific at-risk waist thresholds.
+waist_cm,waist_cm,upper_only,Female,,,,88.0,88.0,NIH NHLBI waist circumference risk,https://www.nhlbi.nih.gov/health/educational/lose_wt/risk.htm,Sex-specific at-risk waist thresholds.

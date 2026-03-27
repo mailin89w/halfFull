@@ -15,6 +15,8 @@ CONDITION_IDS: list[str] = [
     "prediabetes",
     "inflammation",
     "electrolyte_imbalance",
+    "vitamin_b12_deficiency",
+    "vitamin_d_deficiency",
 ]
 
 # MedGemma API configuration

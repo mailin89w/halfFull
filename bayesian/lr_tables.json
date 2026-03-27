@@ -28,7 +28,9 @@
       "inflammation",
       "electrolytes",
       "hepatitis",
-      "perimenopause"
+      "perimenopause",
+      "vitamin_b12_deficiency",
+      "vitamin_d_deficiency"
     ],
     "confounders_covered": [
       "depression",
@@ -1533,6 +1535,246 @@
               "label": "No",
               "lr": 0.72,
               "lr_confidence": "medium"
+            }
+          ]
+        }
+      ]
+    },
+    "vitamin_b12_deficiency": {
+      "trigger_threshold": 0.6,
+      "questions": [
+        {
+          "id": "b12_q1",
+          "fdda_section": null,
+          "fdda_question": false,
+          "text": "Do you take metformin most days, or have you taken it regularly for at least 6 months?",
+          "supplementary_note": "Long-term metformin use is a recognized B12 deficiency risk factor.",
+          "answer_type": "binary",
+          "answer_options": [
+            {
+              "value": "yes",
+              "label": "Yes",
+              "lr": 2.2,
+              "lr_source": "NICE vitamin B12 deficiency evidence review (2024) and contemporary consensus reviews list metformin as a common risk factor for low B12.",
+              "lr_confidence": "medium"
+            },
+            {
+              "value": "no",
+              "label": "No",
+              "lr": 0.85,
+              "lr_confidence": "low"
+            }
+          ]
+        },
+        {
+          "id": "b12_q2",
+          "fdda_section": null,
+          "fdda_question": false,
+          "text": "Do you take acid-suppressing medication like omeprazole, pantoprazole, or famotidine most days for more than 3 months?",
+          "supplementary_note": "Chronic acid suppression can impair dietary B12 absorption.",
+          "answer_type": "binary",
+          "answer_options": [
+            {
+              "value": "yes",
+              "label": "Yes",
+              "lr": 1.8,
+              "lr_source": "Risk-factor estimate based on guideline and review evidence linking chronic PPI or H2 blocker use with lower B12 status.",
+              "lr_confidence": "medium"
+            },
+            {
+              "value": "no",
+              "label": "No",
+              "lr": 0.9,
+              "lr_confidence": "low"
+            }
+          ]
+        },
+        {
+          "id": "b12_q3",
+          "fdda_section": "C",
+          "fdda_question": true,
+          "text": "Do you avoid most animal products, or follow a vegan diet?",
+          "supplementary_note": "Low animal-product intake lowers B12 intake unless supplementation is consistent.",
+          "answer_type": "binary",
+          "answer_options": [
+            {
+              "value": "yes",
+              "label": "Yes",
+              "lr": 2.0,
+              "lr_source": "Dietary-risk estimate supported by clinical reviews and guidelines on B12 deficiency in low-animal-product diets.",
+              "lr_confidence": "medium"
+            },
+            {
+              "value": "no",
+              "label": "No",
+              "lr": 0.85,
+              "lr_confidence": "low"
+            }
+          ]
+        },
+        {
+          "id": "b12_q4",
+          "fdda_section": null,
+          "fdda_question": false,
+          "text": "Have you ever been told you have pernicious anemia, autoimmune gastritis, Crohn's disease, celiac disease, or had bowel surgery affecting absorption?",
+          "supplementary_note": "Autoimmune or malabsorptive causes are among the strongest clinical risk factors for true B12 deficiency.",
+          "answer_type": "binary",
+          "answer_options": [
+            {
+              "value": "yes",
+              "label": "Yes",
+              "lr": 3.2,
+              "lr_source": "NICE vitamin B12 deficiency evidence review (2024). Pernicious anemia and malabsorption syndromes are major etiologic risk factors.",
+              "lr_confidence": "medium"
+            },
+            {
+              "value": "no",
+              "label": "No",
+              "lr": 0.8,
+              "lr_confidence": "low"
+            }
+          ]
+        },
+        {
+          "id": "b12_q5",
+          "fdda_section": null,
+          "fdda_question": false,
+          "text": "Have you had new tingling or numbness in your hands or feet, trouble with balance, or unexplained memory changes?",
+          "supplementary_note": "Neurologic symptoms are clinically important for B12 deficiency but are not highly specific.",
+          "answer_type": "binary",
+          "answer_options": [
+            {
+              "value": "yes",
+              "label": "Yes",
+              "lr": 1.6,
+              "lr_source": "Clinical heuristic based on B12 deficiency neurology reviews; symptom LR is kept modest because formal diagnostic-accuracy evidence is limited.",
+              "lr_confidence": "low"
+            },
+            {
+              "value": "no",
+              "label": "No",
+              "lr": 0.9,
+              "lr_confidence": "low"
+            }
+          ]
+        }
+      ]
+    },
+    "vitamin_d_deficiency": {
+      "trigger_threshold": 0.35,
+      "questions": [
+        {
+          "id": "vitd_q1",
+          "fdda_section": "C",
+          "fdda_question": true,
+          "text": "Do you spend very little time in direct sunlight most weeks, or are you mostly indoors or fully covered when outside?",
+          "supplementary_note": "Low UV exposure is a major driver of low vitamin D status.",
+          "answer_type": "binary",
+          "answer_options": [
+            {
+              "value": "yes",
+              "label": "Yes",
+              "lr": 2.0,
+              "lr_source": "NIH Office of Dietary Supplements vitamin D professional fact sheet. Limited sunlight exposure is a recognized risk factor for low 25(OH)D.",
+              "lr_confidence": "medium"
+            },
+            {
+              "value": "no",
+              "label": "No",
+              "lr": 0.8,
+              "lr_confidence": "low"
+            }
+          ]
+        },
+        {
+          "id": "vitd_q2",
+          "fdda_section": null,
+          "fdda_question": false,
+          "text": "Have you been told you have obesity, or is your BMI 30 or above?",
+          "supplementary_note": "Obesity is consistently associated with lower measured 25(OH)D levels.",
+          "answer_type": "binary",
+          "answer_options": [
+            {
+              "value": "yes",
+              "label": "Yes",
+              "lr": 1.6,
+              "lr_source": "Risk-factor estimate based on review evidence and NIH guidance identifying obesity as a common vitamin D deficiency risk factor.",
+              "lr_confidence": "medium"
+            },
+            {
+              "value": "no",
+              "label": "No",
+              "lr": 0.9,
+              "lr_confidence": "low"
+            }
+          ]
+        },
+        {
+          "id": "vitd_q3",
+          "fdda_section": null,
+          "fdda_question": false,
+          "text": "Have you ever been told you have celiac disease, Crohn's disease, pancreatic disease, or had bowel surgery that affects absorption?",
+          "supplementary_note": "Fat malabsorption is a common clinical cause of vitamin D deficiency.",
+          "answer_type": "binary",
+          "answer_options": [
+            {
+              "value": "yes",
+              "label": "Yes",
+              "lr": 2.3,
+              "lr_source": "Vitamin D deficiency and osteomalacia reviews consistently identify malabsorption syndromes as major causes of deficiency.",
+              "lr_confidence": "medium"
+            },
+            {
+              "value": "no",
+              "label": "No",
+              "lr": 0.85,
+              "lr_confidence": "low"
+            }
+          ]
+        },
+        {
+          "id": "vitd_q4",
+          "fdda_section": null,
+          "fdda_question": false,
+          "text": "Have you been told you have chronic kidney disease or chronic liver disease?",
+          "supplementary_note": "Kidney and liver disease can reduce vitamin D activation or handling.",
+          "answer_type": "binary",
+          "answer_options": [
+            {
+              "value": "yes",
+              "label": "Yes",
+              "lr": 2.0,
+              "lr_source": "Clinical review evidence identifies CKD and chronic liver disease as important risk factors for low active vitamin D states.",
+              "lr_confidence": "medium"
+            },
+            {
+              "value": "no",
+              "label": "No",
+              "lr": 0.88,
+              "lr_confidence": "low"
+            }
+          ]
+        },
+        {
+          "id": "vitd_q5",
+          "fdda_section": null,
+          "fdda_question": false,
+          "text": "Do you have diffuse bone pain, marked muscle weakness when climbing stairs or rising from a chair, or frequent falls?",
+          "supplementary_note": "These symptoms fit osteomalacia-type presentations but are nonspecific.",
+          "answer_type": "binary",
+          "answer_options": [
+            {
+              "value": "yes",
+              "label": "Yes",
+              "lr": 1.7,
+              "lr_source": "Osteomalacia and vitamin D deficiency reviews describe proximal muscle weakness and bone pain as common manifestations; LR kept low because specificity is limited.",
+              "lr_confidence": "low"
+            },
+            {
+              "value": "no",
+              "label": "No",
+              "lr": 0.9,
+              "lr_confidence": "low"
             }
           ]
         }
