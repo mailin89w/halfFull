@@ -6,7 +6,7 @@
   "properties": {
     "profile_id":       { "type": "string" },
     "profile_type":     { "type": "string", "enum": ["positive", "borderline", "negative", "healthy", "edge", "multi"] },
-    "target_condition": { "type": "string" },
+    "target_condition": { "type": ["string", "null"] },
     "demographics": {
       "type": "object",
       "required": ["age", "sex", "bmi"],
