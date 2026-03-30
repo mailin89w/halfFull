@@ -1,0 +1,69 @@
+{
+  "model": "kidney_lr_v3_hard_neg.joblib",
+  "version": "v3",
+  "condition": "kidney",
+  "ml_ticket": "ML-05",
+  "algorithm": "LogisticRegression L2 C=1.0 class_weight=balanced",
+  "data_source": "nhanes_merged_adults_final_normalized.csv + 200 hard negatives",
+  "n_train_original": 7437,
+  "n_hard_negatives": 200,
+  "n_train_augmented": 7637,
+  "n_positives": 259,
+  "prevalence": 0.0348,
+  "features": [
+    "uacr_mg_g",
+    "serum_creatinine_mg_dl",
+    "LBXSUA_uric_acid_mg_dl",
+    "age_years",
+    "med_count",
+    "huq010___general_health_condition",
+    "huq071___overnight_hospital_patient_in_last_year",
+    "kiq005___how_often_have_urinary_leakage?",
+    "kiq480___how_many_times_urinate_in_night?",
+    "mcq160b___ever_told_you_had_congestive_heart_failure",
+    "mcq160a___ever_told_you_had_arthritis",
+    "mcq092___ever_receive_blood_transfusion",
+    "mcq520___abdominal_pain_during_past_12_months?",
+    "cdq010___shortness_of_breath_on_stairs/inclines",
+    "bpq020___ever_told_you_had_high_blood_pressure",
+    "paq650___vigorous_recreational_activities",
+    "alq151___ever_have_4/5_or_more_drinks_every_day?",
+    "smq078___how_soon_after_waking_do_you_smoke",
+    "whq040___like_to_weigh_more,_less_or_same"
+  ],
+  "n_features": 19,
+  "new_features": [
+    "serum_creatinine_mg_dl",
+    "LBXSUA_uric_acid_mg_dl"
+  ],
+  "cv_folds": 5,
+  "cv_auc_mean": 0.8884,
+  "cv_auc_std": 0.0153,
+  "cv_avg_precision": 0.5643,
+  "full_train_auc": 0.9043,
+  "full_train_auprc": 0.5792,
+  "recall_at_pipeline_gate": 0.8533,
+  "recall_at_recommended_thr": 0.7452,
+  "pipeline_gate": 0.35,
+  "recommended_threshold": 0.62,
+  "intercept": 3.8455,
+  "hard_neg_validation": {
+    "n_hard_negatives": 200,
+    "pct_above_030": 0.01,
+    "mean_score": 0.1173,
+    "max_score": 0.321,
+    "passed": false
+  },
+  "pipeline_steps": [
+    "SimpleImputer(strategy=median, add_indicator=True)",
+    "LogisticRegression(L2, class_weight=balanced, C=1.0)"
+  ],
+  "changes_from_v2": [
+    "Added serum_creatinine_mg_dl (eGFR proxy)",
+    "Added LBXSUA_uric_acid_mg_dl (uric acid) as discriminative anchor",
+    "Augmented training with 200 hard-negative fatigue/sleep/thyroid profiles",
+    "Hard negatives constrained to score <0.30 post-training"
+  ],
+  "random_seed": 42,
+  "created_at": "2026-03-30T11:22:20.252330+00:00"
+}

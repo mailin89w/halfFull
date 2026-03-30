@@ -1,0 +1,81 @@
+{
+  "model": "hidden_inflammation_lr_v4_hard_neg.joblib",
+  "version": "v4",
+  "condition": "hidden_inflammation",
+  "ml_ticket": "ML-05",
+  "algorithm": "CalibratedClassifierCV(LogisticRegression L2 C=1.0, cv=5, isotonic)",
+  "data_source": "nhanes_merged_adults_final_normalized.csv + 200 hard negatives",
+  "n_train_original": 7437,
+  "n_hard_negatives": 200,
+  "n_train_augmented": 7637,
+  "n_positives": 638,
+  "prevalence": 0.0858,
+  "features": [
+    "age_years",
+    "hdl_cholesterol_mg_dl",
+    "huq010___general_health_condition",
+    "med_count",
+    "alq130___avg_#_alcoholic_drinks/day___past_12_mos",
+    "sld012___sleep_hours___weekdays_or_workdays",
+    "paq650___vigorous_recreational_activities",
+    "rhq031___had_regular_periods_in_past_12_months",
+    "slq030___how_often_do_you_snore?",
+    "bpq080___doctor_told_you___high_cholesterol_level",
+    "cdq010___shortness_of_breath_on_stairs/inclines",
+    "mcq053___taking_treatment_for_anemia/past_3_mos",
+    "smd650___avg_#_cigarettes/day_during_past_30_days",
+    "bpq030___told_had_high_blood_pressure___2+_times",
+    "huq051___#times_receive_healthcare_over_past_year",
+    "kiq430___how_frequently_does_this_occur?",
+    "mcq195___which_type_of_arthritis_was_it?",
+    "mcq300c___close_relative_had_diabetes",
+    "ocq180___hours_worked_last_week_in_total_all_jobs",
+    "pregnancy_status_bin",
+    "rhq131___ever_been_pregnant?",
+    "rhq160___how_many_times_have_been_pregnant?",
+    "smq020___smoked_at_least_100_cigarettes_in_life",
+    "smq040___do_you_now_smoke_cigarettes?",
+    "waist_cm",
+    "waist_elevated_female",
+    "waist_elevated_male"
+  ],
+  "n_features": 27,
+  "new_features": [
+    "waist_elevated_female",
+    "waist_elevated_male"
+  ],
+  "removed_features": [
+    "bmi"
+  ],
+  "cv_folds": 5,
+  "cv_auc_mean": 0.7894,
+  "cv_auc_std": 0.0074,
+  "cv_avg_precision": 0.2752,
+  "full_train_auc": 0.7988,
+  "full_train_auprc": 0.3003,
+  "recall_at_pipeline_gate": 0.1708,
+  "recall_at_recommended_thr": 0.0956,
+  "pipeline_gate": 0.3,
+  "recommended_threshold": 0.41,
+  "base_lr_intercept_fold0": -0.6568,
+  "hard_neg_validation": {
+    "n_hard_negatives": 200,
+    "pct_above_035": 0.0,
+    "mean_score": 0.0,
+    "max_score": 0.0,
+    "passed": true
+  },
+  "pipeline_steps": [
+    "SimpleImputer(strategy=median, add_indicator=True)",
+    "CalibratedClassifierCV(LogisticRegression L2, cv=5, method=isotonic)"
+  ],
+  "changes_from_v3": [
+    "Removed class_weight='balanced' (was inflating intercept to 2.17)",
+    "Wrapped in CalibratedClassifierCV(cv=5, method='isotonic')",
+    "Replaced raw bmi with sex-specific waist elevation flags",
+    "Added waist_elevated_female (IDF \u226588cm) and waist_elevated_male (IDF \u2265102cm)",
+    "Augmented with 200 hard negatives: high BMI but no inflammatory markers"
+  ],
+  "random_seed": 42,
+  "created_at": "2026-03-30T11:26:36.470897+00:00"
+}
