@@ -139,7 +139,7 @@ RECOMMENDED_THRESHOLDS = {
 #                                  best OOF F1 on the clean blood-lab sweep
 USER_FACING_THRESHOLDS = {
     "hepatitis_bc":          0.10,
-    "liver":                 0.10,
+    "liver":                 0.07,
     "iron_deficiency":       0.20,
     "kidney":                0.35,   # raised 0.25→0.35 on 2026-03-27 second-pass tightening: trade recall for materially lower user-facing alert burden
     "anemia":                0.60,   # raised 0.50→0.60 on 2026-03-26 quick-win sweep: precision 16.9%→21.8%, flag 41.3%→26.0%, recall 62.7%→50.7%
