@@ -51,6 +51,16 @@ from typing import Any
 import numpy as np
 
 warnings.filterwarnings("ignore")
+warnings.filterwarnings(
+    "ignore",
+    message=".*SimpleImputer was fitted without feature names.*",
+    category=UserWarning,
+)
+warnings.filterwarnings(
+    "ignore",
+    message="`sklearn.utils.parallel.delayed` should be used.*",
+    category=UserWarning,
+)
 
 # ---------------------------------------------------------------------------
 # Path setup
@@ -65,7 +75,7 @@ sys.path.insert(0, str(MODELS_NORMALIZED_DIR))  # makes `import model_runner` wo
 
 try:
     from tqdm import tqdm
-    _TQDM = True
+    _TQDM = sys.stderr.isatty()
 except ImportError:
     _TQDM = False
 
@@ -95,6 +105,8 @@ logging.basicConfig(
     datefmt="%H:%M:%S",
 )
 logger = logging.getLogger("run_layer1_eval")
+logging.getLogger("model_runner").setLevel(logging.WARNING)
+logging.getLogger("pipeline.profile_loader").setLevel(logging.WARNING)
 
 # ---------------------------------------------------------------------------
 # Condition name mapping
@@ -113,6 +125,8 @@ CONDITION_TO_MODEL_KEY: dict[str, str | None] = {
     "perimenopause":         "perimenopause",
     "prediabetes":           "prediabetes",
     "sleep_disorder":        "sleep_disorder",
+    "vitamin_b12_deficiency": "vitamin_b12_deficiency",
+    "vitamin_d_deficiency":   "vitamin_d_deficiency",
 }
 
 # v2 model registry key  →  primary eval condition ID (for display)
@@ -128,6 +142,8 @@ MODEL_KEY_TO_CONDITION: dict[str, str | None] = {
     "prediabetes":           "prediabetes",
     "sleep_disorder":        "sleep_disorder",
     "thyroid":               "hypothyroidism",
+    "vitamin_b12_deficiency": "vitamin_b12_deficiency",
+    "vitamin_d_deficiency":   "vitamin_d_deficiency",
 }
 
 # DoD targets applicable to the ML layer
@@ -798,6 +814,13 @@ def _to_markdown(report: dict, run_id: str) -> str:
     lines.append(
         "> `iron_deficiency` gender_female coefficient (+1.32) dominates all "
         "female profiles, often displacing true top-1 for other conditions."
+    )
+    lines.append("")
+    lines.append(
+        "> `vitamin_b12_deficiency` and `vitamin_d_deficiency` currently have no "
+        "positive target profiles in this synthetic cohort. Their rows therefore "
+        "reflect only how often they flag against the existing benchmark, not a "
+        "clean holdout estimate of recall or precision."
     )
     lines.append("")
 

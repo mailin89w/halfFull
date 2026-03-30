@@ -10,7 +10,7 @@ GROUP_BONUSES: dict[str, dict[str, float]] = {
     "liver": {"liver_panel": 0.08},
     "hepatitis": {"liver_panel": 0.08},
     "inflammation": {"inflammation": 0.08},
-    "prediabetes": {"glycemic": 0.08, "lipids": 0.03},
+    "prediabetes": {"glycemic": 0.08},  # lipids bonus removed 2026-03-27: fires on healthy profiles with borderline kidney/lipid signals, boosting prediabetes above its 0.45 threshold on profiles where there is no glycemic signal — too nonspecific to keep
     "thyroid": {"thyroid": 0.08},
     "iron_deficiency": {"iron_studies": 0.08, "cbc": 0.03},
     "anemia": {"cbc": 0.06, "iron_studies": 0.04},
@@ -52,7 +52,12 @@ def rerank_condition_scores_with_knn(
     max_candidate_rank: int = 6,
     max_distance_from_top3: float = 0.22,
     freeze_top1: bool = True,
+    top1_confidence_threshold: float = 1.0,
     top_n: int = 3,
+    # When the profile has zero KNN lab-signal groups (no lab evidence at all),
+    # UNSUPPORTED_PENALTIES are doubled (up to this cap) and the score guard is
+    # raised so that even high-confidence mispredictions get penalised.
+    zero_groups_max_penalty: float = 0.20,
 ) -> dict[str, Any]:
     """
     Conservative post-Bayesian reranker.
@@ -61,6 +66,15 @@ def rerank_condition_scores_with_knn(
     - rescue plausible missed comorbidities into the top-k
     - never invent a brand-new top condition from scratch
     - use KNN as weak supporting evidence, not as a primary classifier
+
+    top1_confidence_threshold:
+        When freeze_top1=True, the top-1 slot is still released if the Bayesian
+        top-1 score falls below this threshold — i.e. the model is uncertain.
+        1.0 (default) = always freeze regardless of score (original behaviour).
+        0.0           = never freeze (pure KNN reranking).
+        0.60          = unfreeze only when top-1 posterior < 0.60.
+        This enables A/B testing a confidence-gated unfreeze without changing the
+        production default.
     """
     if not bayesian_scores:
         return {
@@ -114,13 +128,23 @@ def rerank_condition_scores_with_knn(
 
         if bonus <= 0.0:
             penalty = 0.0
+            zero_groups = len(knn_groups) == 0
+            # Standard penalty: condition overflies, no condition-specific KNN support.
+            # Guard is raised to 0.90 (from 0.75) when the profile has zero lab signals
+            # at all — the absence of any signal is itself evidence against high-scoring
+            # conditions that have well-defined lab markers.
+            score_guard = 0.90 if zero_groups else 0.75
             if (
                 condition in UNSUPPORTED_PENALTIES
                 and not matched_groups
                 and rank <= top_n
-                and base_score < 0.75
+                and base_score < score_guard
             ):
-                penalty = UNSUPPORTED_PENALTIES[condition]
+                base_penalty = UNSUPPORTED_PENALTIES[condition]
+                # Double the penalty when the whole profile has no lab signal groups —
+                # that is stronger negative evidence than merely lacking one specific group.
+                penalty = min(base_penalty * 2 if zero_groups else base_penalty,
+                              zero_groups_max_penalty)
                 # Be a bit stricter on lower-ranked shortlist entries, since
                 # these are the most common false-positive extras.
                 if rank >= 3:
@@ -155,7 +179,13 @@ def rerank_condition_scores_with_knn(
         key=lambda item: item[1],
         reverse=True,
     )
-    if freeze_top1:
+
+    # Respect freeze_top1 flag, but release the freeze when the Bayesian top-1
+    # score is below the confidence threshold — the model is uncertain enough
+    # that neighbourhood evidence should be allowed to promote a different condition.
+    effective_freeze = freeze_top1 and (top1_score >= top1_confidence_threshold)
+
+    if effective_freeze:
         top_conditions = [top1_condition] + [cond for cond, _ in remaining[: max(top_n - 1, 0)]]
     else:
         top_conditions = [cond for cond, _ in sorted(adjusted.items(), key=lambda item: item[1], reverse=True)[:top_n]]
@@ -165,5 +195,8 @@ def rerank_condition_scores_with_knn(
         "top_conditions": top_conditions,
         "bonuses": bonuses,
         "penalties": penalties,
-        "frozen_top1": top1_condition if freeze_top1 else None,
+        "frozen_top1": top1_condition if effective_freeze else None,
+        "top1_confidence_threshold": top1_confidence_threshold,
+        "top1_score": round(top1_score, 4),
+        "top1_released": not effective_freeze,
     }

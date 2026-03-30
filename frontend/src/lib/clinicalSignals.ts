@@ -62,6 +62,8 @@ const CONDITION_LABELS: Record<string, string> = {
   electrolytes: 'electrolyte balance',
   hepatitis: 'hepatitis markers',
   perimenopause: 'perimenopause',
+  vitamin_b12_deficiency: 'vitamin B12 deficiency',
+  vitamin_d_deficiency: 'vitamin D deficiency',
 };
 
 const CLUSTER_MARKER_MAP: Record<string, string[]> = {
@@ -76,6 +78,8 @@ const CLUSTER_MARKER_MAP: Record<string, string[]> = {
   electrolytes: ['sodium', 'potassium', 'magnesium', 'calcium', 'phosphorus'],
   hepatitis: ['alt', 'ast', 'bilirubin', 'hepatitis'],
   perimenopause: ['fsh', 'estradiol', 'amh'],
+  vitamin_b12_deficiency: ['b12', 'vitamin b12', 'methylmalonic', 'homocysteine'],
+  vitamin_d_deficiency: ['vitamin d', '25-oh', '25(oh)', '25 hydroxy'],
 };
 
 const URGENCY_RULES: Record<string, { urgent: string[]; soon: string[] }> = {
@@ -122,6 +126,14 @@ const URGENCY_RULES: Record<string, { urgent: string[]; soon: string[] }> = {
   perimenopause: {
     urgent: ['Heavy cycle disruption plus severe fatigue warrants prompt review.'],
     soon: ['Hormonal-transition pattern supports booking a visit soon.'],
+  },
+  vitamin_b12_deficiency: {
+    urgent: ['Neurologic symptoms together with a strong B12 signal should be reviewed promptly.'],
+    soon: ['A vitamin B12 deficiency pattern is worth checking with a clinician soon.'],
+  },
+  vitamin_d_deficiency: {
+    urgent: ['Severe weakness, falls, or bone pain with a strong vitamin D signal should be reviewed promptly.'],
+    soon: ['A vitamin D deficiency pattern supports follow-up soon.'],
   },
 };
 

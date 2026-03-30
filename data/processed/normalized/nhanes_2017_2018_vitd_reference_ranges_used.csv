@@ -1,0 +1,2 @@
+feature_name,dataset_column,method,sex,age_min,age_max,lower,upper,scale,source_label,source_url,note
+bmi_kg_m2,bmi,interval,,,,18.5,24.9,,WHO BMI categories,https://www.worldobesity.org/about/about-obesity/obesity-classification,Healthy BMI interval 18.5-24.9 kg/m^2.

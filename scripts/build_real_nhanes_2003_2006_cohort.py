@@ -50,7 +50,7 @@ CYCLE_CONFIG: dict[str, dict[str, Any]] = {
             FileSpec("mcq", ("MCQ_C",), ("SEQN", "MCQ053", "MCQ080", "MCQ092", "MCQ160A", "MCQ160B", "MCQ160L", "MCQ160M", "MCQ170L", "MCQ170M", "MCQ300C", "MCQ520", "MCQ510A", "MCQ510B", "MCQ510C", "MCQ510D", "MCQ510E", "MCQ510F")),
             FileSpec("paq", ("PAQ_C",), ("SEQN", "PAQ620", "PAQ650", "PAQ665", "PAD680")),
             FileSpec("rhq", ("RHQ_C",), ("SEQN", "RHQ031", "RHQ060", "RHQ131", "RHQ200", "RHQ305", "RHQ540", "RHD043", "RHD143", "RHD280")),
-            FileSpec("rxq", ("RXQ_RX_C",), ("SEQN", "RXDRSD1", "RXDRSD2", "RXDRSD3")),
+            FileSpec("rxq", ("RXQ_RX_C",), ("SEQN", "RXDUSE", "RXDDRUG", "RXDDRGID", "RXQSEEN", "RXDDAYS", "RXDCOUNT")),
             FileSpec("smq", ("SMQ_C",), ("SEQN", "SMQ040")),
             FileSpec("whq", ("WHQ_C",), ("SEQN", "WHQ040", "WHQ070")),
             FileSpec("ocq", ("OCQ_C",), ("SEQN", "OCQ180", "OCQ670")),
@@ -63,6 +63,8 @@ CYCLE_CONFIG: dict[str, dict[str, Any]] = {
             FileSpec("biochem", ("L40_C",), ("SEQN", "LBXSCR", "LBXSATSI", "LBXSASSI", "LBXSGTSI", "LBXSAL", "LBXSNASI", "LBXSKSI", "LBXSCA", "LBXSTP")),
             FileSpec("iron", ("L40FE_C",), ("SEQN", "LBDPCT")),
             FileSpec("ferritin", ("L06TFR_C",), ("SEQN", "LBDFER")),
+            FileSpec("vit_b12", ("L06NB_C",), ("SEQN", "LBXB12", "LBDB12SI")),
+            FileSpec("vit_d", ("VID_C",), ("SEQN", "LBDVIDMS")),
             FileSpec("ghb", ("GHB_C",), ("SEQN", "LBXGH")),
             FileSpec("cbc", ("CBC_C",), ("SEQN", "LBXHGB", "LBXWBCSI", "LBXNEPCT", "LBXLYPCT")),
             FileSpec("crp", ("CRP_C",), ("SEQN", "LBXCRP")),
@@ -85,7 +87,7 @@ CYCLE_CONFIG: dict[str, dict[str, Any]] = {
             FileSpec("mcq", ("MCQ_D",), ("SEQN", "MCQ053", "MCQ080", "MCQ092", "MCQ160A", "MCQ160B", "MCQ160L", "MCQ160M", "MCQ170L", "MCQ170M", "MCQ300C", "MCQ520", "MCQ510A", "MCQ510B", "MCQ510C", "MCQ510D", "MCQ510E", "MCQ510F")),
             FileSpec("paq", ("PAQ_D",), ("SEQN", "PAQ620", "PAQ650", "PAQ665", "PAD680")),
             FileSpec("rhq", ("RHQ_D",), ("SEQN", "RHQ031", "RHQ060", "RHQ131", "RHQ200", "RHQ305", "RHQ540", "RHD043", "RHD143", "RHD280")),
-            FileSpec("rxq", ("RXQ_RX_D",), ("SEQN", "RXDRSD1", "RXDRSD2", "RXDRSD3")),
+            FileSpec("rxq", ("RXQ_RX_D",), ("SEQN", "RXDUSE", "RXDDRUG", "RXDDRGID", "RXQSEEN", "RXDDAYS", "RXDCOUNT")),
             FileSpec("slq", ("SLQ_D",), ("SEQN", "SLQ030", "SLQ040", "SLQ050", "SLD012", "SLD013")),
             FileSpec("smq", ("SMQ_D",), ("SEQN", "SMQ040")),
             FileSpec("whq", ("WHQ_D",), ("SEQN", "WHQ040", "WHQ070")),
@@ -99,6 +101,8 @@ CYCLE_CONFIG: dict[str, dict[str, Any]] = {
             FileSpec("biochem", ("BIOPRO_D",), ("SEQN", "LBXSCR", "LBXSATSI", "LBXSASSI", "LBXSGTSI", "LBXSAL", "LBXSNASI", "LBXSKSI", "LBXSCA", "LBXSTP")),
             FileSpec("iron", ("FETIB_D",), ("SEQN", "LBDPCT")),
             FileSpec("ferritin", ("FERTIN_D",), ("SEQN", "LBXFER")),
+            FileSpec("vit_b12", ("B12_D",), ("SEQN", "LBXB12", "LBDB12SI")),
+            FileSpec("vit_d", ("VID_D",), ("SEQN", "LBDVIDMS")),
             FileSpec("ghb", ("GHB_D",), ("SEQN", "LBXGH")),
             FileSpec("cbc", ("CBC_D",), ("SEQN", "LBXHGB", "LBXWBCSI", "LBXNEPCT", "LBXLYPCT")),
             FileSpec("crp", ("CRP_D",), ("SEQN", "LBXCRP")),
@@ -198,6 +202,9 @@ RENAME_MAP = {
     "LBDPCT": "transferrin_saturation_pct",
     "LBDFER": "ferritin_ng_ml",
     "LBXFER": "ferritin_ng_ml",
+    "LBXB12": "vitamin_b12_serum_pg_ml",
+    "LBDB12SI": "vitamin_b12_serum_pmol_l",
+    "LBDVIDMS": "vitamin_d_25oh_nmol_l",
     "LBXGH": "hba1c_pct",
     "LBXHGB": "hemoglobin_g_dl",
     "LBXWBCSI": "wbc_1000_cells_ul",
@@ -307,18 +314,54 @@ def merge_frames(frames: list[pd.DataFrame]) -> pd.DataFrame:
     return merged
 
 
+def is_rx_frame(df: pd.DataFrame) -> bool:
+    cols = set(df.columns)
+    return "SEQN" in cols and (
+        {"RXDUSE", "RXDDRUG", "RXDCOUNT"}.issubset(cols)
+        or {"RXDRSD1", "RXDRSD2", "RXDRSD3"}.issubset(cols)
+    )
+
+
 def aggregate_rxd(df: pd.DataFrame) -> pd.DataFrame:
     if df.empty:
         return pd.DataFrame(columns=["SEQN", "rxd_disease_list", "med_count"])
+
+    if {"RXDUSE", "RXDDRUG", "RXDCOUNT"}.issubset(df.columns):
+        rxduse = pd.to_numeric(df["RXDUSE"], errors="coerce")
+        rxdcount = pd.to_numeric(df["RXDCOUNT"], errors="coerce")
+        med_name = df["RXDDRUG"].astype("string").str.strip()
+        med_row = rxduse.eq(1) & med_name.notna() & med_name.ne("")
+
+        med_count = (
+            pd.DataFrame({"SEQN": df["SEQN"], "_med_count": rxdcount.where(med_row)})
+            .groupby("SEQN", as_index=False)["_med_count"]
+            .max()
+            .rename(columns={"_med_count": "med_count"})
+        )
+
+        fallback_counts = (
+            pd.DataFrame({"SEQN": df.loc[med_row, "SEQN"]})
+            .groupby("SEQN", as_index=False)
+            .size()
+            .rename(columns={"size": "_fallback_med_count"})
+        )
+        med_count = med_count.merge(fallback_counts, on="SEQN", how="outer")
+        med_count["med_count"] = med_count["med_count"].fillna(med_count["_fallback_med_count"]).fillna(0)
+        med_count = med_count[["SEQN", "med_count"]]
+
+        disease_list = (
+            pd.DataFrame({"SEQN": df.loc[med_row, "SEQN"], "drug": med_name.loc[med_row]})
+            .drop_duplicates(subset=["SEQN", "drug"])
+            .groupby("SEQN", as_index=False)["drug"]
+            .agg(lambda values: ", ".join(sorted(values)))
+            .rename(columns={"drug": "rxd_disease_list"})
+        )
+
+        return med_count.merge(disease_list, on="SEQN", how="left")
+
     if not {"RXDRSD1", "RXDRSD2", "RXDRSD3"}.issubset(df.columns):
-        if "RXDCOUNT" in df.columns:
-            med_count = (
-                df[["SEQN", "RXDCOUNT"]]
-                .drop_duplicates(subset=["SEQN"])
-                .rename(columns={"RXDCOUNT": "med_count"})
-            )
-            return med_count.assign(rxd_disease_list=pd.NA)
         return pd.DataFrame(columns=["SEQN", "rxd_disease_list", "med_count"])
+
     melted = df.melt(id_vars="SEQN", value_vars=["RXDRSD1", "RXDRSD2", "RXDRSD3"], value_name="disease")
     melted["disease"] = melted["disease"].astype("string").str.strip()
     melted = melted[melted["disease"].notna() & (melted["disease"] != "")]
@@ -469,6 +512,8 @@ def apply_disease_definitions(df: pd.DataFrame) -> pd.DataFrame:
     creat = num(col("serum_creatinine_mg_dl"))
     ferritin = num(col("ferritin_ng_ml"))
     transf_sat = num(col("transferrin_saturation_pct"))
+    vitamin_b12 = num(col("vitamin_b12_serum_pg_ml"))
+    vitamin_d = num(col("vitamin_d_25oh_nmol_l"))
     sodium = num(col("sodium_mmol_l"))
     potassium = num(col("potassium_mmol_l"))
     calcium = num(col("calcium_mg_dl"))
@@ -525,6 +570,32 @@ def apply_disease_definitions(df: pd.DataFrame) -> pd.DataFrame:
         )
     ).astype("Int64")
     out["iron_deficiency"] = ((ferritin < 30) & (transf_sat < 20)).astype("Int64")
+    b12_available = vitamin_b12.notna()
+    vit_d_available = vitamin_d.notna()
+    out["vitamin_b12_deficiency"] = (
+        pd.Series(np.where(vitamin_b12 < 200, 1.0, 0.0), index=out.index)
+        .where(b12_available, np.nan)
+        .astype("Float64")
+    )
+    out["vitamin_d_deficiency"] = (
+        pd.Series(np.where(vitamin_d < 50, 1.0, 0.0), index=out.index)
+        .where(vit_d_available, np.nan)
+        .astype("Float64")
+    )
+    any_available = b12_available | vit_d_available
+    out["vitamin_deficiency_any"] = (
+        pd.Series(
+            np.where(
+                out["vitamin_b12_deficiency"].fillna(0).eq(1)
+                | out["vitamin_d_deficiency"].fillna(0).eq(1),
+                1.0,
+                0.0,
+            ),
+            index=out.index,
+        )
+        .where(any_available, np.nan)
+        .astype("Float64")
+    )
     out["electrolyte_imbalance"] = (
         (sodium < 136) | (sodium > 145)
         | (potassium < 3.5) | (potassium > 5.0)
@@ -690,6 +761,8 @@ def build_profiles(df: pd.DataFrame) -> list[dict[str, Any]]:
                 "symptom_vector": symptom_vector,
                 "lab_values": {
                     "ferritin": None if pd.isna(row_s.get("ferritin_ng_ml")) else round(float(row_s["ferritin_ng_ml"]), 2),
+                    "vitamin_b12": None if pd.isna(row_s.get("vitamin_b12_serum_pg_ml")) else round(float(row_s["vitamin_b12_serum_pg_ml"]), 2),
+                    "vitamin_d": None if pd.isna(row_s.get("vitamin_d_25oh_nmol_l")) else round(float(row_s["vitamin_d_25oh_nmol_l"]), 2),
                     "hba1c": None if pd.isna(row_s.get("hba1c_pct")) else round(float(row_s["hba1c_pct"]), 2),
                     "creatinine": None if pd.isna(row_s.get("serum_creatinine_mg_dl")) else round(float(row_s["serum_creatinine_mg_dl"]), 2),
                     "crp": None if pd.isna(row_s.get("crp_mg_l")) else round(float(row_s["crp_mg_l"]), 2),
@@ -705,7 +778,7 @@ def build_profiles(df: pd.DataFrame) -> list[dict[str, Any]]:
                 "bayesian_answers": bayesian_answers,
                 "metadata": {
                     "cycle": row_s["cycle"],
-                    "rxd_disease_list": row_s.get("rxd_disease_list"),
+                    "rxd_disease_list": None if pd.isna(row_s.get("rxd_disease_list")) else str(row_s.get("rxd_disease_list")),
                     "notes": "Real NHANES anchor row with probabilistic Bayesian-answer completion and lightweight symptom-noise projection.",
                 },
             }
@@ -720,8 +793,8 @@ def build_dataset() -> tuple[pd.DataFrame, list[dict[str, Any]]]:
         e_frames = load_component_frames(cycle, "examination")
         l_frames = load_component_frames(cycle, "laboratory")
 
-        q_merged = merge_frames([df for df in q_frames if not {"RXDRSD1", "RXDRSD2", "RXDRSD3"}.issubset(df.columns)])
-        rx_frames = [df for df in q_frames if {"RXDRSD1", "RXDRSD2", "RXDRSD3"}.issubset(df.columns)]
+        q_merged = merge_frames([df for df in q_frames if not is_rx_frame(df)])
+        rx_frames = [df for df in q_frames if is_rx_frame(df)]
         rx_agg = aggregate_rxd(rx_frames[0]) if rx_frames else pd.DataFrame(columns=["SEQN", "rxd_disease_list", "med_count"])
         exam = add_exam_means(merge_frames(e_frames))
         lab = merge_frames(l_frames)
@@ -752,6 +825,9 @@ def save_outputs(df: pd.DataFrame, profiles: list[dict[str, Any]]) -> None:
         "liver",
         "menopause",
         "iron_deficiency",
+        "vitamin_b12_deficiency",
+        "vitamin_d_deficiency",
+        "vitamin_deficiency_any",
         "electrolyte_imbalance",
         "infection_inflammation",
         "hidden_inflammation",

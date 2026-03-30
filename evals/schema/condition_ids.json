@@ -10,9 +10,11 @@
     "liver",
     "prediabetes",
     "inflammation",
-    "electrolyte_imbalance"
+    "electrolyte_imbalance",
+    "vitamin_b12_deficiency",
+    "vitamin_d_deficiency"
   ],
-  "count": 11,
+  "count": 13,
   "source": "config.CONDITION_IDS",
   "frozen": true
 }
