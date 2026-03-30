@@ -4,18 +4,18 @@
   "type": "object",
   "required": ["profile_id", "demographics", "symptom_vector", "ground_truth"],
   "properties": {
-    "profile_id":       { "type": "string", "pattern": "^SYN-[A-Z0-9]{8}$" },
-    "profile_type":     { "type": "string", "enum": ["positive", "borderline", "negative", "healthy", "edge"] },
+    "profile_id":       { "type": "string" },
+    "profile_type":     { "type": "string", "enum": ["positive", "borderline", "negative", "healthy", "edge", "multi"] },
     "target_condition": { "type": "string" },
     "demographics": {
       "type": "object",
       "required": ["age", "sex", "bmi"],
       "properties": {
-        "age":            { "type": "integer", "minimum": 18, "maximum": 85 },
+        "age":            { "type": "integer", "minimum": 1, "maximum": 85 },
         "sex":            { "type": "string", "enum": ["M", "F", "X"] },
-        "bmi":            { "type": "number" },
-        "smoking_status": { "type": "string", "enum": ["never", "former", "current"] },
-        "activity_level": { "type": "string", "enum": ["sedentary", "low", "moderate", "high"] }
+        "bmi":            { "type": ["number", "null"] },
+        "smoking_status": { "type": "string", "enum": ["never", "former", "current", "unknown"] },
+        "activity_level": { "type": "string", "enum": ["sedentary", "low", "moderate", "high", "unknown"] }
       }
     },
     "symptom_vector": {
@@ -36,15 +36,7 @@
     },
     "lab_values": {
       "type": ["object", "null"],
-      "properties": {
-        "tsh":        { "type": "number" },
-        "ferritin":   { "type": "number" },
-        "hemoglobin": { "type": "number" },
-        "crp":        { "type": "number" },
-        "vitamin_d":  { "type": "number" },
-        "hba1c":      { "type": "number" },
-        "cortisol":   { "type": "number" }
-      }
+      "additionalProperties": { "type": ["number", "null"] }
     },
     "quiz_path": { "type": "string", "enum": ["full", "hybrid"] },
     "ground_truth": {
