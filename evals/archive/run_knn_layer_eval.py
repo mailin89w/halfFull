@@ -32,7 +32,7 @@ from pathlib import Path
 from statistics import mean
 from typing import Any
 
-EVALS_DIR = Path(__file__).resolve().parent
+EVALS_DIR = Path(__file__).resolve().parent.parent  # script in archive/, step up twice to reach project root
 PROJECT_ROOT = EVALS_DIR.parent
 if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
@@ -40,11 +40,12 @@ if str(PROJECT_ROOT) not in sys.path:
 warnings.filterwarnings("ignore")
 
 from scripts.knn_scorer import KNNScorer
-from evals.run_layer1_eval import (
+from evals.archive.run_layer1_eval import (
     CONDITION_TO_MODEL_KEY,
     MODEL_KEY_TO_CONDITION,
     ModelRunner,
     _build_raw_inputs,
+    _build_raw_inputs_from_nhanes,
 )
 
 DEFAULT_PROFILES = EVALS_DIR / "cohort" / "profiles_v2_latent.json"
@@ -239,7 +240,10 @@ def build_eval_inputs(profile: dict[str, Any]) -> dict[str, Any]:
     Build NHANES-style raw inputs, then apply any hand-authored overrides for
     targeted evaluation packs.
     """
-    raw_inputs = _build_raw_inputs(profile)
+    if "nhanes_inputs" in profile:
+        raw_inputs = _build_raw_inputs_from_nhanes(profile)
+    else:
+        raw_inputs = _build_raw_inputs(profile)
     overrides = profile.get("raw_input_overrides") or {}
     for key, value in overrides.items():
         raw_inputs[key] = value

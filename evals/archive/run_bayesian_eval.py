@@ -29,11 +29,11 @@ from typing import Any
 
 import numpy as np
 
-EVALS_DIR = Path(__file__).resolve().parent
+EVALS_DIR = Path(__file__).resolve().parent.parent  # script in archive/, step up twice to reach project root
 PROJECT_ROOT = EVALS_DIR.parent
 RESULTS_DIR = EVALS_DIR / "results"
 REPORTS_DIR = EVALS_DIR / "reports"
-PROFILES_PATH = EVALS_DIR / "cohort" / "profiles_v3_three_layer.json"
+PROFILES_PATH = EVALS_DIR / "cohort" / "nhanes_balanced_650.json"
 
 sys.path.insert(0, str(PROJECT_ROOT))
 sys.path.insert(0, str(EVALS_DIR))
@@ -41,7 +41,7 @@ sys.path.insert(0, str(EVALS_DIR))
 from bayesian.bayesian_updater import BayesianUpdater
 from bayesian.quiz_to_bayesian_map import get_prefilled_answers
 from bayesian.run_bayesian import handle_questions, handle_update
-from evals.run_layer1_eval import _build_raw_inputs
+from evals.archive.run_layer1_eval import _build_raw_inputs, _build_raw_inputs_from_nhanes
 from models_normalized.model_runner import ModelRunner
 from scripts.score_answers import _patient_context, _remap_scores
 
@@ -318,7 +318,10 @@ def build_prefilled_by_condition(updater: BayesianUpdater, raw_inputs: dict[str,
 
 
 def score_ml_profile(runner: ModelRunner, profile: dict[str, Any]) -> tuple[dict[str, float], dict[str, Any]]:
-    raw_inputs = _build_raw_inputs(profile)
+    if "nhanes_inputs" in profile:
+        raw_inputs = _build_raw_inputs_from_nhanes(profile)
+    else:
+        raw_inputs = _build_raw_inputs(profile)
     feature_vectors = runner._get_normalizer().build_feature_vectors(raw_inputs)
     raw_scores = runner.run_all_with_context(feature_vectors, patient_context=_patient_context(raw_inputs))
     legacy_scores = _remap_scores(raw_scores)

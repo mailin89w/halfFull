@@ -65,7 +65,7 @@ warnings.filterwarnings(
 # ---------------------------------------------------------------------------
 # Path setup
 # ---------------------------------------------------------------------------
-EVALS_DIR             = Path(__file__).resolve().parent
+EVALS_DIR             = Path(__file__).resolve().parent.parent  # script moved to archive/
 PROJECT_ROOT          = EVALS_DIR.parent
 MODELS_NORMALIZED_DIR = PROJECT_ROOT / "models_normalized"
 
@@ -94,7 +94,7 @@ except ImportError as exc:
 # ---------------------------------------------------------------------------
 # Paths
 # ---------------------------------------------------------------------------
-PROFILES_PATH = EVALS_DIR / "cohort" / "profiles_v3_three_layer.json"
+PROFILES_PATH = EVALS_DIR / "cohort" / "nhanes_balanced_650.json"
 SCHEMA_PATH   = EVALS_DIR / "schema"  / "profile_schema.json"
 RESULTS_DIR   = EVALS_DIR / "results"
 REPORTS_DIR   = EVALS_DIR / "reports"
@@ -380,7 +380,7 @@ def _build_raw_inputs(profile: dict) -> dict[str, Any]:
 
     age      = int(demo.get("age",             45))
     sex      = str(demo.get("sex",             "F"))
-    bmi      = float(demo.get("bmi",           28.0))
+    bmi      = float(demo.get("bmi") or 28.0)
     smoking  = str(demo.get("smoking_status",  "never"))
     activity = str(demo.get("activity_level",  "moderate"))
 
@@ -670,7 +670,7 @@ def _build_raw_inputs(profile: dict) -> dict[str, Any]:
     # Include profile lab values under their original keys so the normalizer
     # can pick them up if those column names match any model's feature list.
     for lab_key, lab_val in labs.items():
-        if lab_key not in answers:
+        if lab_key not in answers and lab_val is not None:
             answers[lab_key] = float(lab_val)
 
     # ── Condition-specific overrides ───────────────────────────────────────────
