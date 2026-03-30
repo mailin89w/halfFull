@@ -154,10 +154,213 @@ DOD_TARGETS: dict[str, dict] = {
 
 # ---------------------------------------------------------------------------
 # Feature construction
-# Adapted from evals/score_profiles.py::_build_answers().
-# Converts a profile's symptom_vector + demographics + lab_values into a flat
-# NHANES-keyed dict accepted by ModelRunner's InputNormalizer.
 # ---------------------------------------------------------------------------
+
+def _build_raw_inputs_from_nhanes(profile: dict) -> dict[str, Any]:
+    """
+    Fast path for real NHANES profiles that store raw field values in
+    `nhanes_inputs`.  Maps those values directly to the flat NHANES-keyed
+    dict that ModelRunner's InputNormalizer expects — no synthetic
+    back-calculation from an intermediate symptom_vector.
+
+    Fields not measured in NHANES 2003-2006 (sleep hours, sedentary minutes,
+    abdominal pain) carry neutral population defaults stored in nhanes_inputs
+    at cohort build time (clearly marked there with comments).
+    """
+    ni   = profile["nhanes_inputs"]
+    demo = profile.get("demographics", {})
+    labs = profile.get("lab_values") or {}
+
+    age         = float(ni.get("age_years") or demo.get("age") or 45.0)
+    sex         = demo.get("sex", "F")
+    bmi         = float(ni.get("bmi") or demo.get("bmi") or 27.0)
+    gender_code = float(ni.get("gender_code", 2.0 if sex == "F" else 1.0))
+    gender_f    = float(ni.get("gender_female", 1.0 if sex == "F" else 0.0))
+    weight_kg   = float(ni.get("weight_kg") or bmi * (1.68 ** 2))
+    waist       = float(ni.get("waist_cm") or max(65.0, min(140.0, 75.0 + (bmi - 23.0) * 2.5)))
+
+    dpq040  = float(ni.get("dpq040_fatigue") or 0.0)
+    dpq010  = float(ni.get("dpq010_anhedonia") or 0.0)
+    dpq020  = float(ni.get("dpq020_depressed") or 0.0)
+    dpq030  = float(ni.get("dpq030_sleep") or 0.0)
+    dpq070  = float(ni.get("dpq070_concentration") or 0.0)
+    slq050  = float(ni.get("slq050_sleep_trouble_doctor") or 2.0)
+    sld012  = float(ni.get("sld012_sleep_hours_weekday") or 7.0)
+    sld013  = float(ni.get("sld013_sleep_hours_weekend") or 8.0)
+    snore   = float(ni.get("slq030_snore_freq") or 0.0)
+    stopbrth= float(ni.get("slq040_stop_breathing_freq") or 0.0)
+    cdq010  = float(ni.get("cdq010_sob_stairs") or 2.0)
+    pad680  = float(ni.get("pad680_sedentary_minutes") or 300.0)
+    arthrit = float(ni.get("mcq160a_arthritis") or 2.0)
+    huq010  = float(ni.get("huq010_general_health") or 3.0)
+    nocturia= float(ni.get("kiq480_nocturia") or 0.0)
+    alcohol = float(ni.get("alq130_avg_drinks_per_day") or 0.0)
+    whq040  = float(ni.get("whq040_weight_preference") or 3.0)
+    med_cnt = float(ni.get("med_count") or 0.0)
+    sbp     = float(ni.get("sbp_mean") or 118.0)
+    dbp     = float(ni.get("dbp_mean") or 74.0)
+    smq040  = float(ni.get("smq040_smoke_now") or 3.0)
+    bpq020  = float(ni.get("bpq020_high_bp") or 2.0)
+    bpq040  = float(ni.get("bpq040a_bp_meds") or 2.0)
+    diq010  = float(ni.get("diq010_diabetes") or 2.0)
+    diq160  = float(ni.get("diq160_prediabetes") or 2.0)
+    transf  = float(ni.get("mcq092_transfusion") or 2.0)
+    anemia_tx= float(ni.get("mcq053_anemia_treatment") or 2.0)
+    thyroid_ever  = float(ni.get("mcq160m_ever_thyroid") or 2.0)
+    thyroid_active= float(ni.get("mcq170m_active_thyroid") or 2.0)
+    liver_cond    = float(ni.get("mcq160l_liver_condition") or 2.0)
+    liver_active  = float(ni.get("mcq170l_active_liver") or 2.0)
+    kidney_weak   = float(ni.get("kiq022_weak_kidneys") or 2.0)
+    abdom   = float(ni.get("mcq520_abdominal_pain") or 2.0)
+    reg_per = float(ni.get("rhq031_regular_periods") or 2.0)
+    age_lmp = float(ni.get("rhq060_age_last_period") or 0.0)
+    hormones= float(ni.get("rhq540_hormone_use") or 2.0)
+    ever_preg= float(ni.get("rhq131_ever_pregnant") or 2.0)
+    hw      = float(ni.get("ocq180_hours_worked_week") or 40.0)
+    rxd     = str(ni.get("rxd_disease_list") or "")
+
+    smk_now  = 1.0 if smq040 == 1 else 0.0
+    cigs_day = 10.0 if smq040 == 1 else 0.0
+    smk_100  = 1.0 if smq040 in (1.0, 2.0) else 2.0
+
+    answers: dict[str, Any] = {
+        # Demographics
+        "age_years":    age, "gender": gender_code, "gender_female": gender_f,
+        "bmi": bmi, "weight_kg": weight_kg, "waist_cm": waist,
+        # ── Lab values ────────────────────────────────────────────────────────
+        # Users upload a Clinical Chemistry & Urinalysis report containing ONLY:
+        # lipid panel (total cholesterol, LDL, HDL, triglycerides), fasting
+        # glucose, and urine dipstick (protein, glucose, RBC, WBC, nitrite).
+        # These are not present as numeric values in NHANES 2003-2006, so all
+        # lab fields are None here.  All other clinical chemistry labs
+        # (ferritin, HbA1c, creatinine, CRP, liver enzymes, electrolytes,
+        # vitamin D, vitamin B12, etc.) are also not available from the report
+        # and must be null — the model cannot use them at inference time.
+        "total_cholesterol_mg_dl":    None,
+        "ldl_mg_dl":                  None,
+        "hdl_mg_dl":                  None,
+        "triglycerides_mg_dl":        None,
+        "fasting_glucose_mg_dl":      None,
+        "urine_protein":              None,
+        "urine_glucose":              None,
+        "urine_rbc":                  None,
+        "urine_wbc":                  None,
+        "urine_nitrite":              None,
+        "ferritin_ng_ml":             None,
+        "hemoglobin_g_dl":            None,
+        "hba1c_pct":                  None,
+        "serum_creatinine_mg_dl":     None,
+        "crp_mg_l":                   None,
+        "alt_u_l":                    None,
+        "ast_u_l":                    None,
+        "ggt_u_l":                    None,
+        "serum_albumin_g_dl":         None,
+        "wbc_1000_cells_ul":          None,
+        "total_protein_g_dl":         None,
+        "vitamin_d_25oh_nmol_l":      None,
+        "vitamin_b12_serum_pg_ml":    None,
+        "transferrin_saturation_pct": None,
+        "sodium_mmol_l":              None,
+        "potassium_mmol_l":           None,
+        "calcium_mg_dl":              None,
+        "wbc": None, "total_protein": None,
+        "sbp_mean": sbp, "dbp_mean": dbp,
+        # PHQ items
+        "dpq040___feeling_tired_or_having_little_energy": dpq040,
+        "dpq040_tired_little_energy": dpq040, "feeling_tired_little_energy": dpq040,
+        "dpq010": dpq010, "dpq020": dpq020, "dpq030": dpq030, "dpq070": dpq070,
+        # Sleep
+        "slq050___ever_told_doctor_had_trouble_sleeping?": slq050,
+        "slq050_told_trouble_sleeping": slq050, "trouble_sleeping": slq050,
+        "sld012___sleep_hours___weekdays_or_workdays": sld012,
+        "sld012_sleep_hours_weekday": sld012, "sleep_hours_weekdays": sld012,
+        "sld013___sleep_hours___weekends": sld013,
+        "sld013_sleep_hours_weekend": sld013,
+        "slq030___how_often_do_you_snore?": snore,
+        "slq040___how_often_stop_breathing": stopbrth,
+        "pad680___minutes_sedentary_activity": pad680,
+        "pad680_sedentary_minutes": pad680, "sedentary_minutes": pad680,
+        # Exertion / joints
+        "cdq010___shortness_of_breath_on_stairs/inclines": cdq010,
+        "cdq010_sob_stairs": cdq010,
+        "mcq160a___ever_told_you_had_arthritis": arthrit,
+        "ever_told_arthritis": arthrit,
+        "mcq195___which_type_of_arthritis_was_it?": 2.0 if arthrit == 2.0 else 3.0,
+        "huq010___general_health_condition": huq010,
+        "huq010_general_health": huq010, "general_health": huq010,
+        # Abdominal
+        "mcq520___abdominal_pain_during_past_12_months?": abdom, "abdominal_pain": abdom,
+        "mcq540___ever_seen_a_dr_about_this_pain": 2.0, "saw_dr_for_pain": 2.0,
+        # Liver / hepatitis (use NHANES history flags directly)
+        "mcq160l___ever_told_you_had_any_liver_condition": liver_cond, "liver_condition": liver_cond,
+        "heq030___ever_told_you_have_hepatitis_c?": 1.0 if float(ni.get("hepatitis_bc") or 0) >= 0.5 else 2.0,
+        "ever_hepatitis_c": 1.0 if float(ni.get("hepatitis_bc") or 0) >= 0.5 else 2.0,
+        # Weight
+        "whq040___like_to_weigh_more,_less_or_same": whq040,
+        "mcq080___doctor_ever_said_you_were_overweight": 1.0 if bmi >= 30 else 2.0,
+        # Medications
+        "med_count": med_cnt,
+        "mcq053___taking_treatment_for_anemia/past_3_mos": anemia_tx,
+        "taking_anemia_treatment": anemia_tx,
+        # Smoking
+        "smq040___do_you_now_smoke_cigarettes?": smq040, "smoking_now": smk_now,
+        "smd650___avg_#_cigarettes/day_during_past_30_days": cigs_day,
+        "smq020___smoked_at_least_100_cigarettes_in_life": smk_100,
+        # Alcohol
+        "alq130___avg_#_alcoholic_drinks/day___past_12_mos": alcohol,
+        "avg_drinks_per_day": alcohol,
+        "alq111___ever_had_a_drink_of_any_kind_of_alcohol": 1.0 if alcohol > 0 else 2.0,
+        "alq151___ever_have_4/5_or_more_drinks_every_day?": 1.0 if alcohol >= 4 else 2.0,
+        # Activity (derived from stored activity_level)
+        "paq605___vigorous_work_activity": 2.0,
+        "paq620___moderate_work_activity": 2.0,
+        "paq650___vigorous_recreational_activities": 2.0,
+        "paq665___moderate_recreational_activities": 1.0 if ni.get("activity_level") in ("moderate", "high") else 2.0,
+        "ocq180___hours_worked_last_week_in_total_all_jobs": hw, "hours_worked_per_week": hw,
+        # Blood pressure
+        "bpq020___ever_told_you_had_high_blood_pressure": bpq020, "ever_told_high_bp": bpq020,
+        "bpq040a___taking_prescription_for_hypertension": bpq040, "taking_bp_prescription": bpq040,
+        "bpq080___doctor_told_you___high_cholesterol_level": 2.0, "ever_told_high_cholesterol": 2.0,
+        # Diabetes
+        "diq010___doctor_told_you_have_diabetes": diq010, "ever_told_diabetes": diq010, "diabetes": diq010,
+        "diq160___told_by_doctor_have_prediabetes": diq160,
+        "diq050___taking_insulin_now": 2.0, "diq070___take_diabetic_pills_to_lower_blood_sugar": 2.0,
+        "mcq300c___close_relative_had_diabetes": 2.0,
+        # Kidney
+        "kiq022___ever_told_you_had_weak/failing_kidneys?": kidney_weak, "kidney_disease": kidney_weak,
+        "kiq480___how_many_times_urinate_in_night?": nocturia, "times_urinate_in_night": nocturia,
+        "kiq026___ever_had_kidney_stones?": 2.0,
+        "kiq005___how_often_have_urinary_leakage?": 5.0, "kiq010___how_much_urine_lose_each_time?": 3.0,
+        "kiq042___leak_urine_during_physical_activities?": 2.0,
+        "kiq044___urinated_before_reaching_the_toilet?": 2.0,
+        "kiq052___how_much_were_daily_activities_affected?": 4.0,
+        # Transfusion
+        "mcq092___ever_receive_blood_transfusion": transf,
+        "ever_had_blood_transfusion": transf, "blood_transfusion": transf,
+        # Reproductive
+        "rhq031___had_regular_periods_in_past_12_months": reg_per, "regular_periods": reg_per,
+        "rhq060___age_at_last_menstrual_period": age_lmp,
+        "rhq540___ever_use_female_hormones?": hormones,
+        "rhq131___ever_been_pregnant?": ever_preg,
+        "rhq160___how_many_times_have_been_pregnant?": 2.0,
+        "pregnancy_status": 2.0,
+        # Thyroid history
+        "mcq160m___ever_told_you_had_thyroid_problem": thyroid_ever,
+        "mcq170m___still_have_thyroid_problem": thyroid_active,
+        # General
+        "huq051___#times_receive_healthcare_over_past_year": float(np.clip(1.0 + med_cnt * 1.5, 0.0, 16.0)),
+        "huq071___overnight_hospital_patient_in_last_year": 2.0,
+        "rxd_disease_list": rxd,
+        "dmdeduc2": 3.0, "education": 3.0,
+    }
+
+    # Merge profile lab_values under their original keys
+    for k, v in labs.items():
+        if k not in answers and v is not None:
+            answers[k] = float(v)
+
+    return answers
+
 
 def _build_raw_inputs(profile: dict) -> dict[str, Any]:
     """Build NHANES-format raw inputs from a synthetic profile."""
@@ -527,7 +730,10 @@ def _score_profile(
     or None if feature construction or inference failed.
     """
     try:
-        raw_inputs = _build_raw_inputs(profile)
+        if "nhanes_inputs" in profile:
+            raw_inputs = _build_raw_inputs_from_nhanes(profile)
+        else:
+            raw_inputs = _build_raw_inputs(profile)
         demo = profile.get("demographics", {})
         patient_context = {
             "gender":    "Female" if demo.get("sex") == "F" else "Male",
@@ -816,13 +1022,16 @@ def _to_markdown(report: dict, run_id: str) -> str:
         "female profiles, often displacing true top-1 for other conditions."
     )
     lines.append("")
-    lines.append(
-        "> `vitamin_b12_deficiency` and `vitamin_d_deficiency` currently have no "
-        "positive target profiles in this synthetic cohort. Their rows therefore "
-        "reflect only how often they flag against the existing benchmark, not a "
-        "clean holdout estimate of recall or precision."
-    )
-    lines.append("")
+    vit_b12 = report["per_condition"].get("vitamin_b12_deficiency")
+    vit_d = report["per_condition"].get("vitamin_d_deficiency")
+    if vit_b12 and vit_d and vit_b12["n_positive_target"] == 0 and vit_d["n_positive_target"] == 0:
+        lines.append(
+            "> `vitamin_b12_deficiency` and `vitamin_d_deficiency` currently have no "
+            "positive target profiles in this synthetic cohort. Their rows therefore "
+            "reflect only how often they flag against the existing benchmark, not a "
+            "clean holdout estimate of recall or precision."
+        )
+        lines.append("")
 
     return "\n".join(lines)
 
