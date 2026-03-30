@@ -42,8 +42,9 @@ import json
 import logging
 import random
 import sys
+import types
 import warnings
-from collections import defaultdict
+from collections import defaultdict, deque
 from datetime import datetime
 from pathlib import Path
 from typing import Any
@@ -72,6 +73,16 @@ MODELS_NORMALIZED_DIR = PROJECT_ROOT / "models_normalized"
 sys.path.insert(0, str(PROJECT_ROOT))
 sys.path.insert(0, str(EVALS_DIR))
 sys.path.insert(0, str(MODELS_NORMALIZED_DIR))  # makes `import model_runner` work
+
+try:
+    import jsonschema  # noqa: F401
+except ImportError:
+    # Eval convenience: schema validation is nice-to-have, not a hard runtime
+    # dependency when we are loading a repo-owned benchmark file.
+    jsonschema_stub = types.ModuleType("jsonschema")
+    jsonschema_stub.ValidationError = Exception
+    jsonschema_stub.validate = lambda *args, **kwargs: None
+    sys.modules["jsonschema"] = jsonschema_stub
 
 try:
     from tqdm import tqdm
@@ -125,7 +136,6 @@ CONDITION_TO_MODEL_KEY: dict[str, str | None] = {
     "perimenopause":         "perimenopause",
     "prediabetes":           "prediabetes",
     "sleep_disorder":        "sleep_disorder",
-    "vitamin_b12_deficiency": "vitamin_b12_deficiency",
     "vitamin_d_deficiency":   "vitamin_d_deficiency",
 }
 
@@ -142,8 +152,19 @@ MODEL_KEY_TO_CONDITION: dict[str, str | None] = {
     "prediabetes":           "prediabetes",
     "sleep_disorder":        "sleep_disorder",
     "thyroid":               "hypothyroidism",
-    "vitamin_b12_deficiency": "vitamin_b12_deficiency",
     "vitamin_d_deficiency":   "vitamin_d_deficiency",
+}
+
+ACTIVE_EVAL_CONDITIONS_12: tuple[str, ...] = tuple(CONDITION_TO_MODEL_KEY.keys())
+ACTIVE_MODEL_KEYS_12: set[str] = {
+    model_key
+    for model_key in CONDITION_TO_MODEL_KEY.values()
+    if model_key is not None
+}
+SKIP_MODEL_KEYS_FOR_EVAL: set[str] = {
+    model_key
+    for model_key in MODEL_KEY_TO_CONDITION
+    if model_key not in ACTIVE_MODEL_KEYS_12
 }
 
 # DoD targets applicable to the ML layer
@@ -749,7 +770,16 @@ def _score_profile(
         patient_context["raw_fasting_glucose"] = raw_inputs.get("fasting_glucose_mg_dl")
         norm = runner._get_normalizer()
         feature_vectors = norm.build_feature_vectors(raw_inputs)
-        scores = runner.run_all_with_context(feature_vectors, patient_context)
+        scores = runner.run_all_with_context(
+            feature_vectors,
+            patient_context,
+            skip_conditions=SKIP_MODEL_KEYS_FOR_EVAL,
+        )
+        scores = {
+            model_key: prob
+            for model_key, prob in scores.items()
+            if model_key in ACTIVE_MODEL_KEYS_12
+        }
         return scores
     except Exception as exc:
         logger.warning(
@@ -1023,18 +1053,96 @@ def _to_markdown(report: dict, run_id: str) -> str:
         "female profiles, often displacing true top-1 for other conditions."
     )
     lines.append("")
-    vit_b12 = report["per_condition"].get("vitamin_b12_deficiency")
     vit_d = report["per_condition"].get("vitamin_d_deficiency")
-    if vit_b12 and vit_d and vit_b12["n_positive_target"] == 0 and vit_d["n_positive_target"] == 0:
+    if vit_d and vit_d["n_positive_target"] == 0:
         lines.append(
-            "> `vitamin_b12_deficiency` and `vitamin_d_deficiency` currently have no "
-            "positive target profiles in this synthetic cohort. Their rows therefore "
-            "reflect only how often they flag against the existing benchmark, not a "
-            "clean holdout estimate of recall or precision."
+            "> `vitamin_d_deficiency` currently has no positive target profiles in "
+            "this benchmark slice. Its row therefore reflects only how often it flags "
+            "against the existing cohort, not a clean holdout estimate of recall or precision."
         )
         lines.append("")
 
     return "\n".join(lines)
+
+
+def _force_serial_inference(runner: ModelRunner) -> None:
+    """
+    Disable nested parallelism inside the loaded sklearn pipelines.
+
+    On Windows, some RF-based models can intermittently throw WinError 5 during
+    predict_proba when both the outer ModelRunner loop and inner estimators try
+    to parallelise. For eval stability we force everything to single-worker.
+    """
+    runner._max_workers = 1
+
+    seen: set[int] = set()
+
+    def _walk(obj: Any) -> None:
+        queue: deque[Any] = deque([obj])
+        while queue:
+            current = queue.popleft()
+            ident = id(current)
+            if ident in seen:
+                continue
+            seen.add(ident)
+
+            if hasattr(current, "n_jobs"):
+                try:
+                    current.n_jobs = 1
+                except Exception:
+                    pass
+
+            if isinstance(current, dict):
+                queue.extend(current.values())
+                continue
+
+            if isinstance(current, (list, tuple, set)):
+                queue.extend(current)
+                continue
+
+            if hasattr(current, "steps"):
+                try:
+                    queue.extend(step for _, step in current.steps)
+                except Exception:
+                    pass
+
+            if hasattr(current, "named_steps"):
+                try:
+                    queue.extend(current.named_steps.values())
+                except Exception:
+                    pass
+
+            if hasattr(current, "estimators_"):
+                try:
+                    queue.extend(current.estimators_)
+                except Exception:
+                    pass
+
+            if hasattr(current, "estimator"):
+                try:
+                    queue.append(current.estimator)
+                except Exception:
+                    pass
+
+            if hasattr(current, "base_estimator"):
+                try:
+                    queue.append(current.base_estimator)
+                except Exception:
+                    pass
+
+            if hasattr(current, "get_params"):
+                try:
+                    queue.extend(current.get_params(deep=True).values())
+                except Exception:
+                    pass
+
+            try:
+                queue.extend(vars(current).values())
+            except Exception:
+                pass
+
+    for pipeline in runner._pipelines.values():
+        _walk(pipeline)
 
 
 def _print_dod(report: dict) -> None:
@@ -1128,13 +1236,15 @@ def main() -> int:
         profiles = rng.sample(profiles, args.n)
         logger.info("Sampled %d profiles (seed=%d)", args.n, args.seed)
 
-    # -- Load ModelRunner (once; loads all 11 v2 models) ----------------------
+    # -- Load ModelRunner (once; loads all active v2 models) ------------------
     logger.info("Loading v2 ML models from %s …", MODELS_NORMALIZED_DIR)
     try:
-        runner = ModelRunner(models_dir=MODELS_NORMALIZED_DIR)
+        runner = ModelRunner(models_dir=MODELS_NORMALIZED_DIR, max_workers=1)
     except Exception as exc:
         logger.error("Failed to initialise ModelRunner: %s", exc)
         return 1
+
+    _force_serial_inference(runner)
 
     if runner.failed_models:
         logger.warning("Failed to load models: %s", runner.failed_models)

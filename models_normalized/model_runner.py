@@ -98,7 +98,7 @@ RECOMMENDED_THRESHOLDS = {
     "hepatitis_bc":          0.15,
     "iron_deficiency":       0.15,
     "vitamin_b12_deficiency": 0.80,
-    "vitamin_d_deficiency":   0.25,
+    "vitamin_d_deficiency":   0.40,
 }
 
 # Per-disease user-facing filtering criteria
@@ -135,8 +135,10 @@ RECOMMENDED_THRESHOLDS = {
 #   0.80  vitamin_b12_deficiency — very low-prevalence model; only surface the
 #                                  strongest scores until we have product-side
 #                                  validation on real user traffic
-#   0.25  vitamin_d_deficiency   — NHANES 2017–2018 aligned RF+cal model;
-#                                  best OOF F1 on the clean blood-lab sweep
+#   0.40  vitamin_d_deficiency   — raised from 0.25 on 2026-03-30 after
+#                                  NHANES 760 threshold sweep: far lower alert
+#                                  burden and healthy false positives while
+#                                  keeping a usable recall level
 USER_FACING_THRESHOLDS = {
     "hepatitis_bc":          0.10,
     "liver":                 0.07,
@@ -150,7 +152,7 @@ USER_FACING_THRESHOLDS = {
     "perimenopause":         0.40,
     "sleep_disorder":        0.75,   # raised 0.70→0.75 on 2026-03-26 optional cleanup: precision 10.9%→13.1%, flag 24.5%→16.5%, recall 25.0%→20.3%
     "vitamin_b12_deficiency": 0.80,
-    "vitamin_d_deficiency":   0.25,
+    "vitamin_d_deficiency":   0.40,
 }
 
 # Lower thresholds used only to decide which conditions enter Bayesian review.

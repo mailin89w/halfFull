@@ -157,6 +157,11 @@ export async function POST(req: NextRequest) {
   const answers: Record<string, unknown> = body.answers ?? {};
   const mlScores: Record<string, number> | undefined = body.mlScores;
   const rawMlScores: Record<string, number> | undefined = body.rawMlScores;
+  const evalMode: 'default' | 'medgemma_only' =
+    body.evalMode === 'medgemma_only' ? 'medgemma_only' : 'default';
+  const evalCandidateConditions: string[] = Array.isArray(body.evalCandidateConditions)
+    ? body.evalCandidateConditions.map((value: unknown) => String(value)).filter(Boolean)
+    : [];
   let privacy: ServerPrivacyContext | null;
 
   try {
@@ -181,9 +186,11 @@ export async function POST(req: NextRequest) {
   const fatigueSeverity = fatigueSeverityRaw === undefined ? null : Number(fatigueSeverityRaw);
 
   const topConditions = mlScores ? selectTopConditions(mlScores) : [];
-  const flaggedConditions = topConditions
-    .filter(([, p]) => p >= ML_THRESHOLD)
-    .map(([c]) => c);
+  const flaggedConditions = evalMode === 'medgemma_only'
+    ? evalCandidateConditions
+    : topConditions
+      .filter(([, p]) => p >= ML_THRESHOLD)
+      .map(([c]) => c);
 
   const bayesianEvidenceText = clarificationQA && clarificationQA.length > 0
     ? clarificationQA
@@ -191,17 +198,26 @@ export async function POST(req: NextRequest) {
       .join('\n')
     : 'No Bayesian follow-up evidence provided.';
 
-  const scoreSummaryJson = JSON.stringify({
-    threshold: ML_THRESHOLD,
-    topConditions,
-    allScores: mlScores ?? {},
-    filteredHighScoreConditions: flaggedConditions,
-    confirmedConditions,
-  }, null, 2);
+  const scoreSummaryJson = evalMode === 'medgemma_only'
+    ? JSON.stringify({
+      mode: 'medgemma_only',
+      note: 'ML scores intentionally withheld for quiz-only evaluation. Review the candidate conditions using questionnaire evidence only.',
+      candidateConditions: flaggedConditions,
+      confirmedConditions,
+    }, null, 2)
+    : JSON.stringify({
+      threshold: ML_THRESHOLD,
+      topConditions,
+      allScores: mlScores ?? {},
+      filteredHighScoreConditions: flaggedConditions,
+      confirmedConditions,
+    }, null, 2);
 
   // [ADDED] Healthy user path: no scores or everything below 0.35
   const isAllClear =
-    !mlScores || Object.values(mlScores).every((p) => p < 0.35);
+    evalMode === 'medgemma_only'
+      ? false
+      : (!mlScores || Object.values(mlScores).every((p) => p < 0.35));
 
   // ── KNN neighbour lab signals (optional, toggle via useKNN in request body) ──
   let knnResult: KnnResult | null = null;
@@ -237,7 +253,9 @@ export async function POST(req: NextRequest) {
     }
   }
 
-  const promptCalibrationSignals: PromptCalibrationSignal[] = topConditions.map(([conditionId]) => {
+  const promptCalibrationSignals: PromptCalibrationSignal[] = evalMode === 'medgemma_only'
+    ? []
+    : topConditions.map(([conditionId]) => {
     const rawMlScore = rawMlScores?.[conditionId] ?? mlScores?.[conditionId] ?? 0;
     const effectiveScore = mlScores?.[conditionId] ?? rawMlScore;
     const confidence = computeConfidence({
@@ -263,7 +281,7 @@ export async function POST(req: NextRequest) {
       confidenceSummary: confidence.summary,
       urgencySummary: urgency.reasons[0] ?? urgency.cta,
     };
-  });
+    });
   const riskCalibrationText = buildRiskCalibrationText(promptCalibrationSignals);
   const overallUrgency: UrgencyLevel =
     promptCalibrationSignals.some((signal) => signal.urgencyLevel === 'urgent')
@@ -338,7 +356,10 @@ export async function POST(req: NextRequest) {
     knnLabText,
     prioritizedConditions: flaggedConditions,
     confirmedConditions,
-    riskCalibrationText,
+    riskCalibrationText: evalMode === 'medgemma_only' ? null : riskCalibrationText,
+    candidateSourceLabel: evalMode === 'medgemma_only'
+      ? 'Review these candidate conditions for this quiz-only eval arm. ML scores are intentionally withheld:'
+      : undefined,
   });
 
   let groundingResult: MedGemmaGroundingResult = {

@@ -10,9 +10,26 @@
 // ── Allowlist of valid diagnosisId values (mirrors the prompt allowlist) ───
 
 export const DIAGNOSIS_ID_ALLOWLIST = new Set([
-  'iron', 'thyroid', 'sleep', 'vitamins', 'stress', 'postviral',
-  'anemia', 'iron_deficiency', 'kidney', 'sleep_disorder', 'liver',
-  'prediabetes', 'inflammation', 'electrolytes', 'hepatitis', 'perimenopause',
+  'anemia',
+  'electrolyte_imbalance',
+  'electrolytes',
+  'hepatitis',
+  'hypothyroidism',
+  'inflammation',
+  'iron',
+  'iron_deficiency',
+  'kidney',
+  'kidney_disease',
+  'liver',
+  'perimenopause',
+  'prediabetes',
+  'sleep',
+  'sleep_disorder',
+  'stress',
+  'thyroid',
+  'vitamin_d_deficiency',
+  'vitamins',
+  'postviral',
 ]);
 
 // ── V6: MedGemma grounding output types ───────────────────────────────────

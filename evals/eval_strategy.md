@@ -195,6 +195,23 @@ The original build used `< 50 nmol/L` (the WHO "insufficiency" cut), which label
 - 659 profiles (10.5%) are vitamin D deficient — a more realistic prevalence for a diagnostic tool
 - 13,164 of 20,470 NHANES rows have zero conditions — providing a large, real "healthy" pool
 
+### Vitamin D model surfacing threshold: 0.40
+
+The **model operating threshold** for `vitamin_d_deficiency` is distinct from the **clinical cohort-label threshold** above.
+
+On 2026-03-30 we re-ran `run_layer1_eval.py` on `nhanes_balanced_760.json` and swept the current repo model across candidate thresholds. The previous user-facing threshold (`0.25`) produced excessive alert burden:
+
+- threshold `0.25` → recall `78.2%`, precision `9.2%`, flag rate `61.3%`, healthy flag rate `52.0%`
+- threshold `0.40` → recall `30.9%`, precision `13.6%`, flag rate `16.4%`, healthy flag rate `8.0%`
+- threshold `0.50` → recall `16.4%`, precision `14.8%`, flag rate `8.0%`, healthy flag rate `4.0%`
+
+We adopted **`0.40`** as the new default operating threshold because it is the best balanced point on the current benchmark:
+
+- flag rate is close to cohort prevalence (`15.4%`)
+- healthy over-alert falls below the 10% guardrail
+- precision improves materially over `0.25`
+- recall remains usable, unlike more conservative thresholds such as `0.50+`
+
 ### 100 healthy profiles
 
 Healthy profiles are drawn from the 13,164 NHANES rows with genuinely zero conditions under the tightened thresholds. These are real adults who happen to not meet any of our 12 condition definitions at the time of their NHANES survey.

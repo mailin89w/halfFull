@@ -1,6 +1,6 @@
 import { EVALUATED_FATIGUE_DISEASES } from '@/src/lib/assessmentPromptContext';
 
-const CONDITION_ALLOWLIST = 'iron|thyroid|sleep|vitamins|stress|postviral|anemia|iron_deficiency|kidney|sleep_disorder|liver|prediabetes|inflammation|electrolytes|hepatitis|perimenopause';
+const CONDITION_ALLOWLIST = 'perimenopause|hypothyroidism|kidney_disease|sleep_disorder|anemia|iron_deficiency|hepatitis|liver|prediabetes|inflammation|electrolyte_imbalance|vitamin_d_deficiency|thyroid|kidney|electrolytes|vitamins';
 
 export const MEDGEMMA_JSON_SYSTEM_V1 =
   'You output valid JSON only. No markdown, no thinking, no explanations, no preamble. Start your response immediately with { and end with }.';
@@ -103,7 +103,7 @@ export function buildDeepAnalyzePrompt({
 
 Your job is NOT to ask clarification questions. The Bayesian layer already handled follow-up questioning. Your job is to review all provided evidence, verify which disease suspicions are still supported, decline the ones that are not supported, and produce a useful doctor-ready summary.
 
-We tested 11 diseases as fatigue-related signals in our filtering layer:
+We tested 12 diseases as fatigue-related signals in our filtering layer:
 ${evaluatedDiseases}
 
 ${candidateInstruction}
@@ -223,6 +223,7 @@ export type MedGemmaGroundingPromptArgs = {
   confirmedConditions: string[];
   riskCalibrationText?: string | null;
   knnLabText?: string | null;
+  candidateSourceLabel?: string;
 };
 
 export function buildMedGemmaGroundingPromptV6({
@@ -233,6 +234,7 @@ export function buildMedGemmaGroundingPromptV6({
   confirmedConditions,
   riskCalibrationText,
   knnLabText,
+  candidateSourceLabel,
 }: MedGemmaGroundingPromptArgs): string {
   const evaluatedDiseases = formatEvaluatedDiseaseList();
   const confirmedText =
@@ -248,10 +250,10 @@ TASK: Produce a complete structured clinical summary. A general-purpose language
 
 CRITICAL INSTRUCTION: Follow the evidence in this patient record. Do not apply your prior beliefs about which diseases are statistically common. If the questionnaire answers and Bayesian data do not independently support a hypothesis beyond just the ML score, decline it — even if it is a common disease. Your job is to follow the evidence, not your priors.
 
-We tested 11 diseases as fatigue signals:
+We tested 12 diseases as fatigue signals:
 ${evaluatedDiseases}
 
-These hypotheses cleared the ML filtering layer and require verification:
+${candidateSourceLabel ?? 'These hypotheses cleared the ML filtering layer and require verification:'}
 ${candidateList}
 
 ALREADY CONFIRMED CONDITIONS (treat as established facts, do not re-evaluate):

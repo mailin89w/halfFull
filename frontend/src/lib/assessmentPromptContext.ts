@@ -17,16 +17,17 @@ export interface EvaluatedDisease {
 
 export const EVALUATED_FATIGUE_DISEASES: EvaluatedDisease[] = [
   { id: 'perimenopause', label: 'Perimenopause' },
+  { id: 'hypothyroidism', label: 'Hypothyroidism' },
   { id: 'anemia', label: 'Anaemia' },
   { id: 'iron_deficiency', label: 'Iron deficiency' },
-  { id: 'kidney', label: 'Kidney disease' },
+  { id: 'kidney_disease', label: 'Kidney disease' },
   { id: 'sleep_disorder', label: 'Sleep disorder' },
-  { id: 'thyroid', label: 'Hypothyroidism / thyroid dysfunction' },
-  { id: 'hepatitis', label: 'Hepatitis / liver inflammation' },
+  { id: 'hepatitis', label: 'Hepatitis' },
+  { id: 'liver', label: 'Liver disease' },
   { id: 'prediabetes', label: 'Prediabetes' },
   { id: 'inflammation', label: 'Hidden inflammation' },
-  { id: 'electrolytes', label: 'Electrolyte imbalance' },
-  { id: 'liver', label: 'Liver disease' },
+  { id: 'electrolyte_imbalance', label: 'Electrolyte imbalance' },
+  { id: 'vitamin_d_deficiency', label: 'Vitamin D deficiency' },
 ];
 
 function stringifyRawValue(value: unknown): string {

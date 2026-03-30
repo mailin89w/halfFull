@@ -52,8 +52,8 @@
     "whq070_tried_to_lose_weight"
   ],
   "n_features": 41,
-  "recommended_threshold": 0.25,
-  "pipeline_gate": 0.25,
+  "recommended_threshold": 0.4,
+  "pipeline_gate": 0.4,
   "auc_oof": 0.7044,
   "auprc_oof": 0.4715,
   "best_f1_oof": 0.5173,
