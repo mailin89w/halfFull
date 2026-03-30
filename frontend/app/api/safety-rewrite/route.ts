@@ -24,9 +24,11 @@ export async function POST(req: NextRequest) {
   }
   if (rewritten.status !== undefined) {
     response.headers.set('x-safety-rewrite-status', String(rewritten.status));
+    response.headers.set('x-safety-groq-status', String(rewritten.status));
   }
   if (rewritten.errorSnippet) {
     response.headers.set('x-safety-rewrite-error-snippet', encodeURIComponent(rewritten.errorSnippet));
+    response.headers.set('x-safety-groq-error-snippet', encodeURIComponent(rewritten.errorSnippet));
   }
   return response;
 }

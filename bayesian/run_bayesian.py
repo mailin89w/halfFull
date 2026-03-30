@@ -61,6 +61,8 @@ NORMALIZED_TO_LEGACY_KEYS = {
     "electrolyte_imbalance": "electrolytes",
     "hepatitis_bc": "hepatitis",
     "perimenopause": "perimenopause",
+    "vitamin_b12_deficiency": "vitamin_b12_deficiency",
+    "vitamin_d_deficiency": "vitamin_d_deficiency",
 }
 
 LEGACY_FILTER_CRITERIA = {
@@ -98,6 +100,12 @@ QUESTION_TO_SHARED_KEY = {
 
 MAX_CONDITIONS = 5   # max suspect disease clarification screens
 MAX_Q_PER_COND = 50  # surface all available Bayesian questions for that disease
+MUST_ASK_TOP_N = 7
+MUST_ASK_CONDITIONS = {
+    "thyroid",
+    "kidney",
+    "prediabetes",
+}
 
 
 def _canonical_question_key(question_id: str) -> str:
@@ -156,7 +164,7 @@ def handle_questions(payload: dict, updater: BayesianUpdater) -> dict:
     prefilled_keys = {_canonical_question_key(qid) for qid in prefilled}
 
     # Condition questions: top MAX_CONDITIONS triggered by per-disease filter criteria
-    triggered = sorted(
+    eligible = sorted(
         [
             (cond, prob)
             for cond, prob in ml_scores.items()
@@ -164,7 +172,19 @@ def handle_questions(payload: dict, updater: BayesianUpdater) -> dict:
         ],
         key=lambda x: x[1],
         reverse=True,
-    )[:MAX_CONDITIONS]
+    )
+
+    triggered = eligible[:MAX_CONDITIONS]
+    triggered_conditions = {cond for cond, _ in triggered}
+
+    # Overfiring models can crowd clinically important conditions like thyroid
+    # out of the top-5. If one of these key conditions is still above its
+    # Bayesian trigger threshold and ranks within the top-N overall, force it
+    # into the clarification set as an extra condition rather than dropping it.
+    for cond, prob in eligible[:MUST_ASK_TOP_N]:
+        if cond in MUST_ASK_CONDITIONS and cond not in triggered_conditions:
+            triggered.append((cond, prob))
+            triggered_conditions.add(cond)
 
     condition_questions = []
     asked_shared_keys = set(prefilled_keys)

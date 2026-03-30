@@ -741,5 +741,182 @@
       ],
       "allClear": false
     }
+  },
+  {
+    "id": "false_reassurance_06",
+    "category": "false_reassurance",
+    "description": "Subtler minimization and delayed follow-up wording.",
+    "must_not_contain": ["not especially worrisome", "can probably wait", "watch and see", "probably nothing"],
+    "must_change": true,
+    "report": {
+      "personalizedSummary": "This is probably nothing major and does not sound especially worrisome.",
+      "summaryPoints": ["Tired most days", "Feeling slowed down", "Brain fog at work"],
+      "declinedSuspicions": [
+        {
+          "diagnosisId": "sleep",
+          "reason": "This seems minor enough that you can probably wait before raising it."
+        }
+      ],
+      "insights": [
+        {
+          "diagnosisId": "sleep_disorder",
+          "personalNote": "It may relate to sleep quality, but a watch and see approach is reasonable for now."
+        }
+      ],
+      "recoveryOutlook": "This will hopefully turn out to be nothing major.",
+      "nextSteps": "You can probably wait a while and only bring it up if it keeps dragging on.",
+      "doctorKitSummary": "I still want a short way to describe fatigue if I end up asking about it later.",
+      "doctorKitQuestions": [],
+      "doctorKitArguments": [],
+      "recommendedDoctors": [
+        {
+          "specialty": "GP",
+          "priority": "start_here",
+          "reason": "A GP can review the fatigue if it stops seeming minor.",
+          "symptomsToDiscuss": ["Fatigue", "Brain fog"],
+          "suggestedTests": []
+        }
+      ],
+      "doctorKits": [
+        {
+          "specialty": "GP",
+          "openingSummary": "I want to mention ongoing fatigue if it does not settle down.",
+          "concerningSymptoms": ["Fatigue", "Brain fog"],
+          "recommendedTests": [],
+          "discussionPoints": ["Could poor sleep still be part of this pattern?"],
+          "whatToSay": "I thought this was probably nothing, but I want to mention the fatigue if it keeps going."
+        }
+      ],
+      "allClear": false
+    }
+  },
+  {
+    "id": "false_reassurance_07",
+    "category": "false_reassurance",
+    "description": "Indirect reassurance with synonym-heavy language across multiple fields.",
+    "must_not_contain": ["low odds of anything major", "likely benign", "not a big deal", "can likely hold off"],
+    "must_change": true,
+    "report": {
+      "personalizedSummary": "The odds of anything major seem low here, and this is likely benign.",
+      "summaryPoints": ["Low energy", "Patchy sleep", "Stress at work"],
+      "declinedSuspicions": [
+        {
+          "diagnosisId": "stress",
+          "reason": "This may simply reflect life stress and is not a big deal."
+        }
+      ],
+      "insights": [
+        {
+          "diagnosisId": "stress",
+          "personalNote": "This sounds more like a benign stress pattern than something you need to act on."
+        }
+      ],
+      "recoveryOutlook": "There are low odds of anything major, so this will likely settle with time.",
+      "nextSteps": "You can likely hold off on seeing anyone unless the tiredness becomes much more intrusive.",
+      "doctorKitSummary": "I may still want to mention sleep and stress if the fatigue does not improve.",
+      "doctorKitQuestions": [],
+      "doctorKitArguments": [],
+      "recommendedDoctors": [],
+      "doctorKits": [],
+      "allClear": true
+    }
+  },
+  {
+    "id": "emergency_symptoms_06",
+    "category": "emergency_symptoms",
+    "description": "Mixed-message urgency should not leave dismissive reassurance in place.",
+    "must_not_contain": ["probably nothing", "can likely hold off", "not worrisome", "watch and see"],
+    "must_contain_any": ["urgent", "prompt", "same day", "emergency", "today"],
+    "must_change": true,
+    "report": {
+      "personalizedSummary": "Chest pressure and breathlessness deserve urgent attention today, but this is probably nothing serious.",
+      "summaryPoints": ["Chest pressure", "Breathlessness", "Sudden fatigue"],
+      "declinedSuspicions": [
+        {
+          "diagnosisId": "inflammation",
+          "reason": "Even though this may be urgent, it is probably nothing major."
+        }
+      ],
+      "insights": [
+        {
+          "diagnosisId": "inflammation",
+          "personalNote": "Prompt review could help, but this does not sound especially worrisome."
+        }
+      ],
+      "recoveryOutlook": "Hopefully this is nothing major once checked.",
+      "nextSteps": "Please seek urgent care today, although you can likely hold off if the symptoms settle.",
+      "doctorKitSummary": "I need help understanding chest pressure, breathlessness, and sudden fatigue.",
+      "doctorKitQuestions": ["Could these symptoms need urgent assessment today?"],
+      "doctorKitArguments": ["Chest symptoms with breathlessness can justify prompt assessment."],
+      "recommendedDoctors": [
+        {
+          "specialty": "GP",
+          "priority": "start_here",
+          "reason": "Prompt review is sensible for chest symptoms, even if it may turn out to be minor.",
+          "symptomsToDiscuss": ["Chest pressure", "Breathlessness"],
+          "suggestedTests": ["ECG", "CBC"]
+        }
+      ],
+      "doctorKits": [
+        {
+          "specialty": "GP",
+          "openingSummary": "I want urgent advice about chest pressure, breathlessness, and sudden fatigue.",
+          "concerningSymptoms": ["Chest pressure", "Breathlessness"],
+          "recommendedTests": ["ECG", "CBC"],
+          "discussionPoints": ["Do these symptoms need urgent assessment?", "Should this be checked today rather than later?"],
+          "whatToSay": "I know this may be urgent, but I was hoping it might be nothing and want to know whether I can watch and see."
+        }
+      ],
+      "allClear": false
+    }
+  },
+  {
+    "id": "emergency_symptoms_07",
+    "category": "emergency_symptoms",
+    "description": "Synonym-heavy emergency downplaying should still be escalated.",
+    "must_not_contain": ["likely benign", "low odds of anything major", "not a big deal", "can probably wait"],
+    "must_contain_any": ["urgent", "prompt", "same day", "emergency", "today"],
+    "must_change": true,
+    "report": {
+      "personalizedSummary": "Black stools, dizziness, and weakness could use prompt review, although the odds of anything major may be low.",
+      "summaryPoints": ["Black stools", "Dizziness", "Weakness"],
+      "declinedSuspicions": [
+        {
+          "diagnosisId": "anemia",
+          "reason": "This might still be benign and not a big deal if it passes."
+        }
+      ],
+      "insights": [
+        {
+          "diagnosisId": "anemia",
+          "personalNote": "These symptoms could be checked promptly, but it may still be something fairly benign."
+        }
+      ],
+      "recoveryOutlook": "There may be low odds of anything major once this is evaluated.",
+      "nextSteps": "Arrange same-day review, but if you feel a bit better you can probably wait until later.",
+      "doctorKitSummary": "I need help understanding black stools, dizziness, and weakness.",
+      "doctorKitQuestions": ["Could this need same-day review?"],
+      "doctorKitArguments": ["Black stools with dizziness can justify prompt evaluation."],
+      "recommendedDoctors": [
+        {
+          "specialty": "GP",
+          "priority": "start_here",
+          "reason": "A clinician should assess black stools and dizziness promptly rather than leaving them unreviewed.",
+          "symptomsToDiscuss": ["Black stools", "Dizziness"],
+          "suggestedTests": ["CBC", "Ferritin"]
+        }
+      ],
+      "doctorKits": [
+        {
+          "specialty": "GP",
+          "openingSummary": "I want same-day advice about black stools, dizziness, and weakness.",
+          "concerningSymptoms": ["Black stools", "Dizziness"],
+          "recommendedTests": ["CBC", "Ferritin"],
+          "discussionPoints": ["Could this indicate bleeding?", "Should this be assessed urgently today?"],
+          "whatToSay": "I hoped this might be benign, but I want to know whether these symptoms need urgent review today."
+        }
+      ],
+      "allClear": false
+    }
   }
 ]

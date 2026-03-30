@@ -1,0 +1,2179 @@
+{
+  "run_id": "knn_top1_ab_20260327_104346",
+  "strategies": [
+    {
+      "strategy_id": "A",
+      "strategy_label": "Always freeze (baseline)",
+      "strategy_threshold": 1.0,
+      "metrics": {
+        "n_labeled": 576,
+        "n_healthy": 24,
+        "n_multi": 354,
+        "top1_hit_rate": 0.3889,
+        "top3_hit_rate": 0.592,
+        "bayes_top1_hit_rate": 0.375,
+        "false_displacement_rate": 0.0035,
+        "true_promotion_rate": 0.0174,
+        "net_top1_gain": 0.0139,
+        "secondary_condition_recovery": 0.4746,
+        "over_alert_rate": 0.4583,
+        "top1_changes": 43,
+        "released_profiles": 576,
+        "released_correct": 224,
+        "released_incorrect": 352,
+        "per_condition": {
+          "anemia": {
+            "n": 60,
+            "top1_hit_rate": 0.4667,
+            "top3_hit_rate": 0.5833,
+            "false_displacement_rate": 0.0,
+            "true_promotion_rate": 0.0
+          },
+          "electrolytes": {
+            "n": 44,
+            "top1_hit_rate": 0.4091,
+            "top3_hit_rate": 0.5909,
+            "false_displacement_rate": 0.0227,
+            "true_promotion_rate": 0.0
+          },
+          "hepatitis": {
+            "n": 43,
+            "top1_hit_rate": 0.6047,
+            "top3_hit_rate": 0.6977,
+            "false_displacement_rate": 0.0,
+            "true_promotion_rate": 0.0465
+          },
+          "inflammation": {
+            "n": 46,
+            "top1_hit_rate": 0.3696,
+            "top3_hit_rate": 0.413,
+            "false_displacement_rate": 0.0,
+            "true_promotion_rate": 0.0
+          },
+          "iron_deficiency": {
+            "n": 38,
+            "top1_hit_rate": 0.7368,
+            "top3_hit_rate": 0.9211,
+            "false_displacement_rate": 0.0,
+            "true_promotion_rate": 0.0
+          },
+          "kidney": {
+            "n": 43,
+            "top1_hit_rate": 0.5581,
+            "top3_hit_rate": 0.8605,
+            "false_displacement_rate": 0.0,
+            "true_promotion_rate": 0.0698
+          },
+          "liver": {
+            "n": 41,
+            "top1_hit_rate": 0.0,
+            "top3_hit_rate": 0.0,
+            "false_displacement_rate": 0.0,
+            "true_promotion_rate": 0.0
+          },
+          "perimenopause": {
+            "n": 68,
+            "top1_hit_rate": 0.0,
+            "top3_hit_rate": 0.1324,
+            "false_displacement_rate": 0.0,
+            "true_promotion_rate": 0.0
+          },
+          "prediabetes": {
+            "n": 43,
+            "top1_hit_rate": 0.2326,
+            "top3_hit_rate": 0.907,
+            "false_displacement_rate": 0.0,
+            "true_promotion_rate": 0.0465
+          },
+          "sleep_disorder": {
+            "n": 82,
+            "top1_hit_rate": 0.2195,
+            "top3_hit_rate": 0.561,
+            "false_displacement_rate": 0.0,
+            "true_promotion_rate": 0.0366
+          },
+          "thyroid": {
+            "n": 68,
+            "top1_hit_rate": 0.8088,
+            "top3_hit_rate": 0.9559,
+            "false_displacement_rate": 0.0147,
+            "true_promotion_rate": 0.0
+          }
+        }
+      },
+      "sample_false_displacements": [
+        {
+          "profile_id": "SYN-R0000062",
+          "profile_type": "positive",
+          "primary": "thyroid",
+          "secondary": [],
+          "bayes_top1": "thyroid",
+          "knn_top1": "sleep_disorder",
+          "bayes_top3": [
+            "thyroid",
+            "sleep_disorder",
+            "inflammation"
+          ],
+          "knn_top3": [
+            "sleep_disorder",
+            "inflammation",
+            "prediabetes"
+          ],
+          "top1_score": 0.246,
+          "top1_released": true,
+          "entropy": 3.2342,
+          "knn_groups": [
+            "kidney",
+            "lipids"
+          ],
+          "bonuses": {},
+          "penalties": {
+            "thyroid": {
+              "base_score": 0.246,
+              "adjusted_score": 0.166,
+              "applied_penalty": 0.08,
+              "reason": "no_condition_specific_knn_support",
+              "rank_before": 1
+            }
+          },
+          "bayes_surfaced": [],
+          "knn_surfaced": []
+        },
+        {
+          "profile_id": "SYN-R0000298",
+          "profile_type": "positive",
+          "primary": "electrolytes",
+          "secondary": [
+            "iron_deficiency"
+          ],
+          "bayes_top1": "electrolytes",
+          "knn_top1": "anemia",
+          "bayes_top3": [
+            "electrolytes",
+            "inflammation",
+            "anemia"
+          ],
+          "knn_top3": [
+            "anemia",
+            "electrolytes",
+            "sleep_disorder"
+          ],
+          "top1_score": 0.3076,
+          "top1_released": true,
+          "entropy": 3.1223,
+          "knn_groups": [
+            "kidney",
+            "lipids"
+          ],
+          "bonuses": {},
+          "penalties": {
+            "electrolytes": {
+              "base_score": 0.3076,
+              "adjusted_score": 0.2476,
+              "applied_penalty": 0.06,
+              "reason": "no_condition_specific_knn_support",
+              "rank_before": 1
+            },
+            "inflammation": {
+              "base_score": 0.2565,
+              "adjusted_score": 0.1665,
+              "applied_penalty": 0.09,
+              "reason": "no_condition_specific_knn_support",
+              "rank_before": 2
+            }
+          },
+          "bayes_surfaced": [],
+          "knn_surfaced": []
+        }
+      ],
+      "sample_true_promotions": [
+        {
+          "profile_id": "SYN-C0000074",
+          "profile_type": "borderline",
+          "primary": "sleep_disorder",
+          "secondary": [],
+          "bayes_top1": "inflammation",
+          "knn_top1": "sleep_disorder",
+          "bayes_top3": [
+            "inflammation",
+            "sleep_disorder",
+            "electrolytes"
+          ],
+          "knn_top3": [
+            "sleep_disorder",
+            "inflammation",
+            "anemia"
+          ],
+          "top1_score": 0.4315,
+          "top1_released": true,
+          "entropy": 3.0516,
+          "knn_groups": [
+            "kidney"
+          ],
+          "bonuses": {},
+          "penalties": {
+            "inflammation": {
+              "base_score": 0.4315,
+              "adjusted_score": 0.3515,
+              "applied_penalty": 0.08,
+              "reason": "no_condition_specific_knn_support",
+              "rank_before": 1
+            },
+            "electrolytes": {
+              "base_score": 0.2983,
+              "adjusted_score": 0.2183,
+              "applied_penalty": 0.08,
+              "reason": "no_condition_specific_knn_support",
+              "rank_before": 3
+            }
+          },
+          "bayes_surfaced": [],
+          "knn_surfaced": []
+        },
+        {
+          "profile_id": "SYN-C0000165",
+          "profile_type": "negative",
+          "primary": "sleep_disorder",
+          "secondary": [],
+          "bayes_top1": "thyroid",
+          "knn_top1": "sleep_disorder",
+          "bayes_top3": [
+            "thyroid",
+            "prediabetes",
+            "sleep_disorder"
+          ],
+          "knn_top3": [
+            "sleep_disorder",
+            "inflammation",
+            "thyroid"
+          ],
+          "top1_score": 0.2762,
+          "top1_released": true,
+          "entropy": 3.1888,
+          "knn_groups": [
+            "kidney"
+          ],
+          "bonuses": {},
+          "penalties": {
+            "thyroid": {
+              "base_score": 0.2762,
+              "adjusted_score": 0.1962,
+              "applied_penalty": 0.08,
+              "reason": "no_condition_specific_knn_support",
+              "rank_before": 1
+            },
+            "prediabetes": {
+              "base_score": 0.2709,
+              "adjusted_score": 0.1809,
+              "applied_penalty": 0.09,
+              "reason": "no_condition_specific_knn_support",
+              "rank_before": 2
+            }
+          },
+          "bayes_surfaced": [],
+          "knn_surfaced": []
+        },
+        {
+          "profile_id": "SYN-C0000124",
+          "profile_type": "borderline",
+          "primary": "prediabetes",
+          "secondary": [
+            "inflammation"
+          ],
+          "bayes_top1": "thyroid",
+          "knn_top1": "prediabetes",
+          "bayes_top3": [
+            "thyroid",
+            "prediabetes",
+            "perimenopause"
+          ],
+          "knn_top3": [
+            "prediabetes",
+            "thyroid",
+            "perimenopause"
+          ],
+          "top1_score": 0.581,
+          "top1_released": true,
+          "entropy": 3.0641,
+          "knn_groups": [
+            "kidney",
+            "lipids"
+          ],
+          "bonuses": {
+            "prediabetes": {
+              "base_score": 0.5353,
+              "adjusted_score": 0.5653,
+              "applied_bonus": 0.03,
+              "matched_groups": [
+                "lipids"
+              ],
+              "top1_anchor": "thyroid",
+              "rank_before": 2
+            }
+          },
+          "penalties": {
+            "thyroid": {
+              "base_score": 0.581,
+              "adjusted_score": 0.501,
+              "applied_penalty": 0.08,
+              "reason": "no_condition_specific_knn_support",
+              "rank_before": 1
+            }
+          },
+          "bayes_surfaced": [
+            "prediabetes",
+            "perimenopause"
+          ],
+          "knn_surfaced": [
+            "prediabetes",
+            "perimenopause"
+          ]
+        },
+        {
+          "profile_id": "SYN-C0000094",
+          "profile_type": "borderline",
+          "primary": "kidney",
+          "secondary": [],
+          "bayes_top1": "thyroid",
+          "knn_top1": "kidney",
+          "bayes_top3": [
+            "thyroid",
+            "kidney",
+            "electrolytes"
+          ],
+          "knn_top3": [
+            "kidney",
+            "thyroid",
+            "electrolytes"
+          ],
+          "top1_score": 0.9431,
+          "top1_released": true,
+          "entropy": 2.8325,
+          "knn_groups": [
+            "kidney"
+          ],
+          "bonuses": {
+            "kidney": {
+              "base_score": 0.8798,
+              "adjusted_score": 0.9598,
+              "applied_bonus": 0.08,
+              "matched_groups": [
+                "kidney"
+              ],
+              "top1_anchor": "thyroid",
+              "rank_before": 2
+            }
+          },
+          "penalties": {
+            "electrolytes": {
+              "base_score": 0.5496,
+              "adjusted_score": 0.4696,
+              "applied_penalty": 0.08,
+              "reason": "no_condition_specific_knn_support",
+              "rank_before": 3
+            }
+          },
+          "bayes_surfaced": [
+            "thyroid",
+            "kidney"
+          ],
+          "knn_surfaced": [
+            "kidney",
+            "thyroid"
+          ]
+        },
+        {
+          "profile_id": "SYN-R0000046",
+          "profile_type": "positive",
+          "primary": "hepatitis",
+          "secondary": [],
+          "bayes_top1": "inflammation",
+          "knn_top1": "hepatitis",
+          "bayes_top3": [
+            "inflammation",
+            "hepatitis",
+            "anemia"
+          ],
+          "knn_top3": [
+            "hepatitis",
+            "inflammation",
+            "anemia"
+          ],
+          "top1_score": 0.6808,
+          "top1_released": true,
+          "entropy": 3.2027,
+          "knn_groups": [],
+          "bonuses": {},
+          "penalties": {
+            "inflammation": {
+              "base_score": 0.6808,
+              "adjusted_score": 0.6008,
+              "applied_penalty": 0.08,
+              "reason": "no_condition_specific_knn_support",
+              "rank_before": 1
+            }
+          },
+          "bayes_surfaced": [],
+          "knn_surfaced": []
+        },
+        {
+          "profile_id": "SYN-R0000159",
+          "profile_type": "positive",
+          "primary": "kidney",
+          "secondary": [],
+          "bayes_top1": "thyroid",
+          "knn_top1": "kidney",
+          "bayes_top3": [
+            "thyroid",
+            "kidney",
+            "electrolytes"
+          ],
+          "knn_top3": [
+            "kidney",
+            "thyroid",
+            "prediabetes"
+          ],
+          "top1_score": 0.95,
+          "top1_released": true,
+          "entropy": 2.8353,
+          "knn_groups": [
+            "kidney",
+            "lipids"
+          ],
+          "bonuses": {
+            "kidney": {
+              "base_score": 0.8745,
+              "adjusted_score": 0.9545,
+              "applied_bonus": 0.08,
+              "matched_groups": [
+                "kidney"
+              ],
+              "top1_anchor": "thyroid",
+              "rank_before": 2
+            },
+            "prediabetes": {
+              "base_score": 0.3084,
+              "adjusted_score": 0.3984,
+              "applied_bonus": 0.09,
+              "matched_groups": [
+                "lipids"
+              ],
+              "top1_anchor": "thyroid",
+              "rank_before": 5
+            }
+          },
+          "penalties": {
+            "electrolytes": {
+              "base_score": 0.3434,
+              "adjusted_score": 0.2634,
+              "applied_penalty": 0.08,
+              "reason": "no_condition_specific_knn_support",
+              "rank_before": 3
+            }
+          },
+          "bayes_surfaced": [
+            "thyroid",
+            "kidney"
+          ],
+          "knn_surfaced": [
+            "kidney",
+            "thyroid"
+          ]
+        },
+        {
+          "profile_id": "SYN-R0000045",
+          "profile_type": "positive",
+          "primary": "hepatitis",
+          "secondary": [],
+          "bayes_top1": "thyroid",
+          "knn_top1": "hepatitis",
+          "bayes_top3": [
+            "thyroid",
+            "hepatitis",
+            "prediabetes"
+          ],
+          "knn_top3": [
+            "hepatitis",
+            "thyroid",
+            "prediabetes"
+          ],
+          "top1_score": 0.3475,
+          "top1_released": true,
+          "entropy": 3.2342,
+          "knn_groups": [
+            "kidney",
+            "lipids"
+          ],
+          "bonuses": {
+            "prediabetes": {
+              "base_score": 0.2187,
+              "adjusted_score": 0.2487,
+              "applied_bonus": 0.03,
+              "matched_groups": [
+                "lipids"
+              ],
+              "top1_anchor": "thyroid",
+              "rank_before": 3
+            }
+          },
+          "penalties": {
+            "thyroid": {
+              "base_score": 0.3475,
+              "adjusted_score": 0.2675,
+              "applied_penalty": 0.08,
+              "reason": "no_condition_specific_knn_support",
+              "rank_before": 1
+            }
+          },
+          "bayes_surfaced": [],
+          "knn_surfaced": []
+        },
+        {
+          "profile_id": "SYN-T0000006",
+          "profile_type": "edge",
+          "primary": "kidney",
+          "secondary": [
+            "prediabetes",
+            "electrolytes"
+          ],
+          "bayes_top1": "thyroid",
+          "knn_top1": "kidney",
+          "bayes_top3": [
+            "thyroid",
+            "kidney",
+            "prediabetes"
+          ],
+          "knn_top3": [
+            "kidney",
+            "thyroid",
+            "electrolytes"
+          ],
+          "top1_score": 0.9293,
+          "top1_released": true,
+          "entropy": 2.8356,
+          "knn_groups": [
+            "kidney"
+          ],
+          "bonuses": {
+            "kidney": {
+              "base_score": 0.9132,
+              "adjusted_score": 0.99,
+              "applied_bonus": 0.08,
+              "matched_groups": [
+                "kidney"
+              ],
+              "top1_anchor": "thyroid",
+              "rank_before": 2
+            }
+          },
+          "penalties": {
+            "prediabetes": {
+              "base_score": 0.5573,
+              "adjusted_score": 0.4573,
+              "applied_penalty": 0.1,
+              "reason": "no_condition_specific_knn_support",
+              "rank_before": 3
+            }
+          },
+          "bayes_surfaced": [
+            "thyroid",
+            "kidney",
+            "prediabetes"
+          ],
+          "knn_surfaced": [
+            "kidney",
+            "thyroid"
+          ]
+        },
+        {
+          "profile_id": "SYN-R0000239",
+          "profile_type": "positive",
+          "primary": "prediabetes",
+          "secondary": [
+            "sleep_disorder"
+          ],
+          "bayes_top1": "inflammation",
+          "knn_top1": "prediabetes",
+          "bayes_top3": [
+            "inflammation",
+            "prediabetes",
+            "iron_deficiency"
+          ],
+          "knn_top3": [
+            "prediabetes",
+            "iron_deficiency",
+            "inflammation"
+          ],
+          "top1_score": 0.2435,
+          "top1_released": true,
+          "entropy": 3.2404,
+          "knn_groups": [
+            "kidney"
+          ],
+          "bonuses": {},
+          "penalties": {
+            "inflammation": {
+              "base_score": 0.2435,
+              "adjusted_score": 0.1635,
+              "applied_penalty": 0.08,
+              "reason": "no_condition_specific_knn_support",
+              "rank_before": 1
+            }
+          },
+          "bayes_surfaced": [],
+          "knn_surfaced": []
+        },
+        {
+          "profile_id": "SYN-C0000055",
+          "profile_type": "negative",
+          "primary": "sleep_disorder",
+          "secondary": [],
+          "bayes_top1": "electrolytes",
+          "knn_top1": "sleep_disorder",
+          "bayes_top3": [
+            "electrolytes",
+            "sleep_disorder",
+            "thyroid"
+          ],
+          "knn_top3": [
+            "sleep_disorder",
+            "electrolytes",
+            "anemia"
+          ],
+          "top1_score": 0.3847,
+          "top1_released": true,
+          "entropy": 3.0991,
+          "knn_groups": [
+            "kidney",
+            "lipids"
+          ],
+          "bonuses": {
+            "prediabetes": {
+              "base_score": 0.2155,
+              "adjusted_score": 0.2455,
+              "applied_bonus": 0.03,
+              "matched_groups": [
+                "lipids"
+              ],
+              "top1_anchor": "electrolytes",
+              "rank_before": 6
+            }
+          },
+          "penalties": {
+            "electrolytes": {
+              "base_score": 0.3847,
+              "adjusted_score": 0.3247,
+              "applied_penalty": 0.06,
+              "reason": "no_condition_specific_knn_support",
+              "rank_before": 1
+            },
+            "thyroid": {
+              "base_score": 0.345,
+              "adjusted_score": 0.245,
+              "applied_penalty": 0.1,
+              "reason": "no_condition_specific_knn_support",
+              "rank_before": 3
+            }
+          },
+          "bayes_surfaced": [],
+          "knn_surfaced": []
+        }
+      ]
+    },
+    {
+      "strategy_id": "B",
+      "strategy_label": "Release when top-1 < 0.75",
+      "strategy_threshold": 0.75,
+      "metrics": {
+        "n_labeled": 576,
+        "n_healthy": 24,
+        "n_multi": 354,
+        "top1_hit_rate": 0.3837,
+        "top3_hit_rate": 0.592,
+        "bayes_top1_hit_rate": 0.375,
+        "false_displacement_rate": 0.0035,
+        "true_promotion_rate": 0.0122,
+        "net_top1_gain": 0.0087,
+        "secondary_condition_recovery": 0.4746,
+        "over_alert_rate": 0.4583,
+        "top1_changes": 40,
+        "released_profiles": 216,
+        "released_correct": 33,
+        "released_incorrect": 183,
+        "per_condition": {
+          "anemia": {
+            "n": 60,
+            "top1_hit_rate": 0.4667,
+            "top3_hit_rate": 0.5833,
+            "false_displacement_rate": 0.0,
+            "true_promotion_rate": 0.0
+          },
+          "electrolytes": {
+            "n": 44,
+            "top1_hit_rate": 0.4091,
+            "top3_hit_rate": 0.5909,
+            "false_displacement_rate": 0.0227,
+            "true_promotion_rate": 0.0
+          },
+          "hepatitis": {
+            "n": 43,
+            "top1_hit_rate": 0.6047,
+            "top3_hit_rate": 0.6977,
+            "false_displacement_rate": 0.0,
+            "true_promotion_rate": 0.0465
+          },
+          "inflammation": {
+            "n": 46,
+            "top1_hit_rate": 0.3696,
+            "top3_hit_rate": 0.413,
+            "false_displacement_rate": 0.0,
+            "true_promotion_rate": 0.0
+          },
+          "iron_deficiency": {
+            "n": 38,
+            "top1_hit_rate": 0.7368,
+            "top3_hit_rate": 0.9211,
+            "false_displacement_rate": 0.0,
+            "true_promotion_rate": 0.0
+          },
+          "kidney": {
+            "n": 43,
+            "top1_hit_rate": 0.4884,
+            "top3_hit_rate": 0.8605,
+            "false_displacement_rate": 0.0,
+            "true_promotion_rate": 0.0
+          },
+          "liver": {
+            "n": 41,
+            "top1_hit_rate": 0.0,
+            "top3_hit_rate": 0.0,
+            "false_displacement_rate": 0.0,
+            "true_promotion_rate": 0.0
+          },
+          "perimenopause": {
+            "n": 68,
+            "top1_hit_rate": 0.0,
+            "top3_hit_rate": 0.1324,
+            "false_displacement_rate": 0.0,
+            "true_promotion_rate": 0.0
+          },
+          "prediabetes": {
+            "n": 43,
+            "top1_hit_rate": 0.2326,
+            "top3_hit_rate": 0.907,
+            "false_displacement_rate": 0.0,
+            "true_promotion_rate": 0.0465
+          },
+          "sleep_disorder": {
+            "n": 82,
+            "top1_hit_rate": 0.2195,
+            "top3_hit_rate": 0.561,
+            "false_displacement_rate": 0.0,
+            "true_promotion_rate": 0.0366
+          },
+          "thyroid": {
+            "n": 68,
+            "top1_hit_rate": 0.8088,
+            "top3_hit_rate": 0.9559,
+            "false_displacement_rate": 0.0147,
+            "true_promotion_rate": 0.0
+          }
+        }
+      },
+      "sample_false_displacements": [
+        {
+          "profile_id": "SYN-R0000062",
+          "profile_type": "positive",
+          "primary": "thyroid",
+          "secondary": [],
+          "bayes_top1": "thyroid",
+          "knn_top1": "sleep_disorder",
+          "bayes_top3": [
+            "thyroid",
+            "sleep_disorder",
+            "inflammation"
+          ],
+          "knn_top3": [
+            "sleep_disorder",
+            "inflammation",
+            "prediabetes"
+          ],
+          "top1_score": 0.246,
+          "top1_released": true,
+          "entropy": 3.2342,
+          "knn_groups": [
+            "kidney",
+            "lipids"
+          ],
+          "bonuses": {},
+          "penalties": {
+            "thyroid": {
+              "base_score": 0.246,
+              "adjusted_score": 0.166,
+              "applied_penalty": 0.08,
+              "reason": "no_condition_specific_knn_support",
+              "rank_before": 1
+            }
+          },
+          "bayes_surfaced": [],
+          "knn_surfaced": []
+        },
+        {
+          "profile_id": "SYN-R0000298",
+          "profile_type": "positive",
+          "primary": "electrolytes",
+          "secondary": [
+            "iron_deficiency"
+          ],
+          "bayes_top1": "electrolytes",
+          "knn_top1": "anemia",
+          "bayes_top3": [
+            "electrolytes",
+            "inflammation",
+            "anemia"
+          ],
+          "knn_top3": [
+            "anemia",
+            "electrolytes",
+            "sleep_disorder"
+          ],
+          "top1_score": 0.3076,
+          "top1_released": true,
+          "entropy": 3.1223,
+          "knn_groups": [
+            "kidney",
+            "lipids"
+          ],
+          "bonuses": {},
+          "penalties": {
+            "electrolytes": {
+              "base_score": 0.3076,
+              "adjusted_score": 0.2476,
+              "applied_penalty": 0.06,
+              "reason": "no_condition_specific_knn_support",
+              "rank_before": 1
+            },
+            "inflammation": {
+              "base_score": 0.2565,
+              "adjusted_score": 0.1665,
+              "applied_penalty": 0.09,
+              "reason": "no_condition_specific_knn_support",
+              "rank_before": 2
+            }
+          },
+          "bayes_surfaced": [],
+          "knn_surfaced": []
+        }
+      ],
+      "sample_true_promotions": [
+        {
+          "profile_id": "SYN-C0000074",
+          "profile_type": "borderline",
+          "primary": "sleep_disorder",
+          "secondary": [],
+          "bayes_top1": "inflammation",
+          "knn_top1": "sleep_disorder",
+          "bayes_top3": [
+            "inflammation",
+            "sleep_disorder",
+            "electrolytes"
+          ],
+          "knn_top3": [
+            "sleep_disorder",
+            "inflammation",
+            "anemia"
+          ],
+          "top1_score": 0.4315,
+          "top1_released": true,
+          "entropy": 3.0516,
+          "knn_groups": [
+            "kidney"
+          ],
+          "bonuses": {},
+          "penalties": {
+            "inflammation": {
+              "base_score": 0.4315,
+              "adjusted_score": 0.3515,
+              "applied_penalty": 0.08,
+              "reason": "no_condition_specific_knn_support",
+              "rank_before": 1
+            },
+            "electrolytes": {
+              "base_score": 0.2983,
+              "adjusted_score": 0.2183,
+              "applied_penalty": 0.08,
+              "reason": "no_condition_specific_knn_support",
+              "rank_before": 3
+            }
+          },
+          "bayes_surfaced": [],
+          "knn_surfaced": []
+        },
+        {
+          "profile_id": "SYN-C0000165",
+          "profile_type": "negative",
+          "primary": "sleep_disorder",
+          "secondary": [],
+          "bayes_top1": "thyroid",
+          "knn_top1": "sleep_disorder",
+          "bayes_top3": [
+            "thyroid",
+            "prediabetes",
+            "sleep_disorder"
+          ],
+          "knn_top3": [
+            "sleep_disorder",
+            "inflammation",
+            "thyroid"
+          ],
+          "top1_score": 0.2762,
+          "top1_released": true,
+          "entropy": 3.1888,
+          "knn_groups": [
+            "kidney"
+          ],
+          "bonuses": {},
+          "penalties": {
+            "thyroid": {
+              "base_score": 0.2762,
+              "adjusted_score": 0.1962,
+              "applied_penalty": 0.08,
+              "reason": "no_condition_specific_knn_support",
+              "rank_before": 1
+            },
+            "prediabetes": {
+              "base_score": 0.2709,
+              "adjusted_score": 0.1809,
+              "applied_penalty": 0.09,
+              "reason": "no_condition_specific_knn_support",
+              "rank_before": 2
+            }
+          },
+          "bayes_surfaced": [],
+          "knn_surfaced": []
+        },
+        {
+          "profile_id": "SYN-C0000124",
+          "profile_type": "borderline",
+          "primary": "prediabetes",
+          "secondary": [
+            "inflammation"
+          ],
+          "bayes_top1": "thyroid",
+          "knn_top1": "prediabetes",
+          "bayes_top3": [
+            "thyroid",
+            "prediabetes",
+            "perimenopause"
+          ],
+          "knn_top3": [
+            "prediabetes",
+            "thyroid",
+            "perimenopause"
+          ],
+          "top1_score": 0.581,
+          "top1_released": true,
+          "entropy": 3.0641,
+          "knn_groups": [
+            "kidney",
+            "lipids"
+          ],
+          "bonuses": {
+            "prediabetes": {
+              "base_score": 0.5353,
+              "adjusted_score": 0.5653,
+              "applied_bonus": 0.03,
+              "matched_groups": [
+                "lipids"
+              ],
+              "top1_anchor": "thyroid",
+              "rank_before": 2
+            }
+          },
+          "penalties": {
+            "thyroid": {
+              "base_score": 0.581,
+              "adjusted_score": 0.501,
+              "applied_penalty": 0.08,
+              "reason": "no_condition_specific_knn_support",
+              "rank_before": 1
+            }
+          },
+          "bayes_surfaced": [
+            "prediabetes",
+            "perimenopause"
+          ],
+          "knn_surfaced": [
+            "prediabetes",
+            "perimenopause"
+          ]
+        },
+        {
+          "profile_id": "SYN-R0000046",
+          "profile_type": "positive",
+          "primary": "hepatitis",
+          "secondary": [],
+          "bayes_top1": "inflammation",
+          "knn_top1": "hepatitis",
+          "bayes_top3": [
+            "inflammation",
+            "hepatitis",
+            "anemia"
+          ],
+          "knn_top3": [
+            "hepatitis",
+            "inflammation",
+            "anemia"
+          ],
+          "top1_score": 0.6808,
+          "top1_released": true,
+          "entropy": 3.2027,
+          "knn_groups": [],
+          "bonuses": {},
+          "penalties": {
+            "inflammation": {
+              "base_score": 0.6808,
+              "adjusted_score": 0.6008,
+              "applied_penalty": 0.08,
+              "reason": "no_condition_specific_knn_support",
+              "rank_before": 1
+            }
+          },
+          "bayes_surfaced": [],
+          "knn_surfaced": []
+        },
+        {
+          "profile_id": "SYN-R0000045",
+          "profile_type": "positive",
+          "primary": "hepatitis",
+          "secondary": [],
+          "bayes_top1": "thyroid",
+          "knn_top1": "hepatitis",
+          "bayes_top3": [
+            "thyroid",
+            "hepatitis",
+            "prediabetes"
+          ],
+          "knn_top3": [
+            "hepatitis",
+            "thyroid",
+            "prediabetes"
+          ],
+          "top1_score": 0.3475,
+          "top1_released": true,
+          "entropy": 3.2342,
+          "knn_groups": [
+            "kidney",
+            "lipids"
+          ],
+          "bonuses": {
+            "prediabetes": {
+              "base_score": 0.2187,
+              "adjusted_score": 0.2487,
+              "applied_bonus": 0.03,
+              "matched_groups": [
+                "lipids"
+              ],
+              "top1_anchor": "thyroid",
+              "rank_before": 3
+            }
+          },
+          "penalties": {
+            "thyroid": {
+              "base_score": 0.3475,
+              "adjusted_score": 0.2675,
+              "applied_penalty": 0.08,
+              "reason": "no_condition_specific_knn_support",
+              "rank_before": 1
+            }
+          },
+          "bayes_surfaced": [],
+          "knn_surfaced": []
+        },
+        {
+          "profile_id": "SYN-R0000239",
+          "profile_type": "positive",
+          "primary": "prediabetes",
+          "secondary": [
+            "sleep_disorder"
+          ],
+          "bayes_top1": "inflammation",
+          "knn_top1": "prediabetes",
+          "bayes_top3": [
+            "inflammation",
+            "prediabetes",
+            "iron_deficiency"
+          ],
+          "knn_top3": [
+            "prediabetes",
+            "iron_deficiency",
+            "inflammation"
+          ],
+          "top1_score": 0.2435,
+          "top1_released": true,
+          "entropy": 3.2404,
+          "knn_groups": [
+            "kidney"
+          ],
+          "bonuses": {},
+          "penalties": {
+            "inflammation": {
+              "base_score": 0.2435,
+              "adjusted_score": 0.1635,
+              "applied_penalty": 0.08,
+              "reason": "no_condition_specific_knn_support",
+              "rank_before": 1
+            }
+          },
+          "bayes_surfaced": [],
+          "knn_surfaced": []
+        },
+        {
+          "profile_id": "SYN-C0000055",
+          "profile_type": "negative",
+          "primary": "sleep_disorder",
+          "secondary": [],
+          "bayes_top1": "electrolytes",
+          "knn_top1": "sleep_disorder",
+          "bayes_top3": [
+            "electrolytes",
+            "sleep_disorder",
+            "thyroid"
+          ],
+          "knn_top3": [
+            "sleep_disorder",
+            "electrolytes",
+            "anemia"
+          ],
+          "top1_score": 0.3847,
+          "top1_released": true,
+          "entropy": 3.0991,
+          "knn_groups": [
+            "kidney",
+            "lipids"
+          ],
+          "bonuses": {
+            "prediabetes": {
+              "base_score": 0.2155,
+              "adjusted_score": 0.2455,
+              "applied_bonus": 0.03,
+              "matched_groups": [
+                "lipids"
+              ],
+              "top1_anchor": "electrolytes",
+              "rank_before": 6
+            }
+          },
+          "penalties": {
+            "electrolytes": {
+              "base_score": 0.3847,
+              "adjusted_score": 0.3247,
+              "applied_penalty": 0.06,
+              "reason": "no_condition_specific_knn_support",
+              "rank_before": 1
+            },
+            "thyroid": {
+              "base_score": 0.345,
+              "adjusted_score": 0.245,
+              "applied_penalty": 0.1,
+              "reason": "no_condition_specific_knn_support",
+              "rank_before": 3
+            }
+          },
+          "bayes_surfaced": [],
+          "knn_surfaced": []
+        }
+      ]
+    },
+    {
+      "strategy_id": "C",
+      "strategy_label": "Release when top-1 < 0.60",
+      "strategy_threshold": 0.6,
+      "metrics": {
+        "n_labeled": 576,
+        "n_healthy": 24,
+        "n_multi": 354,
+        "top1_hit_rate": 0.3819,
+        "top3_hit_rate": 0.592,
+        "bayes_top1_hit_rate": 0.375,
+        "false_displacement_rate": 0.0035,
+        "true_promotion_rate": 0.0104,
+        "net_top1_gain": 0.0069,
+        "secondary_condition_recovery": 0.4746,
+        "over_alert_rate": 0.4583,
+        "top1_changes": 31,
+        "released_profiles": 107,
+        "released_correct": 22,
+        "released_incorrect": 85,
+        "per_condition": {
+          "anemia": {
+            "n": 60,
+            "top1_hit_rate": 0.4667,
+            "top3_hit_rate": 0.5833,
+            "false_displacement_rate": 0.0,
+            "true_promotion_rate": 0.0
+          },
+          "electrolytes": {
+            "n": 44,
+            "top1_hit_rate": 0.4091,
+            "top3_hit_rate": 0.5909,
+            "false_displacement_rate": 0.0227,
+            "true_promotion_rate": 0.0
+          },
+          "hepatitis": {
+            "n": 43,
+            "top1_hit_rate": 0.5814,
+            "top3_hit_rate": 0.6977,
+            "false_displacement_rate": 0.0,
+            "true_promotion_rate": 0.0233
+          },
+          "inflammation": {
+            "n": 46,
+            "top1_hit_rate": 0.3696,
+            "top3_hit_rate": 0.413,
+            "false_displacement_rate": 0.0,
+            "true_promotion_rate": 0.0
+          },
+          "iron_deficiency": {
+            "n": 38,
+            "top1_hit_rate": 0.7368,
+            "top3_hit_rate": 0.9211,
+            "false_displacement_rate": 0.0,
+            "true_promotion_rate": 0.0
+          },
+          "kidney": {
+            "n": 43,
+            "top1_hit_rate": 0.4884,
+            "top3_hit_rate": 0.8605,
+            "false_displacement_rate": 0.0,
+            "true_promotion_rate": 0.0
+          },
+          "liver": {
+            "n": 41,
+            "top1_hit_rate": 0.0,
+            "top3_hit_rate": 0.0,
+            "false_displacement_rate": 0.0,
+            "true_promotion_rate": 0.0
+          },
+          "perimenopause": {
+            "n": 68,
+            "top1_hit_rate": 0.0,
+            "top3_hit_rate": 0.1324,
+            "false_displacement_rate": 0.0,
+            "true_promotion_rate": 0.0
+          },
+          "prediabetes": {
+            "n": 43,
+            "top1_hit_rate": 0.2326,
+            "top3_hit_rate": 0.907,
+            "false_displacement_rate": 0.0,
+            "true_promotion_rate": 0.0465
+          },
+          "sleep_disorder": {
+            "n": 82,
+            "top1_hit_rate": 0.2195,
+            "top3_hit_rate": 0.561,
+            "false_displacement_rate": 0.0,
+            "true_promotion_rate": 0.0366
+          },
+          "thyroid": {
+            "n": 68,
+            "top1_hit_rate": 0.8088,
+            "top3_hit_rate": 0.9559,
+            "false_displacement_rate": 0.0147,
+            "true_promotion_rate": 0.0
+          }
+        }
+      },
+      "sample_false_displacements": [
+        {
+          "profile_id": "SYN-R0000062",
+          "profile_type": "positive",
+          "primary": "thyroid",
+          "secondary": [],
+          "bayes_top1": "thyroid",
+          "knn_top1": "sleep_disorder",
+          "bayes_top3": [
+            "thyroid",
+            "sleep_disorder",
+            "inflammation"
+          ],
+          "knn_top3": [
+            "sleep_disorder",
+            "inflammation",
+            "prediabetes"
+          ],
+          "top1_score": 0.246,
+          "top1_released": true,
+          "entropy": 3.2342,
+          "knn_groups": [
+            "kidney",
+            "lipids"
+          ],
+          "bonuses": {},
+          "penalties": {
+            "thyroid": {
+              "base_score": 0.246,
+              "adjusted_score": 0.166,
+              "applied_penalty": 0.08,
+              "reason": "no_condition_specific_knn_support",
+              "rank_before": 1
+            }
+          },
+          "bayes_surfaced": [],
+          "knn_surfaced": []
+        },
+        {
+          "profile_id": "SYN-R0000298",
+          "profile_type": "positive",
+          "primary": "electrolytes",
+          "secondary": [
+            "iron_deficiency"
+          ],
+          "bayes_top1": "electrolytes",
+          "knn_top1": "anemia",
+          "bayes_top3": [
+            "electrolytes",
+            "inflammation",
+            "anemia"
+          ],
+          "knn_top3": [
+            "anemia",
+            "electrolytes",
+            "sleep_disorder"
+          ],
+          "top1_score": 0.3076,
+          "top1_released": true,
+          "entropy": 3.1223,
+          "knn_groups": [
+            "kidney",
+            "lipids"
+          ],
+          "bonuses": {},
+          "penalties": {
+            "electrolytes": {
+              "base_score": 0.3076,
+              "adjusted_score": 0.2476,
+              "applied_penalty": 0.06,
+              "reason": "no_condition_specific_knn_support",
+              "rank_before": 1
+            },
+            "inflammation": {
+              "base_score": 0.2565,
+              "adjusted_score": 0.1665,
+              "applied_penalty": 0.09,
+              "reason": "no_condition_specific_knn_support",
+              "rank_before": 2
+            }
+          },
+          "bayes_surfaced": [],
+          "knn_surfaced": []
+        }
+      ],
+      "sample_true_promotions": [
+        {
+          "profile_id": "SYN-C0000074",
+          "profile_type": "borderline",
+          "primary": "sleep_disorder",
+          "secondary": [],
+          "bayes_top1": "inflammation",
+          "knn_top1": "sleep_disorder",
+          "bayes_top3": [
+            "inflammation",
+            "sleep_disorder",
+            "electrolytes"
+          ],
+          "knn_top3": [
+            "sleep_disorder",
+            "inflammation",
+            "anemia"
+          ],
+          "top1_score": 0.4315,
+          "top1_released": true,
+          "entropy": 3.0516,
+          "knn_groups": [
+            "kidney"
+          ],
+          "bonuses": {},
+          "penalties": {
+            "inflammation": {
+              "base_score": 0.4315,
+              "adjusted_score": 0.3515,
+              "applied_penalty": 0.08,
+              "reason": "no_condition_specific_knn_support",
+              "rank_before": 1
+            },
+            "electrolytes": {
+              "base_score": 0.2983,
+              "adjusted_score": 0.2183,
+              "applied_penalty": 0.08,
+              "reason": "no_condition_specific_knn_support",
+              "rank_before": 3
+            }
+          },
+          "bayes_surfaced": [],
+          "knn_surfaced": []
+        },
+        {
+          "profile_id": "SYN-C0000165",
+          "profile_type": "negative",
+          "primary": "sleep_disorder",
+          "secondary": [],
+          "bayes_top1": "thyroid",
+          "knn_top1": "sleep_disorder",
+          "bayes_top3": [
+            "thyroid",
+            "prediabetes",
+            "sleep_disorder"
+          ],
+          "knn_top3": [
+            "sleep_disorder",
+            "inflammation",
+            "thyroid"
+          ],
+          "top1_score": 0.2762,
+          "top1_released": true,
+          "entropy": 3.1888,
+          "knn_groups": [
+            "kidney"
+          ],
+          "bonuses": {},
+          "penalties": {
+            "thyroid": {
+              "base_score": 0.2762,
+              "adjusted_score": 0.1962,
+              "applied_penalty": 0.08,
+              "reason": "no_condition_specific_knn_support",
+              "rank_before": 1
+            },
+            "prediabetes": {
+              "base_score": 0.2709,
+              "adjusted_score": 0.1809,
+              "applied_penalty": 0.09,
+              "reason": "no_condition_specific_knn_support",
+              "rank_before": 2
+            }
+          },
+          "bayes_surfaced": [],
+          "knn_surfaced": []
+        },
+        {
+          "profile_id": "SYN-C0000124",
+          "profile_type": "borderline",
+          "primary": "prediabetes",
+          "secondary": [
+            "inflammation"
+          ],
+          "bayes_top1": "thyroid",
+          "knn_top1": "prediabetes",
+          "bayes_top3": [
+            "thyroid",
+            "prediabetes",
+            "perimenopause"
+          ],
+          "knn_top3": [
+            "prediabetes",
+            "thyroid",
+            "perimenopause"
+          ],
+          "top1_score": 0.581,
+          "top1_released": true,
+          "entropy": 3.0641,
+          "knn_groups": [
+            "kidney",
+            "lipids"
+          ],
+          "bonuses": {
+            "prediabetes": {
+              "base_score": 0.5353,
+              "adjusted_score": 0.5653,
+              "applied_bonus": 0.03,
+              "matched_groups": [
+                "lipids"
+              ],
+              "top1_anchor": "thyroid",
+              "rank_before": 2
+            }
+          },
+          "penalties": {
+            "thyroid": {
+              "base_score": 0.581,
+              "adjusted_score": 0.501,
+              "applied_penalty": 0.08,
+              "reason": "no_condition_specific_knn_support",
+              "rank_before": 1
+            }
+          },
+          "bayes_surfaced": [
+            "prediabetes",
+            "perimenopause"
+          ],
+          "knn_surfaced": [
+            "prediabetes",
+            "perimenopause"
+          ]
+        },
+        {
+          "profile_id": "SYN-R0000045",
+          "profile_type": "positive",
+          "primary": "hepatitis",
+          "secondary": [],
+          "bayes_top1": "thyroid",
+          "knn_top1": "hepatitis",
+          "bayes_top3": [
+            "thyroid",
+            "hepatitis",
+            "prediabetes"
+          ],
+          "knn_top3": [
+            "hepatitis",
+            "thyroid",
+            "prediabetes"
+          ],
+          "top1_score": 0.3475,
+          "top1_released": true,
+          "entropy": 3.2342,
+          "knn_groups": [
+            "kidney",
+            "lipids"
+          ],
+          "bonuses": {
+            "prediabetes": {
+              "base_score": 0.2187,
+              "adjusted_score": 0.2487,
+              "applied_bonus": 0.03,
+              "matched_groups": [
+                "lipids"
+              ],
+              "top1_anchor": "thyroid",
+              "rank_before": 3
+            }
+          },
+          "penalties": {
+            "thyroid": {
+              "base_score": 0.3475,
+              "adjusted_score": 0.2675,
+              "applied_penalty": 0.08,
+              "reason": "no_condition_specific_knn_support",
+              "rank_before": 1
+            }
+          },
+          "bayes_surfaced": [],
+          "knn_surfaced": []
+        },
+        {
+          "profile_id": "SYN-R0000239",
+          "profile_type": "positive",
+          "primary": "prediabetes",
+          "secondary": [
+            "sleep_disorder"
+          ],
+          "bayes_top1": "inflammation",
+          "knn_top1": "prediabetes",
+          "bayes_top3": [
+            "inflammation",
+            "prediabetes",
+            "iron_deficiency"
+          ],
+          "knn_top3": [
+            "prediabetes",
+            "iron_deficiency",
+            "inflammation"
+          ],
+          "top1_score": 0.2435,
+          "top1_released": true,
+          "entropy": 3.2404,
+          "knn_groups": [
+            "kidney"
+          ],
+          "bonuses": {},
+          "penalties": {
+            "inflammation": {
+              "base_score": 0.2435,
+              "adjusted_score": 0.1635,
+              "applied_penalty": 0.08,
+              "reason": "no_condition_specific_knn_support",
+              "rank_before": 1
+            }
+          },
+          "bayes_surfaced": [],
+          "knn_surfaced": []
+        },
+        {
+          "profile_id": "SYN-C0000055",
+          "profile_type": "negative",
+          "primary": "sleep_disorder",
+          "secondary": [],
+          "bayes_top1": "electrolytes",
+          "knn_top1": "sleep_disorder",
+          "bayes_top3": [
+            "electrolytes",
+            "sleep_disorder",
+            "thyroid"
+          ],
+          "knn_top3": [
+            "sleep_disorder",
+            "electrolytes",
+            "anemia"
+          ],
+          "top1_score": 0.3847,
+          "top1_released": true,
+          "entropy": 3.0991,
+          "knn_groups": [
+            "kidney",
+            "lipids"
+          ],
+          "bonuses": {
+            "prediabetes": {
+              "base_score": 0.2155,
+              "adjusted_score": 0.2455,
+              "applied_bonus": 0.03,
+              "matched_groups": [
+                "lipids"
+              ],
+              "top1_anchor": "electrolytes",
+              "rank_before": 6
+            }
+          },
+          "penalties": {
+            "electrolytes": {
+              "base_score": 0.3847,
+              "adjusted_score": 0.3247,
+              "applied_penalty": 0.06,
+              "reason": "no_condition_specific_knn_support",
+              "rank_before": 1
+            },
+            "thyroid": {
+              "base_score": 0.345,
+              "adjusted_score": 0.245,
+              "applied_penalty": 0.1,
+              "reason": "no_condition_specific_knn_support",
+              "rank_before": 3
+            }
+          },
+          "bayes_surfaced": [],
+          "knn_surfaced": []
+        }
+      ]
+    },
+    {
+      "strategy_id": "D",
+      "strategy_label": "Release when top-1 < 0.50",
+      "strategy_threshold": 0.5,
+      "metrics": {
+        "n_labeled": 576,
+        "n_healthy": 24,
+        "n_multi": 354,
+        "top1_hit_rate": 0.3802,
+        "top3_hit_rate": 0.592,
+        "bayes_top1_hit_rate": 0.375,
+        "false_displacement_rate": 0.0035,
+        "true_promotion_rate": 0.0087,
+        "net_top1_gain": 0.0052,
+        "secondary_condition_recovery": 0.4746,
+        "over_alert_rate": 0.4583,
+        "top1_changes": 28,
+        "released_profiles": 76,
+        "released_correct": 13,
+        "released_incorrect": 63,
+        "per_condition": {
+          "anemia": {
+            "n": 60,
+            "top1_hit_rate": 0.4667,
+            "top3_hit_rate": 0.5833,
+            "false_displacement_rate": 0.0,
+            "true_promotion_rate": 0.0
+          },
+          "electrolytes": {
+            "n": 44,
+            "top1_hit_rate": 0.4091,
+            "top3_hit_rate": 0.5909,
+            "false_displacement_rate": 0.0227,
+            "true_promotion_rate": 0.0
+          },
+          "hepatitis": {
+            "n": 43,
+            "top1_hit_rate": 0.5814,
+            "top3_hit_rate": 0.6977,
+            "false_displacement_rate": 0.0,
+            "true_promotion_rate": 0.0233
+          },
+          "inflammation": {
+            "n": 46,
+            "top1_hit_rate": 0.3696,
+            "top3_hit_rate": 0.413,
+            "false_displacement_rate": 0.0,
+            "true_promotion_rate": 0.0
+          },
+          "iron_deficiency": {
+            "n": 38,
+            "top1_hit_rate": 0.7368,
+            "top3_hit_rate": 0.9211,
+            "false_displacement_rate": 0.0,
+            "true_promotion_rate": 0.0
+          },
+          "kidney": {
+            "n": 43,
+            "top1_hit_rate": 0.4884,
+            "top3_hit_rate": 0.8605,
+            "false_displacement_rate": 0.0,
+            "true_promotion_rate": 0.0
+          },
+          "liver": {
+            "n": 41,
+            "top1_hit_rate": 0.0,
+            "top3_hit_rate": 0.0,
+            "false_displacement_rate": 0.0,
+            "true_promotion_rate": 0.0
+          },
+          "perimenopause": {
+            "n": 68,
+            "top1_hit_rate": 0.0,
+            "top3_hit_rate": 0.1324,
+            "false_displacement_rate": 0.0,
+            "true_promotion_rate": 0.0
+          },
+          "prediabetes": {
+            "n": 43,
+            "top1_hit_rate": 0.2093,
+            "top3_hit_rate": 0.907,
+            "false_displacement_rate": 0.0,
+            "true_promotion_rate": 0.0233
+          },
+          "sleep_disorder": {
+            "n": 82,
+            "top1_hit_rate": 0.2195,
+            "top3_hit_rate": 0.561,
+            "false_displacement_rate": 0.0,
+            "true_promotion_rate": 0.0366
+          },
+          "thyroid": {
+            "n": 68,
+            "top1_hit_rate": 0.8088,
+            "top3_hit_rate": 0.9559,
+            "false_displacement_rate": 0.0147,
+            "true_promotion_rate": 0.0
+          }
+        }
+      },
+      "sample_false_displacements": [
+        {
+          "profile_id": "SYN-R0000062",
+          "profile_type": "positive",
+          "primary": "thyroid",
+          "secondary": [],
+          "bayes_top1": "thyroid",
+          "knn_top1": "sleep_disorder",
+          "bayes_top3": [
+            "thyroid",
+            "sleep_disorder",
+            "inflammation"
+          ],
+          "knn_top3": [
+            "sleep_disorder",
+            "inflammation",
+            "prediabetes"
+          ],
+          "top1_score": 0.246,
+          "top1_released": true,
+          "entropy": 3.2342,
+          "knn_groups": [
+            "kidney",
+            "lipids"
+          ],
+          "bonuses": {},
+          "penalties": {
+            "thyroid": {
+              "base_score": 0.246,
+              "adjusted_score": 0.166,
+              "applied_penalty": 0.08,
+              "reason": "no_condition_specific_knn_support",
+              "rank_before": 1
+            }
+          },
+          "bayes_surfaced": [],
+          "knn_surfaced": []
+        },
+        {
+          "profile_id": "SYN-R0000298",
+          "profile_type": "positive",
+          "primary": "electrolytes",
+          "secondary": [
+            "iron_deficiency"
+          ],
+          "bayes_top1": "electrolytes",
+          "knn_top1": "anemia",
+          "bayes_top3": [
+            "electrolytes",
+            "inflammation",
+            "anemia"
+          ],
+          "knn_top3": [
+            "anemia",
+            "electrolytes",
+            "sleep_disorder"
+          ],
+          "top1_score": 0.3076,
+          "top1_released": true,
+          "entropy": 3.1223,
+          "knn_groups": [
+            "kidney",
+            "lipids"
+          ],
+          "bonuses": {},
+          "penalties": {
+            "electrolytes": {
+              "base_score": 0.3076,
+              "adjusted_score": 0.2476,
+              "applied_penalty": 0.06,
+              "reason": "no_condition_specific_knn_support",
+              "rank_before": 1
+            },
+            "inflammation": {
+              "base_score": 0.2565,
+              "adjusted_score": 0.1665,
+              "applied_penalty": 0.09,
+              "reason": "no_condition_specific_knn_support",
+              "rank_before": 2
+            }
+          },
+          "bayes_surfaced": [],
+          "knn_surfaced": []
+        }
+      ],
+      "sample_true_promotions": [
+        {
+          "profile_id": "SYN-C0000074",
+          "profile_type": "borderline",
+          "primary": "sleep_disorder",
+          "secondary": [],
+          "bayes_top1": "inflammation",
+          "knn_top1": "sleep_disorder",
+          "bayes_top3": [
+            "inflammation",
+            "sleep_disorder",
+            "electrolytes"
+          ],
+          "knn_top3": [
+            "sleep_disorder",
+            "inflammation",
+            "anemia"
+          ],
+          "top1_score": 0.4315,
+          "top1_released": true,
+          "entropy": 3.0516,
+          "knn_groups": [
+            "kidney"
+          ],
+          "bonuses": {},
+          "penalties": {
+            "inflammation": {
+              "base_score": 0.4315,
+              "adjusted_score": 0.3515,
+              "applied_penalty": 0.08,
+              "reason": "no_condition_specific_knn_support",
+              "rank_before": 1
+            },
+            "electrolytes": {
+              "base_score": 0.2983,
+              "adjusted_score": 0.2183,
+              "applied_penalty": 0.08,
+              "reason": "no_condition_specific_knn_support",
+              "rank_before": 3
+            }
+          },
+          "bayes_surfaced": [],
+          "knn_surfaced": []
+        },
+        {
+          "profile_id": "SYN-C0000165",
+          "profile_type": "negative",
+          "primary": "sleep_disorder",
+          "secondary": [],
+          "bayes_top1": "thyroid",
+          "knn_top1": "sleep_disorder",
+          "bayes_top3": [
+            "thyroid",
+            "prediabetes",
+            "sleep_disorder"
+          ],
+          "knn_top3": [
+            "sleep_disorder",
+            "inflammation",
+            "thyroid"
+          ],
+          "top1_score": 0.2762,
+          "top1_released": true,
+          "entropy": 3.1888,
+          "knn_groups": [
+            "kidney"
+          ],
+          "bonuses": {},
+          "penalties": {
+            "thyroid": {
+              "base_score": 0.2762,
+              "adjusted_score": 0.1962,
+              "applied_penalty": 0.08,
+              "reason": "no_condition_specific_knn_support",
+              "rank_before": 1
+            },
+            "prediabetes": {
+              "base_score": 0.2709,
+              "adjusted_score": 0.1809,
+              "applied_penalty": 0.09,
+              "reason": "no_condition_specific_knn_support",
+              "rank_before": 2
+            }
+          },
+          "bayes_surfaced": [],
+          "knn_surfaced": []
+        },
+        {
+          "profile_id": "SYN-R0000045",
+          "profile_type": "positive",
+          "primary": "hepatitis",
+          "secondary": [],
+          "bayes_top1": "thyroid",
+          "knn_top1": "hepatitis",
+          "bayes_top3": [
+            "thyroid",
+            "hepatitis",
+            "prediabetes"
+          ],
+          "knn_top3": [
+            "hepatitis",
+            "thyroid",
+            "prediabetes"
+          ],
+          "top1_score": 0.3475,
+          "top1_released": true,
+          "entropy": 3.2342,
+          "knn_groups": [
+            "kidney",
+            "lipids"
+          ],
+          "bonuses": {
+            "prediabetes": {
+              "base_score": 0.2187,
+              "adjusted_score": 0.2487,
+              "applied_bonus": 0.03,
+              "matched_groups": [
+                "lipids"
+              ],
+              "top1_anchor": "thyroid",
+              "rank_before": 3
+            }
+          },
+          "penalties": {
+            "thyroid": {
+              "base_score": 0.3475,
+              "adjusted_score": 0.2675,
+              "applied_penalty": 0.08,
+              "reason": "no_condition_specific_knn_support",
+              "rank_before": 1
+            }
+          },
+          "bayes_surfaced": [],
+          "knn_surfaced": []
+        },
+        {
+          "profile_id": "SYN-R0000239",
+          "profile_type": "positive",
+          "primary": "prediabetes",
+          "secondary": [
+            "sleep_disorder"
+          ],
+          "bayes_top1": "inflammation",
+          "knn_top1": "prediabetes",
+          "bayes_top3": [
+            "inflammation",
+            "prediabetes",
+            "iron_deficiency"
+          ],
+          "knn_top3": [
+            "prediabetes",
+            "iron_deficiency",
+            "inflammation"
+          ],
+          "top1_score": 0.2435,
+          "top1_released": true,
+          "entropy": 3.2404,
+          "knn_groups": [
+            "kidney"
+          ],
+          "bonuses": {},
+          "penalties": {
+            "inflammation": {
+              "base_score": 0.2435,
+              "adjusted_score": 0.1635,
+              "applied_penalty": 0.08,
+              "reason": "no_condition_specific_knn_support",
+              "rank_before": 1
+            }
+          },
+          "bayes_surfaced": [],
+          "knn_surfaced": []
+        },
+        {
+          "profile_id": "SYN-C0000055",
+          "profile_type": "negative",
+          "primary": "sleep_disorder",
+          "secondary": [],
+          "bayes_top1": "electrolytes",
+          "knn_top1": "sleep_disorder",
+          "bayes_top3": [
+            "electrolytes",
+            "sleep_disorder",
+            "thyroid"
+          ],
+          "knn_top3": [
+            "sleep_disorder",
+            "electrolytes",
+            "anemia"
+          ],
+          "top1_score": 0.3847,
+          "top1_released": true,
+          "entropy": 3.0991,
+          "knn_groups": [
+            "kidney",
+            "lipids"
+          ],
+          "bonuses": {
+            "prediabetes": {
+              "base_score": 0.2155,
+              "adjusted_score": 0.2455,
+              "applied_bonus": 0.03,
+              "matched_groups": [
+                "lipids"
+              ],
+              "top1_anchor": "electrolytes",
+              "rank_before": 6
+            }
+          },
+          "penalties": {
+            "electrolytes": {
+              "base_score": 0.3847,
+              "adjusted_score": 0.3247,
+              "applied_penalty": 0.06,
+              "reason": "no_condition_specific_knn_support",
+              "rank_before": 1
+            },
+            "thyroid": {
+              "base_score": 0.345,
+              "adjusted_score": 0.245,
+              "applied_penalty": 0.1,
+              "reason": "no_condition_specific_knn_support",
+              "rank_before": 3
+            }
+          },
+          "bayes_surfaced": [],
+          "knn_surfaced": []
+        }
+      ]
+    },
+    {
+      "strategy_id": "E",
+      "strategy_label": "Never freeze (full KNN)",
+      "strategy_threshold": 0.0,
+      "metrics": {
+        "n_labeled": 576,
+        "n_healthy": 24,
+        "n_multi": 354,
+        "top1_hit_rate": 0.375,
+        "top3_hit_rate": 0.5938,
+        "bayes_top1_hit_rate": 0.375,
+        "false_displacement_rate": 0.0,
+        "true_promotion_rate": 0.0,
+        "net_top1_gain": 0.0,
+        "secondary_condition_recovery": 0.4774,
+        "over_alert_rate": 0.4583,
+        "top1_changes": 0,
+        "released_profiles": 0,
+        "released_correct": 0,
+        "released_incorrect": 0,
+        "per_condition": {
+          "anemia": {
+            "n": 60,
+            "top1_hit_rate": 0.4667,
+            "top3_hit_rate": 0.5833,
+            "false_displacement_rate": 0.0,
+            "true_promotion_rate": 0.0
+          },
+          "electrolytes": {
+            "n": 44,
+            "top1_hit_rate": 0.4318,
+            "top3_hit_rate": 0.5909,
+            "false_displacement_rate": 0.0,
+            "true_promotion_rate": 0.0
+          },
+          "hepatitis": {
+            "n": 43,
+            "top1_hit_rate": 0.5581,
+            "top3_hit_rate": 0.6977,
+            "false_displacement_rate": 0.0,
+            "true_promotion_rate": 0.0
+          },
+          "inflammation": {
+            "n": 46,
+            "top1_hit_rate": 0.3696,
+            "top3_hit_rate": 0.413,
+            "false_displacement_rate": 0.0,
+            "true_promotion_rate": 0.0
+          },
+          "iron_deficiency": {
+            "n": 38,
+            "top1_hit_rate": 0.7368,
+            "top3_hit_rate": 0.9211,
+            "false_displacement_rate": 0.0,
+            "true_promotion_rate": 0.0
+          },
+          "kidney": {
+            "n": 43,
+            "top1_hit_rate": 0.4884,
+            "top3_hit_rate": 0.8605,
+            "false_displacement_rate": 0.0,
+            "true_promotion_rate": 0.0
+          },
+          "liver": {
+            "n": 41,
+            "top1_hit_rate": 0.0,
+            "top3_hit_rate": 0.0,
+            "false_displacement_rate": 0.0,
+            "true_promotion_rate": 0.0
+          },
+          "perimenopause": {
+            "n": 68,
+            "top1_hit_rate": 0.0,
+            "top3_hit_rate": 0.1324,
+            "false_displacement_rate": 0.0,
+            "true_promotion_rate": 0.0
+          },
+          "prediabetes": {
+            "n": 43,
+            "top1_hit_rate": 0.186,
+            "top3_hit_rate": 0.907,
+            "false_displacement_rate": 0.0,
+            "true_promotion_rate": 0.0
+          },
+          "sleep_disorder": {
+            "n": 82,
+            "top1_hit_rate": 0.1829,
+            "top3_hit_rate": 0.561,
+            "false_displacement_rate": 0.0,
+            "true_promotion_rate": 0.0
+          },
+          "thyroid": {
+            "n": 68,
+            "top1_hit_rate": 0.8235,
+            "top3_hit_rate": 0.9706,
+            "false_displacement_rate": 0.0,
+            "true_promotion_rate": 0.0
+          }
+        }
+      },
+      "sample_false_displacements": [],
+      "sample_true_promotions": []
+    }
+  ],
+  "recommendation": "**Recommended: Strategy B (`top1_confidence_threshold=0.75`)**\n\n- Top-1 accuracy: `38.9%` \u2192 `38.4%` (-0.5% gain)\n- False-displacement rate: `0.4%` \u2192 `0.4%` (+0.0%)\n- True promotions: `1.2%`\n- Net top-1 gain: `+0.9%`\n\nTo apply: update the `deep-analyze` route to pass `top1_confidence_threshold=0.75` to `rerank_condition_scores_with_knn`."
+}

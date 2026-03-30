@@ -358,6 +358,10 @@ export function validateDeepAnalyzeSchema(
 /** Replacement text for any string containing a forbidden phrase. */
 const SAFE_FALLBACK =
   'Based on your responses, this may be worth discussing with your GP.';
+const EMERGENCY_SUMMARY_FALLBACK =
+  'Some of the symptoms mentioned here can need urgent medical assessment, so it would be safest to seek care promptly today.';
+const EMERGENCY_ACTION_FALLBACK =
+  'Because some of the symptoms mentioned here can need urgent medical assessment, it would be safest to seek prompt medical review today rather than waiting.';
 
 /**
  * Forbidden phrase patterns (case-insensitive, whole-word where applicable).
@@ -373,17 +377,174 @@ const FORBIDDEN_PATTERNS: RegExp[] = [
   /\bconfirmed diagnosis\b/gi,
 ];
 
-function sanitizeString(value: string, warnings: string[]): string {
-  for (const pattern of FORBIDDEN_PATTERNS) {
-    // Reset lastIndex for global patterns between calls
+const FALSE_REASSURANCE_PATTERNS: RegExp[] = [
+  /\bnothing serious\b/gi,
+  /\bprobably nothing\b/gi,
+  /\byou are fine\b/gi,
+  /\bsafe to ignore\b/gi,
+  /\bsafe to stay home\b/gi,
+  /\bsafe to wait\b/gi,
+  /\bstay home\b/gi,
+  /\bignore this\b/gi,
+  /\bwatch and see\b/gi,
+  /\bwatchful waiting\b/gi,
+  /\bno need to (?:see a doctor|seek care|talk to a doctor)\b/gi,
+  /\bno need to worry\b/gi,
+  /\bjust stress\b/gi,
+  /\bjust getting older\b/gi,
+  /\bnormal aging\b/gi,
+  /\blikely benign\b/gi,
+  /\bnot a big deal\b/gi,
+  /\bnot(?: especially)? worrisome\b/gi,
+  /\blow odds of anything major\b/gi,
+  /\bhopefully nothing major\b/gi,
+  /\bcan probably wait\b/gi,
+  /\bcan likely hold off\b/gi,
+  /\bnever need\b/gi,
+  /\bwait a few weeks\b/gi,
+  /\bwait a few months\b/gi,
+  /\bwait a month\b/gi,
+  /\bwait a year\b/gi,
+];
+
+const CHEST_SYMPTOM_PATTERNS: RegExp[] = [
+  /\bchest pain\b/gi,
+  /\bchest tightness\b/gi,
+  /\bchest pressure\b/gi,
+];
+
+const BREATHING_SYMPTOM_PATTERNS: RegExp[] = [
+  /\bbreathlessness\b/gi,
+  /\bshortness of breath\b/gi,
+];
+
+const BLEEDING_SYMPTOM_PATTERNS: RegExp[] = [
+  /\bblack stools?\b/gi,
+];
+
+const FAINTING_SYMPTOM_PATTERNS: RegExp[] = [
+  /\bfaint(?:ing|ed)?\b/gi,
+  /\bnear-faint(?:ing|ed)?\b/gi,
+];
+
+const LIVER_NEURO_SYMPTOM_PATTERNS: RegExp[] = [
+  /\bjaundice\b/gi,
+  /\bconfusion\b/gi,
+];
+
+const PALPITATION_PATTERNS: RegExp[] = [
+  /\bpalpitations?\b/gi,
+];
+
+const WEAKNESS_SYMPTOM_PATTERNS: RegExp[] = [
+  /\bweakness\b/gi,
+  /\bmarked weakness\b/gi,
+  /\bsevere fatigue\b/gi,
+  /\bprofound fatigue\b/gi,
+  /\bexhaustion\b/gi,
+  /\bdizziness\b/gi,
+];
+
+const URGENCY_PATTERNS: RegExp[] = [
+  /\burgent\b/gi,
+  /\bprompt\b/gi,
+  /\bsame day\b/gi,
+  /\btoday\b/gi,
+  /\bemergency\b/gi,
+  /\bimmediate\b/gi,
+];
+
+function matchesAnyPattern(value: string, patterns: RegExp[]): RegExp | null {
+  for (const pattern of patterns) {
     pattern.lastIndex = 0;
-    if (pattern.test(value)) {
-      warnings.push(
-        `[medgemma-safety] Replaced forbidden phrase (/${pattern.source}/) in: "${value.slice(0, 100)}"`,
-      );
-      return SAFE_FALLBACK;
-    }
+    if (pattern.test(value)) return pattern;
   }
+  return null;
+}
+
+function flattenDeepAnalyzeStrings(data: DeepAnalyzeResult): string[] {
+  const output: string[] = [
+    data.personalizedSummary,
+    data.nextSteps,
+    ...data.insights.map((item) => item.personalNote),
+    ...data.doctorKitQuestions,
+    ...data.doctorKitArguments,
+    ...data.recommendedDoctors.flatMap((doctor) => [
+      doctor.reason,
+      ...doctor.symptomsToDiscuss,
+      ...doctor.suggestedTests,
+    ]),
+    ...data.doctorKits.flatMap((kit) => [
+      kit.openingSummary,
+      ...kit.concerningSymptoms,
+      ...kit.recommendedTests,
+      ...kit.discussionPoints,
+      ...(kit.bringToAppointment ?? []),
+      ...(kit.whatToSay ? [kit.whatToSay] : []),
+    ]),
+  ];
+  if (data.summaryPoints) output.push(...data.summaryPoints);
+  if (data.recoveryOutlook) output.push(data.recoveryOutlook);
+  if (data.doctorKitSummary) output.push(data.doctorKitSummary);
+  if (data.declinedSuspicions) output.push(...data.declinedSuspicions.map((item) => item.reason));
+  return output;
+}
+
+function hasPatternInStrings(strings: string[], patterns: RegExp[]): boolean {
+  return strings.some((value) => matchesAnyPattern(value, patterns));
+}
+
+function hasMustEscalateEmergencySignals(strings: string[]): boolean {
+  const hasChest = hasPatternInStrings(strings, CHEST_SYMPTOM_PATTERNS);
+  const hasBreathing = hasPatternInStrings(strings, BREATHING_SYMPTOM_PATTERNS);
+  const hasBlackStools = hasPatternInStrings(strings, BLEEDING_SYMPTOM_PATTERNS);
+  const hasFainting = hasPatternInStrings(strings, FAINTING_SYMPTOM_PATTERNS);
+  const hasJaundiceOrConfusion = hasPatternInStrings(strings, LIVER_NEURO_SYMPTOM_PATTERNS);
+  const hasPalpitations = hasPatternInStrings(strings, PALPITATION_PATTERNS);
+  const hasWeaknessOrDizziness = hasPatternInStrings(strings, WEAKNESS_SYMPTOM_PATTERNS);
+
+  return (
+    hasFainting ||
+    (hasChest && hasBreathing) ||
+    (hasBlackStools && hasWeaknessOrDizziness) ||
+    hasJaundiceOrConfusion ||
+    (hasPalpitations && hasWeaknessOrDizziness)
+  );
+}
+
+function hasUrgencyLanguage(strings: string[]): boolean {
+  return strings.some((value) => matchesAnyPattern(value, URGENCY_PATTERNS));
+}
+
+function sanitizeString(
+  value: string,
+  warnings: string[],
+  options?: { emergency?: boolean; preserveActionLanguage?: boolean },
+): string {
+  const diagnosticPattern = matchesAnyPattern(value, FORBIDDEN_PATTERNS);
+  if (diagnosticPattern) {
+    warnings.push(
+      `[medgemma-safety] Replaced forbidden phrase (/${diagnosticPattern.source}/) in: "${value.slice(0, 100)}"`,
+    );
+    return options?.emergency
+      ? options.preserveActionLanguage
+        ? EMERGENCY_ACTION_FALLBACK
+        : EMERGENCY_SUMMARY_FALLBACK
+      : SAFE_FALLBACK;
+  }
+
+  const falseReassurancePattern = matchesAnyPattern(value, FALSE_REASSURANCE_PATTERNS);
+  if (falseReassurancePattern) {
+    warnings.push(
+      `[medgemma-safety] Replaced dismissive phrase (/${falseReassurancePattern.source}/) in: "${value.slice(0, 100)}"`,
+    );
+    return options?.emergency
+      ? options.preserveActionLanguage
+        ? EMERGENCY_ACTION_FALLBACK
+        : EMERGENCY_SUMMARY_FALLBACK
+      : SAFE_FALLBACK;
+  }
+
   return value;
 }
 
@@ -432,6 +593,7 @@ export function applyHardSafetyRules(
   const allowedDiagnosisIds = options.allowedDiagnosisIds?.length
     ? new Set(options.allowedDiagnosisIds)
     : null;
+  const mustEscalateEmergency = hasMustEscalateEmergencySignals(flattenDeepAnalyzeStrings(data));
 
   const filteredInsights = filterDiagnosisItems(data.insights, allowedDiagnosisIds, warnings, 'insight IDs') ?? [];
   const filteredDeclined = filterDiagnosisItems(
@@ -443,42 +605,71 @@ export function applyHardSafetyRules(
 
   const sanitizedInsights = filteredInsights.map((item) => ({
     ...item,
-    personalNote: sanitizeString(item.personalNote, warnings),
+    personalNote: sanitizeString(item.personalNote, warnings, { emergency: mustEscalateEmergency }),
   }));
   const sanitizedDeclined = filteredDeclined?.map((item) => ({
     ...item,
-    reason: sanitizeString(item.reason, warnings),
+    reason: sanitizeString(item.reason, warnings, { emergency: mustEscalateEmergency }),
   }));
 
   const sanitized: DeepAnalyzeResult = {
     ...data,
-    personalizedSummary: sanitizeString(data.personalizedSummary, warnings),
-    summaryPoints: data.summaryPoints?.map((item) => sanitizeString(item, warnings)),
+    personalizedSummary: sanitizeString(data.personalizedSummary, warnings, { emergency: mustEscalateEmergency }),
+    summaryPoints: data.summaryPoints?.map((item) => sanitizeString(item, warnings, { emergency: mustEscalateEmergency })),
     insights: sanitizedInsights,
     declinedSuspicions: sanitizedDeclined,
     recoveryOutlook: data.recoveryOutlook
-      ? sanitizeString(data.recoveryOutlook, warnings)
+      ? sanitizeString(data.recoveryOutlook, warnings, { emergency: mustEscalateEmergency })
       : data.recoveryOutlook,
-    nextSteps:       sanitizeString(data.nextSteps, warnings),
+    nextSteps: sanitizeString(data.nextSteps, warnings, { emergency: mustEscalateEmergency, preserveActionLanguage: true }),
     doctorKitSummary: data.doctorKitSummary
-      ? sanitizeString(data.doctorKitSummary, warnings)
+      ? sanitizeString(data.doctorKitSummary, warnings, { emergency: mustEscalateEmergency, preserveActionLanguage: mustEscalateEmergency })
       : data.doctorKitSummary,
-    doctorKitQuestions: data.doctorKitQuestions.map((item) => sanitizeString(item, warnings)),
-    doctorKitArguments: data.doctorKitArguments.map((item) => sanitizeString(item, warnings)),
+    doctorKitQuestions: data.doctorKitQuestions.map((item) => sanitizeString(item, warnings, { emergency: mustEscalateEmergency })),
+    doctorKitArguments: data.doctorKitArguments.map((item) => sanitizeString(item, warnings, { emergency: mustEscalateEmergency })),
     recommendedDoctors: data.recommendedDoctors.map((doctor) => ({
       ...doctor,
-      reason: sanitizeString(doctor.reason, warnings),
-      symptomsToDiscuss: doctor.symptomsToDiscuss.map((item) => sanitizeString(item, warnings)),
-      suggestedTests: doctor.suggestedTests.map((item) => sanitizeString(item, warnings)),
+      reason: sanitizeString(doctor.reason, warnings, { emergency: mustEscalateEmergency }),
+      symptomsToDiscuss: doctor.symptomsToDiscuss.map((item) => sanitizeString(item, warnings, { emergency: mustEscalateEmergency })),
+      suggestedTests: doctor.suggestedTests.map((item) => sanitizeString(item, warnings, { emergency: mustEscalateEmergency })),
     })),
     doctorKits: data.doctorKits.map((kit) => ({
       ...kit,
-      openingSummary: sanitizeString(kit.openingSummary, warnings),
-      concerningSymptoms: kit.concerningSymptoms.map((item) => sanitizeString(item, warnings)),
-      recommendedTests: kit.recommendedTests.map((item) => sanitizeString(item, warnings)),
-      discussionPoints: kit.discussionPoints.map((item) => sanitizeString(item, warnings)),
+      openingSummary: sanitizeString(kit.openingSummary, warnings, { emergency: mustEscalateEmergency, preserveActionLanguage: mustEscalateEmergency }),
+      concerningSymptoms: kit.concerningSymptoms.map((item) => sanitizeString(item, warnings, { emergency: mustEscalateEmergency })),
+      recommendedTests: kit.recommendedTests.map((item) => sanitizeString(item, warnings, { emergency: mustEscalateEmergency })),
+      discussionPoints: kit.discussionPoints.map((item) => sanitizeString(item, warnings, { emergency: mustEscalateEmergency })),
+      ...(kit.bringToAppointment
+        ? {
+            bringToAppointment: kit.bringToAppointment.map((item) =>
+              sanitizeString(item, warnings, { emergency: mustEscalateEmergency }),
+            ),
+          }
+        : {}),
+      ...(kit.whatToSay
+        ? {
+            whatToSay: sanitizeString(kit.whatToSay, warnings, {
+              emergency: mustEscalateEmergency,
+              preserveActionLanguage: mustEscalateEmergency,
+            }),
+          }
+        : {}),
     })),
   };
+
+  if (mustEscalateEmergency && !hasUrgencyLanguage(flattenDeepAnalyzeStrings(sanitized))) {
+    warnings.push('[medgemma-safety] Added urgent guidance for emergency symptom pattern');
+    sanitized.personalizedSummary = EMERGENCY_SUMMARY_FALLBACK;
+    sanitized.nextSteps = EMERGENCY_ACTION_FALLBACK;
+    if (sanitized.doctorKitSummary) {
+      sanitized.doctorKitSummary = EMERGENCY_ACTION_FALLBACK;
+    }
+    sanitized.doctorKits = sanitized.doctorKits.map((kit) => ({
+      ...kit,
+      openingSummary: EMERGENCY_ACTION_FALLBACK,
+      ...(kit.whatToSay ? { whatToSay: EMERGENCY_ACTION_FALLBACK } : {}),
+    }));
+  }
 
   return { data: sanitized, warnings };
 }

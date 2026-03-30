@@ -1,0 +1,463 @@
+[
+  {
+    "profile_id": "KNN-OVR-001",
+    "profile_type": "positive",
+    "target_condition": "kidney_disease",
+    "demographics": {
+      "age": 63,
+      "sex": "F",
+      "bmi": 31.4,
+      "smoking_status": "former",
+      "activity_level": "low"
+    },
+    "symptom_vector": {
+      "fatigue_severity": 0.72,
+      "sleep_quality": 0.38,
+      "post_exertional_malaise": 0.58,
+      "joint_pain": 0.26,
+      "cognitive_impairment": 0.41,
+      "depressive_mood": 0.27,
+      "anxiety_level": 0.21,
+      "digestive_symptoms": 0.19,
+      "heat_intolerance": 0.12,
+      "weight_change": 0.08
+    },
+    "lab_values": {
+      "creatinine": 1.56,
+      "bun": 31,
+      "bicarbonate": 20,
+      "albumin": 3.5
+    },
+    "ground_truth": {
+      "expected_conditions": [
+        { "condition_id": "kidney_disease", "confidence": "high", "rank": 1 }
+      ],
+      "expected_lab_groups": ["kidney"],
+      "notes": "Clean CKD-style case."
+    }
+  },
+  {
+    "profile_id": "KNN-OVR-002",
+    "profile_type": "edge",
+    "target_condition": "kidney_disease",
+    "demographics": {
+      "age": 57,
+      "sex": "F",
+      "bmi": 29.7,
+      "smoking_status": "never",
+      "activity_level": "sedentary"
+    },
+    "symptom_vector": {
+      "fatigue_severity": 0.81,
+      "sleep_quality": 0.34,
+      "post_exertional_malaise": 0.62,
+      "joint_pain": 0.33,
+      "cognitive_impairment": 0.48,
+      "depressive_mood": 0.31,
+      "anxiety_level": 0.22,
+      "digestive_symptoms": 0.18,
+      "heat_intolerance": 0.14,
+      "weight_change": 0.03
+    },
+    "lab_values": {
+      "creatinine": 1.67,
+      "bun": 35,
+      "bicarbonate": 19,
+      "hemoglobin": 10.2,
+      "ferritin": 188
+    },
+    "ground_truth": {
+      "expected_conditions": [
+        { "condition_id": "kidney_disease", "confidence": "high", "rank": 1 },
+        { "condition_id": "anemia", "confidence": "medium", "rank": 2 }
+      ],
+      "expected_lab_groups": ["kidney", "cbc"],
+      "notes": "Kidney disease with anemia-of-chronic-disease style overlap."
+    }
+  },
+  {
+    "profile_id": "KNN-OVR-003",
+    "profile_type": "edge",
+    "target_condition": "kidney_disease",
+    "demographics": {
+      "age": 61,
+      "sex": "M",
+      "bmi": 34.6,
+      "smoking_status": "former",
+      "activity_level": "low"
+    },
+    "symptom_vector": {
+      "fatigue_severity": 0.68,
+      "sleep_quality": 0.42,
+      "post_exertional_malaise": 0.52,
+      "joint_pain": 0.24,
+      "cognitive_impairment": 0.36,
+      "depressive_mood": 0.22,
+      "anxiety_level": 0.18,
+      "digestive_symptoms": 0.21,
+      "heat_intolerance": 0.09,
+      "weight_change": 0.27
+    },
+    "lab_values": {
+      "creatinine": 1.73,
+      "bun": 28,
+      "bicarbonate": 21,
+      "fasting_glucose_mg_dl": 121,
+      "hba1c": 6.2,
+      "triglycerides_mg_dl": 198
+    },
+    "ground_truth": {
+      "expected_conditions": [
+        { "condition_id": "kidney_disease", "confidence": "high", "rank": 1 },
+        { "condition_id": "prediabetes", "confidence": "medium", "rank": 2 }
+      ],
+      "expected_lab_groups": ["kidney", "glycemic", "lipids"],
+      "notes": "Metabolic overlap where KNN should add glycemic context around kidney."
+    }
+  },
+  {
+    "profile_id": "KNN-OVR-004",
+    "profile_type": "positive",
+    "target_condition": "liver",
+    "demographics": {
+      "age": 49,
+      "sex": "M",
+      "bmi": 30.8,
+      "smoking_status": "current",
+      "activity_level": "low"
+    },
+    "symptom_vector": {
+      "fatigue_severity": 0.61,
+      "sleep_quality": 0.47,
+      "post_exertional_malaise": 0.36,
+      "joint_pain": 0.22,
+      "cognitive_impairment": 0.29,
+      "depressive_mood": 0.19,
+      "anxiety_level": 0.18,
+      "digestive_symptoms": 0.74,
+      "heat_intolerance": 0.14,
+      "weight_change": 0.19
+    },
+    "lab_values": {
+      "alt_u_l": 88,
+      "ast_u_l": 73,
+      "ggt_u_l": 126,
+      "total_bilirubin_mg_dl": 1.5,
+      "alp_u_l": 138
+    },
+    "ground_truth": {
+      "expected_conditions": [
+        { "condition_id": "liver", "confidence": "high", "rank": 1 }
+      ],
+      "expected_lab_groups": ["liver_panel"],
+      "notes": "Clean liver enzyme pattern."
+    }
+  },
+  {
+    "profile_id": "KNN-OVR-005",
+    "profile_type": "positive",
+    "target_condition": "hepatitis",
+    "demographics": {
+      "age": 54,
+      "sex": "M",
+      "bmi": 27.1,
+      "smoking_status": "former",
+      "activity_level": "moderate"
+    },
+    "symptom_vector": {
+      "fatigue_severity": 0.67,
+      "sleep_quality": 0.44,
+      "post_exertional_malaise": 0.39,
+      "joint_pain": 0.25,
+      "cognitive_impairment": 0.31,
+      "depressive_mood": 0.22,
+      "anxiety_level": 0.2,
+      "digestive_symptoms": 0.79,
+      "heat_intolerance": 0.11,
+      "weight_change": -0.08
+    },
+    "lab_values": {
+      "alt_u_l": 102,
+      "ast_u_l": 84,
+      "ggt_u_l": 93,
+      "total_bilirubin_mg_dl": 1.4,
+      "total_protein_g_dl": 8.4
+    },
+    "ground_truth": {
+      "expected_conditions": [
+        { "condition_id": "hepatitis", "confidence": "high", "rank": 1 }
+      ],
+      "expected_lab_groups": ["liver_panel"],
+      "notes": "Hepatitis-like inflammatory liver pattern."
+    }
+  },
+  {
+    "profile_id": "KNN-OVR-006",
+    "profile_type": "edge",
+    "target_condition": "liver",
+    "demographics": {
+      "age": 46,
+      "sex": "F",
+      "bmi": 33.8,
+      "smoking_status": "never",
+      "activity_level": "sedentary"
+    },
+    "symptom_vector": {
+      "fatigue_severity": 0.72,
+      "sleep_quality": 0.41,
+      "post_exertional_malaise": 0.44,
+      "joint_pain": 0.31,
+      "cognitive_impairment": 0.34,
+      "depressive_mood": 0.24,
+      "anxiety_level": 0.23,
+      "digestive_symptoms": 0.69,
+      "heat_intolerance": 0.17,
+      "weight_change": 0.23
+    },
+    "lab_values": {
+      "alt_u_l": 76,
+      "ast_u_l": 58,
+      "ggt_u_l": 79,
+      "crp": 6.1,
+      "wbc_1000_cells_ul": 12.8
+    },
+    "ground_truth": {
+      "expected_conditions": [
+        { "condition_id": "liver", "confidence": "high", "rank": 1 },
+        { "condition_id": "inflammation", "confidence": "medium", "rank": 2 }
+      ],
+      "expected_lab_groups": ["liver_panel", "inflammation"],
+      "notes": "Fatty-liver style case with clear inflammatory spillover."
+    }
+  },
+  {
+    "profile_id": "KNN-OVR-007",
+    "profile_type": "edge",
+    "target_condition": "anemia",
+    "demographics": {
+      "age": 52,
+      "sex": "F",
+      "bmi": 28.9,
+      "smoking_status": "never",
+      "activity_level": "low"
+    },
+    "symptom_vector": {
+      "fatigue_severity": 0.86,
+      "sleep_quality": 0.36,
+      "post_exertional_malaise": 0.71,
+      "joint_pain": 0.28,
+      "cognitive_impairment": 0.52,
+      "depressive_mood": 0.29,
+      "anxiety_level": 0.26,
+      "digestive_symptoms": 0.17,
+      "heat_intolerance": 0.12,
+      "weight_change": -0.04
+    },
+    "lab_values": {
+      "hemoglobin": 9.8,
+      "ferritin": 22,
+      "creatinine": 1.42,
+      "bun": 26
+    },
+    "ground_truth": {
+      "expected_conditions": [
+        { "condition_id": "anemia", "confidence": "high", "rank": 1 },
+        { "condition_id": "kidney_disease", "confidence": "medium", "rank": 2 }
+      ],
+      "expected_lab_groups": ["cbc", "iron_studies", "kidney"],
+      "notes": "Mixed anemia plus kidney case."
+    }
+  },
+  {
+    "profile_id": "KNN-OVR-008",
+    "profile_type": "edge",
+    "target_condition": "iron_deficiency",
+    "demographics": {
+      "age": 44,
+      "sex": "F",
+      "bmi": 26.2,
+      "smoking_status": "never",
+      "activity_level": "moderate"
+    },
+    "symptom_vector": {
+      "fatigue_severity": 0.79,
+      "sleep_quality": 0.39,
+      "post_exertional_malaise": 0.61,
+      "joint_pain": 0.22,
+      "cognitive_impairment": 0.47,
+      "depressive_mood": 0.28,
+      "anxiety_level": 0.31,
+      "digestive_symptoms": 0.16,
+      "heat_intolerance": 0.58,
+      "weight_change": 0.11
+    },
+    "lab_values": {
+      "hemoglobin": 10.7,
+      "ferritin": 9,
+      "tsh": 2.2
+    },
+    "ground_truth": {
+      "expected_conditions": [
+        { "condition_id": "iron_deficiency", "confidence": "high", "rank": 1 },
+        { "condition_id": "perimenopause", "confidence": "medium", "rank": 2 }
+      ],
+      "expected_lab_groups": ["cbc", "iron_studies"],
+      "notes": "Heavy-period type overlap where control should already be decent."
+    }
+  },
+  {
+    "profile_id": "KNN-OVR-009",
+    "profile_type": "edge",
+    "target_condition": "hypothyroidism",
+    "demographics": {
+      "age": 50,
+      "sex": "F",
+      "bmi": 32.1,
+      "smoking_status": "former",
+      "activity_level": "sedentary"
+    },
+    "symptom_vector": {
+      "fatigue_severity": 0.69,
+      "sleep_quality": 0.43,
+      "post_exertional_malaise": 0.46,
+      "joint_pain": 0.31,
+      "cognitive_impairment": 0.44,
+      "depressive_mood": 0.27,
+      "anxiety_level": 0.23,
+      "digestive_symptoms": 0.2,
+      "heat_intolerance": 0.18,
+      "weight_change": 0.34
+    },
+    "lab_values": {
+      "tsh": 6.8,
+      "fasting_glucose_mg_dl": 112,
+      "hba1c": 5.9,
+      "triglycerides_mg_dl": 182
+    },
+    "ground_truth": {
+      "expected_conditions": [
+        { "condition_id": "hypothyroidism", "confidence": "high", "rank": 1 },
+        { "condition_id": "prediabetes", "confidence": "medium", "rank": 2 }
+      ],
+      "expected_lab_groups": ["thyroid", "glycemic", "lipids"],
+      "notes": "Thyroid plus metabolic case."
+    }
+  },
+  {
+    "profile_id": "KNN-OVR-010",
+    "profile_type": "edge",
+    "target_condition": "prediabetes",
+    "demographics": {
+      "age": 47,
+      "sex": "M",
+      "bmi": 35.2,
+      "smoking_status": "current",
+      "activity_level": "sedentary"
+    },
+    "symptom_vector": {
+      "fatigue_severity": 0.64,
+      "sleep_quality": 0.37,
+      "post_exertional_malaise": 0.41,
+      "joint_pain": 0.25,
+      "cognitive_impairment": 0.3,
+      "depressive_mood": 0.21,
+      "anxiety_level": 0.18,
+      "digestive_symptoms": 0.22,
+      "heat_intolerance": 0.16,
+      "weight_change": 0.39
+    },
+    "lab_values": {
+      "fasting_glucose_mg_dl": 118,
+      "hba1c": 6.0,
+      "triglycerides_mg_dl": 216,
+      "crp": 5.3
+    },
+    "ground_truth": {
+      "expected_conditions": [
+        { "condition_id": "prediabetes", "confidence": "high", "rank": 1 },
+        { "condition_id": "inflammation", "confidence": "medium", "rank": 2 }
+      ],
+      "expected_lab_groups": ["glycemic", "lipids", "inflammation"],
+      "notes": "Common metabolic overlap case."
+    }
+  },
+  {
+    "profile_id": "KNN-OVR-011",
+    "profile_type": "edge",
+    "target_condition": "liver",
+    "demographics": {
+      "age": 58,
+      "sex": "M",
+      "bmi": 33.4,
+      "smoking_status": "former",
+      "activity_level": "low"
+    },
+    "symptom_vector": {
+      "fatigue_severity": 0.66,
+      "sleep_quality": 0.4,
+      "post_exertional_malaise": 0.37,
+      "joint_pain": 0.21,
+      "cognitive_impairment": 0.28,
+      "depressive_mood": 0.18,
+      "anxiety_level": 0.16,
+      "digestive_symptoms": 0.71,
+      "heat_intolerance": 0.13,
+      "weight_change": 0.31
+    },
+    "lab_values": {
+      "alt_u_l": 69,
+      "ast_u_l": 55,
+      "ggt_u_l": 88,
+      "fasting_glucose_mg_dl": 114,
+      "hba1c": 5.8,
+      "triglycerides_mg_dl": 205
+    },
+    "ground_truth": {
+      "expected_conditions": [
+        { "condition_id": "liver", "confidence": "high", "rank": 1 },
+        { "condition_id": "prediabetes", "confidence": "medium", "rank": 2 }
+      ],
+      "expected_lab_groups": ["liver_panel", "glycemic", "lipids"],
+      "notes": "Fatigue with liver-metabolic cluster."
+    }
+  },
+  {
+    "profile_id": "KNN-OVR-012",
+    "profile_type": "edge",
+    "target_condition": "kidney_disease",
+    "demographics": {
+      "age": 55,
+      "sex": "F",
+      "bmi": 30.2,
+      "smoking_status": "never",
+      "activity_level": "low"
+    },
+    "symptom_vector": {
+      "fatigue_severity": 0.74,
+      "sleep_quality": 0.33,
+      "post_exertional_malaise": 0.57,
+      "joint_pain": 0.29,
+      "cognitive_impairment": 0.43,
+      "depressive_mood": 0.25,
+      "anxiety_level": 0.21,
+      "digestive_symptoms": 0.2,
+      "heat_intolerance": 0.15,
+      "weight_change": 0.12
+    },
+    "lab_values": {
+      "creatinine": 1.48,
+      "bun": 27,
+      "bicarbonate": 21,
+      "crp": 4.7,
+      "wbc_1000_cells_ul": 11.8
+    },
+    "ground_truth": {
+      "expected_conditions": [
+        { "condition_id": "kidney_disease", "confidence": "high", "rank": 1 },
+        { "condition_id": "inflammation", "confidence": "medium", "rank": 2 }
+      ],
+      "expected_lab_groups": ["kidney", "inflammation"],
+      "notes": "Kidney plus inflammation overlap."
+    }
+  }
+]

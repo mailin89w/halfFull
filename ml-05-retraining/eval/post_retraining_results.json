@@ -1,0 +1,71 @@
+{
+  "stage": "post_retraining",
+  "date": "2026-03-30",
+  "models": {
+    "kidney": "kidney_lr_v3_hard_neg",
+    "inflammation": "hidden_inflammation_lr_v4_hard_neg",
+    "prediabetes": "prediabetes_xgb_v3_hard_neg (LR fallback)"
+  },
+  "test_set": {
+    "source": "nhanes_merged_adults_final_normalized.csv 20% holdout (seed=42)",
+    "kidney_n_positives": 52,
+    "inflammation_n_positives": 128,
+    "prediabetes_n_positives": 136
+  },
+  "kidney": {
+    "top_1_acc": 0.8077,
+    "top_3_acc": 1.0,
+    "mean_score_positives": 0.769,
+    "fp_rate_real_negatives_thr035": 0.232,
+    "fp_rate_fatigue_only_100_thr035": 0.03,
+    "fp_rate_combined_200_thr035": 0.04,
+    "mean_score_fatigue_only": 0.1816,
+    "recall_at_thr025": 0.9038
+  },
+  "hidden_inflammation": {
+    "top_1_acc": 0.0781,
+    "top_3_acc": 1.0,
+    "mean_score_positives": 0.2066,
+    "fp_rate_real_negatives_thr035": 0.016,
+    "fp_rate_fatigue_only_100_thr035": 0.0,
+    "mean_score_fatigue_only": 0.0,
+    "intercept": -0.6568
+  },
+  "prediabetes": {
+    "top_1_acc": 0.8897,
+    "top_3_acc": 1.0,
+    "mean_score_positives": 0.5859,
+    "fp_rate_real_negatives_thr035": 0.628,
+    "fp_rate_fatigue_only_100_thr035": 0.0,
+    "mean_score_fatigue_only": 0.1062,
+    "flag_rate_nhanes_holdout": 0.1673,
+    "recommended_threshold_used": 0.65
+  },
+  "shared_hard_negatives_fatigue_only_100": {
+    "n": 100,
+    "kidney_fp_rate_thr035": 0.03,
+    "inflammation_fp_rate_thr035": 0.0,
+    "prediabetes_fp_rate_thr035": 0.0,
+    "passed_all_lt_5pct": true
+  },
+  "shared_hard_negatives_combined_200": {
+    "n": 200,
+    "note": "fatigue(100)+sleep(50)+thyroid(50); thyroid profiles may score higher due to poor-health signals",
+    "kidney_fp_rate_thr035": 0.04,
+    "inflammation_fp_rate_thr035": 0.0,
+    "prediabetes_fp_rate_thr035": 0.0
+  },
+  "definition_of_done": {
+    "kidney_top1_gte_20pct": true,
+    "kidney_top3_gte_60pct": true,
+    "inflammation_top3_gte_55pct": true,
+    "inflammation_intercept_lt_05": true,
+    "prediabetes_top1_gte_15pct": true,
+    "prediabetes_flag_rate_lt_20pct": true,
+    "kidney_fp_fatigue_only_lt5pct": true,
+    "inflammation_fp_fatigue_only_lt5pct": true,
+    "prediabetes_fp_fatigue_only_lt5pct": true
+  },
+  "dod_passed_count": 9,
+  "dod_total": 9
+}

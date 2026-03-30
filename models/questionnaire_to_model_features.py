@@ -54,14 +54,14 @@ def _feature_names(meta: dict[str, Any] | None, key: str, condition: str) -> lis
 
 THYROID_META = _load_json(MODELS_DIR / "thyroid_lr_l2_18feat_metadata.json", "thyroid")
 KIDNEY_META = _load_json(MODELS_DIR / "kidney_lr_l2_routine_30feat_metadata.json", "kidney")
-LIVER_META = _load_json(MODELS_DIR / "liver_lr_l2_13feat_metadata.json", "liver")
-ANEMIA_META = _load_json(MODELS_DIR / "anemia_combined_lr_metadata.json", "anemia")
+LIVER_META = _load_json(ROOT / "models_normalized" / "liver_rf_cal_deduped19_v2_metadata.json", "liver")
+ANEMIA_META = _load_json(ROOT / "models_normalized" / "anemia_lr_deduped35_L2_C1_v4_metadata.json", "anemia")
 IRON_META = _load_json(MODELS_DIR / "iron_deficiency_checkup_lr_metadata.json", "iron_deficiency")
 PREDIABETES_META = _load_json(MODELS_DIR / "prediabetes_focused_quiz_demo_med_screening_labs_threshold_045.metadata.json", "prediabetes")
 SLEEP_META = _load_json(MODELS_DIR / "sleep_disorder_compact_quiz_demo_med_screening_labs_threshold_04.metadata.json", "sleep_disorder")
 ELECTROLYTES_META = _load_json(MODELS_DIR / "electrolyte_imbalance_compact_quiz_demo_med_screening_labs_threshold_05.metadata.json", "electrolytes")
 HEPATITIS_META = _load_json(MODELS_DIR / "hepatitis_rf_cal_33feat_metadata.json", "hepatitis")
-PERIMENO_META = _load_json(MODELS_DIR / "perimenopause_gradient_boosting_metadata.json", "perimenopause")
+PERIMENO_META = _load_json(ROOT / "models_normalized" / "perimenopause_lr_deduped21_L2_v2_metadata.json", "perimenopause")
 INFLAMMATION_META = _load_json(MODELS_DIR / "inflammation_lr_l1_45feat_metadata.json", "inflammation")
 
 
@@ -73,7 +73,7 @@ for condition, features in [
     ("thyroid", _feature_names(THYROID_META, "all_features", "thyroid")),
     ("kidney", _feature_names(KIDNEY_META, "all_features", "kidney")),
     ("sleep_disorder", _feature_names(SLEEP_META, "features", "sleep_disorder")),
-    ("liver", _feature_names(LIVER_META, "all_features", "liver")),
+    ("liver", _feature_names(LIVER_META, "features", "liver")),
     ("prediabetes", _feature_names(PREDIABETES_META, "features", "prediabetes")),
     ("inflammation", _feature_names(INFLAMMATION_META, "feature_names", "inflammation")),
     ("electrolytes", _feature_names(ELECTROLYTES_META, "features", "electrolytes")),

@@ -15,10 +15,12 @@ const SAFETY_SYSTEM_PROMPT = `You are a medical communication safety filter. Rew
 Rules:
 - Never say a diagnosis is confirmed unless the input explicitly says it is already medically confirmed
 - Use possibility framing such as "may suggest", "could indicate", and "worth discussing with your doctor"
-- Remove alarmist wording
+- Remove alarmist wording, but do not soften or delete urgent safety guidance when red-flag symptoms are present
+- Remove dismissive reassurance such as "nothing serious", "you are fine", "safe to ignore", "safe to stay home", "no need to see a doctor", "just stress", "watch and see", "likely benign", "not worrisome", or long delays like "wait a few weeks" / "wait a month" / "wait a year"
+- If the content mentions red-flag symptoms such as chest pain, breathlessness, black stools, jaundice, confusion, fainting, near-fainting, or palpitations, the output must keep or add urgent review language such as "urgent", "prompt", "same day", "today", "immediate", or "emergency"
 - Keep the same overall meaning, specificity, and structure
 - Rewrite these fields when present: personalizedSummary, summaryPoints[], insights[].personalNote, declinedSuspicions[].reason, recoveryOutlook, nextSteps, doctorKitSummary, doctorKitQuestions[], doctorKitArguments[], recommendedDoctors[].reason, recommendedDoctors[].symptomsToDiscuss[], doctorKits[].openingSummary, doctorKits[].discussionPoints[], doctorKits[].whatToSay, doctorKits[].bringToAppointment[]
-- Do not modify immutable identifiers or care-plan structure such as diagnosisId, suggestedTests, recommendedTests, priority, specialty, and allClear
+- Do not modify immutable identifiers or care-plan structure such as diagnosisId, suggestedTests, recommendedTests, priority, specialty, concerningSymptoms, and allClear
 - Return valid JSON only, same schema as input`;
 
 type RewriteSource =
@@ -70,7 +72,7 @@ function mergeWithImmutableFields(
     personalizedSummary: rewritten.personalizedSummary,
     summaryPoints: original.summaryPoints
       ? mergeStringArray(original.summaryPoints, rewritten.summaryPoints)
-      : original.summaryPoints,
+      : (rewritten.summaryPoints ?? original.summaryPoints),
     insights: original.insights.map((item, index) => ({
       diagnosisId: item.diagnosisId,
       personalNote: rewritten.insights[index]?.personalNote?.trim() || item.personalNote,
@@ -452,7 +454,6 @@ export async function rewriteDeepAnalyzeTone(
           }),
           signal: controller.signal,
         });
-
         if (!groqResponse.ok) {
           const errBody = await groqResponse.text().catch(() => '');
           if (groqResponse.status === 429 && attempt < GROQ_MAX_429_RETRIES) {

@@ -1,0 +1,20 @@
+{
+  "stage": "baseline",
+  "date": "2026-03-30",
+  "note": "Evaluated on 20% NHANES holdout (seed=42) with normalized features",
+  "kidney": {
+    "top_1_acc": 0.5769,
+    "top_3_acc": 1.0,
+    "recall_at_thr025": 0.9231
+  },
+  "hidden_inflammation": {
+    "top_1_acc": 0.5859,
+    "top_3_acc": 1.0,
+    "intercept": 2.1669
+  },
+  "prediabetes": {
+    "top_1_acc": 0.5147,
+    "top_3_acc": 1.0,
+    "flag_rate_at_thr053": 0.2722
+  }
+}

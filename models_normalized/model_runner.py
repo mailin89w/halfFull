@@ -68,7 +68,7 @@ _ROOT = _DIR.parent
 # ── Registry — v2 normalised models ────────────────────────────────────────────
 
 MODEL_REGISTRY = {
-    "anemia":                "anemia_lr_deduped38_L2_C005_v3.joblib",
+    "anemia":                "anemia_lr_deduped35_L2_C1_v4.joblib",
     "electrolyte_imbalance": "electrolyte_imbalance_lr_deduped28_L2_v2.joblib",
     "kidney":                "kidney_lr_deduped17_L2_v2.joblib",
     "liver":                 "liver_rf_cal_deduped19_v2.joblib",
@@ -79,6 +79,8 @@ MODEL_REGISTRY = {
     "perimenopause":         "perimenopause_lr_deduped21_L2_v2.joblib",
     "hepatitis_bc":          "hepatitis_bc_rf_cal_deduped20_v2.joblib",
     "iron_deficiency":       "iron_deficiency_rf_cal_deduped35_v4.joblib",
+    "vitamin_b12_deficiency": "vitamin_b12_deficiency_2003_2006_lr_roadmap.joblib",
+    "vitamin_d_deficiency":   "vitamin_d_deficiency_2017_2018_rf_cal_aligned.joblib",
 }
 
 # Per-model recommended operating thresholds
@@ -95,6 +97,8 @@ RECOMMENDED_THRESHOLDS = {
     "perimenopause":         0.55,
     "hepatitis_bc":          0.15,
     "iron_deficiency":       0.15,
+    "vitamin_b12_deficiency": 0.80,
+    "vitamin_d_deficiency":   0.25,
 }
 
 # Per-disease user-facing filtering criteria
@@ -102,7 +106,7 @@ RECOMMENDED_THRESHOLDS = {
 # A model score at or above this value is considered worth:
 #   (a) surfacing in user recommendations.
 #
-# All 11 models always run regardless of this value — it only controls which
+# All models always run regardless of this value — it only controls which
 # scores are elevated to the user-visible shortlist.
 #
 # Bayesian question triggering now uses a separate, lower threshold map so
@@ -128,18 +132,25 @@ RECOMMENDED_THRESHOLDS = {
 #                                  rate (perimenopause 23%) → need clearer signal
 #   0.75  sleep_disorder        — optional stricter cleanup from 2026-03-26 sweep;
 #                                  (polysomnography); only surface strong signals
+#   0.80  vitamin_b12_deficiency — very low-prevalence model; only surface the
+#                                  strongest scores until we have product-side
+#                                  validation on real user traffic
+#   0.25  vitamin_d_deficiency   — NHANES 2017–2018 aligned RF+cal model;
+#                                  best OOF F1 on the clean blood-lab sweep
 USER_FACING_THRESHOLDS = {
     "hepatitis_bc":          0.10,
-    "liver":                 0.10,
+    "liver":                 0.07,
     "iron_deficiency":       0.20,
     "kidney":                0.35,   # raised 0.25→0.35 on 2026-03-27 second-pass tightening: trade recall for materially lower user-facing alert burden
     "anemia":                0.60,   # raised 0.50→0.60 on 2026-03-26 quick-win sweep: precision 16.9%→21.8%, flag 41.3%→26.0%, recall 62.7%→50.7%
     "hidden_inflammation":   0.40,   # raised 0.30→0.40 on 2026-03-26 quick-win sweep: precision 6.3%→8.2%, flag 55.3%→36.5%, recall 46.7%→40.0%
     "prediabetes":           0.45,   # raised 0.40→0.45 on 2026-03-27 second-pass tightening: high-recall yellow model still over-flagged
-    "thyroid":               0.60,   # raised 0.55→0.60 on 2026-03-27 second-pass tightening: high-recall yellow model still over-flagged
+    "thyroid":               0.75,   # raised 0.60→0.75 on 2026-03-27: eval shows 5/12 healthy FP suppressed; tradeoff is 7/58 TP lost (85%→75% recall) — model produces 0.85-0.95 saturated scores that cannot be separated by threshold alone; proper fix is ML-02 recalibration
     "electrolyte_imbalance": 0.46,   # raised 0.40→0.46: flag 54%→34%, recall 40%→15%
     "perimenopause":         0.40,
     "sleep_disorder":        0.75,   # raised 0.70→0.75 on 2026-03-26 optional cleanup: precision 10.9%→13.1%, flag 24.5%→16.5%, recall 25.0%→20.3%
+    "vitamin_b12_deficiency": 0.80,
+    "vitamin_d_deficiency":   0.25,
 }
 
 # Lower thresholds used only to decide which conditions enter Bayesian review.
@@ -153,10 +164,12 @@ BAYESIAN_TRIGGER_THRESHOLDS = {
     "anemia":                0.50,
     "hidden_inflammation":   0.30,
     "prediabetes":           0.40,
-    "thyroid":               0.55,
+    "thyroid":               0.50,
     "electrolyte_imbalance": 0.46,
     "perimenopause":         0.40,
     "sleep_disorder":        0.70,
+    "vitamin_b12_deficiency": 0.60,
+    "vitamin_d_deficiency":   0.20,
 }
 
 # Backward-compatible alias: existing eval/report code expects FILTER_CRITERIA
@@ -208,6 +221,8 @@ SCORE_RANGES: dict[str, tuple[float, float]] = {
     "perimenopause":         (0.000, 0.988),
     "hepatitis_bc":          (0.005, 0.524),
     "iron_deficiency":       (0.006, 0.451),   # v4 — 35 feats, no CBC markers (600-profile cohort: min 0.0056, max 0.4511)
+    "vitamin_b12_deficiency": (0.000, 0.976),  # NHANES 2003-2006 roadmap LR model
+    "vitamin_d_deficiency":   (0.000, 0.942),  # NHANES 2017-2018 aligned RF+cal model
 }
 
 # Population-mean score across ALL profiles (positive + negative + healthy).
@@ -229,6 +244,8 @@ SCORE_MEANS: dict[str, float] = {
     "perimenopause":         0.306,  # updated 2026-03-26: was 0.297
     "hepatitis_bc":          0.044,
     "iron_deficiency":       0.082,  # v4 — 600-profile cohort mean (was 0.038 v3 with CBC features)
+    "vitamin_b12_deficiency": 0.125,  # NHANES 2003-2006 roadmap LR model mean score
+    "vitamin_d_deficiency":   0.283,  # NHANES 2017-2018 aligned RF+cal model mean score
 }
 
 # Sex-specific floors for iron_deficiency.

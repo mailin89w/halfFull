@@ -1,24 +1,27 @@
 {
-  "rows": 36406,
-  "profiles": 17671,
+  "rows": 20470,
+  "profiles": 6617,
   "cycles": {
-    "C": 18401,
-    "D": 18005
+    "D": 10348,
+    "C": 10122
   },
   "label_prevalence": {
-    "anemia": 0.04694281162445751,
-    "thyroid": 0.08605724331154205,
-    "sleep_disorder": 0.3704967766401214,
-    "kidney": 0.07677305938581552,
-    "hepatitis_bc": 0.018909549322407817,
-    "liver": 0.04834428973908783,
-    "menopause": 0.21202549030379608,
-    "iron_deficiency": 0.05213426358292589,
-    "electrolyte_imbalance": 0.09190792726473658,
-    "infection_inflammation": 0.4168293503870751,
-    "hidden_inflammation": 0.13107451403887688,
-    "CFS_suspect": 0.000384551996923584,
-    "prediabetes": 0.05122357687922112,
-    "perimenopause_proxy_probable": 0.0035955056179775282
+    "anemia": 0.02432828529555447,
+    "thyroid": 0.033610161211529065,
+    "sleep_disorder": 0.13770610617865556,
+    "kidney": 0.02779677576941866,
+    "hepatitis_bc": 0.014682996143176127,
+    "liver": 0.03323684998502845,
+    "menopause": 0.10180752320468979,
+    "iron_deficiency": 0.07469467513434294,
+    "vitamin_b12_deficiency": 0.016854621230693798,
+    "vitamin_d_deficiency": 0.36120481927710846,
+    "vitamin_deficiency_any": 0.3685953398759709,
+    "electrolyte_imbalance": 0.059843673668783584,
+    "infection_inflammation": 0.3335794266026824,
+    "hidden_inflammation": 0.09719995065992353,
+    "CFS_suspect": 0.0002442598925256473,
+    "prediabetes": 0.028416779431664412,
+    "perimenopause_proxy_probable": 0.0052863436123348016
   }
 }

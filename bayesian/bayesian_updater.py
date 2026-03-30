@@ -82,7 +82,7 @@ class BayesianUpdater:
         Parameters
         ----------
         condition : str
-            One of the 11 ML conditions (e.g. "anemia", "perimenopause").
+            One of the ML conditions supported by the runner (e.g. "anemia", "perimenopause").
         prior_prob : float
             ML posterior probability for this condition (0–1).
         patient_sex : str, optional
