@@ -11,7 +11,7 @@ from pathlib import Path
 from statistics import mean
 from typing import Any
 
-EVALS_DIR = Path(__file__).resolve().parent
+EVALS_DIR = Path(__file__).resolve().parent.parent  # script in archive/, step up twice to reach project root
 PROJECT_ROOT = EVALS_DIR.parent
 if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
@@ -25,14 +25,14 @@ from bayesian.bayesian_updater import BayesianUpdater
 from bayesian.run_bayesian import handle_questions, handle_update
 from evals.pipeline.knn_condition_reranker import rerank_condition_scores_with_knn
 from evals.pipeline.profile_loader import ProfileLoader
-from evals.run_bayesian_eval import simulated_bayesian_answer
-from evals.run_knn_layer_eval import KNN_LAB_GROUPS, build_eval_inputs
-from evals.run_layer1_eval import CONDITION_TO_MODEL_KEY, ModelRunner, SCHEMA_PATH
+from evals.archive.run_bayesian_eval import simulated_bayesian_answer
+from evals.archive.run_knn_layer_eval import KNN_LAB_GROUPS, build_eval_inputs
+from evals.archive.run_layer1_eval import CONDITION_TO_MODEL_KEY, ModelRunner, SCHEMA_PATH
 from models_normalized.model_runner import USER_FACING_THRESHOLDS
 from scripts.knn_scorer import KNNScorer
 from scripts.score_answers import _patient_context, _remap_scores
 
-PROFILES_PATH = EVALS_DIR / "cohort" / "profiles_v3_three_layer.json"
+PROFILES_PATH = EVALS_DIR / "cohort" / "nhanes_balanced_650.json"
 RESULTS_DIR = EVALS_DIR / "results"
 REPORTS_DIR = EVALS_DIR / "reports"
 

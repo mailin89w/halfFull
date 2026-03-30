@@ -2,7 +2,7 @@
   "$schema": "http://json-schema.org/draft-07/schema#",
   "title": "SyntheticUserProfile",
   "type": "object",
-  "required": ["profile_id", "demographics", "symptom_vector", "ground_truth"],
+  "required": ["profile_id", "demographics", "ground_truth"],
   "properties": {
     "profile_id":       { "type": "string" },
     "profile_type":     { "type": "string", "enum": ["positive", "borderline", "negative", "healthy", "edge", "multi"] },
