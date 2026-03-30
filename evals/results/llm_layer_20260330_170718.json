@@ -1,0 +1,190 @@
+{
+  "summary": {
+    "run_id": "llm_layer_20260330_170718",
+    "base_url": "http://127.0.0.1:3000",
+    "n_profiles": 2,
+    "selection_strategy": "random",
+    "top_k_allowlist": 5,
+    "required_threshold": 0.65,
+    "parse_successes": 0,
+    "hallucination_profiles": 0,
+    "condition_list_matches": 0,
+    "unsafe_final_outputs": 0,
+    "parse_success_rate": 0.0,
+    "hallucination_rate": 0.0,
+    "condition_list_match_rate": 0.0,
+    "unsafe_final_output_rate": 0.0,
+    "manual_review_count": 0,
+    "grounding_source_counts": {},
+    "synthesis_source_counts": {},
+    "rewrite_source_counts": {},
+    "hard_safety_applied_count": 0,
+    "profile_type_counts": {
+      "negative": 2
+    },
+    "challenge_bucket_counts": {
+      "random": 2
+    },
+    "section_metric_counts": {
+      "symptom_summary_present": 0,
+      "symptom_summary_structured": 0,
+      "doctor_recommendation_present": 0,
+      "doctor_recommendation_populated": 0,
+      "doctor_kit_aligned": 0,
+      "doctor_kit_populated": 0,
+      "lab_recommendation_present": 0,
+      "recovery_outlook_present": 0
+    },
+    "section_metric_rates": {
+      "symptom_summary_present": 0.0,
+      "symptom_summary_structured": 0.0,
+      "doctor_recommendation_present": 0.0,
+      "doctor_recommendation_populated": 0.0,
+      "doctor_kit_aligned": 0.0,
+      "doctor_kit_populated": 0.0,
+      "lab_recommendation_present": 0.0,
+      "recovery_outlook_present": 0.0
+    },
+    "dod_checks": {
+      "manual_review_count": {
+        "target": ">= 10",
+        "actual": 0,
+        "pass": false
+      },
+      "hallucination_rate": {
+        "target": 0.05,
+        "actual": 0.0,
+        "pass": true
+      },
+      "parse_success_rate": {
+        "target": 0.95,
+        "actual": 0.0,
+        "pass": false
+      },
+      "condition_list_match_rate": {
+        "target": 0.95,
+        "actual": 0.0,
+        "pass": false
+      },
+      "unsafe_final_output_rate": {
+        "target": 0.0,
+        "actual": 0.0,
+        "pass": true
+      }
+    },
+    "dod_pass": false
+  },
+  "results": [
+    {
+      "profile_id": "SYN-MUST0003",
+      "profile_type": "negative",
+      "target_condition": "hypothyroidism",
+      "patient_context": {
+        "gender": "Female",
+        "age_years": 55.0
+      },
+      "challenge_bucket": "random",
+      "difficulty_score": null,
+      "selection_top_scores": null,
+      "required_condition_ids": [
+        "perimenopause",
+        "thyroid",
+        "sleep_disorder"
+      ],
+      "top_allowlist_ids": [
+        "perimenopause",
+        "thyroid",
+        "sleep_disorder",
+        "prediabetes",
+        "anemia"
+      ],
+      "model_scores": {
+        "perimenopause": 0.9808,
+        "thyroid": 0.8755,
+        "sleep_disorder": 0.7029,
+        "prediabetes": 0.6316,
+        "anemia": 0.5538,
+        "electrolytes": 0.4486,
+        "kidney": 0.3114,
+        "inflammation": 0.1224,
+        "liver": 0.0564,
+        "iron_deficiency": 0.0139,
+        "hepatitis": 0.0139
+      },
+      "raw_model_scores": {
+        "thyroid": 0.8755,
+        "anemia": 0.5538,
+        "perimenopause": 0.9808,
+        "kidney": 0.3114,
+        "prediabetes": 0.6316,
+        "hidden_inflammation": 0.1224,
+        "electrolyte_imbalance": 0.4486,
+        "sleep_disorder": 0.7029,
+        "iron_deficiency": 0.0139,
+        "liver": 0.0564,
+        "hepatitis_bc": 0.0139
+      },
+      "max_required_score": 0.9808,
+      "parse_success": false,
+      "condition_list_match": false,
+      "hallucinated_ids": [],
+      "error": "HTTPConnectionPool(host='127.0.0.1', port=3000): Max retries exceeded with url: /api/deep-analyze (Caused by NewConnectionError(\"HTTPConnection(host='127.0.0.1', port=3000): Failed to establish a new connection: [Errno 61] Connection refused\"))"
+    },
+    {
+      "profile_id": "SYN-MUST0001",
+      "profile_type": "negative",
+      "target_condition": "sleep_disorder",
+      "patient_context": {
+        "gender": "Female",
+        "age_years": 23.0
+      },
+      "challenge_bucket": "random",
+      "difficulty_score": null,
+      "selection_top_scores": null,
+      "required_condition_ids": [
+        "sleep_disorder",
+        "anemia",
+        "thyroid"
+      ],
+      "top_allowlist_ids": [
+        "sleep_disorder",
+        "anemia",
+        "thyroid",
+        "electrolytes",
+        "kidney"
+      ],
+      "model_scores": {
+        "sleep_disorder": 0.9612,
+        "anemia": 0.8191,
+        "thyroid": 0.7306,
+        "electrolytes": 0.5386,
+        "kidney": 0.4962,
+        "prediabetes": 0.321,
+        "inflammation": 0.2414,
+        "iron_deficiency": 0.1721,
+        "liver": 0.0181,
+        "hepatitis": 0.0049,
+        "perimenopause": 0.0
+      },
+      "raw_model_scores": {
+        "perimenopause": 0.0,
+        "sleep_disorder": 0.9612,
+        "electrolyte_imbalance": 0.5386,
+        "thyroid": 0.7306,
+        "hidden_inflammation": 0.2414,
+        "prediabetes": 0.321,
+        "kidney": 0.4962,
+        "anemia": 0.8191,
+        "iron_deficiency": 0.1721,
+        "hepatitis_bc": 0.0049,
+        "liver": 0.0181
+      },
+      "max_required_score": 0.9612,
+      "parse_success": false,
+      "condition_list_match": false,
+      "hallucinated_ids": [],
+      "error": "HTTPConnectionPool(host='127.0.0.1', port=3000): Max retries exceeded with url: /api/deep-analyze (Caused by NewConnectionError(\"HTTPConnection(host='127.0.0.1', port=3000): Failed to establish a new connection: [Errno 61] Connection refused\"))"
+    }
+  ],
+  "manual_review_cases": []
+}

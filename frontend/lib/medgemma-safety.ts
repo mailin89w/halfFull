@@ -65,6 +65,11 @@ function normalizeStringArray(value: unknown): string[] {
     .filter(Boolean);
 }
 
+function asObjectArray(value: unknown): Record<string, unknown>[] {
+  if (!Array.isArray(value)) return [];
+  return value.filter((item): item is Record<string, unknown> => Boolean(item) && typeof item === 'object');
+}
+
 /**
  * Validates the V6 MedGemma grounding output (Call 1).
  */
@@ -76,20 +81,17 @@ export function validateMedGemmaGroundingSchema(
 
   if (!Array.isArray(parsed.supportedSuspicions))
     return err('supportedSuspicions must be an array');
-  if (parsed.supportedSuspicions.length > 3)
-    return err(`supportedSuspicions has ${parsed.supportedSuspicions.length} items — max 3`);
 
   const supportedSuspicions: SupportedSuspicion[] = [];
-  for (let i = 0; i < parsed.supportedSuspicions.length; i++) {
-    const item = parsed.supportedSuspicions[i] as Record<string, unknown>;
+  for (const item of asObjectArray(parsed.supportedSuspicions).slice(0, 3)) {
     if (typeof item?.diagnosisId !== 'string' || !DIAGNOSIS_ID_ALLOWLIST.has(item.diagnosisId))
-      return err(`supportedSuspicions[${i}].diagnosisId "${String(item?.diagnosisId)}" not in allowlist`);
+      continue;
     if (!['probable', 'possible', 'worth_ruling_out'].includes(item?.confidence as string))
-      return err(`supportedSuspicions[${i}].confidence must be probable | possible | worth_ruling_out`);
+      continue;
     if (typeof item?.anchorEvidence !== 'string' || !item.anchorEvidence.trim())
-      return err(`supportedSuspicions[${i}].anchorEvidence must be a non-empty string`);
+      continue;
     if (typeof item?.reasoning !== 'string' || !item.reasoning.trim())
-      return err(`supportedSuspicions[${i}].reasoning must be a non-empty string`);
+      continue;
     supportedSuspicions.push({
       diagnosisId: item.diagnosisId,
       confidence: item.confidence as SupportedSuspicion['confidence'],
@@ -101,9 +103,9 @@ export function validateMedGemmaGroundingSchema(
   }
 
   const declinedSuspicions: DeclinedSuspicion[] = [];
-  const declinedInput = Array.isArray(parsed.declinedSuspicions) ? parsed.declinedSuspicions : [];
+  const declinedInput = asObjectArray(parsed.declinedSuspicions);
   for (let i = 0; i < declinedInput.length; i++) {
-    const item = declinedInput[i] as Record<string, unknown>;
+    const item = declinedInput[i];
     if (typeof item?.diagnosisId !== 'string' || !DIAGNOSIS_ID_ALLOWLIST.has(item.diagnosisId))
       continue;
     if (typeof item?.reason !== 'string' || !item.reason.trim())
@@ -115,9 +117,9 @@ export function validateMedGemmaGroundingSchema(
   }
 
   const medicationFlags: MedicationFlag[] = [];
-  const medicationFlagsInput = Array.isArray(parsed.medicationFlags) ? parsed.medicationFlags : [];
+  const medicationFlagsInput = asObjectArray(parsed.medicationFlags);
   for (let i = 0; i < medicationFlagsInput.length; i++) {
-    const item = medicationFlagsInput[i] as Record<string, unknown>;
+    const item = medicationFlagsInput[i];
     if (typeof item?.labOrSymptom !== 'string' || !item.labOrSymptom.trim())
       continue;
     if (typeof item?.medication !== 'string' || !item.medication.trim())
@@ -132,17 +134,15 @@ export function validateMedGemmaGroundingSchema(
   }
 
   const recommendedSpecialties: RecommendedSpecialty[] = [];
-  const specialtiesInput = Array.isArray(parsed.recommendedSpecialties) ? parsed.recommendedSpecialties : [];
-  if (specialtiesInput.length > 3)
-    return err(`recommendedSpecialties has ${specialtiesInput.length} items — max 3`);
+  const specialtiesInput = asObjectArray(parsed.recommendedSpecialties).slice(0, 3);
   for (let i = 0; i < specialtiesInput.length; i++) {
-    const item = specialtiesInput[i] as Record<string, unknown>;
+    const item = specialtiesInput[i];
     if (typeof item?.specialty !== 'string' || !item.specialty.trim())
-      return err(`recommendedSpecialties[${i}].specialty must be a non-empty string`);
+      continue;
     if (typeof item?.priority !== 'string' || !item.priority.trim())
-      return err(`recommendedSpecialties[${i}].priority must be a non-empty string`);
+      continue;
     if (typeof item?.clinicalReason !== 'string' || !item.clinicalReason.trim())
-      return err(`recommendedSpecialties[${i}].clinicalReason must be a non-empty string`);
+      continue;
     recommendedSpecialties.push({
       specialty: item.specialty.trim(),
       priority: item.priority.trim(),
@@ -235,11 +235,8 @@ export function validateDeepAnalyzeSchema(
   // insights — array, 0–4 items, each with valid diagnosisId + non-empty personalNote
   if (!Array.isArray(parsed.insights))
     return err('insights must be an array');
-  if (parsed.insights.length > 4)
-    return err(`insights has ${parsed.insights.length} items — max is 4`);
   const insights: InsightItem[] = [];
-  for (let i = 0; i < parsed.insights.length; i++) {
-    const item = parsed.insights[i] as Record<string, unknown>;
+  for (const item of asObjectArray(parsed.insights).slice(0, 4)) {
     if (typeof item?.diagnosisId !== 'string' || !DIAGNOSIS_ID_ALLOWLIST.has(item.diagnosisId))
       continue; // skip hallucinated or empty diagnosisIds rather than failing the whole response
     if (typeof item?.personalNote !== 'string' || !item.personalNote.trim())
@@ -269,111 +266,57 @@ export function validateDeepAnalyzeSchema(
   }
 
   // doctorKitQuestions — 0 to 6 non-empty strings
-  if (
-    !Array.isArray(parsed.doctorKitQuestions) ||
-    parsed.doctorKitQuestions.length > 6
-  )
-    return err(
-      `doctorKitQuestions must have between 0 and 6 items (got ${
-        Array.isArray(parsed.doctorKitQuestions)
-          ? parsed.doctorKitQuestions.length
-          : typeof parsed.doctorKitQuestions
-      })`,
-    );
-  const doctorKitQuestions = normalizeStringArray(parsed.doctorKitQuestions);
-  if (doctorKitQuestions.length !== parsed.doctorKitQuestions.length)
-    return err('doctorKitQuestions must contain only non-empty strings');
-  for (let i = 0; i < doctorKitQuestions.length; i++) {
-    if (!doctorKitQuestions[i])
-      return err(`doctorKitQuestions[${i}] must be a non-empty string`);
-  }
+  const doctorKitQuestions = normalizeStringArray(parsed.doctorKitQuestions).slice(0, 6);
 
   // doctorKitArguments — 0 to 6 non-empty strings
-  if (
-    !Array.isArray(parsed.doctorKitArguments) ||
-    parsed.doctorKitArguments.length > 6
-  )
-    return err(
-      `doctorKitArguments must have between 0 and 6 items (got ${
-        Array.isArray(parsed.doctorKitArguments)
-          ? parsed.doctorKitArguments.length
-          : typeof parsed.doctorKitArguments
-      })`,
-    );
-  const doctorKitArguments = normalizeStringArray(parsed.doctorKitArguments);
-  if (doctorKitArguments.length !== parsed.doctorKitArguments.length)
-    return err('doctorKitArguments must contain only non-empty strings');
-  for (let i = 0; i < doctorKitArguments.length; i++) {
-    if (!doctorKitArguments[i])
-      return err(`doctorKitArguments[${i}] must be a non-empty string`);
-  }
+  const doctorKitArguments = normalizeStringArray(parsed.doctorKitArguments).slice(0, 6);
 
-  if (!Array.isArray(parsed.recommendedDoctors))
-    return err('recommendedDoctors must be an array');
-  if (parsed.recommendedDoctors.length > 3)
-    return err(`recommendedDoctors has ${parsed.recommendedDoctors.length} items — max is 3`);
   const recommendedDoctors: RecommendedDoctor[] = [];
-  for (let i = 0; i < parsed.recommendedDoctors.length; i++) {
-    const item = parsed.recommendedDoctors[i] as Record<string, unknown>;
+  for (const item of asObjectArray(parsed.recommendedDoctors).slice(0, 3)) {
     if (typeof item?.specialty !== 'string' || !item.specialty.trim())
-      return err(`recommendedDoctors[${i}].specialty must be a non-empty string`);
+      continue;
     if (typeof item?.priority !== 'string' || !item.priority.trim())
-      return err(`recommendedDoctors[${i}].priority must be a non-empty string`);
+      continue;
     if (typeof item?.reason !== 'string' || !item.reason.trim())
-      return err(`recommendedDoctors[${i}].reason must be a non-empty string`);
+      continue;
     const symptomsToDiscuss = normalizeStringArray(item?.symptomsToDiscuss);
     const suggestedTests = normalizeStringArray(item?.suggestedTests);
-    if (symptomsToDiscuss.length > 5)
-      return err(`recommendedDoctors[${i}].symptomsToDiscuss must have between 0 and 5 items`);
-    if (suggestedTests.length > 6)
-      return err(`recommendedDoctors[${i}].suggestedTests must have between 0 and 6 items`);
     recommendedDoctors.push({
       specialty: item.specialty.trim(),
       priority: item.priority.trim(),
       reason: item.reason.trim(),
-      symptomsToDiscuss,
-      suggestedTests,
+      symptomsToDiscuss: symptomsToDiscuss.slice(0, 5),
+      suggestedTests: suggestedTests.slice(0, 6),
     });
   }
 
-  if (!Array.isArray(parsed.doctorKits))
-    return err('doctorKits must be an array');
-  if (parsed.doctorKits.length > 3)
-    return err(`doctorKits has ${parsed.doctorKits.length} items — max is 3`);
   const doctorKits: DoctorKit[] = [];
-  for (let i = 0; i < parsed.doctorKits.length; i++) {
-    const item = parsed.doctorKits[i] as Record<string, unknown>;
+  for (const item of asObjectArray(parsed.doctorKits).slice(0, 3)) {
     if (typeof item?.specialty !== 'string' || !item.specialty.trim())
-      return err(`doctorKits[${i}].specialty must be a non-empty string`);
+      continue;
     if (typeof item?.openingSummary !== 'string' || !item.openingSummary.trim())
-      return err(`doctorKits[${i}].openingSummary must be a non-empty string`);
+      continue;
     const concerningSymptoms = normalizeStringArray(item?.concerningSymptoms);
     const recommendedTests = normalizeStringArray(item?.recommendedTests);
     const discussionPoints = normalizeStringArray(item?.discussionPoints);
     const bringToAppointment = normalizeStringArray(item?.bringToAppointment);
-    if (concerningSymptoms.length > 6)
-      return err(`doctorKits[${i}].concerningSymptoms must have between 0 and 6 items`);
-    if (recommendedTests.length > 6)
-      return err(`doctorKits[${i}].recommendedTests must have between 0 and 6 items`);
-    if (discussionPoints.length > 6)
-      return err(`doctorKits[${i}].discussionPoints must have between 0 and 6 items`);
     doctorKits.push({
       specialty: item.specialty.trim(),
       openingSummary: item.openingSummary.trim(),
-      concerningSymptoms,
-      recommendedTests,
-      discussionPoints,
-      ...(bringToAppointment.length > 0 ? { bringToAppointment } : {}),
+      concerningSymptoms: concerningSymptoms.slice(0, 6),
+      recommendedTests: recommendedTests.slice(0, 6),
+      discussionPoints: discussionPoints.slice(0, 6),
+      ...(bringToAppointment.length > 0 ? { bringToAppointment: bringToAppointment.slice(0, 6) } : {}),
       ...(typeof item?.whatToSay === 'string' && item.whatToSay.trim()
         ? { whatToSay: item.whatToSay.trim() }
         : {}),
     });
   }
 
-  const declinedInput = Array.isArray(parsed.declinedSuspicions) ? parsed.declinedSuspicions : [];
+  const declinedInput = asObjectArray(parsed.declinedSuspicions);
   const declinedSuspicions: DeclinedSuspicion[] = [];
   for (let i = 0; i < declinedInput.length; i++) {
-    const item = declinedInput[i] as Record<string, unknown>;
+    const item = declinedInput[i];
     if (typeof item?.diagnosisId !== 'string' || !DIAGNOSIS_ID_ALLOWLIST.has(item.diagnosisId))
       continue; // skip hallucinated ids rather than failing the whole response
     if (typeof item?.reason !== 'string' || !item.reason.trim())
@@ -450,24 +393,69 @@ export interface SafetyResult {
   warnings: string[];
 }
 
+interface SafetyOptions {
+  allowedDiagnosisIds?: string[];
+}
+
+function filterDiagnosisItems<T extends { diagnosisId: string }>(
+  items: T[] | undefined,
+  allowedDiagnosisIds: Set<string> | null,
+  warnings: string[],
+  label: string,
+): T[] | undefined {
+  if (!items) return items;
+  if (!allowedDiagnosisIds) return items;
+
+  const filtered = items.filter((item) => allowedDiagnosisIds.has(item.diagnosisId));
+  if (filtered.length !== items.length) {
+    const removed = items
+      .filter((item) => !allowedDiagnosisIds.has(item.diagnosisId))
+      .map((item) => item.diagnosisId);
+    warnings.push(
+      `[medgemma-safety] Removed unsupported ${label}: ${removed.join(', ')}`,
+    );
+  }
+  return filtered;
+}
+
 /**
  * Scans all string fields in the validated output for forbidden phrases
  * and replaces any offending field with SAFE_FALLBACK.
  *
  * Returns the sanitized data and a list of warning messages (empty if clean).
  */
-export function applyHardSafetyRules(data: DeepAnalyzeResult): SafetyResult {
+export function applyHardSafetyRules(
+  data: DeepAnalyzeResult,
+  options: SafetyOptions = {},
+): SafetyResult {
   const warnings: string[] = [];
+  const allowedDiagnosisIds = options.allowedDiagnosisIds?.length
+    ? new Set(options.allowedDiagnosisIds)
+    : null;
+
+  const filteredInsights = filterDiagnosisItems(data.insights, allowedDiagnosisIds, warnings, 'insight IDs') ?? [];
+  const filteredDeclined = filterDiagnosisItems(
+    data.declinedSuspicions,
+    allowedDiagnosisIds,
+    warnings,
+    'declined suspicion IDs',
+  );
+
+  const sanitizedInsights = filteredInsights.map((item) => ({
+    ...item,
+    personalNote: sanitizeString(item.personalNote, warnings),
+  }));
+  const sanitizedDeclined = filteredDeclined?.map((item) => ({
+    ...item,
+    reason: sanitizeString(item.reason, warnings),
+  }));
 
   const sanitized: DeepAnalyzeResult = {
     ...data,
     personalizedSummary: sanitizeString(data.personalizedSummary, warnings),
     summaryPoints: data.summaryPoints?.map((item) => sanitizeString(item, warnings)),
-    insights: data.insights.map((item) => ({
-      ...item,
-      personalNote: sanitizeString(item.personalNote, warnings),
-    })),
-    declinedSuspicions: data.declinedSuspicions,
+    insights: sanitizedInsights,
+    declinedSuspicions: sanitizedDeclined,
     recoveryOutlook: data.recoveryOutlook
       ? sanitizeString(data.recoveryOutlook, warnings)
       : data.recoveryOutlook,

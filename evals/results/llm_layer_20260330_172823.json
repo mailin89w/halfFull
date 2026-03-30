@@ -1,0 +1,1408 @@
+{
+  "summary": {
+    "run_id": "llm_layer_20260330_172823",
+    "base_url": "http://127.0.0.1:3000",
+    "n_profiles": 4,
+    "selection_strategy": "random",
+    "top_k_allowlist": 5,
+    "required_threshold": 0.65,
+    "parse_successes": 3,
+    "hallucination_profiles": 0,
+    "condition_list_matches": 3,
+    "unsafe_final_outputs": 0,
+    "parse_success_rate": 0.75,
+    "hallucination_rate": 0.0,
+    "condition_list_match_rate": 0.75,
+    "unsafe_final_output_rate": 0.0,
+    "manual_review_count": 3,
+    "grounding_source_counts": {
+      "live_medgemma_success": 3
+    },
+    "synthesis_source_counts": {
+      "live_groq_fallback_success": 3
+    },
+    "rewrite_source_counts": {
+      "fallback_groq_http_error": 3
+    },
+    "hard_safety_applied_count": 1,
+    "profile_type_counts": {
+      "negative": 2,
+      "borderline": 1,
+      "healthy": 1
+    },
+    "challenge_bucket_counts": {
+      "random": 4
+    },
+    "section_metric_counts": {
+      "symptom_summary_present": 3,
+      "symptom_summary_structured": 0,
+      "doctor_recommendation_present": 3,
+      "doctor_recommendation_populated": 3,
+      "doctor_kit_aligned": 3,
+      "doctor_kit_populated": 3,
+      "lab_recommendation_present": 3,
+      "recovery_outlook_present": 3
+    },
+    "section_metric_rates": {
+      "symptom_summary_present": 0.75,
+      "symptom_summary_structured": 0.0,
+      "doctor_recommendation_present": 0.75,
+      "doctor_recommendation_populated": 0.75,
+      "doctor_kit_aligned": 0.75,
+      "doctor_kit_populated": 0.75,
+      "lab_recommendation_present": 0.75,
+      "recovery_outlook_present": 0.75
+    },
+    "dod_checks": {
+      "manual_review_count": {
+        "target": ">= 10",
+        "actual": 3,
+        "pass": false
+      },
+      "hallucination_rate": {
+        "target": 0.05,
+        "actual": 0.0,
+        "pass": true
+      },
+      "parse_success_rate": {
+        "target": 0.95,
+        "actual": 0.75,
+        "pass": false
+      },
+      "condition_list_match_rate": {
+        "target": 0.95,
+        "actual": 0.75,
+        "pass": false
+      },
+      "unsafe_final_output_rate": {
+        "target": 0.0,
+        "actual": 0.0,
+        "pass": true
+      }
+    },
+    "dod_pass": false
+  },
+  "results": [
+    {
+      "profile_id": "SYN-MUST0003",
+      "profile_type": "negative",
+      "target_condition": "hypothyroidism",
+      "patient_context": {
+        "gender": "Female",
+        "age_years": 55.0
+      },
+      "challenge_bucket": "random",
+      "difficulty_score": null,
+      "selection_top_scores": null,
+      "required_condition_ids": [
+        "perimenopause",
+        "thyroid",
+        "sleep_disorder"
+      ],
+      "top_allowlist_ids": [
+        "perimenopause",
+        "thyroid",
+        "sleep_disorder",
+        "prediabetes",
+        "anemia"
+      ],
+      "model_scores": {
+        "perimenopause": 0.9808,
+        "thyroid": 0.8755,
+        "sleep_disorder": 0.7029,
+        "prediabetes": 0.6316,
+        "anemia": 0.5538,
+        "electrolytes": 0.4486,
+        "kidney": 0.3114,
+        "inflammation": 0.1224,
+        "liver": 0.0564,
+        "iron_deficiency": 0.0139,
+        "hepatitis": 0.0139
+      },
+      "raw_model_scores": {
+        "anemia": 0.5538,
+        "prediabetes": 0.6316,
+        "electrolyte_imbalance": 0.4486,
+        "perimenopause": 0.9808,
+        "kidney": 0.3114,
+        "thyroid": 0.8755,
+        "sleep_disorder": 0.7029,
+        "hidden_inflammation": 0.1224,
+        "liver": 0.0564,
+        "iron_deficiency": 0.0139,
+        "hepatitis_bc": 0.0139
+      },
+      "max_required_score": 0.9808,
+      "parse_success": true,
+      "condition_list_match": true,
+      "hallucinated_ids": [],
+      "http_status": 200,
+      "response": {
+        "personalizedSummary": "From what you shared, your fatigue is connected to the persistent unrefreshing sleep is worth discussing soon and glucose regulation markers support a follow-up soon. This is worth investigating further. Below you can see some hypotheses on the root causes and which doctors to see first, and how to prepare for your visit.",
+        "insights": [
+          {
+            "diagnosisId": "thyroid",
+            "personalNote": "The ML score is high (0.88) and the record includes specific symptoms like marked thyroid abnormalities can worsen quickly and need prompt review.",
+            "confidence": "probable"
+          },
+          {
+            "diagnosisId": "sleep_disorder",
+            "personalNote": "The ML score is high (0.70) and the record includes specific symptoms like persistent unrefreshing sleep is worth discussing soon.",
+            "confidence": "probable"
+          },
+          {
+            "diagnosisId": "prediabetes",
+            "personalNote": "The ML score is high (0.63) and the record includes specific symptoms like glucose regulation markers support a follow-up soon.",
+            "confidence": "probable"
+          }
+        ],
+        "recoveryOutlook": "Improvement depends on prompt review of your thyroid function and sleep patterns. Some of these conditions are treatable, and clarity often comes quickly with the right tests and evaluations.",
+        "nextSteps": "See your GP first for a review of your thyroid function and to discuss your sleep. If necessary, a sleep specialist will be the next step for further evaluation and treatment.",
+        "doctorKitSummary": "I'm experiencing fatigue, marked thyroid abnormalities, and persistent unrefreshing sleep. I'd like to test for thyroid function and sleep apnea today.",
+        "doctorKitQuestions": [],
+        "doctorKitArguments": [],
+        "recommendedDoctors": [
+          {
+            "specialty": "GP",
+            "priority": "start_here",
+            "reason": "Your GP can order the necessary tests for thyroid function and initiate the sleep apnea pathway in a single visit.",
+            "symptomsToDiscuss": [
+              "marked thyroid abnormalities can worsen quickly and need prompt review",
+              "persistent unrefreshing sleep is worth discussing soon"
+            ],
+            "suggestedTests": [
+              "TSH, Free T4, Free T3, Thyroid antibodies (Anti-TPO, Anti-Tg)",
+              "Polysomnography (sleep study)"
+            ]
+          },
+          {
+            "specialty": "Endocrinologist",
+            "priority": "consider_next",
+            "reason": "An endocrinologist can provide specialized care for thyroid function and initiate treatment if necessary.",
+            "symptomsToDiscuss": [
+              "marked thyroid abnormalities can worsen quickly and need prompt review"
+            ],
+            "suggestedTests": [
+              "TSH, Free T4, Free T3, Thyroid antibodies (Anti-TPO, Anti-Tg)"
+            ]
+          },
+          {
+            "specialty": "Sleep specialist",
+            "priority": "consider_next",
+            "reason": "A sleep specialist can provide specialized care for sleep apnea and initiate treatment if necessary.",
+            "symptomsToDiscuss": [
+              "persistent unrefreshing sleep is worth discussing soon"
+            ],
+            "suggestedTests": [
+              "Polysomnography (sleep study)"
+            ]
+          }
+        ],
+        "doctorKits": [
+          {
+            "specialty": "GP",
+            "openingSummary": "I'm here because I'm experiencing fatigue, marked thyroid abnormalities, and persistent unrefreshing sleep. I'd like to test for thyroid function and sleep apnea today.",
+            "concerningSymptoms": [
+              "marked thyroid abnormalities can worsen quickly and need prompt review",
+              "persistent unrefreshing sleep is worth discussing soon"
+            ],
+            "recommendedTests": [
+              "TSH, Free T4, Free T3, Thyroid antibodies (Anti-TPO, Anti-Tg)",
+              "Polysomnography (sleep study)"
+            ],
+            "discussionPoints": [
+              "I have marked thyroid abnormalities that need prompt review, and I'd like to test for thyroid function today.",
+              "My persistent unrefreshing sleep is worth discussing soon, and I'd like a sleep study to rule out sleep apnea."
+            ],
+            "bringToAppointment": [
+              "Thyroid medication list, if any",
+              "Sleep diary: 2 weeks of bedtime, wake time, number of awakenings"
+            ],
+            "whatToSay": "I'm here to investigate thyroid function and possible sleep apnea \u2014 two things that may be connected. I'd like thyroid function tests and a sleep study today if possible."
+          },
+          {
+            "specialty": "Endocrinologist",
+            "openingSummary": "I've been referred for thyroid function evaluation. I'm experiencing marked thyroid abnormalities that need prompt review.",
+            "concerningSymptoms": [
+              "marked thyroid abnormalities can worsen quickly and need prompt review"
+            ],
+            "recommendedTests": [
+              "TSH, Free T4, Free T3, Thyroid antibodies (Anti-TPO, Anti-Tg)"
+            ],
+            "discussionPoints": [
+              "I have marked thyroid abnormalities that need prompt review, and I'd like to test for thyroid function today."
+            ],
+            "bringToAppointment": [
+              "Thyroid medication list, if any",
+              "Thyroid medication list, if any"
+            ],
+            "whatToSay": "I'm here to investigate thyroid function \u2014 I have marked thyroid abnormalities that need prompt review. I'd like thyroid function tests today."
+          },
+          {
+            "specialty": "Sleep specialist",
+            "openingSummary": "I've been referred for sleep apnea evaluation. I'm experiencing persistent unrefreshing sleep, and I'd like a sleep study to rule out sleep apnea.",
+            "concerningSymptoms": [
+              "persistent unrefreshing sleep is worth discussing soon"
+            ],
+            "recommendedTests": [
+              "Polysomnography (sleep study)"
+            ],
+            "discussionPoints": [
+              "My persistent unrefreshing sleep is worth discussing soon, and I'd like a sleep study to rule out sleep apnea."
+            ],
+            "bringToAppointment": [
+              "Sleep diary: 2 weeks of bedtime, wake time, number of awakenings",
+              "Partner's written account of witnessed events if they can provide one"
+            ],
+            "whatToSay": "I'm here to investigate sleep apnea \u2014 my persistent unrefreshing sleep is worth discussing soon. I'd like a sleep study to rule out sleep apnea today."
+          }
+        ],
+        "allClear": false,
+        "declinedSuspicions": [
+          {
+            "diagnosisId": "perimenopause",
+            "reason": "This signal was reviewed but was not strong enough to prioritise after the full evidence check."
+          },
+          {
+            "diagnosisId": "anemia",
+            "reason": "This signal was reviewed but was not strong enough to prioritise after the full evidence check."
+          }
+        ]
+      },
+      "deep_analyze_headers": {
+        "grounding_source": "live_medgemma_success",
+        "synthesis_source": "live_groq_fallback_success",
+        "synthesis_model": "llama-3.1-8b-instant",
+        "synthesis_status": null,
+        "synthesis_error_snippet": null,
+        "rewrite_source": "fallback_groq_http_error",
+        "rewrite_model": "llama-3.1-8b-instant",
+        "rewrite_status": "429",
+        "rewrite_error_snippet": "{\"error\":{\"message\":\"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01kh90s72ffwe86v4gnp87nm38` service tier `on_demand` on tokens per minute (TPM): Limit 6000, Used 5855, Re",
+        "hard_safety_applied": "false",
+        "hard_safety_count": "0"
+      },
+      "output_condition_ids": [
+        "thyroid",
+        "sleep_disorder",
+        "prediabetes",
+        "perimenopause",
+        "anemia"
+      ],
+      "section_checks": {
+        "symptom_summary_present": true,
+        "symptom_summary_structured": false,
+        "doctor_recommendation_present": true,
+        "doctor_recommendation_populated": true,
+        "doctor_kit_aligned": true,
+        "doctor_kit_populated": true,
+        "lab_recommendation_present": true,
+        "recovery_outlook_present": true,
+        "supported_condition_count": 5,
+        "recommended_doctor_count": 3,
+        "doctor_kit_count": 3,
+        "insight_count": 3,
+        "summary_point_count": 0,
+        "recovery_outlook_expected": false
+      },
+      "unsafe_final_output": false
+    },
+    {
+      "profile_id": "SYN-MUST0001",
+      "profile_type": "negative",
+      "target_condition": "sleep_disorder",
+      "patient_context": {
+        "gender": "Female",
+        "age_years": 23.0
+      },
+      "challenge_bucket": "random",
+      "difficulty_score": null,
+      "selection_top_scores": null,
+      "required_condition_ids": [
+        "sleep_disorder",
+        "anemia",
+        "thyroid"
+      ],
+      "top_allowlist_ids": [
+        "sleep_disorder",
+        "anemia",
+        "thyroid",
+        "electrolytes",
+        "kidney"
+      ],
+      "model_scores": {
+        "sleep_disorder": 0.9612,
+        "anemia": 0.8191,
+        "thyroid": 0.7306,
+        "electrolytes": 0.5386,
+        "kidney": 0.4962,
+        "prediabetes": 0.321,
+        "inflammation": 0.2414,
+        "iron_deficiency": 0.1721,
+        "liver": 0.0181,
+        "hepatitis": 0.0049,
+        "perimenopause": 0.0
+      },
+      "raw_model_scores": {
+        "kidney": 0.4962,
+        "anemia": 0.8191,
+        "hidden_inflammation": 0.2414,
+        "sleep_disorder": 0.9612,
+        "thyroid": 0.7306,
+        "prediabetes": 0.321,
+        "perimenopause": 0.0,
+        "electrolyte_imbalance": 0.5386,
+        "liver": 0.0181,
+        "iron_deficiency": 0.1721,
+        "hepatitis_bc": 0.0049
+      },
+      "max_required_score": 0.9612,
+      "parse_success": true,
+      "condition_list_match": true,
+      "hallucinated_ids": [],
+      "http_status": 200,
+      "response": {
+        "personalizedSummary": "From what you shared, your fatigue is connected to the snoring more than once per night and overall health described as >3.5. This is worth investigating further. Below you can see some hypotheses on the root causes and which doctors to see first, and how to prepare for your visit.",
+        "insights": [
+          {
+            "diagnosisId": "sleep_disorder",
+            "personalNote": "The patient reported snoring more than once per night, a key indicator for sleep disorder. This is a common symptom that may suggest sleep apnea. A sleep study could help clarify this.",
+            "confidence": "probable"
+          },
+          {
+            "diagnosisId": "anemia",
+            "personalNote": "The patient reported feeling tired or having little energy more than 1.5 times per week, a common symptom of anemia. This could be worth ruling out with a blood test. A complete blood count could provide more information.",
+            "confidence": "probable"
+          },
+          {
+            "diagnosisId": "thyroid",
+            "personalNote": "The patient reported overall health as >3.5, which could indicate thyroid dysfunction. This may suggest hypothyroidism, but it's worth noting that this is not confirmed. A thyroid function test could provide more information.",
+            "confidence": "probable"
+          }
+        ],
+        "declinedSuspicions": [
+          {
+            "diagnosisId": "thyroid",
+            "reason": "Your weight gain is better explained by metabolic and sleep factors."
+          },
+          {
+            "diagnosisId": "electrolytes",
+            "reason": "This signal was reviewed but was not strong enough to prioritise after the full evidence check."
+          },
+          {
+            "diagnosisId": "kidney",
+            "reason": "This signal was reviewed but was not strong enough to prioritise after the full evidence check."
+          }
+        ],
+        "recoveryOutlook": "Improvement depends on getting a proper diagnosis and starting treatment. Some symptoms, like fatigue, may improve quickly with the right treatment, while others, like disrupted sleep, may take longer to resolve. Clarity often comes with a combination of tests and doctor visits.",
+        "nextSteps": "See your GP first for a complete blood count and a sleep study referral. If the sleep study confirms sleep apnea, a sleep specialist is the natural next step for further evaluation.",
+        "doctorKitSummary": "I'm experiencing heavy periods, disrupted sleep, and fatigue. I'd like to rule out anemia and sleep apnea, and get a proper diagnosis for my overall health.",
+        "doctorKitQuestions": [],
+        "doctorKitArguments": [],
+        "recommendedDoctors": [
+          {
+            "specialty": "GP",
+            "priority": "start_here",
+            "reason": "Your GP can order a complete blood count and initiate the sleep apnea pathway in one visit \u2014 the most efficient starting point for both suspected conditions.",
+            "symptomsToDiscuss": [
+              "Heavy periods",
+              "Disrupted sleep",
+              "Fatigue"
+            ],
+            "suggestedTests": [
+              "Complete Blood Count (CBC) including Hemoglobin and Hematocrit",
+              "Polysomnography (sleep study)"
+            ]
+          },
+          {
+            "specialty": "Sleep specialist",
+            "priority": "consider_next",
+            "reason": "A sleep specialist can interpret your sleep study result and initiate CPAP if sleep apnea is confirmed \u2014 this is beyond GP scope for complex cases.",
+            "symptomsToDiscuss": [
+              "Disrupted sleep",
+              "Fatigue"
+            ],
+            "suggestedTests": [
+              "Polysomnography if sleep study inconclusive",
+              "CPAP titration study if sleep apnea confirmed"
+            ]
+          }
+        ],
+        "doctorKits": [
+          {
+            "specialty": "GP",
+            "openingSummary": "I'm here because I've had heavy periods, disrupted sleep, and fatigue. I'd like to rule out anemia and sleep apnea, and get a proper diagnosis for my overall health.",
+            "concerningSymptoms": [
+              "Heavy periods",
+              "Disrupted sleep",
+              "Fatigue"
+            ],
+            "recommendedTests": [
+              "Complete Blood Count (CBC) including Hemoglobin and Hematocrit",
+              "Polysomnography (sleep study)"
+            ],
+            "discussionPoints": [
+              "I'd like to rule out anemia and sleep apnea, and get a proper diagnosis for my overall health. I'm concerned about my heavy periods and disrupted sleep."
+            ],
+            "bringToAppointment": [
+              "3-day menstrual diary showing typical flow",
+              "1-week log of sleep patterns (keep before the appointment)",
+              "List of any current medications or supplements"
+            ],
+            "whatToSay": "I'm here to investigate anemia and sleep apnea, and get a proper diagnosis for my overall health. I'd like to rule out these conditions and get some answers."
+          },
+          {
+            "specialty": "Sleep specialist",
+            "openingSummary": "I've been referred for possible sleep apnea. My sleep patterns are disrupted, and I wake up feeling tired. I'd like to confirm whether I have sleep apnea and, if so, start CPAP treatment.",
+            "concerningSymptoms": [
+              "Disrupted sleep",
+              "Fatigue"
+            ],
+            "recommendedTests": [
+              "Polysomnography if sleep study inconclusive",
+              "CPAP titration study if sleep apnea confirmed"
+            ],
+            "discussionPoints": [
+              "I'd like to confirm whether I have sleep apnea and, if so, start CPAP treatment. I'm concerned about my disrupted sleep and fatigue."
+            ],
+            "bringToAppointment": [
+              "Sleep study results from GP if already completed",
+              "Sleep diary: 2 weeks of bedtime, wake time, number of awakenings",
+              "Partner's written account of witnessed events if they can provide one"
+            ],
+            "whatToSay": "I'm here because my sleep patterns are disrupted, and I wake up feeling tired. I'd like to confirm whether I have sleep apnea and, if so, start CPAP treatment."
+          }
+        ],
+        "allClear": false
+      },
+      "deep_analyze_headers": {
+        "grounding_source": "live_medgemma_success",
+        "synthesis_source": "live_groq_fallback_success",
+        "synthesis_model": "llama-3.1-8b-instant",
+        "synthesis_status": null,
+        "synthesis_error_snippet": null,
+        "rewrite_source": "fallback_groq_http_error",
+        "rewrite_model": "llama-3.1-8b-instant",
+        "rewrite_status": "429",
+        "rewrite_error_snippet": "{\"error\":{\"message\":\"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01kh90s72ffwe86v4gnp87nm38` service tier `on_demand` on tokens per minute (TPM): Limit 6000, Used 5995, Re",
+        "hard_safety_applied": "true",
+        "hard_safety_count": "1"
+      },
+      "output_condition_ids": [
+        "sleep_disorder",
+        "anemia",
+        "thyroid",
+        "electrolytes",
+        "kidney"
+      ],
+      "section_checks": {
+        "symptom_summary_present": true,
+        "symptom_summary_structured": false,
+        "doctor_recommendation_present": true,
+        "doctor_recommendation_populated": true,
+        "doctor_kit_aligned": true,
+        "doctor_kit_populated": true,
+        "lab_recommendation_present": true,
+        "recovery_outlook_present": true,
+        "supported_condition_count": 5,
+        "recommended_doctor_count": 2,
+        "doctor_kit_count": 2,
+        "insight_count": 3,
+        "summary_point_count": 0,
+        "recovery_outlook_expected": false
+      },
+      "unsafe_final_output": false
+    },
+    {
+      "profile_id": "SYN-C0000021",
+      "profile_type": "borderline",
+      "target_condition": "hepatitis",
+      "patient_context": {
+        "gender": "Male",
+        "age_years": 59.0
+      },
+      "challenge_bucket": "random",
+      "difficulty_score": null,
+      "selection_top_scores": null,
+      "required_condition_ids": [],
+      "top_allowlist_ids": [
+        "sleep_disorder",
+        "prediabetes",
+        "thyroid",
+        "electrolytes",
+        "kidney"
+      ],
+      "model_scores": {
+        "sleep_disorder": 0.497,
+        "prediabetes": 0.4285,
+        "thyroid": 0.4268,
+        "electrolytes": 0.4262,
+        "kidney": 0.3134,
+        "inflammation": 0.3087,
+        "anemia": 0.2351,
+        "liver": 0.1341,
+        "hepatitis": 0.0277,
+        "iron_deficiency": 0.0273,
+        "perimenopause": 0.0
+      },
+      "raw_model_scores": {
+        "prediabetes": 0.4285,
+        "perimenopause": 0.0,
+        "sleep_disorder": 0.497,
+        "anemia": 0.2351,
+        "electrolyte_imbalance": 0.4262,
+        "hidden_inflammation": 0.3087,
+        "kidney": 0.3134,
+        "thyroid": 0.4268,
+        "hepatitis_bc": 0.0277,
+        "liver": 0.1341,
+        "iron_deficiency": 0.0273
+      },
+      "max_required_score": 0.0,
+      "parse_success": false,
+      "condition_list_match": false,
+      "hallucinated_ids": [],
+      "http_status": 503,
+      "response": {
+        "error": "Groq synthesis unavailable"
+      },
+      "deep_analyze_headers": {
+        "grounding_source": null,
+        "synthesis_source": null,
+        "synthesis_model": null,
+        "synthesis_status": null,
+        "synthesis_error_snippet": null,
+        "rewrite_source": null,
+        "rewrite_model": null,
+        "rewrite_status": null,
+        "rewrite_error_snippet": null,
+        "hard_safety_applied": null,
+        "hard_safety_count": null
+      },
+      "error": {
+        "error": "Groq synthesis unavailable"
+      }
+    },
+    {
+      "profile_id": "SYN-T0000025",
+      "profile_type": "healthy",
+      "target_condition": "",
+      "patient_context": {
+        "gender": "Male",
+        "age_years": 56.0
+      },
+      "challenge_bucket": "random",
+      "difficulty_score": null,
+      "selection_top_scores": null,
+      "required_condition_ids": [],
+      "top_allowlist_ids": [
+        "sleep_disorder",
+        "thyroid",
+        "prediabetes",
+        "electrolytes",
+        "kidney"
+      ],
+      "model_scores": {
+        "sleep_disorder": 0.5339,
+        "thyroid": 0.4633,
+        "prediabetes": 0.438,
+        "electrolytes": 0.4311,
+        "kidney": 0.2747,
+        "inflammation": 0.1633,
+        "anemia": 0.1483,
+        "iron_deficiency": 0.028,
+        "hepatitis": 0.0253,
+        "liver": 0.0188,
+        "perimenopause": 0.0
+      },
+      "raw_model_scores": {
+        "electrolyte_imbalance": 0.4311,
+        "anemia": 0.1483,
+        "thyroid": 0.4633,
+        "prediabetes": 0.438,
+        "sleep_disorder": 0.5339,
+        "kidney": 0.2747,
+        "hidden_inflammation": 0.1633,
+        "perimenopause": 0.0,
+        "iron_deficiency": 0.028,
+        "liver": 0.0188,
+        "hepatitis_bc": 0.0253
+      },
+      "max_required_score": 0.0,
+      "parse_success": true,
+      "condition_list_match": true,
+      "hallucinated_ids": [],
+      "http_status": 200,
+      "response": {
+        "personalizedSummary": "From what you shared, your fatigue is not a standalone symptom \u2014 it's worth looking into how it connects with how often you snore while sleeping, which is above the typical threshold for sleep disorder. You also mentioned heavy periods, which might be related to the heavy periods you mentioned. Below you can see some hypotheses on the root causes and which doctors to see first, and how to prepare for your visit.",
+        "insights": [
+          {
+            "diagnosisId": "sleep_disorder",
+            "personalNote": "The patient's answer to the snoring question suggests a potential sleep disorder. This could be related to the heavy periods you mentioned. A sleep study may be helpful to determine the cause of your fatigue.",
+            "confidence": "probable"
+          },
+          {
+            "diagnosisId": "thyroid",
+            "personalNote": "The patient's ML score indicates a potential thyroid dysfunction. This could be related to the heavy periods you mentioned. A thyroid test may be helpful to determine the cause of your fatigue.",
+            "confidence": "probable"
+          },
+          {
+            "diagnosisId": "prediabetes",
+            "personalNote": "The patient's ML score indicates a potential prediabetes. This could be related to the heavy periods you mentioned. A blood test may be helpful to determine the cause of your fatigue.",
+            "confidence": "probable"
+          }
+        ],
+        "declinedSuspicions": [
+          {
+            "diagnosisId": "electrolytes",
+            "reason": "The current evidence does not strongly support a connection between your symptoms and electrolyte balance."
+          }
+        ],
+        "recoveryOutlook": "Improvement depends on addressing the underlying causes of your fatigue, which may take some time. You can expect to see clarity on the root causes and treatment options after consulting with a doctor.",
+        "nextSteps": "See your GP first for a referral to a sleep specialist and a thyroid test. If the sleep specialist confirms a sleep disorder, they can guide further treatment.",
+        "doctorKitSummary": "I'm experiencing fatigue, heavy periods, and heavy snoring. I'd like to explore the connection between these symptoms and rule out any underlying conditions.",
+        "doctorKitQuestions": [],
+        "doctorKitArguments": [],
+        "recommendedDoctors": [
+          {
+            "specialty": "GP",
+            "priority": "start_here",
+            "reason": "Your GP can order a thyroid test and initiate the sleep apnea pathway via a home test referral in a single visit.",
+            "symptomsToDiscuss": [
+              "How often do you snore while sleeping?",
+              "Heavy periods"
+            ],
+            "suggestedTests": [
+              "TSH test",
+              "Home sleep apnea test referral"
+            ]
+          },
+          {
+            "specialty": "Sleep specialist",
+            "priority": "consider_next",
+            "reason": "A sleep specialist can interpret your home test result and initiate CPAP if sleep apnea is confirmed \u2014 this is beyond GP scope for complex cases.",
+            "symptomsToDiscuss": [
+              "How often do you snore while sleeping?",
+              "Heavy periods"
+            ],
+            "suggestedTests": [
+              "Polysomnography if home sleep test inconclusive",
+              "CPAP titration study if OSA confirmed"
+            ]
+          }
+        ],
+        "doctorKits": [
+          {
+            "specialty": "GP",
+            "openingSummary": "I'm here because I've been experiencing fatigue, heavy periods, and heavy snoring. I'd like to explore the connection between these symptoms and rule out any underlying conditions.",
+            "concerningSymptoms": [
+              "How often do you snore while sleeping?",
+              "Heavy periods"
+            ],
+            "recommendedTests": [
+              "TSH test",
+              "Home sleep apnea test referral"
+            ],
+            "discussionPoints": [
+              "I'd like to explore the connection between my fatigue, heavy periods, and heavy snoring \u2014 could there be an underlying condition?",
+              "I'd like to discuss the possibility of sleep apnea and how it might be related to my heavy periods"
+            ],
+            "bringToAppointment": [
+              "3-day food and fluid diary showing typical intake",
+              "1-week log of night-time awakenings (keep before the appointment)",
+              "List of any current medications or supplements"
+            ],
+            "whatToSay": "I'm here to investigate the connection between my fatigue, heavy periods, and heavy snoring \u2014 could there be an underlying condition?"
+          },
+          {
+            "specialty": "Sleep specialist",
+            "openingSummary": "I've been referred for possible sleep apnea. I've been experiencing heavy snoring, heavy periods, and fatigue. I'd like to explore the connection between these symptoms and rule out any underlying conditions.",
+            "concerningSymptoms": [
+              "How often do you snore while sleeping?",
+              "Heavy periods"
+            ],
+            "recommendedTests": [
+              "Polysomnography if home sleep test inconclusive",
+              "CPAP titration study if OSA confirmed"
+            ],
+            "discussionPoints": [
+              "I'd like to understand my AHI score and whether CPAP is indicated \u2014 could it be related to my heavy periods?",
+              "I'd like to discuss whether treating sleep apnea might reduce my heavy periods"
+            ],
+            "bringToAppointment": [
+              "Home sleep test results from GP if already completed",
+              "Sleep diary: 2 weeks of bedtime, wake time, number of awakenings",
+              "Partner's written account of witnessed events if they can provide one"
+            ],
+            "whatToSay": "I'm here to confirm whether I have sleep apnea and, if so, start CPAP treatment \u2014 could it be related to my heavy periods?"
+          }
+        ],
+        "allClear": false
+      },
+      "deep_analyze_headers": {
+        "grounding_source": "live_medgemma_success",
+        "synthesis_source": "live_groq_fallback_success",
+        "synthesis_model": "llama-3.1-8b-instant",
+        "synthesis_status": null,
+        "synthesis_error_snippet": null,
+        "rewrite_source": "fallback_groq_http_error",
+        "rewrite_model": "llama-3.1-8b-instant",
+        "rewrite_status": "429",
+        "rewrite_error_snippet": "{\"error\":{\"message\":\"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01kh90s72ffwe86v4gnp87nm38` service tier `on_demand` on tokens per minute (TPM): Limit 6000, Used 5484, Re",
+        "hard_safety_applied": "false",
+        "hard_safety_count": "0"
+      },
+      "output_condition_ids": [
+        "sleep_disorder",
+        "thyroid",
+        "prediabetes",
+        "electrolytes"
+      ],
+      "section_checks": {
+        "symptom_summary_present": true,
+        "symptom_summary_structured": false,
+        "doctor_recommendation_present": true,
+        "doctor_recommendation_populated": true,
+        "doctor_kit_aligned": true,
+        "doctor_kit_populated": true,
+        "lab_recommendation_present": true,
+        "recovery_outlook_present": true,
+        "supported_condition_count": 4,
+        "recommended_doctor_count": 2,
+        "doctor_kit_count": 2,
+        "insight_count": 3,
+        "summary_point_count": 0,
+        "recovery_outlook_expected": false
+      },
+      "unsafe_final_output": false
+    }
+  ],
+  "manual_review_cases": [
+    {
+      "profile_id": "SYN-MUST0003",
+      "profile_type": "negative",
+      "target_condition": "hypothyroidism",
+      "patient_context": {
+        "gender": "Female",
+        "age_years": 55.0
+      },
+      "challenge_bucket": "random",
+      "difficulty_score": null,
+      "selection_top_scores": null,
+      "required_condition_ids": [
+        "perimenopause",
+        "thyroid",
+        "sleep_disorder"
+      ],
+      "top_allowlist_ids": [
+        "perimenopause",
+        "thyroid",
+        "sleep_disorder",
+        "prediabetes",
+        "anemia"
+      ],
+      "model_scores": {
+        "perimenopause": 0.9808,
+        "thyroid": 0.8755,
+        "sleep_disorder": 0.7029,
+        "prediabetes": 0.6316,
+        "anemia": 0.5538,
+        "electrolytes": 0.4486,
+        "kidney": 0.3114,
+        "inflammation": 0.1224,
+        "liver": 0.0564,
+        "iron_deficiency": 0.0139,
+        "hepatitis": 0.0139
+      },
+      "raw_model_scores": {
+        "anemia": 0.5538,
+        "prediabetes": 0.6316,
+        "electrolyte_imbalance": 0.4486,
+        "perimenopause": 0.9808,
+        "kidney": 0.3114,
+        "thyroid": 0.8755,
+        "sleep_disorder": 0.7029,
+        "hidden_inflammation": 0.1224,
+        "liver": 0.0564,
+        "iron_deficiency": 0.0139,
+        "hepatitis_bc": 0.0139
+      },
+      "max_required_score": 0.9808,
+      "parse_success": true,
+      "condition_list_match": true,
+      "hallucinated_ids": [],
+      "http_status": 200,
+      "response": {
+        "personalizedSummary": "From what you shared, your fatigue is connected to the persistent unrefreshing sleep is worth discussing soon and glucose regulation markers support a follow-up soon. This is worth investigating further. Below you can see some hypotheses on the root causes and which doctors to see first, and how to prepare for your visit.",
+        "insights": [
+          {
+            "diagnosisId": "thyroid",
+            "personalNote": "The ML score is high (0.88) and the record includes specific symptoms like marked thyroid abnormalities can worsen quickly and need prompt review.",
+            "confidence": "probable"
+          },
+          {
+            "diagnosisId": "sleep_disorder",
+            "personalNote": "The ML score is high (0.70) and the record includes specific symptoms like persistent unrefreshing sleep is worth discussing soon.",
+            "confidence": "probable"
+          },
+          {
+            "diagnosisId": "prediabetes",
+            "personalNote": "The ML score is high (0.63) and the record includes specific symptoms like glucose regulation markers support a follow-up soon.",
+            "confidence": "probable"
+          }
+        ],
+        "recoveryOutlook": "Improvement depends on prompt review of your thyroid function and sleep patterns. Some of these conditions are treatable, and clarity often comes quickly with the right tests and evaluations.",
+        "nextSteps": "See your GP first for a review of your thyroid function and to discuss your sleep. If necessary, a sleep specialist will be the next step for further evaluation and treatment.",
+        "doctorKitSummary": "I'm experiencing fatigue, marked thyroid abnormalities, and persistent unrefreshing sleep. I'd like to test for thyroid function and sleep apnea today.",
+        "doctorKitQuestions": [],
+        "doctorKitArguments": [],
+        "recommendedDoctors": [
+          {
+            "specialty": "GP",
+            "priority": "start_here",
+            "reason": "Your GP can order the necessary tests for thyroid function and initiate the sleep apnea pathway in a single visit.",
+            "symptomsToDiscuss": [
+              "marked thyroid abnormalities can worsen quickly and need prompt review",
+              "persistent unrefreshing sleep is worth discussing soon"
+            ],
+            "suggestedTests": [
+              "TSH, Free T4, Free T3, Thyroid antibodies (Anti-TPO, Anti-Tg)",
+              "Polysomnography (sleep study)"
+            ]
+          },
+          {
+            "specialty": "Endocrinologist",
+            "priority": "consider_next",
+            "reason": "An endocrinologist can provide specialized care for thyroid function and initiate treatment if necessary.",
+            "symptomsToDiscuss": [
+              "marked thyroid abnormalities can worsen quickly and need prompt review"
+            ],
+            "suggestedTests": [
+              "TSH, Free T4, Free T3, Thyroid antibodies (Anti-TPO, Anti-Tg)"
+            ]
+          },
+          {
+            "specialty": "Sleep specialist",
+            "priority": "consider_next",
+            "reason": "A sleep specialist can provide specialized care for sleep apnea and initiate treatment if necessary.",
+            "symptomsToDiscuss": [
+              "persistent unrefreshing sleep is worth discussing soon"
+            ],
+            "suggestedTests": [
+              "Polysomnography (sleep study)"
+            ]
+          }
+        ],
+        "doctorKits": [
+          {
+            "specialty": "GP",
+            "openingSummary": "I'm here because I'm experiencing fatigue, marked thyroid abnormalities, and persistent unrefreshing sleep. I'd like to test for thyroid function and sleep apnea today.",
+            "concerningSymptoms": [
+              "marked thyroid abnormalities can worsen quickly and need prompt review",
+              "persistent unrefreshing sleep is worth discussing soon"
+            ],
+            "recommendedTests": [
+              "TSH, Free T4, Free T3, Thyroid antibodies (Anti-TPO, Anti-Tg)",
+              "Polysomnography (sleep study)"
+            ],
+            "discussionPoints": [
+              "I have marked thyroid abnormalities that need prompt review, and I'd like to test for thyroid function today.",
+              "My persistent unrefreshing sleep is worth discussing soon, and I'd like a sleep study to rule out sleep apnea."
+            ],
+            "bringToAppointment": [
+              "Thyroid medication list, if any",
+              "Sleep diary: 2 weeks of bedtime, wake time, number of awakenings"
+            ],
+            "whatToSay": "I'm here to investigate thyroid function and possible sleep apnea \u2014 two things that may be connected. I'd like thyroid function tests and a sleep study today if possible."
+          },
+          {
+            "specialty": "Endocrinologist",
+            "openingSummary": "I've been referred for thyroid function evaluation. I'm experiencing marked thyroid abnormalities that need prompt review.",
+            "concerningSymptoms": [
+              "marked thyroid abnormalities can worsen quickly and need prompt review"
+            ],
+            "recommendedTests": [
+              "TSH, Free T4, Free T3, Thyroid antibodies (Anti-TPO, Anti-Tg)"
+            ],
+            "discussionPoints": [
+              "I have marked thyroid abnormalities that need prompt review, and I'd like to test for thyroid function today."
+            ],
+            "bringToAppointment": [
+              "Thyroid medication list, if any",
+              "Thyroid medication list, if any"
+            ],
+            "whatToSay": "I'm here to investigate thyroid function \u2014 I have marked thyroid abnormalities that need prompt review. I'd like thyroid function tests today."
+          },
+          {
+            "specialty": "Sleep specialist",
+            "openingSummary": "I've been referred for sleep apnea evaluation. I'm experiencing persistent unrefreshing sleep, and I'd like a sleep study to rule out sleep apnea.",
+            "concerningSymptoms": [
+              "persistent unrefreshing sleep is worth discussing soon"
+            ],
+            "recommendedTests": [
+              "Polysomnography (sleep study)"
+            ],
+            "discussionPoints": [
+              "My persistent unrefreshing sleep is worth discussing soon, and I'd like a sleep study to rule out sleep apnea."
+            ],
+            "bringToAppointment": [
+              "Sleep diary: 2 weeks of bedtime, wake time, number of awakenings",
+              "Partner's written account of witnessed events if they can provide one"
+            ],
+            "whatToSay": "I'm here to investigate sleep apnea \u2014 my persistent unrefreshing sleep is worth discussing soon. I'd like a sleep study to rule out sleep apnea today."
+          }
+        ],
+        "allClear": false,
+        "declinedSuspicions": [
+          {
+            "diagnosisId": "perimenopause",
+            "reason": "This signal was reviewed but was not strong enough to prioritise after the full evidence check."
+          },
+          {
+            "diagnosisId": "anemia",
+            "reason": "This signal was reviewed but was not strong enough to prioritise after the full evidence check."
+          }
+        ]
+      },
+      "deep_analyze_headers": {
+        "grounding_source": "live_medgemma_success",
+        "synthesis_source": "live_groq_fallback_success",
+        "synthesis_model": "llama-3.1-8b-instant",
+        "synthesis_status": null,
+        "synthesis_error_snippet": null,
+        "rewrite_source": "fallback_groq_http_error",
+        "rewrite_model": "llama-3.1-8b-instant",
+        "rewrite_status": "429",
+        "rewrite_error_snippet": "{\"error\":{\"message\":\"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01kh90s72ffwe86v4gnp87nm38` service tier `on_demand` on tokens per minute (TPM): Limit 6000, Used 5855, Re",
+        "hard_safety_applied": "false",
+        "hard_safety_count": "0"
+      },
+      "output_condition_ids": [
+        "thyroid",
+        "sleep_disorder",
+        "prediabetes",
+        "perimenopause",
+        "anemia"
+      ],
+      "section_checks": {
+        "symptom_summary_present": true,
+        "symptom_summary_structured": false,
+        "doctor_recommendation_present": true,
+        "doctor_recommendation_populated": true,
+        "doctor_kit_aligned": true,
+        "doctor_kit_populated": true,
+        "lab_recommendation_present": true,
+        "recovery_outlook_present": true,
+        "supported_condition_count": 5,
+        "recommended_doctor_count": 3,
+        "doctor_kit_count": 3,
+        "insight_count": 3,
+        "summary_point_count": 0,
+        "recovery_outlook_expected": false
+      },
+      "unsafe_final_output": false,
+      "review_bucket": "urgent"
+    },
+    {
+      "profile_id": "SYN-T0000025",
+      "profile_type": "healthy",
+      "target_condition": "",
+      "patient_context": {
+        "gender": "Male",
+        "age_years": 56.0
+      },
+      "challenge_bucket": "random",
+      "difficulty_score": null,
+      "selection_top_scores": null,
+      "required_condition_ids": [],
+      "top_allowlist_ids": [
+        "sleep_disorder",
+        "thyroid",
+        "prediabetes",
+        "electrolytes",
+        "kidney"
+      ],
+      "model_scores": {
+        "sleep_disorder": 0.5339,
+        "thyroid": 0.4633,
+        "prediabetes": 0.438,
+        "electrolytes": 0.4311,
+        "kidney": 0.2747,
+        "inflammation": 0.1633,
+        "anemia": 0.1483,
+        "iron_deficiency": 0.028,
+        "hepatitis": 0.0253,
+        "liver": 0.0188,
+        "perimenopause": 0.0
+      },
+      "raw_model_scores": {
+        "electrolyte_imbalance": 0.4311,
+        "anemia": 0.1483,
+        "thyroid": 0.4633,
+        "prediabetes": 0.438,
+        "sleep_disorder": 0.5339,
+        "kidney": 0.2747,
+        "hidden_inflammation": 0.1633,
+        "perimenopause": 0.0,
+        "iron_deficiency": 0.028,
+        "liver": 0.0188,
+        "hepatitis_bc": 0.0253
+      },
+      "max_required_score": 0.0,
+      "parse_success": true,
+      "condition_list_match": true,
+      "hallucinated_ids": [],
+      "http_status": 200,
+      "response": {
+        "personalizedSummary": "From what you shared, your fatigue is not a standalone symptom \u2014 it's worth looking into how it connects with how often you snore while sleeping, which is above the typical threshold for sleep disorder. You also mentioned heavy periods, which might be related to the heavy periods you mentioned. Below you can see some hypotheses on the root causes and which doctors to see first, and how to prepare for your visit.",
+        "insights": [
+          {
+            "diagnosisId": "sleep_disorder",
+            "personalNote": "The patient's answer to the snoring question suggests a potential sleep disorder. This could be related to the heavy periods you mentioned. A sleep study may be helpful to determine the cause of your fatigue.",
+            "confidence": "probable"
+          },
+          {
+            "diagnosisId": "thyroid",
+            "personalNote": "The patient's ML score indicates a potential thyroid dysfunction. This could be related to the heavy periods you mentioned. A thyroid test may be helpful to determine the cause of your fatigue.",
+            "confidence": "probable"
+          },
+          {
+            "diagnosisId": "prediabetes",
+            "personalNote": "The patient's ML score indicates a potential prediabetes. This could be related to the heavy periods you mentioned. A blood test may be helpful to determine the cause of your fatigue.",
+            "confidence": "probable"
+          }
+        ],
+        "declinedSuspicions": [
+          {
+            "diagnosisId": "electrolytes",
+            "reason": "The current evidence does not strongly support a connection between your symptoms and electrolyte balance."
+          }
+        ],
+        "recoveryOutlook": "Improvement depends on addressing the underlying causes of your fatigue, which may take some time. You can expect to see clarity on the root causes and treatment options after consulting with a doctor.",
+        "nextSteps": "See your GP first for a referral to a sleep specialist and a thyroid test. If the sleep specialist confirms a sleep disorder, they can guide further treatment.",
+        "doctorKitSummary": "I'm experiencing fatigue, heavy periods, and heavy snoring. I'd like to explore the connection between these symptoms and rule out any underlying conditions.",
+        "doctorKitQuestions": [],
+        "doctorKitArguments": [],
+        "recommendedDoctors": [
+          {
+            "specialty": "GP",
+            "priority": "start_here",
+            "reason": "Your GP can order a thyroid test and initiate the sleep apnea pathway via a home test referral in a single visit.",
+            "symptomsToDiscuss": [
+              "How often do you snore while sleeping?",
+              "Heavy periods"
+            ],
+            "suggestedTests": [
+              "TSH test",
+              "Home sleep apnea test referral"
+            ]
+          },
+          {
+            "specialty": "Sleep specialist",
+            "priority": "consider_next",
+            "reason": "A sleep specialist can interpret your home test result and initiate CPAP if sleep apnea is confirmed \u2014 this is beyond GP scope for complex cases.",
+            "symptomsToDiscuss": [
+              "How often do you snore while sleeping?",
+              "Heavy periods"
+            ],
+            "suggestedTests": [
+              "Polysomnography if home sleep test inconclusive",
+              "CPAP titration study if OSA confirmed"
+            ]
+          }
+        ],
+        "doctorKits": [
+          {
+            "specialty": "GP",
+            "openingSummary": "I'm here because I've been experiencing fatigue, heavy periods, and heavy snoring. I'd like to explore the connection between these symptoms and rule out any underlying conditions.",
+            "concerningSymptoms": [
+              "How often do you snore while sleeping?",
+              "Heavy periods"
+            ],
+            "recommendedTests": [
+              "TSH test",
+              "Home sleep apnea test referral"
+            ],
+            "discussionPoints": [
+              "I'd like to explore the connection between my fatigue, heavy periods, and heavy snoring \u2014 could there be an underlying condition?",
+              "I'd like to discuss the possibility of sleep apnea and how it might be related to my heavy periods"
+            ],
+            "bringToAppointment": [
+              "3-day food and fluid diary showing typical intake",
+              "1-week log of night-time awakenings (keep before the appointment)",
+              "List of any current medications or supplements"
+            ],
+            "whatToSay": "I'm here to investigate the connection between my fatigue, heavy periods, and heavy snoring \u2014 could there be an underlying condition?"
+          },
+          {
+            "specialty": "Sleep specialist",
+            "openingSummary": "I've been referred for possible sleep apnea. I've been experiencing heavy snoring, heavy periods, and fatigue. I'd like to explore the connection between these symptoms and rule out any underlying conditions.",
+            "concerningSymptoms": [
+              "How often do you snore while sleeping?",
+              "Heavy periods"
+            ],
+            "recommendedTests": [
+              "Polysomnography if home sleep test inconclusive",
+              "CPAP titration study if OSA confirmed"
+            ],
+            "discussionPoints": [
+              "I'd like to understand my AHI score and whether CPAP is indicated \u2014 could it be related to my heavy periods?",
+              "I'd like to discuss whether treating sleep apnea might reduce my heavy periods"
+            ],
+            "bringToAppointment": [
+              "Home sleep test results from GP if already completed",
+              "Sleep diary: 2 weeks of bedtime, wake time, number of awakenings",
+              "Partner's written account of witnessed events if they can provide one"
+            ],
+            "whatToSay": "I'm here to confirm whether I have sleep apnea and, if so, start CPAP treatment \u2014 could it be related to my heavy periods?"
+          }
+        ],
+        "allClear": false
+      },
+      "deep_analyze_headers": {
+        "grounding_source": "live_medgemma_success",
+        "synthesis_source": "live_groq_fallback_success",
+        "synthesis_model": "llama-3.1-8b-instant",
+        "synthesis_status": null,
+        "synthesis_error_snippet": null,
+        "rewrite_source": "fallback_groq_http_error",
+        "rewrite_model": "llama-3.1-8b-instant",
+        "rewrite_status": "429",
+        "rewrite_error_snippet": "{\"error\":{\"message\":\"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01kh90s72ffwe86v4gnp87nm38` service tier `on_demand` on tokens per minute (TPM): Limit 6000, Used 5484, Re",
+        "hard_safety_applied": "false",
+        "hard_safety_count": "0"
+      },
+      "output_condition_ids": [
+        "sleep_disorder",
+        "thyroid",
+        "prediabetes",
+        "electrolytes"
+      ],
+      "section_checks": {
+        "symptom_summary_present": true,
+        "symptom_summary_structured": false,
+        "doctor_recommendation_present": true,
+        "doctor_recommendation_populated": true,
+        "doctor_kit_aligned": true,
+        "doctor_kit_populated": true,
+        "lab_recommendation_present": true,
+        "recovery_outlook_present": true,
+        "supported_condition_count": 4,
+        "recommended_doctor_count": 2,
+        "doctor_kit_count": 2,
+        "insight_count": 3,
+        "summary_point_count": 0,
+        "recovery_outlook_expected": false
+      },
+      "unsafe_final_output": false,
+      "review_bucket": "routine"
+    },
+    {
+      "profile_id": "SYN-MUST0001",
+      "profile_type": "negative",
+      "target_condition": "sleep_disorder",
+      "patient_context": {
+        "gender": "Female",
+        "age_years": 23.0
+      },
+      "challenge_bucket": "random",
+      "difficulty_score": null,
+      "selection_top_scores": null,
+      "required_condition_ids": [
+        "sleep_disorder",
+        "anemia",
+        "thyroid"
+      ],
+      "top_allowlist_ids": [
+        "sleep_disorder",
+        "anemia",
+        "thyroid",
+        "electrolytes",
+        "kidney"
+      ],
+      "model_scores": {
+        "sleep_disorder": 0.9612,
+        "anemia": 0.8191,
+        "thyroid": 0.7306,
+        "electrolytes": 0.5386,
+        "kidney": 0.4962,
+        "prediabetes": 0.321,
+        "inflammation": 0.2414,
+        "iron_deficiency": 0.1721,
+        "liver": 0.0181,
+        "hepatitis": 0.0049,
+        "perimenopause": 0.0
+      },
+      "raw_model_scores": {
+        "kidney": 0.4962,
+        "anemia": 0.8191,
+        "hidden_inflammation": 0.2414,
+        "sleep_disorder": 0.9612,
+        "thyroid": 0.7306,
+        "prediabetes": 0.321,
+        "perimenopause": 0.0,
+        "electrolyte_imbalance": 0.5386,
+        "liver": 0.0181,
+        "iron_deficiency": 0.1721,
+        "hepatitis_bc": 0.0049
+      },
+      "max_required_score": 0.9612,
+      "parse_success": true,
+      "condition_list_match": true,
+      "hallucinated_ids": [],
+      "http_status": 200,
+      "response": {
+        "personalizedSummary": "From what you shared, your fatigue is connected to the snoring more than once per night and overall health described as >3.5. This is worth investigating further. Below you can see some hypotheses on the root causes and which doctors to see first, and how to prepare for your visit.",
+        "insights": [
+          {
+            "diagnosisId": "sleep_disorder",
+            "personalNote": "The patient reported snoring more than once per night, a key indicator for sleep disorder. This is a common symptom that may suggest sleep apnea. A sleep study could help clarify this.",
+            "confidence": "probable"
+          },
+          {
+            "diagnosisId": "anemia",
+            "personalNote": "The patient reported feeling tired or having little energy more than 1.5 times per week, a common symptom of anemia. This could be worth ruling out with a blood test. A complete blood count could provide more information.",
+            "confidence": "probable"
+          },
+          {
+            "diagnosisId": "thyroid",
+            "personalNote": "The patient reported overall health as >3.5, which could indicate thyroid dysfunction. This may suggest hypothyroidism, but it's worth noting that this is not confirmed. A thyroid function test could provide more information.",
+            "confidence": "probable"
+          }
+        ],
+        "declinedSuspicions": [
+          {
+            "diagnosisId": "thyroid",
+            "reason": "Your weight gain is better explained by metabolic and sleep factors."
+          },
+          {
+            "diagnosisId": "electrolytes",
+            "reason": "This signal was reviewed but was not strong enough to prioritise after the full evidence check."
+          },
+          {
+            "diagnosisId": "kidney",
+            "reason": "This signal was reviewed but was not strong enough to prioritise after the full evidence check."
+          }
+        ],
+        "recoveryOutlook": "Improvement depends on getting a proper diagnosis and starting treatment. Some symptoms, like fatigue, may improve quickly with the right treatment, while others, like disrupted sleep, may take longer to resolve. Clarity often comes with a combination of tests and doctor visits.",
+        "nextSteps": "See your GP first for a complete blood count and a sleep study referral. If the sleep study confirms sleep apnea, a sleep specialist is the natural next step for further evaluation.",
+        "doctorKitSummary": "I'm experiencing heavy periods, disrupted sleep, and fatigue. I'd like to rule out anemia and sleep apnea, and get a proper diagnosis for my overall health.",
+        "doctorKitQuestions": [],
+        "doctorKitArguments": [],
+        "recommendedDoctors": [
+          {
+            "specialty": "GP",
+            "priority": "start_here",
+            "reason": "Your GP can order a complete blood count and initiate the sleep apnea pathway in one visit \u2014 the most efficient starting point for both suspected conditions.",
+            "symptomsToDiscuss": [
+              "Heavy periods",
+              "Disrupted sleep",
+              "Fatigue"
+            ],
+            "suggestedTests": [
+              "Complete Blood Count (CBC) including Hemoglobin and Hematocrit",
+              "Polysomnography (sleep study)"
+            ]
+          },
+          {
+            "specialty": "Sleep specialist",
+            "priority": "consider_next",
+            "reason": "A sleep specialist can interpret your sleep study result and initiate CPAP if sleep apnea is confirmed \u2014 this is beyond GP scope for complex cases.",
+            "symptomsToDiscuss": [
+              "Disrupted sleep",
+              "Fatigue"
+            ],
+            "suggestedTests": [
+              "Polysomnography if sleep study inconclusive",
+              "CPAP titration study if sleep apnea confirmed"
+            ]
+          }
+        ],
+        "doctorKits": [
+          {
+            "specialty": "GP",
+            "openingSummary": "I'm here because I've had heavy periods, disrupted sleep, and fatigue. I'd like to rule out anemia and sleep apnea, and get a proper diagnosis for my overall health.",
+            "concerningSymptoms": [
+              "Heavy periods",
+              "Disrupted sleep",
+              "Fatigue"
+            ],
+            "recommendedTests": [
+              "Complete Blood Count (CBC) including Hemoglobin and Hematocrit",
+              "Polysomnography (sleep study)"
+            ],
+            "discussionPoints": [
+              "I'd like to rule out anemia and sleep apnea, and get a proper diagnosis for my overall health. I'm concerned about my heavy periods and disrupted sleep."
+            ],
+            "bringToAppointment": [
+              "3-day menstrual diary showing typical flow",
+              "1-week log of sleep patterns (keep before the appointment)",
+              "List of any current medications or supplements"
+            ],
+            "whatToSay": "I'm here to investigate anemia and sleep apnea, and get a proper diagnosis for my overall health. I'd like to rule out these conditions and get some answers."
+          },
+          {
+            "specialty": "Sleep specialist",
+            "openingSummary": "I've been referred for possible sleep apnea. My sleep patterns are disrupted, and I wake up feeling tired. I'd like to confirm whether I have sleep apnea and, if so, start CPAP treatment.",
+            "concerningSymptoms": [
+              "Disrupted sleep",
+              "Fatigue"
+            ],
+            "recommendedTests": [
+              "Polysomnography if sleep study inconclusive",
+              "CPAP titration study if sleep apnea confirmed"
+            ],
+            "discussionPoints": [
+              "I'd like to confirm whether I have sleep apnea and, if so, start CPAP treatment. I'm concerned about my disrupted sleep and fatigue."
+            ],
+            "bringToAppointment": [
+              "Sleep study results from GP if already completed",
+              "Sleep diary: 2 weeks of bedtime, wake time, number of awakenings",
+              "Partner's written account of witnessed events if they can provide one"
+            ],
+            "whatToSay": "I'm here because my sleep patterns are disrupted, and I wake up feeling tired. I'd like to confirm whether I have sleep apnea and, if so, start CPAP treatment."
+          }
+        ],
+        "allClear": false
+      },
+      "deep_analyze_headers": {
+        "grounding_source": "live_medgemma_success",
+        "synthesis_source": "live_groq_fallback_success",
+        "synthesis_model": "llama-3.1-8b-instant",
+        "synthesis_status": null,
+        "synthesis_error_snippet": null,
+        "rewrite_source": "fallback_groq_http_error",
+        "rewrite_model": "llama-3.1-8b-instant",
+        "rewrite_status": "429",
+        "rewrite_error_snippet": "{\"error\":{\"message\":\"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01kh90s72ffwe86v4gnp87nm38` service tier `on_demand` on tokens per minute (TPM): Limit 6000, Used 5995, Re",
+        "hard_safety_applied": "true",
+        "hard_safety_count": "1"
+      },
+      "output_condition_ids": [
+        "sleep_disorder",
+        "anemia",
+        "thyroid",
+        "electrolytes",
+        "kidney"
+      ],
+      "section_checks": {
+        "symptom_summary_present": true,
+        "symptom_summary_structured": false,
+        "doctor_recommendation_present": true,
+        "doctor_recommendation_populated": true,
+        "doctor_kit_aligned": true,
+        "doctor_kit_populated": true,
+        "lab_recommendation_present": true,
+        "recovery_outlook_present": true,
+        "supported_condition_count": 5,
+        "recommended_doctor_count": 2,
+        "doctor_kit_count": 2,
+        "insight_count": 3,
+        "summary_point_count": 0,
+        "recovery_outlook_expected": false
+      },
+      "unsafe_final_output": false,
+      "review_bucket": "general"
+    }
+  ]
+}

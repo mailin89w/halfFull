@@ -1,0 +1,835 @@
+{
+  "summary": {
+    "run_id": "llm_layer_20260330_175155",
+    "base_url": "http://127.0.0.1:3000",
+    "n_profiles": 2,
+    "selection_strategy": "random",
+    "top_k_allowlist": 5,
+    "required_threshold": 0.65,
+    "parse_successes": 2,
+    "hallucination_profiles": 0,
+    "condition_list_matches": 2,
+    "unsafe_final_outputs": 0,
+    "parse_success_rate": 1.0,
+    "hallucination_rate": 0.0,
+    "condition_list_match_rate": 1.0,
+    "unsafe_final_output_rate": 0.0,
+    "manual_review_count": 2,
+    "grounding_source_counts": {
+      "live_medgemma_success": 2
+    },
+    "synthesis_source_counts": {
+      "live_groq_fallback_success": 2
+    },
+    "rewrite_source_counts": {
+      "live_groq_rewrite_success": 2
+    },
+    "hard_safety_applied_count": 0,
+    "profile_type_counts": {
+      "negative": 2
+    },
+    "challenge_bucket_counts": {
+      "random": 2
+    },
+    "section_metric_counts": {
+      "symptom_summary_present": 2,
+      "symptom_summary_structured": 2,
+      "doctor_recommendation_present": 2,
+      "doctor_recommendation_populated": 2,
+      "doctor_kit_aligned": 2,
+      "doctor_kit_populated": 2,
+      "lab_recommendation_present": 2,
+      "recovery_outlook_present": 2
+    },
+    "section_metric_rates": {
+      "symptom_summary_present": 1.0,
+      "symptom_summary_structured": 1.0,
+      "doctor_recommendation_present": 1.0,
+      "doctor_recommendation_populated": 1.0,
+      "doctor_kit_aligned": 1.0,
+      "doctor_kit_populated": 1.0,
+      "lab_recommendation_present": 1.0,
+      "recovery_outlook_present": 1.0
+    },
+    "dod_checks": {
+      "manual_review_count": {
+        "target": ">= 10",
+        "actual": 2,
+        "pass": false
+      },
+      "hallucination_rate": {
+        "target": 0.05,
+        "actual": 0.0,
+        "pass": true
+      },
+      "parse_success_rate": {
+        "target": 0.95,
+        "actual": 1.0,
+        "pass": true
+      },
+      "condition_list_match_rate": {
+        "target": 0.95,
+        "actual": 1.0,
+        "pass": true
+      },
+      "unsafe_final_output_rate": {
+        "target": 0.0,
+        "actual": 0.0,
+        "pass": true
+      }
+    },
+    "dod_pass": false
+  },
+  "results": [
+    {
+      "profile_id": "SYN-MUST0003",
+      "profile_type": "negative",
+      "target_condition": "hypothyroidism",
+      "patient_context": {
+        "gender": "Female",
+        "age_years": 55.0
+      },
+      "challenge_bucket": "random",
+      "difficulty_score": null,
+      "selection_top_scores": null,
+      "required_condition_ids": [
+        "perimenopause",
+        "thyroid",
+        "sleep_disorder"
+      ],
+      "top_allowlist_ids": [
+        "perimenopause",
+        "thyroid",
+        "sleep_disorder",
+        "prediabetes",
+        "anemia"
+      ],
+      "model_scores": {
+        "perimenopause": 0.9808,
+        "thyroid": 0.8755,
+        "sleep_disorder": 0.7029,
+        "prediabetes": 0.6316,
+        "anemia": 0.5538,
+        "electrolytes": 0.4486,
+        "kidney": 0.3114,
+        "inflammation": 0.1224,
+        "liver": 0.0564,
+        "iron_deficiency": 0.0139,
+        "hepatitis": 0.0139
+      },
+      "raw_model_scores": {
+        "anemia": 0.5538,
+        "thyroid": 0.8755,
+        "kidney": 0.3114,
+        "hidden_inflammation": 0.1224,
+        "prediabetes": 0.6316,
+        "sleep_disorder": 0.7029,
+        "electrolyte_imbalance": 0.4486,
+        "perimenopause": 0.9808,
+        "iron_deficiency": 0.0139,
+        "hepatitis_bc": 0.0139,
+        "liver": 0.0564
+      },
+      "max_required_score": 0.9808,
+      "parse_success": true,
+      "condition_list_match": true,
+      "hallucinated_ids": [],
+      "http_status": 200,
+      "response": {
+        "personalizedSummary": "Your fatigue may be connected to persistent unrefreshing sleep and glucose regulation markers. It's worth discussing these with your doctor soon. Below, you'll find some possible root causes and which doctors to see first, as well as how to prepare for your visit.",
+        "summaryPoints": [
+          "Marked thyroid abnormalities may be a concern",
+          "Persistent unrefreshing sleep is worth discussing",
+          "Glucose regulation markers suggest a follow-up may be helpful",
+          "Thyroid symptoms include rapid weight loss and fatigue",
+          "Sleep disorder symptoms include daytime sleepiness and mood changes"
+        ],
+        "insights": [
+          {
+            "diagnosisId": "thyroid",
+            "personalNote": "It's a good idea to discuss your thyroid symptoms with a doctor as soon as possible, as they can worsen quickly."
+          },
+          {
+            "diagnosisId": "sleep_disorder",
+            "personalNote": "Your doctor can help you determine the underlying cause of your sleep disorder and develop a plan to improve your sleep quality."
+          },
+          {
+            "diagnosisId": "prediabetes",
+            "personalNote": "Your doctor can help you manage your glucose regulation and prevent the progression to diabetes."
+          }
+        ],
+        "recoveryOutlook": "With proper treatment and management, you may be able to improve your symptoms and quality of life.",
+        "nextSteps": "Schedule an appointment with a doctor to discuss your symptoms and develop a treatment plan.",
+        "doctorKitSummary": "As your doctor, I will work with you to determine the underlying cause of your symptoms and develop a personalized treatment plan.",
+        "doctorKitQuestions": [],
+        "doctorKitArguments": [],
+        "recommendedDoctors": [
+          {
+            "specialty": "Endocrinologist",
+            "priority": "High",
+            "reason": "They specialize in thyroid and glucose regulation issues.",
+            "symptomsToDiscuss": [
+              "Marked thyroid abnormalities",
+              "Glucose regulation issues"
+            ],
+            "suggestedTests": [
+              "TSH, Free T4, Free T3, Thyroid antibodies (Anti-TPO, Anti-Tg)",
+              "HbA1c, Fasting Plasma Glucose (FPG), Oral Glucose Tolerance Test (OGTT)"
+            ]
+          },
+          {
+            "specialty": "Sleep Specialist",
+            "priority": "Medium",
+            "reason": "They specialize in sleep disorders and can help you develop a plan to improve your sleep quality.",
+            "symptomsToDiscuss": [
+              "Persistent unrefreshing sleep"
+            ],
+            "suggestedTests": [
+              "Polysomnography (sleep study)"
+            ]
+          }
+        ],
+        "doctorKits": [
+          {
+            "specialty": "Endocrinologist",
+            "openingSummary": "As your endocrinologist, I will work with you to determine the underlying cause of your thyroid symptoms and develop a personalized treatment plan.",
+            "concerningSymptoms": [
+              "Marked thyroid abnormalities"
+            ],
+            "recommendedTests": [
+              "TSH, Free T4, Free T3, Thyroid antibodies (Anti-TPO, Anti-Tg)"
+            ],
+            "discussionPoints": [
+              "Your thyroid symptoms and how they affect your daily life",
+              "Your medical history and any previous thyroid issues"
+            ],
+            "bringToAppointment": [
+              "Your medical records",
+              "A list of your medications"
+            ],
+            "whatToSay": "I'm concerned about my thyroid symptoms and would like to discuss them with you."
+          },
+          {
+            "specialty": "Sleep Specialist",
+            "openingSummary": "As your sleep specialist, I will work with you to determine the underlying cause of your sleep disorder and develop a plan to improve your sleep quality.",
+            "concerningSymptoms": [
+              "Persistent unrefreshing sleep"
+            ],
+            "recommendedTests": [
+              "Polysomnography (sleep study)"
+            ],
+            "discussionPoints": [
+              "Your sleep symptoms and how they affect your daily life",
+              "Your medical history and any previous sleep issues"
+            ],
+            "bringToAppointment": [
+              "Your medical records",
+              "A list of your medications"
+            ],
+            "whatToSay": "I'm concerned about my sleep symptoms and would like to discuss them with you."
+          }
+        ],
+        "allClear": false,
+        "declinedSuspicions": [
+          {
+            "diagnosisId": "perimenopause",
+            "reason": "This signal was reviewed but was not strong enough to prioritize after the full evidence check."
+          },
+          {
+            "diagnosisId": "anemia",
+            "reason": "This signal was reviewed but was not strong enough to prioritize after the full evidence check."
+          }
+        ]
+      },
+      "deep_analyze_headers": {
+        "grounding_source": "live_medgemma_success",
+        "synthesis_source": "live_groq_fallback_success",
+        "synthesis_model": "llama-3.1-8b-instant",
+        "synthesis_status": null,
+        "synthesis_error_snippet": null,
+        "rewrite_source": "live_groq_rewrite_success",
+        "rewrite_model": "llama-3.1-8b-instant",
+        "rewrite_status": null,
+        "rewrite_error_snippet": null,
+        "hard_safety_applied": "false",
+        "hard_safety_count": "0"
+      },
+      "output_condition_ids": [
+        "thyroid",
+        "sleep_disorder",
+        "prediabetes",
+        "perimenopause",
+        "anemia"
+      ],
+      "section_checks": {
+        "symptom_summary_present": true,
+        "symptom_summary_structured": true,
+        "doctor_recommendation_present": true,
+        "doctor_recommendation_populated": true,
+        "doctor_kit_aligned": true,
+        "doctor_kit_populated": true,
+        "lab_recommendation_present": true,
+        "recovery_outlook_present": true,
+        "supported_condition_count": 5,
+        "recommended_doctor_count": 2,
+        "doctor_kit_count": 2,
+        "insight_count": 3,
+        "summary_point_count": 5,
+        "recovery_outlook_expected": false
+      },
+      "unsafe_final_output": false
+    },
+    {
+      "profile_id": "SYN-MUST0001",
+      "profile_type": "negative",
+      "target_condition": "sleep_disorder",
+      "patient_context": {
+        "gender": "Female",
+        "age_years": 23.0
+      },
+      "challenge_bucket": "random",
+      "difficulty_score": null,
+      "selection_top_scores": null,
+      "required_condition_ids": [
+        "sleep_disorder",
+        "anemia",
+        "thyroid"
+      ],
+      "top_allowlist_ids": [
+        "sleep_disorder",
+        "anemia",
+        "thyroid",
+        "electrolytes",
+        "kidney"
+      ],
+      "model_scores": {
+        "sleep_disorder": 0.9612,
+        "anemia": 0.8191,
+        "thyroid": 0.7306,
+        "electrolytes": 0.5386,
+        "kidney": 0.4962,
+        "prediabetes": 0.321,
+        "inflammation": 0.2414,
+        "iron_deficiency": 0.1721,
+        "liver": 0.0181,
+        "hepatitis": 0.0049,
+        "perimenopause": 0.0
+      },
+      "raw_model_scores": {
+        "kidney": 0.4962,
+        "anemia": 0.8191,
+        "sleep_disorder": 0.9612,
+        "prediabetes": 0.321,
+        "hidden_inflammation": 0.2414,
+        "electrolyte_imbalance": 0.5386,
+        "thyroid": 0.7306,
+        "perimenopause": 0.0,
+        "liver": 0.0181,
+        "iron_deficiency": 0.1721,
+        "hepatitis_bc": 0.0049
+      },
+      "max_required_score": 0.9612,
+      "parse_success": true,
+      "condition_list_match": true,
+      "hallucinated_ids": [],
+      "http_status": 200,
+      "response": {
+        "personalizedSummary": "Your fatigue and snoring may be connected. It's worth discussing these symptoms with your doctor to explore possible causes.",
+        "summaryPoints": [
+          "Snoring more than once per night",
+          "Feeling tired or having little energy more than 1.5 times per week",
+          "Overall health described as poor",
+          "Reported tiredness more than 1.5 times per week",
+          "Overall health described as >3.5"
+        ],
+        "insights": [
+          {
+            "diagnosisId": "sleep_disorder",
+            "personalNote": "Your doctor may want to discuss your snoring to see if it could be related to a sleep disorder."
+          },
+          {
+            "diagnosisId": "anemia",
+            "personalNote": "Your doctor may want to discuss your fatigue and energy levels to determine if anemia could be a contributing factor."
+          },
+          {
+            "diagnosisId": "thyroid",
+            "personalNote": "Your doctor may want to discuss your overall health and any thyroid-related symptoms you're experiencing."
+          }
+        ],
+        "recoveryOutlook": "With proper diagnosis and treatment, you may be able to manage your symptoms and improve your overall health.",
+        "nextSteps": "Schedule an appointment with a primary care physician or a specialist, such as a pulmonologist or an endocrinologist, to discuss your symptoms and determine the best course of action.",
+        "doctorKitSummary": "I'm concerned about your symptoms and want to work with you to determine the underlying cause. Let's discuss your snoring, fatigue, and overall health with your doctor.",
+        "doctorKitQuestions": [],
+        "doctorKitArguments": [],
+        "recommendedDoctors": [
+          {
+            "specialty": "Primary Care Physician",
+            "priority": "High",
+            "reason": "To discuss your symptoms and determine the best course of action.",
+            "symptomsToDiscuss": [
+              "Snoring more than once per night",
+              "Feeling tired or having little energy more than 1.5 times per week",
+              "Overall health described as poor"
+            ],
+            "suggestedTests": [
+              "Polysomnography (sleep study)",
+              "Complete Blood Count (CBC) including Hemoglobin and Hematocrit",
+              "TSH and Free T4 levels"
+            ]
+          }
+        ],
+        "doctorKits": [
+          {
+            "specialty": "Primary Care Physician",
+            "openingSummary": "I'm concerned about your symptoms and want to work with you to determine the underlying cause. Let's discuss your snoring, fatigue, and overall health with your doctor.",
+            "concerningSymptoms": [
+              "Snoring more than once per night",
+              "Feeling tired or having little energy more than 1.5 times per week",
+              "Overall health described as poor"
+            ],
+            "recommendedTests": [
+              "Polysomnography (sleep study)",
+              "Complete Blood Count (CBC) including Hemoglobin and Hematocrit",
+              "TSH and Free T4 levels"
+            ],
+            "discussionPoints": [
+              "Discuss your snoring and any possible sleep disorders",
+              "Discuss your fatigue and energy levels to determine if anemia could be a contributing factor",
+              "Discuss your overall health and any thyroid-related symptoms you're experiencing"
+            ],
+            "bringToAppointment": [
+              "A list of your medications",
+              "Any relevant medical history"
+            ],
+            "whatToSay": "I'm concerned about my symptoms and want to work with you to determine the underlying cause. Let's discuss my snoring, fatigue, and overall health with you."
+          }
+        ],
+        "allClear": false,
+        "declinedSuspicions": [
+          {
+            "diagnosisId": "electrolytes",
+            "reason": "This signal was reviewed but was not strong enough to prioritize after the full evidence check."
+          },
+          {
+            "diagnosisId": "kidney",
+            "reason": "This signal was reviewed but was not strong enough to prioritize after the full evidence check."
+          }
+        ]
+      },
+      "deep_analyze_headers": {
+        "grounding_source": "live_medgemma_success",
+        "synthesis_source": "live_groq_fallback_success",
+        "synthesis_model": "llama-3.1-8b-instant",
+        "synthesis_status": null,
+        "synthesis_error_snippet": null,
+        "rewrite_source": "live_groq_rewrite_success",
+        "rewrite_model": "llama-3.1-8b-instant",
+        "rewrite_status": null,
+        "rewrite_error_snippet": null,
+        "hard_safety_applied": "false",
+        "hard_safety_count": "0"
+      },
+      "output_condition_ids": [
+        "sleep_disorder",
+        "anemia",
+        "thyroid",
+        "electrolytes",
+        "kidney"
+      ],
+      "section_checks": {
+        "symptom_summary_present": true,
+        "symptom_summary_structured": true,
+        "doctor_recommendation_present": true,
+        "doctor_recommendation_populated": true,
+        "doctor_kit_aligned": true,
+        "doctor_kit_populated": true,
+        "lab_recommendation_present": true,
+        "recovery_outlook_present": true,
+        "supported_condition_count": 5,
+        "recommended_doctor_count": 1,
+        "doctor_kit_count": 1,
+        "insight_count": 3,
+        "summary_point_count": 5,
+        "recovery_outlook_expected": false
+      },
+      "unsafe_final_output": false
+    }
+  ],
+  "manual_review_cases": [
+    {
+      "profile_id": "SYN-MUST0003",
+      "profile_type": "negative",
+      "target_condition": "hypothyroidism",
+      "patient_context": {
+        "gender": "Female",
+        "age_years": 55.0
+      },
+      "challenge_bucket": "random",
+      "difficulty_score": null,
+      "selection_top_scores": null,
+      "required_condition_ids": [
+        "perimenopause",
+        "thyroid",
+        "sleep_disorder"
+      ],
+      "top_allowlist_ids": [
+        "perimenopause",
+        "thyroid",
+        "sleep_disorder",
+        "prediabetes",
+        "anemia"
+      ],
+      "model_scores": {
+        "perimenopause": 0.9808,
+        "thyroid": 0.8755,
+        "sleep_disorder": 0.7029,
+        "prediabetes": 0.6316,
+        "anemia": 0.5538,
+        "electrolytes": 0.4486,
+        "kidney": 0.3114,
+        "inflammation": 0.1224,
+        "liver": 0.0564,
+        "iron_deficiency": 0.0139,
+        "hepatitis": 0.0139
+      },
+      "raw_model_scores": {
+        "anemia": 0.5538,
+        "thyroid": 0.8755,
+        "kidney": 0.3114,
+        "hidden_inflammation": 0.1224,
+        "prediabetes": 0.6316,
+        "sleep_disorder": 0.7029,
+        "electrolyte_imbalance": 0.4486,
+        "perimenopause": 0.9808,
+        "iron_deficiency": 0.0139,
+        "hepatitis_bc": 0.0139,
+        "liver": 0.0564
+      },
+      "max_required_score": 0.9808,
+      "parse_success": true,
+      "condition_list_match": true,
+      "hallucinated_ids": [],
+      "http_status": 200,
+      "response": {
+        "personalizedSummary": "Your fatigue may be connected to persistent unrefreshing sleep and glucose regulation markers. It's worth discussing these with your doctor soon. Below, you'll find some possible root causes and which doctors to see first, as well as how to prepare for your visit.",
+        "summaryPoints": [
+          "Marked thyroid abnormalities may be a concern",
+          "Persistent unrefreshing sleep is worth discussing",
+          "Glucose regulation markers suggest a follow-up may be helpful",
+          "Thyroid symptoms include rapid weight loss and fatigue",
+          "Sleep disorder symptoms include daytime sleepiness and mood changes"
+        ],
+        "insights": [
+          {
+            "diagnosisId": "thyroid",
+            "personalNote": "It's a good idea to discuss your thyroid symptoms with a doctor as soon as possible, as they can worsen quickly."
+          },
+          {
+            "diagnosisId": "sleep_disorder",
+            "personalNote": "Your doctor can help you determine the underlying cause of your sleep disorder and develop a plan to improve your sleep quality."
+          },
+          {
+            "diagnosisId": "prediabetes",
+            "personalNote": "Your doctor can help you manage your glucose regulation and prevent the progression to diabetes."
+          }
+        ],
+        "recoveryOutlook": "With proper treatment and management, you may be able to improve your symptoms and quality of life.",
+        "nextSteps": "Schedule an appointment with a doctor to discuss your symptoms and develop a treatment plan.",
+        "doctorKitSummary": "As your doctor, I will work with you to determine the underlying cause of your symptoms and develop a personalized treatment plan.",
+        "doctorKitQuestions": [],
+        "doctorKitArguments": [],
+        "recommendedDoctors": [
+          {
+            "specialty": "Endocrinologist",
+            "priority": "High",
+            "reason": "They specialize in thyroid and glucose regulation issues.",
+            "symptomsToDiscuss": [
+              "Marked thyroid abnormalities",
+              "Glucose regulation issues"
+            ],
+            "suggestedTests": [
+              "TSH, Free T4, Free T3, Thyroid antibodies (Anti-TPO, Anti-Tg)",
+              "HbA1c, Fasting Plasma Glucose (FPG), Oral Glucose Tolerance Test (OGTT)"
+            ]
+          },
+          {
+            "specialty": "Sleep Specialist",
+            "priority": "Medium",
+            "reason": "They specialize in sleep disorders and can help you develop a plan to improve your sleep quality.",
+            "symptomsToDiscuss": [
+              "Persistent unrefreshing sleep"
+            ],
+            "suggestedTests": [
+              "Polysomnography (sleep study)"
+            ]
+          }
+        ],
+        "doctorKits": [
+          {
+            "specialty": "Endocrinologist",
+            "openingSummary": "As your endocrinologist, I will work with you to determine the underlying cause of your thyroid symptoms and develop a personalized treatment plan.",
+            "concerningSymptoms": [
+              "Marked thyroid abnormalities"
+            ],
+            "recommendedTests": [
+              "TSH, Free T4, Free T3, Thyroid antibodies (Anti-TPO, Anti-Tg)"
+            ],
+            "discussionPoints": [
+              "Your thyroid symptoms and how they affect your daily life",
+              "Your medical history and any previous thyroid issues"
+            ],
+            "bringToAppointment": [
+              "Your medical records",
+              "A list of your medications"
+            ],
+            "whatToSay": "I'm concerned about my thyroid symptoms and would like to discuss them with you."
+          },
+          {
+            "specialty": "Sleep Specialist",
+            "openingSummary": "As your sleep specialist, I will work with you to determine the underlying cause of your sleep disorder and develop a plan to improve your sleep quality.",
+            "concerningSymptoms": [
+              "Persistent unrefreshing sleep"
+            ],
+            "recommendedTests": [
+              "Polysomnography (sleep study)"
+            ],
+            "discussionPoints": [
+              "Your sleep symptoms and how they affect your daily life",
+              "Your medical history and any previous sleep issues"
+            ],
+            "bringToAppointment": [
+              "Your medical records",
+              "A list of your medications"
+            ],
+            "whatToSay": "I'm concerned about my sleep symptoms and would like to discuss them with you."
+          }
+        ],
+        "allClear": false,
+        "declinedSuspicions": [
+          {
+            "diagnosisId": "perimenopause",
+            "reason": "This signal was reviewed but was not strong enough to prioritize after the full evidence check."
+          },
+          {
+            "diagnosisId": "anemia",
+            "reason": "This signal was reviewed but was not strong enough to prioritize after the full evidence check."
+          }
+        ]
+      },
+      "deep_analyze_headers": {
+        "grounding_source": "live_medgemma_success",
+        "synthesis_source": "live_groq_fallback_success",
+        "synthesis_model": "llama-3.1-8b-instant",
+        "synthesis_status": null,
+        "synthesis_error_snippet": null,
+        "rewrite_source": "live_groq_rewrite_success",
+        "rewrite_model": "llama-3.1-8b-instant",
+        "rewrite_status": null,
+        "rewrite_error_snippet": null,
+        "hard_safety_applied": "false",
+        "hard_safety_count": "0"
+      },
+      "output_condition_ids": [
+        "thyroid",
+        "sleep_disorder",
+        "prediabetes",
+        "perimenopause",
+        "anemia"
+      ],
+      "section_checks": {
+        "symptom_summary_present": true,
+        "symptom_summary_structured": true,
+        "doctor_recommendation_present": true,
+        "doctor_recommendation_populated": true,
+        "doctor_kit_aligned": true,
+        "doctor_kit_populated": true,
+        "lab_recommendation_present": true,
+        "recovery_outlook_present": true,
+        "supported_condition_count": 5,
+        "recommended_doctor_count": 2,
+        "doctor_kit_count": 2,
+        "insight_count": 3,
+        "summary_point_count": 5,
+        "recovery_outlook_expected": false
+      },
+      "unsafe_final_output": false,
+      "review_bucket": "urgent"
+    },
+    {
+      "profile_id": "SYN-MUST0001",
+      "profile_type": "negative",
+      "target_condition": "sleep_disorder",
+      "patient_context": {
+        "gender": "Female",
+        "age_years": 23.0
+      },
+      "challenge_bucket": "random",
+      "difficulty_score": null,
+      "selection_top_scores": null,
+      "required_condition_ids": [
+        "sleep_disorder",
+        "anemia",
+        "thyroid"
+      ],
+      "top_allowlist_ids": [
+        "sleep_disorder",
+        "anemia",
+        "thyroid",
+        "electrolytes",
+        "kidney"
+      ],
+      "model_scores": {
+        "sleep_disorder": 0.9612,
+        "anemia": 0.8191,
+        "thyroid": 0.7306,
+        "electrolytes": 0.5386,
+        "kidney": 0.4962,
+        "prediabetes": 0.321,
+        "inflammation": 0.2414,
+        "iron_deficiency": 0.1721,
+        "liver": 0.0181,
+        "hepatitis": 0.0049,
+        "perimenopause": 0.0
+      },
+      "raw_model_scores": {
+        "kidney": 0.4962,
+        "anemia": 0.8191,
+        "sleep_disorder": 0.9612,
+        "prediabetes": 0.321,
+        "hidden_inflammation": 0.2414,
+        "electrolyte_imbalance": 0.5386,
+        "thyroid": 0.7306,
+        "perimenopause": 0.0,
+        "liver": 0.0181,
+        "iron_deficiency": 0.1721,
+        "hepatitis_bc": 0.0049
+      },
+      "max_required_score": 0.9612,
+      "parse_success": true,
+      "condition_list_match": true,
+      "hallucinated_ids": [],
+      "http_status": 200,
+      "response": {
+        "personalizedSummary": "Your fatigue and snoring may be connected. It's worth discussing these symptoms with your doctor to explore possible causes.",
+        "summaryPoints": [
+          "Snoring more than once per night",
+          "Feeling tired or having little energy more than 1.5 times per week",
+          "Overall health described as poor",
+          "Reported tiredness more than 1.5 times per week",
+          "Overall health described as >3.5"
+        ],
+        "insights": [
+          {
+            "diagnosisId": "sleep_disorder",
+            "personalNote": "Your doctor may want to discuss your snoring to see if it could be related to a sleep disorder."
+          },
+          {
+            "diagnosisId": "anemia",
+            "personalNote": "Your doctor may want to discuss your fatigue and energy levels to determine if anemia could be a contributing factor."
+          },
+          {
+            "diagnosisId": "thyroid",
+            "personalNote": "Your doctor may want to discuss your overall health and any thyroid-related symptoms you're experiencing."
+          }
+        ],
+        "recoveryOutlook": "With proper diagnosis and treatment, you may be able to manage your symptoms and improve your overall health.",
+        "nextSteps": "Schedule an appointment with a primary care physician or a specialist, such as a pulmonologist or an endocrinologist, to discuss your symptoms and determine the best course of action.",
+        "doctorKitSummary": "I'm concerned about your symptoms and want to work with you to determine the underlying cause. Let's discuss your snoring, fatigue, and overall health with your doctor.",
+        "doctorKitQuestions": [],
+        "doctorKitArguments": [],
+        "recommendedDoctors": [
+          {
+            "specialty": "Primary Care Physician",
+            "priority": "High",
+            "reason": "To discuss your symptoms and determine the best course of action.",
+            "symptomsToDiscuss": [
+              "Snoring more than once per night",
+              "Feeling tired or having little energy more than 1.5 times per week",
+              "Overall health described as poor"
+            ],
+            "suggestedTests": [
+              "Polysomnography (sleep study)",
+              "Complete Blood Count (CBC) including Hemoglobin and Hematocrit",
+              "TSH and Free T4 levels"
+            ]
+          }
+        ],
+        "doctorKits": [
+          {
+            "specialty": "Primary Care Physician",
+            "openingSummary": "I'm concerned about your symptoms and want to work with you to determine the underlying cause. Let's discuss your snoring, fatigue, and overall health with your doctor.",
+            "concerningSymptoms": [
+              "Snoring more than once per night",
+              "Feeling tired or having little energy more than 1.5 times per week",
+              "Overall health described as poor"
+            ],
+            "recommendedTests": [
+              "Polysomnography (sleep study)",
+              "Complete Blood Count (CBC) including Hemoglobin and Hematocrit",
+              "TSH and Free T4 levels"
+            ],
+            "discussionPoints": [
+              "Discuss your snoring and any possible sleep disorders",
+              "Discuss your fatigue and energy levels to determine if anemia could be a contributing factor",
+              "Discuss your overall health and any thyroid-related symptoms you're experiencing"
+            ],
+            "bringToAppointment": [
+              "A list of your medications",
+              "Any relevant medical history"
+            ],
+            "whatToSay": "I'm concerned about my symptoms and want to work with you to determine the underlying cause. Let's discuss my snoring, fatigue, and overall health with you."
+          }
+        ],
+        "allClear": false,
+        "declinedSuspicions": [
+          {
+            "diagnosisId": "electrolytes",
+            "reason": "This signal was reviewed but was not strong enough to prioritize after the full evidence check."
+          },
+          {
+            "diagnosisId": "kidney",
+            "reason": "This signal was reviewed but was not strong enough to prioritize after the full evidence check."
+          }
+        ]
+      },
+      "deep_analyze_headers": {
+        "grounding_source": "live_medgemma_success",
+        "synthesis_source": "live_groq_fallback_success",
+        "synthesis_model": "llama-3.1-8b-instant",
+        "synthesis_status": null,
+        "synthesis_error_snippet": null,
+        "rewrite_source": "live_groq_rewrite_success",
+        "rewrite_model": "llama-3.1-8b-instant",
+        "rewrite_status": null,
+        "rewrite_error_snippet": null,
+        "hard_safety_applied": "false",
+        "hard_safety_count": "0"
+      },
+      "output_condition_ids": [
+        "sleep_disorder",
+        "anemia",
+        "thyroid",
+        "electrolytes",
+        "kidney"
+      ],
+      "section_checks": {
+        "symptom_summary_present": true,
+        "symptom_summary_structured": true,
+        "doctor_recommendation_present": true,
+        "doctor_recommendation_populated": true,
+        "doctor_kit_aligned": true,
+        "doctor_kit_populated": true,
+        "lab_recommendation_present": true,
+        "recovery_outlook_present": true,
+        "supported_condition_count": 5,
+        "recommended_doctor_count": 1,
+        "doctor_kit_count": 1,
+        "insight_count": 3,
+        "summary_point_count": 5,
+        "recovery_outlook_expected": false
+      },
+      "unsafe_final_output": false,
+      "review_bucket": "general"
+    }
+  ]
+}

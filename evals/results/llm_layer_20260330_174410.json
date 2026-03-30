@@ -1,0 +1,593 @@
+{
+  "summary": {
+    "run_id": "llm_layer_20260330_174410",
+    "base_url": "http://127.0.0.1:3000",
+    "n_profiles": 2,
+    "selection_strategy": "random",
+    "top_k_allowlist": 5,
+    "required_threshold": 0.65,
+    "parse_successes": 1,
+    "hallucination_profiles": 0,
+    "condition_list_matches": 1,
+    "unsafe_final_outputs": 0,
+    "parse_success_rate": 0.5,
+    "hallucination_rate": 0.0,
+    "condition_list_match_rate": 0.5,
+    "unsafe_final_output_rate": 0.0,
+    "manual_review_count": 1,
+    "grounding_source_counts": {
+      "live_medgemma_success": 2
+    },
+    "synthesis_source_counts": {
+      "fallback_groq_http_error": 1,
+      "live_groq_fallback_success": 1
+    },
+    "rewrite_source_counts": {
+      "fallback_groq_http_error": 1
+    },
+    "hard_safety_applied_count": 0,
+    "profile_type_counts": {
+      "negative": 2
+    },
+    "challenge_bucket_counts": {
+      "random": 2
+    },
+    "section_metric_counts": {
+      "symptom_summary_present": 1,
+      "symptom_summary_structured": 1,
+      "doctor_recommendation_present": 1,
+      "doctor_recommendation_populated": 1,
+      "doctor_kit_aligned": 1,
+      "doctor_kit_populated": 1,
+      "lab_recommendation_present": 1,
+      "recovery_outlook_present": 1
+    },
+    "section_metric_rates": {
+      "symptom_summary_present": 0.5,
+      "symptom_summary_structured": 0.5,
+      "doctor_recommendation_present": 0.5,
+      "doctor_recommendation_populated": 0.5,
+      "doctor_kit_aligned": 0.5,
+      "doctor_kit_populated": 0.5,
+      "lab_recommendation_present": 0.5,
+      "recovery_outlook_present": 0.5
+    },
+    "dod_checks": {
+      "manual_review_count": {
+        "target": ">= 10",
+        "actual": 1,
+        "pass": false
+      },
+      "hallucination_rate": {
+        "target": 0.05,
+        "actual": 0.0,
+        "pass": true
+      },
+      "parse_success_rate": {
+        "target": 0.95,
+        "actual": 0.5,
+        "pass": false
+      },
+      "condition_list_match_rate": {
+        "target": 0.95,
+        "actual": 0.5,
+        "pass": false
+      },
+      "unsafe_final_output_rate": {
+        "target": 0.0,
+        "actual": 0.0,
+        "pass": true
+      }
+    },
+    "dod_pass": false
+  },
+  "results": [
+    {
+      "profile_id": "SYN-MUST0003",
+      "profile_type": "negative",
+      "target_condition": "hypothyroidism",
+      "patient_context": {
+        "gender": "Female",
+        "age_years": 55.0
+      },
+      "challenge_bucket": "random",
+      "difficulty_score": null,
+      "selection_top_scores": null,
+      "required_condition_ids": [
+        "perimenopause",
+        "thyroid",
+        "sleep_disorder"
+      ],
+      "top_allowlist_ids": [
+        "perimenopause",
+        "thyroid",
+        "sleep_disorder",
+        "prediabetes",
+        "anemia"
+      ],
+      "model_scores": {
+        "perimenopause": 0.9808,
+        "thyroid": 0.8755,
+        "sleep_disorder": 0.7029,
+        "prediabetes": 0.6316,
+        "anemia": 0.5538,
+        "electrolytes": 0.4486,
+        "kidney": 0.3114,
+        "inflammation": 0.1224,
+        "liver": 0.0564,
+        "iron_deficiency": 0.0139,
+        "hepatitis": 0.0139
+      },
+      "raw_model_scores": {
+        "thyroid": 0.8755,
+        "prediabetes": 0.6316,
+        "electrolyte_imbalance": 0.4486,
+        "perimenopause": 0.9808,
+        "hidden_inflammation": 0.1224,
+        "kidney": 0.3114,
+        "sleep_disorder": 0.7029,
+        "anemia": 0.5538,
+        "hepatitis_bc": 0.0139,
+        "liver": 0.0564,
+        "iron_deficiency": 0.0139
+      },
+      "max_required_score": 0.9808,
+      "parse_success": false,
+      "condition_list_match": false,
+      "hallucinated_ids": [],
+      "http_status": 503,
+      "response": {
+        "error": "LLM synthesis unavailable"
+      },
+      "deep_analyze_headers": {
+        "grounding_source": "live_medgemma_success",
+        "synthesis_source": "fallback_groq_http_error",
+        "synthesis_model": "llama-3.1-8b-instant",
+        "synthesis_status": "413",
+        "synthesis_error_snippet": "{\"error\":{\"message\":\"Request too large for model `llama-3.1-8b-instant` in organization `org_01kh90s72ffwe86v4gnp87nm38` service tier `on_demand` on tokens per minute (TPM): Limit 6000, Requested 6101",
+        "rewrite_source": null,
+        "rewrite_model": null,
+        "rewrite_status": null,
+        "rewrite_error_snippet": null,
+        "hard_safety_applied": "false",
+        "hard_safety_count": "0"
+      },
+      "error": {
+        "error": "LLM synthesis unavailable"
+      }
+    },
+    {
+      "profile_id": "SYN-MUST0001",
+      "profile_type": "negative",
+      "target_condition": "sleep_disorder",
+      "patient_context": {
+        "gender": "Female",
+        "age_years": 23.0
+      },
+      "challenge_bucket": "random",
+      "difficulty_score": null,
+      "selection_top_scores": null,
+      "required_condition_ids": [
+        "sleep_disorder",
+        "anemia",
+        "thyroid"
+      ],
+      "top_allowlist_ids": [
+        "sleep_disorder",
+        "anemia",
+        "thyroid",
+        "electrolytes",
+        "kidney"
+      ],
+      "model_scores": {
+        "sleep_disorder": 0.9612,
+        "anemia": 0.8191,
+        "thyroid": 0.7306,
+        "electrolytes": 0.5386,
+        "kidney": 0.4962,
+        "prediabetes": 0.321,
+        "inflammation": 0.2414,
+        "iron_deficiency": 0.1721,
+        "liver": 0.0181,
+        "hepatitis": 0.0049,
+        "perimenopause": 0.0
+      },
+      "raw_model_scores": {
+        "kidney": 0.4962,
+        "hidden_inflammation": 0.2414,
+        "sleep_disorder": 0.9612,
+        "thyroid": 0.7306,
+        "prediabetes": 0.321,
+        "electrolyte_imbalance": 0.5386,
+        "anemia": 0.8191,
+        "perimenopause": 0.0,
+        "hepatitis_bc": 0.0049,
+        "liver": 0.0181,
+        "iron_deficiency": 0.1721
+      },
+      "max_required_score": 0.9612,
+      "parse_success": true,
+      "condition_list_match": true,
+      "hallucinated_ids": [],
+      "http_status": 200,
+      "response": {
+        "personalizedSummary": "From what you shared, your fatigue is connected to the snoring more than once per night and overall health described as >3.5. This is worth investigating further. Below you can see some hypotheses on the root causes and which doctors to see first, and how to prepare for your visit.",
+        "summaryPoints": [
+          "Persistent fatigue, likely linked to heavy periods and disrupted sleep schedule",
+          "Heavy periods with frequent night-time bleeding and clots",
+          "Disrupted sleep schedule with difficulty falling asleep and staying asleep",
+          "Night sweats and hot flashes, possibly related to thyroid function",
+          "Snoring more than once per night"
+        ],
+        "insights": [
+          {
+            "diagnosisId": "sleep_disorder",
+            "personalNote": "The patient reported snoring more than once per night, a key indicator for sleep disorder. This, combined with disrupted sleep schedule and night sweats, may suggest a sleep-related issue that needs further investigation.",
+            "confidence": "probable"
+          },
+          {
+            "diagnosisId": "anemia",
+            "personalNote": "The patient reported feeling tired or having little energy more than 1.5 times per week, a common symptom of anemia. This, combined with heavy periods and frequent night-time bleeding, may indicate a possible underlying condition that needs further evaluation.",
+            "confidence": "probable"
+          },
+          {
+            "diagnosisId": "thyroid",
+            "personalNote": "The patient reported overall health as >3.5, which could indicate thyroid dysfunction. This, combined with night sweats and hot flashes, may suggest a thyroid-related issue that needs further investigation.",
+            "confidence": "probable"
+          }
+        ],
+        "recoveryOutlook": "With proper diagnosis and treatment, it's possible to manage symptoms and improve quality of life. However, it may take some time to determine the underlying cause and develop an effective treatment plan.",
+        "nextSteps": "See your GP first for a thorough evaluation and to discuss further testing. If necessary, a specialist may be recommended for further evaluation and treatment.",
+        "doctorKitSummary": "I'm experiencing persistent fatigue, heavy periods, and disrupted sleep schedule. I'd like to discuss possible underlying causes and develop a plan to manage symptoms.",
+        "doctorKitQuestions": [],
+        "doctorKitArguments": [],
+        "recommendedDoctors": [
+          {
+            "specialty": "GP",
+            "priority": "start_here",
+            "reason": "Your GP can evaluate your overall health and discuss further testing and treatment options. They can also refer you to a specialist if necessary.",
+            "symptomsToDiscuss": [
+              "Persistent fatigue",
+              "Heavy periods",
+              "Disrupted sleep schedule"
+            ],
+            "suggestedTests": [
+              "Complete Blood Count (CBC) including Hemoglobin and Hematocrit",
+              "TSH and Free T4 levels",
+              "Polysomnography (sleep study)"
+            ]
+          },
+          {
+            "specialty": "Endocrinologist",
+            "priority": "consider_next",
+            "reason": "An endocrinologist specializes in hormone-related disorders, including thyroid function. They can evaluate your thyroid function and discuss treatment options if necessary.",
+            "symptomsToDiscuss": [
+              "Night sweats",
+              "Hot flashes",
+              "Overall health described as >3.5"
+            ],
+            "suggestedTests": [
+              "TSH and Free T4 levels",
+              "Thyroid ultrasound",
+              "Thyroid function tests"
+            ]
+          }
+        ],
+        "doctorKits": [
+          {
+            "specialty": "GP",
+            "openingSummary": "I'm experiencing persistent fatigue, heavy periods, and disrupted sleep schedule. I'd like to discuss possible underlying causes and develop a plan to manage symptoms.",
+            "concerningSymptoms": [
+              "Persistent fatigue",
+              "Heavy periods",
+              "Disrupted sleep schedule"
+            ],
+            "recommendedTests": [
+              "Complete Blood Count (CBC) including Hemoglobin and Hematocrit",
+              "TSH and Free T4 levels",
+              "Polysomnography (sleep study)"
+            ],
+            "discussionPoints": [
+              "I'm concerned about my fatigue and heavy periods \u2014 I'd like to discuss possible underlying causes and develop a plan to manage symptoms.",
+              "I've been experiencing disrupted sleep schedule and night sweats \u2014 I'd like to discuss possible underlying causes and develop a plan to manage symptoms."
+            ],
+            "bringToAppointment": [
+              "Menstrual calendar showing heavy periods and night-time bleeding",
+              "Sleep diary showing disrupted sleep schedule and night sweats"
+            ],
+            "whatToSay": "I'm here to discuss possible underlying causes of my persistent fatigue, heavy periods, and disrupted sleep schedule. I'd like to develop a plan to manage symptoms and improve my quality of life."
+          },
+          {
+            "specialty": "Endocrinologist",
+            "openingSummary": "I'm experiencing night sweats, hot flashes, and overall health described as >3.5. I'd like to discuss possible underlying causes and develop a plan to manage symptoms.",
+            "concerningSymptoms": [
+              "Night sweats",
+              "Hot flashes",
+              "Overall health described as >3.5"
+            ],
+            "recommendedTests": [
+              "TSH and Free T4 levels",
+              "Thyroid ultrasound",
+              "Thyroid function tests"
+            ],
+            "discussionPoints": [
+              "I'm concerned about my night sweats and hot flashes \u2014 I'd like to discuss possible underlying causes and develop a plan to manage symptoms.",
+              "I've been experiencing disrupted sleep schedule and night sweats \u2014 I'd like to discuss possible underlying causes and develop a plan to manage symptoms."
+            ],
+            "bringToAppointment": [
+              "Thyroid function test results from GP if already completed",
+              "Menstrual calendar showing heavy periods and night-time bleeding"
+            ],
+            "whatToSay": "I'm here to discuss possible underlying causes of my night sweats, hot flashes, and overall health described as >3.5. I'd like to develop a plan to manage symptoms and improve my quality of life."
+          }
+        ],
+        "allClear": false,
+        "declinedSuspicions": [
+          {
+            "diagnosisId": "electrolytes",
+            "reason": "This signal was reviewed but was not strong enough to prioritise after the full evidence check."
+          },
+          {
+            "diagnosisId": "kidney",
+            "reason": "This signal was reviewed but was not strong enough to prioritise after the full evidence check."
+          }
+        ]
+      },
+      "deep_analyze_headers": {
+        "grounding_source": "live_medgemma_success",
+        "synthesis_source": "live_groq_fallback_success",
+        "synthesis_model": "llama-3.1-8b-instant",
+        "synthesis_status": null,
+        "synthesis_error_snippet": null,
+        "rewrite_source": "fallback_groq_http_error",
+        "rewrite_model": "llama-3.1-8b-instant",
+        "rewrite_status": "429",
+        "rewrite_error_snippet": "{\"error\":{\"message\":\"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01kh90s72ffwe86v4gnp87nm38` service tier `on_demand` on tokens per minute (TPM): Limit 6000, Used 5088, Re",
+        "hard_safety_applied": "false",
+        "hard_safety_count": "0"
+      },
+      "output_condition_ids": [
+        "sleep_disorder",
+        "anemia",
+        "thyroid",
+        "electrolytes",
+        "kidney"
+      ],
+      "section_checks": {
+        "symptom_summary_present": true,
+        "symptom_summary_structured": true,
+        "doctor_recommendation_present": true,
+        "doctor_recommendation_populated": true,
+        "doctor_kit_aligned": true,
+        "doctor_kit_populated": true,
+        "lab_recommendation_present": true,
+        "recovery_outlook_present": true,
+        "supported_condition_count": 5,
+        "recommended_doctor_count": 2,
+        "doctor_kit_count": 2,
+        "insight_count": 3,
+        "summary_point_count": 5,
+        "recovery_outlook_expected": false
+      },
+      "unsafe_final_output": false
+    }
+  ],
+  "manual_review_cases": [
+    {
+      "profile_id": "SYN-MUST0001",
+      "profile_type": "negative",
+      "target_condition": "sleep_disorder",
+      "patient_context": {
+        "gender": "Female",
+        "age_years": 23.0
+      },
+      "challenge_bucket": "random",
+      "difficulty_score": null,
+      "selection_top_scores": null,
+      "required_condition_ids": [
+        "sleep_disorder",
+        "anemia",
+        "thyroid"
+      ],
+      "top_allowlist_ids": [
+        "sleep_disorder",
+        "anemia",
+        "thyroid",
+        "electrolytes",
+        "kidney"
+      ],
+      "model_scores": {
+        "sleep_disorder": 0.9612,
+        "anemia": 0.8191,
+        "thyroid": 0.7306,
+        "electrolytes": 0.5386,
+        "kidney": 0.4962,
+        "prediabetes": 0.321,
+        "inflammation": 0.2414,
+        "iron_deficiency": 0.1721,
+        "liver": 0.0181,
+        "hepatitis": 0.0049,
+        "perimenopause": 0.0
+      },
+      "raw_model_scores": {
+        "kidney": 0.4962,
+        "hidden_inflammation": 0.2414,
+        "sleep_disorder": 0.9612,
+        "thyroid": 0.7306,
+        "prediabetes": 0.321,
+        "electrolyte_imbalance": 0.5386,
+        "anemia": 0.8191,
+        "perimenopause": 0.0,
+        "hepatitis_bc": 0.0049,
+        "liver": 0.0181,
+        "iron_deficiency": 0.1721
+      },
+      "max_required_score": 0.9612,
+      "parse_success": true,
+      "condition_list_match": true,
+      "hallucinated_ids": [],
+      "http_status": 200,
+      "response": {
+        "personalizedSummary": "From what you shared, your fatigue is connected to the snoring more than once per night and overall health described as >3.5. This is worth investigating further. Below you can see some hypotheses on the root causes and which doctors to see first, and how to prepare for your visit.",
+        "summaryPoints": [
+          "Persistent fatigue, likely linked to heavy periods and disrupted sleep schedule",
+          "Heavy periods with frequent night-time bleeding and clots",
+          "Disrupted sleep schedule with difficulty falling asleep and staying asleep",
+          "Night sweats and hot flashes, possibly related to thyroid function",
+          "Snoring more than once per night"
+        ],
+        "insights": [
+          {
+            "diagnosisId": "sleep_disorder",
+            "personalNote": "The patient reported snoring more than once per night, a key indicator for sleep disorder. This, combined with disrupted sleep schedule and night sweats, may suggest a sleep-related issue that needs further investigation.",
+            "confidence": "probable"
+          },
+          {
+            "diagnosisId": "anemia",
+            "personalNote": "The patient reported feeling tired or having little energy more than 1.5 times per week, a common symptom of anemia. This, combined with heavy periods and frequent night-time bleeding, may indicate a possible underlying condition that needs further evaluation.",
+            "confidence": "probable"
+          },
+          {
+            "diagnosisId": "thyroid",
+            "personalNote": "The patient reported overall health as >3.5, which could indicate thyroid dysfunction. This, combined with night sweats and hot flashes, may suggest a thyroid-related issue that needs further investigation.",
+            "confidence": "probable"
+          }
+        ],
+        "recoveryOutlook": "With proper diagnosis and treatment, it's possible to manage symptoms and improve quality of life. However, it may take some time to determine the underlying cause and develop an effective treatment plan.",
+        "nextSteps": "See your GP first for a thorough evaluation and to discuss further testing. If necessary, a specialist may be recommended for further evaluation and treatment.",
+        "doctorKitSummary": "I'm experiencing persistent fatigue, heavy periods, and disrupted sleep schedule. I'd like to discuss possible underlying causes and develop a plan to manage symptoms.",
+        "doctorKitQuestions": [],
+        "doctorKitArguments": [],
+        "recommendedDoctors": [
+          {
+            "specialty": "GP",
+            "priority": "start_here",
+            "reason": "Your GP can evaluate your overall health and discuss further testing and treatment options. They can also refer you to a specialist if necessary.",
+            "symptomsToDiscuss": [
+              "Persistent fatigue",
+              "Heavy periods",
+              "Disrupted sleep schedule"
+            ],
+            "suggestedTests": [
+              "Complete Blood Count (CBC) including Hemoglobin and Hematocrit",
+              "TSH and Free T4 levels",
+              "Polysomnography (sleep study)"
+            ]
+          },
+          {
+            "specialty": "Endocrinologist",
+            "priority": "consider_next",
+            "reason": "An endocrinologist specializes in hormone-related disorders, including thyroid function. They can evaluate your thyroid function and discuss treatment options if necessary.",
+            "symptomsToDiscuss": [
+              "Night sweats",
+              "Hot flashes",
+              "Overall health described as >3.5"
+            ],
+            "suggestedTests": [
+              "TSH and Free T4 levels",
+              "Thyroid ultrasound",
+              "Thyroid function tests"
+            ]
+          }
+        ],
+        "doctorKits": [
+          {
+            "specialty": "GP",
+            "openingSummary": "I'm experiencing persistent fatigue, heavy periods, and disrupted sleep schedule. I'd like to discuss possible underlying causes and develop a plan to manage symptoms.",
+            "concerningSymptoms": [
+              "Persistent fatigue",
+              "Heavy periods",
+              "Disrupted sleep schedule"
+            ],
+            "recommendedTests": [
+              "Complete Blood Count (CBC) including Hemoglobin and Hematocrit",
+              "TSH and Free T4 levels",
+              "Polysomnography (sleep study)"
+            ],
+            "discussionPoints": [
+              "I'm concerned about my fatigue and heavy periods \u2014 I'd like to discuss possible underlying causes and develop a plan to manage symptoms.",
+              "I've been experiencing disrupted sleep schedule and night sweats \u2014 I'd like to discuss possible underlying causes and develop a plan to manage symptoms."
+            ],
+            "bringToAppointment": [
+              "Menstrual calendar showing heavy periods and night-time bleeding",
+              "Sleep diary showing disrupted sleep schedule and night sweats"
+            ],
+            "whatToSay": "I'm here to discuss possible underlying causes of my persistent fatigue, heavy periods, and disrupted sleep schedule. I'd like to develop a plan to manage symptoms and improve my quality of life."
+          },
+          {
+            "specialty": "Endocrinologist",
+            "openingSummary": "I'm experiencing night sweats, hot flashes, and overall health described as >3.5. I'd like to discuss possible underlying causes and develop a plan to manage symptoms.",
+            "concerningSymptoms": [
+              "Night sweats",
+              "Hot flashes",
+              "Overall health described as >3.5"
+            ],
+            "recommendedTests": [
+              "TSH and Free T4 levels",
+              "Thyroid ultrasound",
+              "Thyroid function tests"
+            ],
+            "discussionPoints": [
+              "I'm concerned about my night sweats and hot flashes \u2014 I'd like to discuss possible underlying causes and develop a plan to manage symptoms.",
+              "I've been experiencing disrupted sleep schedule and night sweats \u2014 I'd like to discuss possible underlying causes and develop a plan to manage symptoms."
+            ],
+            "bringToAppointment": [
+              "Thyroid function test results from GP if already completed",
+              "Menstrual calendar showing heavy periods and night-time bleeding"
+            ],
+            "whatToSay": "I'm here to discuss possible underlying causes of my night sweats, hot flashes, and overall health described as >3.5. I'd like to develop a plan to manage symptoms and improve my quality of life."
+          }
+        ],
+        "allClear": false,
+        "declinedSuspicions": [
+          {
+            "diagnosisId": "electrolytes",
+            "reason": "This signal was reviewed but was not strong enough to prioritise after the full evidence check."
+          },
+          {
+            "diagnosisId": "kidney",
+            "reason": "This signal was reviewed but was not strong enough to prioritise after the full evidence check."
+          }
+        ]
+      },
+      "deep_analyze_headers": {
+        "grounding_source": "live_medgemma_success",
+        "synthesis_source": "live_groq_fallback_success",
+        "synthesis_model": "llama-3.1-8b-instant",
+        "synthesis_status": null,
+        "synthesis_error_snippet": null,
+        "rewrite_source": "fallback_groq_http_error",
+        "rewrite_model": "llama-3.1-8b-instant",
+        "rewrite_status": "429",
+        "rewrite_error_snippet": "{\"error\":{\"message\":\"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01kh90s72ffwe86v4gnp87nm38` service tier `on_demand` on tokens per minute (TPM): Limit 6000, Used 5088, Re",
+        "hard_safety_applied": "false",
+        "hard_safety_count": "0"
+      },
+      "output_condition_ids": [
+        "sleep_disorder",
+        "anemia",
+        "thyroid",
+        "electrolytes",
+        "kidney"
+      ],
+      "section_checks": {
+        "symptom_summary_present": true,
+        "symptom_summary_structured": true,
+        "doctor_recommendation_present": true,
+        "doctor_recommendation_populated": true,
+        "doctor_kit_aligned": true,
+        "doctor_kit_populated": true,
+        "lab_recommendation_present": true,
+        "recovery_outlook_present": true,
+        "supported_condition_count": 5,
+        "recommended_doctor_count": 2,
+        "doctor_kit_count": 2,
+        "insight_count": 3,
+        "summary_point_count": 5,
+        "recovery_outlook_expected": false
+      },
+      "unsafe_final_output": false,
+      "review_bucket": "urgent"
+    }
+  ]
+}

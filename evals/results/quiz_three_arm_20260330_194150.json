@@ -1,0 +1,4485 @@
+{
+  "summary": {
+    "run_id": "quiz_three_arm_20260330_194150",
+    "conditions": [
+      "perimenopause",
+      "hypothyroidism",
+      "kidney_disease",
+      "sleep_disorder",
+      "anemia",
+      "iron_deficiency",
+      "hepatitis",
+      "liver",
+      "prediabetes",
+      "inflammation",
+      "electrolyte_imbalance",
+      "vitamin_d_deficiency"
+    ],
+    "sample_size": 15,
+    "arms": {
+      "models_only": {
+        "n_profiles": 15,
+        "n_labeled": 12,
+        "n_healthy": 3,
+        "parse_success_rate": 1.0,
+        "recall_at_3": 0.5,
+        "healthy_over_alert_rate": 0.3333,
+        "mean_false_positive_rate_absent": 0.2321,
+        "mean_neighbour_false_positive_rate": 0.2222,
+        "per_condition": {
+          "perimenopause": {
+            "n_positive_profiles": 1,
+            "recall_at_3": 0.0,
+            "false_positive_rate_absent": 0.0714,
+            "neighbour_false_positive_rate": 0.0
+          },
+          "hypothyroidism": {
+            "n_positive_profiles": 1,
+            "recall_at_3": 1.0,
+            "false_positive_rate_absent": 0.4286,
+            "neighbour_false_positive_rate": 0.6667
+          },
+          "kidney_disease": {
+            "n_positive_profiles": 1,
+            "recall_at_3": 0.0,
+            "false_positive_rate_absent": 0.0,
+            "neighbour_false_positive_rate": 0.0
+          },
+          "sleep_disorder": {
+            "n_positive_profiles": 1,
+            "recall_at_3": 1.0,
+            "false_positive_rate_absent": 1.0,
+            "neighbour_false_positive_rate": 1.0
+          },
+          "anemia": {
+            "n_positive_profiles": 1,
+            "recall_at_3": 1.0,
+            "false_positive_rate_absent": 0.2143,
+            "neighbour_false_positive_rate": 0.0
+          },
+          "iron_deficiency": {
+            "n_positive_profiles": 1,
+            "recall_at_3": 0.0,
+            "false_positive_rate_absent": 0.0,
+            "neighbour_false_positive_rate": 0.0
+          },
+          "hepatitis": {
+            "n_positive_profiles": 1,
+            "recall_at_3": 1.0,
+            "false_positive_rate_absent": 0.0,
+            "neighbour_false_positive_rate": 0.0
+          },
+          "liver": {
+            "n_positive_profiles": 1,
+            "recall_at_3": 0.0,
+            "false_positive_rate_absent": 0.0,
+            "neighbour_false_positive_rate": 0.0
+          },
+          "prediabetes": {
+            "n_positive_profiles": 1,
+            "recall_at_3": 0.0,
+            "false_positive_rate_absent": 0.5714,
+            "neighbour_false_positive_rate": 1.0
+          },
+          "inflammation": {
+            "n_positive_profiles": 1,
+            "recall_at_3": 1.0,
+            "false_positive_rate_absent": 0.0714,
+            "neighbour_false_positive_rate": 0.0
+          },
+          "electrolyte_imbalance": {
+            "n_positive_profiles": 1,
+            "recall_at_3": 1.0,
+            "false_positive_rate_absent": 0.4286,
+            "neighbour_false_positive_rate": 0.0
+          },
+          "vitamin_d_deficiency": {
+            "n_positive_profiles": 1,
+            "recall_at_3": 0.0,
+            "false_positive_rate_absent": 0.0,
+            "neighbour_false_positive_rate": 0.0
+          }
+        }
+      },
+      "medgemma_only": {
+        "n_profiles": 15,
+        "n_labeled": 12,
+        "n_healthy": 3,
+        "parse_success_rate": 1.0,
+        "recall_at_3": 0.1667,
+        "healthy_over_alert_rate": 1.0,
+        "mean_false_positive_rate_absent": 0.1964,
+        "mean_neighbour_false_positive_rate": 0.25,
+        "per_condition": {
+          "perimenopause": {
+            "n_positive_profiles": 1,
+            "recall_at_3": 0.0,
+            "false_positive_rate_absent": 0.7143,
+            "neighbour_false_positive_rate": 1.0
+          },
+          "hypothyroidism": {
+            "n_positive_profiles": 1,
+            "recall_at_3": 0.0,
+            "false_positive_rate_absent": 0.0,
+            "neighbour_false_positive_rate": 0.0
+          },
+          "kidney_disease": {
+            "n_positive_profiles": 1,
+            "recall_at_3": 0.0,
+            "false_positive_rate_absent": 0.0,
+            "neighbour_false_positive_rate": 0.0
+          },
+          "sleep_disorder": {
+            "n_positive_profiles": 1,
+            "recall_at_3": 1.0,
+            "false_positive_rate_absent": 0.7857,
+            "neighbour_false_positive_rate": 1.0
+          },
+          "anemia": {
+            "n_positive_profiles": 1,
+            "recall_at_3": 0.0,
+            "false_positive_rate_absent": 0.0,
+            "neighbour_false_positive_rate": 0.0
+          },
+          "iron_deficiency": {
+            "n_positive_profiles": 1,
+            "recall_at_3": 1.0,
+            "false_positive_rate_absent": 0.8571,
+            "neighbour_false_positive_rate": 1.0
+          },
+          "hepatitis": {
+            "n_positive_profiles": 1,
+            "recall_at_3": 0.0,
+            "false_positive_rate_absent": 0.0,
+            "neighbour_false_positive_rate": 0.0
+          },
+          "liver": {
+            "n_positive_profiles": 1,
+            "recall_at_3": 0.0,
+            "false_positive_rate_absent": 0.0,
+            "neighbour_false_positive_rate": 0.0
+          },
+          "prediabetes": {
+            "n_positive_profiles": 1,
+            "recall_at_3": 0.0,
+            "false_positive_rate_absent": 0.0,
+            "neighbour_false_positive_rate": 0.0
+          },
+          "inflammation": {
+            "n_positive_profiles": 1,
+            "recall_at_3": 0.0,
+            "false_positive_rate_absent": 0.0,
+            "neighbour_false_positive_rate": 0.0
+          },
+          "electrolyte_imbalance": {
+            "n_positive_profiles": 1,
+            "recall_at_3": 0.0,
+            "false_positive_rate_absent": 0.0,
+            "neighbour_false_positive_rate": 0.0
+          },
+          "vitamin_d_deficiency": {
+            "n_positive_profiles": 1,
+            "recall_at_3": 0.0,
+            "false_positive_rate_absent": 0.0,
+            "neighbour_false_positive_rate": 0.0
+          }
+        }
+      },
+      "hybrid_top5": {
+        "n_profiles": 15,
+        "n_labeled": 12,
+        "n_healthy": 3,
+        "parse_success_rate": 0.7333,
+        "recall_at_3": 0.0833,
+        "healthy_over_alert_rate": 1.0,
+        "mean_false_positive_rate_absent": 0.0714,
+        "mean_neighbour_false_positive_rate": 0.0278,
+        "per_condition": {
+          "perimenopause": {
+            "n_positive_profiles": 1,
+            "recall_at_3": 0.0,
+            "false_positive_rate_absent": 0.0714,
+            "neighbour_false_positive_rate": 0.0
+          },
+          "hypothyroidism": {
+            "n_positive_profiles": 1,
+            "recall_at_3": 0.0,
+            "false_positive_rate_absent": 0.0,
+            "neighbour_false_positive_rate": 0.0
+          },
+          "kidney_disease": {
+            "n_positive_profiles": 1,
+            "recall_at_3": 0.0,
+            "false_positive_rate_absent": 0.0,
+            "neighbour_false_positive_rate": 0.0
+          },
+          "sleep_disorder": {
+            "n_positive_profiles": 1,
+            "recall_at_3": 0.0,
+            "false_positive_rate_absent": 0.5714,
+            "neighbour_false_positive_rate": 0.3333
+          },
+          "anemia": {
+            "n_positive_profiles": 1,
+            "recall_at_3": 0.0,
+            "false_positive_rate_absent": 0.0714,
+            "neighbour_false_positive_rate": 0.0
+          },
+          "iron_deficiency": {
+            "n_positive_profiles": 1,
+            "recall_at_3": 0.0,
+            "false_positive_rate_absent": 0.0,
+            "neighbour_false_positive_rate": 0.0
+          },
+          "hepatitis": {
+            "n_positive_profiles": 1,
+            "recall_at_3": 1.0,
+            "false_positive_rate_absent": 0.0,
+            "neighbour_false_positive_rate": 0.0
+          },
+          "liver": {
+            "n_positive_profiles": 1,
+            "recall_at_3": 0.0,
+            "false_positive_rate_absent": 0.0,
+            "neighbour_false_positive_rate": 0.0
+          },
+          "prediabetes": {
+            "n_positive_profiles": 1,
+            "recall_at_3": 0.0,
+            "false_positive_rate_absent": 0.0714,
+            "neighbour_false_positive_rate": 0.0
+          },
+          "inflammation": {
+            "n_positive_profiles": 1,
+            "recall_at_3": 0.0,
+            "false_positive_rate_absent": 0.0714,
+            "neighbour_false_positive_rate": 0.0
+          },
+          "electrolyte_imbalance": {
+            "n_positive_profiles": 1,
+            "recall_at_3": 0.0,
+            "false_positive_rate_absent": 0.0,
+            "neighbour_false_positive_rate": 0.0
+          },
+          "vitamin_d_deficiency": {
+            "n_positive_profiles": 1,
+            "recall_at_3": 0.0,
+            "false_positive_rate_absent": 0.0,
+            "neighbour_false_positive_rate": 0.0
+          }
+        }
+      }
+    },
+    "recommendations": {
+      "perimenopause": {
+        "recommendation": "maybe",
+        "reason": "Signal is mixed; inspect examples before changing the pipeline."
+      },
+      "hypothyroidism": {
+        "recommendation": "maybe",
+        "reason": "Signal is mixed; inspect examples before changing the pipeline."
+      },
+      "kidney_disease": {
+        "recommendation": "maybe",
+        "reason": "Signal is mixed; inspect examples before changing the pipeline."
+      },
+      "sleep_disorder": {
+        "recommendation": "maybe",
+        "reason": "Signal is mixed; inspect examples before changing the pipeline."
+      },
+      "anemia": {
+        "recommendation": "maybe",
+        "reason": "Signal is mixed; inspect examples before changing the pipeline."
+      },
+      "iron_deficiency": {
+        "recommendation": "skip_candidate",
+        "reason": "MedGemma-only already performs better and the condition model does not recover the gap."
+      },
+      "hepatitis": {
+        "recommendation": "keep",
+        "reason": "Hybrid adds clear recall@3 lift without a large neighbour-FP penalty."
+      },
+      "liver": {
+        "recommendation": "maybe",
+        "reason": "Signal is mixed; inspect examples before changing the pipeline."
+      },
+      "prediabetes": {
+        "recommendation": "maybe",
+        "reason": "Signal is mixed; inspect examples before changing the pipeline."
+      },
+      "inflammation": {
+        "recommendation": "maybe",
+        "reason": "Signal is mixed; inspect examples before changing the pipeline."
+      },
+      "electrolyte_imbalance": {
+        "recommendation": "maybe",
+        "reason": "Signal is mixed; inspect examples before changing the pipeline."
+      },
+      "vitamin_d_deficiency": {
+        "recommendation": "maybe",
+        "reason": "Signal is mixed; inspect examples before changing the pipeline."
+      }
+    }
+  },
+  "sample_profile_ids": [
+    "NHANES-D-40652",
+    "NHANES-C-26260",
+    "NHANES-D-34687",
+    "NHANES-C-26684",
+    "NHANES-C-30371",
+    "NHANES-D-39005",
+    "NHANES-D-41288",
+    "NHANES-D-38725",
+    "NHANES-D-38181",
+    "NHANES-C-27120",
+    "NHANES-D-31254",
+    "NHANES-C-28451",
+    "NHANES-C-21592",
+    "NHANES-C-22809",
+    "NHANES-C-27574"
+  ],
+  "results_by_arm": {
+    "models_only": [
+      {
+        "profile_id": "NHANES-D-40652",
+        "profile_type": "positive",
+        "target_condition": "anemia",
+        "expected_conditions": [
+          "anemia"
+        ],
+        "model_scores_all12": {
+          "sleep_disorder": 0.4416,
+          "anemia": 0.2935,
+          "prediabetes": 0.2355,
+          "electrolyte_imbalance": 0.2042,
+          "iron_deficiency": 0.0966,
+          "inflammation": 0.092,
+          "kidney_disease": 0.0608,
+          "hypothyroidism": 0.0147,
+          "liver": 0.008,
+          "hepatitis": 0.0046,
+          "perimenopause": 0.0
+        },
+        "model_top5": {
+          "sleep_disorder": 0.4416,
+          "anemia": 0.2935,
+          "prediabetes": 0.2355,
+          "electrolyte_imbalance": 0.2042,
+          "iron_deficiency": 0.0966
+        },
+        "parse_success": true,
+        "top3_predictions": [
+          "sleep_disorder",
+          "anemia",
+          "prediabetes"
+        ],
+        "flagged_conditions": [],
+        "response": null,
+        "http_status": null,
+        "error": null
+      },
+      {
+        "profile_id": "NHANES-C-26260",
+        "profile_type": "positive",
+        "target_condition": "kidney_disease",
+        "expected_conditions": [
+          "kidney_disease"
+        ],
+        "model_scores_all12": {
+          "hypothyroidism": 0.7375,
+          "sleep_disorder": 0.5912,
+          "prediabetes": 0.41,
+          "kidney_disease": 0.3775,
+          "electrolyte_imbalance": 0.3557,
+          "inflammation": 0.2692,
+          "iron_deficiency": 0.0519,
+          "anemia": 0.0348,
+          "liver": 0.0215,
+          "hepatitis": 0.0145,
+          "perimenopause": 0.0
+        },
+        "model_top5": {
+          "hypothyroidism": 0.7375,
+          "sleep_disorder": 0.5912,
+          "prediabetes": 0.41,
+          "kidney_disease": 0.3775,
+          "electrolyte_imbalance": 0.3557
+        },
+        "parse_success": true,
+        "top3_predictions": [
+          "hypothyroidism",
+          "sleep_disorder",
+          "prediabetes"
+        ],
+        "flagged_conditions": [
+          "hypothyroidism",
+          "kidney_disease"
+        ],
+        "response": null,
+        "http_status": null,
+        "error": null
+      },
+      {
+        "profile_id": "NHANES-D-34687",
+        "profile_type": "positive",
+        "target_condition": "prediabetes",
+        "expected_conditions": [
+          "prediabetes"
+        ],
+        "model_scores_all12": {
+          "sleep_disorder": 0.5508,
+          "anemia": 0.4701,
+          "hypothyroidism": 0.4142,
+          "electrolyte_imbalance": 0.3979,
+          "prediabetes": 0.3733,
+          "inflammation": 0.3652,
+          "kidney_disease": 0.1138,
+          "iron_deficiency": 0.1077,
+          "liver": 0.0126,
+          "hepatitis": 0.0049,
+          "perimenopause": 0.0
+        },
+        "model_top5": {
+          "sleep_disorder": 0.5508,
+          "anemia": 0.4701,
+          "hypothyroidism": 0.4142,
+          "electrolyte_imbalance": 0.3979,
+          "prediabetes": 0.3733
+        },
+        "parse_success": true,
+        "top3_predictions": [
+          "sleep_disorder",
+          "anemia",
+          "hypothyroidism"
+        ],
+        "flagged_conditions": [],
+        "response": null,
+        "http_status": null,
+        "error": null
+      },
+      {
+        "profile_id": "NHANES-C-26684",
+        "profile_type": "healthy",
+        "target_condition": null,
+        "expected_conditions": [],
+        "model_scores_all12": {
+          "sleep_disorder": 0.5872,
+          "inflammation": 0.4717,
+          "prediabetes": 0.3269,
+          "electrolyte_imbalance": 0.2963,
+          "hypothyroidism": 0.278,
+          "kidney_disease": 0.144,
+          "iron_deficiency": 0.0966,
+          "anemia": 0.0451,
+          "liver": 0.0187,
+          "hepatitis": 0.0145,
+          "perimenopause": 0.0
+        },
+        "model_top5": {
+          "sleep_disorder": 0.5872,
+          "inflammation": 0.4717,
+          "prediabetes": 0.3269,
+          "electrolyte_imbalance": 0.2963,
+          "hypothyroidism": 0.278
+        },
+        "parse_success": true,
+        "top3_predictions": [
+          "sleep_disorder",
+          "inflammation",
+          "prediabetes"
+        ],
+        "flagged_conditions": [
+          "inflammation"
+        ],
+        "response": null,
+        "http_status": null,
+        "error": null
+      },
+      {
+        "profile_id": "NHANES-C-30371",
+        "profile_type": "positive",
+        "target_condition": "hypothyroidism",
+        "expected_conditions": [
+          "hypothyroidism"
+        ],
+        "model_scores_all12": {
+          "hypothyroidism": 0.9213,
+          "sleep_disorder": 0.6501,
+          "electrolyte_imbalance": 0.5338,
+          "prediabetes": 0.4677,
+          "kidney_disease": 0.4043,
+          "anemia": 0.1947,
+          "inflammation": 0.1466,
+          "liver": 0.0188,
+          "iron_deficiency": 0.017,
+          "hepatitis": 0.0169,
+          "perimenopause": 0.0
+        },
+        "model_top5": {
+          "hypothyroidism": 0.9213,
+          "sleep_disorder": 0.6501,
+          "electrolyte_imbalance": 0.5338,
+          "prediabetes": 0.4677,
+          "kidney_disease": 0.4043
+        },
+        "parse_success": true,
+        "top3_predictions": [
+          "hypothyroidism",
+          "sleep_disorder",
+          "electrolyte_imbalance"
+        ],
+        "flagged_conditions": [
+          "hypothyroidism",
+          "electrolyte_imbalance",
+          "prediabetes",
+          "kidney_disease"
+        ],
+        "response": null,
+        "http_status": null,
+        "error": null
+      },
+      {
+        "profile_id": "NHANES-D-39005",
+        "profile_type": "positive",
+        "target_condition": "inflammation",
+        "expected_conditions": [
+          "inflammation"
+        ],
+        "model_scores_all12": {
+          "sleep_disorder": 0.4034,
+          "prediabetes": 0.2709,
+          "inflammation": 0.2223,
+          "electrolyte_imbalance": 0.2166,
+          "anemia": 0.1093,
+          "iron_deficiency": 0.0966,
+          "kidney_disease": 0.0633,
+          "hypothyroidism": 0.0267,
+          "liver": 0.008,
+          "hepatitis": 0.0046,
+          "perimenopause": 0.0
+        },
+        "model_top5": {
+          "sleep_disorder": 0.4034,
+          "prediabetes": 0.2709,
+          "inflammation": 0.2223,
+          "electrolyte_imbalance": 0.2166,
+          "anemia": 0.1093
+        },
+        "parse_success": true,
+        "top3_predictions": [
+          "sleep_disorder",
+          "prediabetes",
+          "inflammation"
+        ],
+        "flagged_conditions": [],
+        "response": null,
+        "http_status": null,
+        "error": null
+      },
+      {
+        "profile_id": "NHANES-D-41288",
+        "profile_type": "healthy",
+        "target_condition": null,
+        "expected_conditions": [],
+        "model_scores_all12": {
+          "anemia": 0.543,
+          "sleep_disorder": 0.4497,
+          "electrolyte_imbalance": 0.3344,
+          "prediabetes": 0.3088,
+          "inflammation": 0.2935,
+          "iron_deficiency": 0.0966,
+          "hypothyroidism": 0.0652,
+          "kidney_disease": 0.0596,
+          "liver": 0.0064,
+          "hepatitis": 0.0046,
+          "perimenopause": 0.0
+        },
+        "model_top5": {
+          "anemia": 0.543,
+          "sleep_disorder": 0.4497,
+          "electrolyte_imbalance": 0.3344,
+          "prediabetes": 0.3088,
+          "inflammation": 0.2935
+        },
+        "parse_success": true,
+        "top3_predictions": [
+          "anemia",
+          "sleep_disorder",
+          "electrolyte_imbalance"
+        ],
+        "flagged_conditions": [],
+        "response": null,
+        "http_status": null,
+        "error": null
+      },
+      {
+        "profile_id": "NHANES-D-38725",
+        "profile_type": "positive",
+        "target_condition": "sleep_disorder",
+        "expected_conditions": [
+          "sleep_disorder"
+        ],
+        "model_scores_all12": {
+          "hypothyroidism": 0.8003,
+          "sleep_disorder": 0.656,
+          "prediabetes": 0.4032,
+          "electrolyte_imbalance": 0.4,
+          "kidney_disease": 0.3858,
+          "inflammation": 0.2821,
+          "hepatitis": 0.0819,
+          "iron_deficiency": 0.0425,
+          "liver": 0.0369,
+          "anemia": 0.0193,
+          "perimenopause": 0.0
+        },
+        "model_top5": {
+          "hypothyroidism": 0.8003,
+          "sleep_disorder": 0.656,
+          "prediabetes": 0.4032,
+          "electrolyte_imbalance": 0.4,
+          "kidney_disease": 0.3858
+        },
+        "parse_success": true,
+        "top3_predictions": [
+          "hypothyroidism",
+          "sleep_disorder",
+          "prediabetes"
+        ],
+        "flagged_conditions": [
+          "hypothyroidism",
+          "kidney_disease"
+        ],
+        "response": null,
+        "http_status": null,
+        "error": null
+      },
+      {
+        "profile_id": "NHANES-D-38181",
+        "profile_type": "positive",
+        "target_condition": "liver",
+        "expected_conditions": [
+          "liver"
+        ],
+        "model_scores_all12": {
+          "sleep_disorder": 0.5605,
+          "prediabetes": 0.3379,
+          "electrolyte_imbalance": 0.251,
+          "hypothyroidism": 0.1763,
+          "anemia": 0.1175,
+          "kidney_disease": 0.1098,
+          "inflammation": 0.1086,
+          "iron_deficiency": 0.0966,
+          "liver": 0.0126,
+          "hepatitis": 0.0046,
+          "perimenopause": 0.0
+        },
+        "model_top5": {
+          "sleep_disorder": 0.5605,
+          "prediabetes": 0.3379,
+          "electrolyte_imbalance": 0.251,
+          "hypothyroidism": 0.1763,
+          "anemia": 0.1175
+        },
+        "parse_success": true,
+        "top3_predictions": [
+          "sleep_disorder",
+          "prediabetes",
+          "electrolyte_imbalance"
+        ],
+        "flagged_conditions": [],
+        "response": null,
+        "http_status": null,
+        "error": null
+      },
+      {
+        "profile_id": "NHANES-C-27120",
+        "profile_type": "positive",
+        "target_condition": "vitamin_d_deficiency",
+        "expected_conditions": [
+          "vitamin_d_deficiency"
+        ],
+        "model_scores_all12": {
+          "anemia": 0.5934,
+          "sleep_disorder": 0.4225,
+          "electrolyte_imbalance": 0.3371,
+          "prediabetes": 0.2897,
+          "inflammation": 0.1593,
+          "iron_deficiency": 0.0966,
+          "hypothyroidism": 0.0486,
+          "kidney_disease": 0.0441,
+          "liver": 0.0064,
+          "hepatitis": 0.0046,
+          "perimenopause": 0.0
+        },
+        "model_top5": {
+          "anemia": 0.5934,
+          "sleep_disorder": 0.4225,
+          "electrolyte_imbalance": 0.3371,
+          "prediabetes": 0.2897,
+          "inflammation": 0.1593
+        },
+        "parse_success": true,
+        "top3_predictions": [
+          "anemia",
+          "sleep_disorder",
+          "electrolyte_imbalance"
+        ],
+        "flagged_conditions": [],
+        "response": null,
+        "http_status": null,
+        "error": null
+      },
+      {
+        "profile_id": "NHANES-D-31254",
+        "profile_type": "positive",
+        "target_condition": "electrolyte_imbalance",
+        "expected_conditions": [
+          "electrolyte_imbalance"
+        ],
+        "model_scores_all12": {
+          "sleep_disorder": 0.4945,
+          "prediabetes": 0.3137,
+          "electrolyte_imbalance": 0.2822,
+          "hypothyroidism": 0.1935,
+          "inflammation": 0.1319,
+          "kidney_disease": 0.109,
+          "iron_deficiency": 0.0966,
+          "anemia": 0.096,
+          "liver": 0.0132,
+          "hepatitis": 0.0046,
+          "perimenopause": 0.0
+        },
+        "model_top5": {
+          "sleep_disorder": 0.4945,
+          "prediabetes": 0.3137,
+          "electrolyte_imbalance": 0.2822,
+          "hypothyroidism": 0.1935,
+          "inflammation": 0.1319
+        },
+        "parse_success": true,
+        "top3_predictions": [
+          "sleep_disorder",
+          "prediabetes",
+          "electrolyte_imbalance"
+        ],
+        "flagged_conditions": [],
+        "response": null,
+        "http_status": null,
+        "error": null
+      },
+      {
+        "profile_id": "NHANES-C-28451",
+        "profile_type": "healthy",
+        "target_condition": null,
+        "expected_conditions": [],
+        "model_scores_all12": {
+          "sleep_disorder": 0.3975,
+          "prediabetes": 0.2669,
+          "electrolyte_imbalance": 0.2328,
+          "anemia": 0.1161,
+          "inflammation": 0.1024,
+          "iron_deficiency": 0.0966,
+          "kidney_disease": 0.0593,
+          "hypothyroidism": 0.0287,
+          "liver": 0.008,
+          "hepatitis": 0.0046,
+          "perimenopause": 0.0
+        },
+        "model_top5": {
+          "sleep_disorder": 0.3975,
+          "prediabetes": 0.2669,
+          "electrolyte_imbalance": 0.2328,
+          "anemia": 0.1161,
+          "inflammation": 0.1024
+        },
+        "parse_success": true,
+        "top3_predictions": [
+          "sleep_disorder",
+          "prediabetes",
+          "electrolyte_imbalance"
+        ],
+        "flagged_conditions": [],
+        "response": null,
+        "http_status": null,
+        "error": null
+      },
+      {
+        "profile_id": "NHANES-C-21592",
+        "profile_type": "positive",
+        "target_condition": "hepatitis",
+        "expected_conditions": [
+          "hepatitis"
+        ],
+        "model_scores_all12": {
+          "sleep_disorder": 0.5242,
+          "hepatitis": 0.5241,
+          "hypothyroidism": 0.4066,
+          "inflammation": 0.3676,
+          "prediabetes": 0.3521,
+          "electrolyte_imbalance": 0.3208,
+          "liver": 0.2409,
+          "kidney_disease": 0.2023,
+          "anemia": 0.0702,
+          "iron_deficiency": 0.0661,
+          "perimenopause": 0.0
+        },
+        "model_top5": {
+          "sleep_disorder": 0.5242,
+          "hepatitis": 0.5241,
+          "hypothyroidism": 0.4066,
+          "inflammation": 0.3676,
+          "prediabetes": 0.3521
+        },
+        "parse_success": true,
+        "top3_predictions": [
+          "sleep_disorder",
+          "hepatitis",
+          "hypothyroidism"
+        ],
+        "flagged_conditions": [
+          "hepatitis",
+          "liver"
+        ],
+        "response": null,
+        "http_status": null,
+        "error": null
+      },
+      {
+        "profile_id": "NHANES-C-22809",
+        "profile_type": "positive",
+        "target_condition": "iron_deficiency",
+        "expected_conditions": [
+          "iron_deficiency"
+        ],
+        "model_scores_all12": {
+          "perimenopause": 0.6144,
+          "hypothyroidism": 0.5322,
+          "sleep_disorder": 0.5318,
+          "prediabetes": 0.5069,
+          "electrolyte_imbalance": 0.4324,
+          "anemia": 0.4185,
+          "inflammation": 0.3175,
+          "iron_deficiency": 0.2568,
+          "kidney_disease": 0.1367,
+          "liver": 0.0163,
+          "hepatitis": 0.0049
+        },
+        "model_top5": {
+          "perimenopause": 0.6144,
+          "hypothyroidism": 0.5322,
+          "sleep_disorder": 0.5318,
+          "prediabetes": 0.5069,
+          "electrolyte_imbalance": 0.4324
+        },
+        "parse_success": true,
+        "top3_predictions": [
+          "perimenopause",
+          "hypothyroidism",
+          "sleep_disorder"
+        ],
+        "flagged_conditions": [
+          "perimenopause",
+          "prediabetes",
+          "iron_deficiency"
+        ],
+        "response": null,
+        "http_status": null,
+        "error": null
+      },
+      {
+        "profile_id": "NHANES-C-27574",
+        "profile_type": "positive",
+        "target_condition": "perimenopause",
+        "expected_conditions": [
+          "perimenopause"
+        ],
+        "model_scores_all12": {
+          "hypothyroidism": 0.9372,
+          "sleep_disorder": 0.6556,
+          "electrolyte_imbalance": 0.5575,
+          "prediabetes": 0.4727,
+          "kidney_disease": 0.4215,
+          "anemia": 0.1914,
+          "inflammation": 0.081,
+          "liver": 0.0188,
+          "iron_deficiency": 0.017,
+          "hepatitis": 0.0145,
+          "perimenopause": 0.0
+        },
+        "model_top5": {
+          "hypothyroidism": 0.9372,
+          "sleep_disorder": 0.6556,
+          "electrolyte_imbalance": 0.5575,
+          "prediabetes": 0.4727,
+          "kidney_disease": 0.4215
+        },
+        "parse_success": true,
+        "top3_predictions": [
+          "hypothyroidism",
+          "sleep_disorder",
+          "electrolyte_imbalance"
+        ],
+        "flagged_conditions": [
+          "hypothyroidism",
+          "electrolyte_imbalance",
+          "prediabetes",
+          "kidney_disease"
+        ],
+        "response": null,
+        "http_status": null,
+        "error": null
+      }
+    ],
+    "medgemma_only": [
+      {
+        "profile_id": "NHANES-D-40652",
+        "profile_type": "positive",
+        "target_condition": "anemia",
+        "expected_conditions": [
+          "anemia"
+        ],
+        "model_scores_all12": {
+          "sleep_disorder": 0.4416,
+          "anemia": 0.2935,
+          "prediabetes": 0.2355,
+          "electrolyte_imbalance": 0.2042,
+          "iron_deficiency": 0.0966,
+          "inflammation": 0.092,
+          "kidney_disease": 0.0608,
+          "hypothyroidism": 0.0147,
+          "liver": 0.008,
+          "hepatitis": 0.0046,
+          "perimenopause": 0.0
+        },
+        "model_top5": {
+          "sleep_disorder": 0.4416,
+          "anemia": 0.2935,
+          "prediabetes": 0.2355,
+          "electrolyte_imbalance": 0.2042,
+          "iron_deficiency": 0.0966
+        },
+        "parse_success": true,
+        "top3_predictions": [
+          "iron_deficiency",
+          "sleep_disorder",
+          "perimenopause"
+        ],
+        "flagged_conditions": [
+          "iron_deficiency",
+          "sleep_disorder",
+          "perimenopause"
+        ],
+        "response": {
+          "personalizedSummary": "You've shared some concerns about fatigue, snoring, and irregular periods. It's worth exploring these symptoms further with your doctor.",
+          "summaryPoints": [
+            "Feeling tired or having little energy",
+            "Taking multiple prescription medications",
+            "Experiencing irregular periods"
+          ],
+          "insights": [
+            {
+              "diagnosisId": "iron_deficiency",
+              "personalNote": "Your fatigue and medication history may be related to iron deficiency anemia. It's a possibility worth discussing with your doctor."
+            },
+            {
+              "diagnosisId": "sleep_disorder",
+              "personalNote": "Your fatigue and snoring may be symptoms of a sleep disorder. Your doctor can help determine the cause."
+            },
+            {
+              "diagnosisId": "perimenopause",
+              "personalNote": "Your fatigue and irregular periods may be related to perimenopause. Discuss this with your doctor to determine the best course of action."
+            }
+          ],
+          "recoveryOutlook": "Recovery depends on the underlying cause and your treatment plan. It's essential to work closely with your doctor.",
+          "nextSteps": "Schedule an appointment with your primary care physician to discuss your symptoms and potential causes. Bring a list of your medications and any relevant medical history.",
+          "doctorKitSummary": "I'd like to discuss your fatigue and irregular periods with your doctor and determine the best course of action.",
+          "doctorKitQuestions": [],
+          "doctorKitArguments": [],
+          "recommendedDoctors": [
+            {
+              "specialty": "Primary Care Physician",
+              "priority": "High",
+              "reason": "To discuss your symptoms and potential causes.",
+              "symptomsToDiscuss": [
+                "Fatigue",
+                "Irregular periods"
+              ],
+              "suggestedTests": [
+                "Complete Blood Count (CBC) with iron studies"
+              ]
+            }
+          ],
+          "doctorKits": [
+            {
+              "specialty": "Primary Care Physician",
+              "openingSummary": "I'd like to discuss your fatigue and irregular periods with your doctor and determine the best course of action.",
+              "concerningSymptoms": [
+                "Fatigue",
+                "Irregular periods"
+              ],
+              "recommendedTests": [
+                "Complete Blood Count (CBC) with iron studies"
+              ],
+              "discussionPoints": [
+                "Potential causes of fatigue and irregular periods"
+              ],
+              "bringToAppointment": [
+                "List of medications",
+                "Medical history"
+              ],
+              "whatToSay": "I'd like to discuss my fatigue and irregular periods with my doctor and determine the best course of action."
+            }
+          ],
+          "allClear": false,
+          "declinedSuspicions": [
+            {
+              "diagnosisId": "hypothyroidism",
+              "reason": "This signal was reviewed but was not strong enough to prioritize after the full evidence check."
+            },
+            {
+              "diagnosisId": "kidney_disease",
+              "reason": "This signal was reviewed but was not strong enough to prioritize after the full evidence check."
+            },
+            {
+              "diagnosisId": "anemia",
+              "reason": "This signal was reviewed but was not strong enough to prioritize after the full evidence check."
+            },
+            {
+              "diagnosisId": "hepatitis",
+              "reason": "This signal was reviewed but was not strong enough to prioritize after the full evidence check."
+            },
+            {
+              "diagnosisId": "liver",
+              "reason": "This signal was reviewed but was not strong enough to prioritize after the full evidence check."
+            },
+            {
+              "diagnosisId": "prediabetes",
+              "reason": "This signal was reviewed but was not strong enough to prioritise after the full evidence check."
+            },
+            {
+              "diagnosisId": "inflammation",
+              "reason": "This signal was reviewed but was not strong enough to prioritise after the full evidence check."
+            },
+            {
+              "diagnosisId": "electrolyte_imbalance",
+              "reason": "This signal was reviewed but was not strong enough to prioritise after the full evidence check."
+            },
+            {
+              "diagnosisId": "vitamin_d_deficiency",
+              "reason": "This signal was reviewed but was not strong enough to prioritise after the full evidence check."
+            }
+          ]
+        },
+        "http_status": 200,
+        "error": null
+      },
+      {
+        "profile_id": "NHANES-C-26260",
+        "profile_type": "positive",
+        "target_condition": "kidney_disease",
+        "expected_conditions": [
+          "kidney_disease"
+        ],
+        "model_scores_all12": {
+          "hypothyroidism": 0.7375,
+          "sleep_disorder": 0.5912,
+          "prediabetes": 0.41,
+          "kidney_disease": 0.3775,
+          "electrolyte_imbalance": 0.3557,
+          "inflammation": 0.2692,
+          "iron_deficiency": 0.0519,
+          "anemia": 0.0348,
+          "liver": 0.0215,
+          "hepatitis": 0.0145,
+          "perimenopause": 0.0
+        },
+        "model_top5": {
+          "hypothyroidism": 0.7375,
+          "sleep_disorder": 0.5912,
+          "prediabetes": 0.41,
+          "kidney_disease": 0.3775,
+          "electrolyte_imbalance": 0.3557
+        },
+        "parse_success": true,
+        "top3_predictions": [],
+        "flagged_conditions": [],
+        "response": {
+          "personalizedSummary": "We're exploring possible explanations for your fatigue, muscle weakness, difficulty sleeping, and weight loss. Let's discuss some potential causes and next steps.",
+          "summaryPoints": [
+            "Fatigue and muscle weakness persist",
+            "Difficulty sleeping at night reported",
+            "Weight loss noticed recently"
+          ],
+          "insights": [],
+          "recoveryOutlook": "With proper care, you may see improvement in your symptoms over time.",
+          "nextSteps": "Schedule an appointment with a specialist to discuss your symptoms and develop a plan.",
+          "doctorKitSummary": "As your doctor, I want to assure you that we're taking a thorough approach to understanding your symptoms.",
+          "doctorKitQuestions": [],
+          "doctorKitArguments": [],
+          "recommendedDoctors": [
+            {
+              "specialty": "copy",
+              "priority": "copy",
+              "reason": "We're considering this specialist to discuss your symptoms.",
+              "symptomsToDiscuss": [
+                "copy"
+              ],
+              "suggestedTests": [
+                "copy"
+              ]
+            }
+          ],
+          "doctorKits": [
+            {
+              "specialty": "copy",
+              "openingSummary": "I'd like to discuss your symptoms and concerns with you.",
+              "concerningSymptoms": [
+                "copy"
+              ],
+              "recommendedTests": [
+                "copy"
+              ],
+              "discussionPoints": [
+                "Let's discuss your symptoms and medical history."
+              ],
+              "bringToAppointment": [
+                "practical items"
+              ],
+              "whatToSay": "I'd like to discuss your symptoms and concerns with you."
+            }
+          ],
+          "allClear": false,
+          "declinedSuspicions": [
+            {
+              "diagnosisId": "perimenopause",
+              "reason": "This possibility was reviewed but didn't seem strong enough to prioritize after our full review."
+            },
+            {
+              "diagnosisId": "hypothyroidism",
+              "reason": "This possibility was reviewed but didn't seem strong enough to prioritize after our full review."
+            },
+            {
+              "diagnosisId": "kidney_disease",
+              "reason": "This possibility was reviewed but didn't seem strong enough to prioritize after our full review."
+            },
+            {
+              "diagnosisId": "sleep_disorder",
+              "reason": "This possibility was reviewed but didn't seem strong enough to prioritize after our full review."
+            },
+            {
+              "diagnosisId": "anemia",
+              "reason": "This possibility was reviewed but didn't seem strong enough to prioritize after our full review."
+            },
+            {
+              "diagnosisId": "iron_deficiency",
+              "reason": "This possibility was reviewed but didn't seem strong enough to prioritize after our full review."
+            },
+            {
+              "diagnosisId": "hepatitis",
+              "reason": "This possibility was reviewed but didn't seem strong enough to prioritize after our full review."
+            },
+            {
+              "diagnosisId": "liver",
+              "reason": "This possibility was reviewed but didn't seem strong enough to prioritize after our full review."
+            },
+            {
+              "diagnosisId": "prediabetes",
+              "reason": "This signal was reviewed but was not strong enough to prioritise after the full evidence check."
+            },
+            {
+              "diagnosisId": "inflammation",
+              "reason": "This signal was reviewed but was not strong enough to prioritise after the full evidence check."
+            },
+            {
+              "diagnosisId": "electrolyte_imbalance",
+              "reason": "This signal was reviewed but was not strong enough to prioritise after the full evidence check."
+            },
+            {
+              "diagnosisId": "vitamin_d_deficiency",
+              "reason": "This signal was reviewed but was not strong enough to prioritise after the full evidence check."
+            }
+          ]
+        },
+        "http_status": 200,
+        "error": null
+      },
+      {
+        "profile_id": "NHANES-D-34687",
+        "profile_type": "positive",
+        "target_condition": "prediabetes",
+        "expected_conditions": [
+          "prediabetes"
+        ],
+        "model_scores_all12": {
+          "sleep_disorder": 0.5508,
+          "anemia": 0.4701,
+          "hypothyroidism": 0.4142,
+          "electrolyte_imbalance": 0.3979,
+          "prediabetes": 0.3733,
+          "inflammation": 0.3652,
+          "kidney_disease": 0.1138,
+          "iron_deficiency": 0.1077,
+          "liver": 0.0126,
+          "hepatitis": 0.0049,
+          "perimenopause": 0.0
+        },
+        "model_top5": {
+          "sleep_disorder": 0.5508,
+          "anemia": 0.4701,
+          "hypothyroidism": 0.4142,
+          "electrolyte_imbalance": 0.3979,
+          "prediabetes": 0.3733
+        },
+        "parse_success": true,
+        "top3_predictions": [
+          "iron_deficiency",
+          "sleep_disorder",
+          "perimenopause"
+        ],
+        "flagged_conditions": [
+          "iron_deficiency",
+          "sleep_disorder",
+          "perimenopause"
+        ],
+        "response": {
+          "personalizedSummary": "You've reported feeling tired or having little energy several days per week. This may be related to your sleeping patterns or other factors. Below, you'll find some possible causes and suggestions for your next steps.",
+          "summaryPoints": [
+            "Feeling tired or having little energy (Several days)",
+            "Feeling tired or having little energy",
+            "Fatigue several days per week"
+          ],
+          "insights": [
+            {
+              "diagnosisId": "iron_deficiency",
+              "personalNote": "Your questionnaire response may suggest iron deficiency anemia as a possible cause of your fatigue. It's worth discussing this further with your doctor."
+            },
+            {
+              "diagnosisId": "sleep_disorder",
+              "personalNote": "Your fatigue could be related to an underlying sleep disorder, such as sleep apnea. Your doctor will need to discuss this further with you."
+            },
+            {
+              "diagnosisId": "perimenopause",
+              "personalNote": "Given your age and sex, perimenopause may be a possible cause of your fatigue. However, your doctor will need to discuss this further with you."
+            }
+          ],
+          "recoveryOutlook": "With proper diagnosis and treatment, you may be able to manage your symptoms and improve your quality of life.",
+          "nextSteps": "Schedule an appointment with your primary care physician to discuss your symptoms and potential causes. Be prepared to discuss your sleeping patterns and any other relevant factors.",
+          "doctorKitSummary": "I'm here to help you understand your symptoms and potential causes. I'll work with you to develop a plan to manage your fatigue and improve your overall health.",
+          "doctorKitQuestions": [],
+          "doctorKitArguments": [],
+          "recommendedDoctors": [
+            {
+              "specialty": "Primary Care Physician",
+              "priority": "High",
+              "reason": "To discuss your symptoms and potential causes of fatigue.",
+              "symptomsToDiscuss": [
+                "Fatigue",
+                "Sleeping patterns"
+              ],
+              "suggestedTests": [
+                "Complete Blood Count (CBC) including ferritin and iron studies",
+                "Polysomnography (sleep study)"
+              ]
+            }
+          ],
+          "doctorKits": [
+            {
+              "specialty": "Primary Care Physician",
+              "openingSummary": "I'm here to help you understand your symptoms and potential causes of fatigue. I'll work with you to develop a plan to manage your fatigue and improve your overall health.",
+              "concerningSymptoms": [
+                "Fatigue",
+                "Sleeping patterns"
+              ],
+              "recommendedTests": [
+                "Complete Blood Count (CBC) including ferritin and iron studies",
+                "Polysomnography (sleep study)"
+              ],
+              "discussionPoints": [
+                "Fatigue and sleeping patterns",
+                "Potential causes of fatigue"
+              ],
+              "bringToAppointment": [
+                "Questionnaire responses",
+                "Sleep diary"
+              ],
+              "whatToSay": "I've been experiencing fatigue and sleeping patterns that may be disrupted. I'm concerned about the potential causes of my fatigue and would like to discuss this further with you."
+            }
+          ],
+          "allClear": false,
+          "declinedSuspicions": [
+            {
+              "diagnosisId": "hypothyroidism",
+              "reason": "This signal was reviewed but was not strong enough to prioritize after the full evidence check."
+            },
+            {
+              "diagnosisId": "kidney_disease",
+              "reason": "This signal was reviewed but was not strong enough to prioritize after the full evidence check."
+            },
+            {
+              "diagnosisId": "anemia",
+              "reason": "This signal was reviewed but was not strong enough to prioritize after the full evidence check."
+            },
+            {
+              "diagnosisId": "hepatitis",
+              "reason": "This signal was reviewed but was not strong enough to prioritize after the full evidence check."
+            },
+            {
+              "diagnosisId": "liver",
+              "reason": "This signal was reviewed but was not strong enough to prioritize after the full evidence check."
+            },
+            {
+              "diagnosisId": "prediabetes",
+              "reason": "This signal was reviewed but was not strong enough to prioritise after the full evidence check."
+            },
+            {
+              "diagnosisId": "inflammation",
+              "reason": "This signal was reviewed but was not strong enough to prioritise after the full evidence check."
+            },
+            {
+              "diagnosisId": "electrolyte_imbalance",
+              "reason": "This signal was reviewed but was not strong enough to prioritise after the full evidence check."
+            },
+            {
+              "diagnosisId": "vitamin_d_deficiency",
+              "reason": "This signal was reviewed but was not strong enough to prioritise after the full evidence check."
+            }
+          ]
+        },
+        "http_status": 200,
+        "error": null
+      },
+      {
+        "profile_id": "NHANES-C-26684",
+        "profile_type": "healthy",
+        "target_condition": null,
+        "expected_conditions": [],
+        "model_scores_all12": {
+          "sleep_disorder": 0.5872,
+          "inflammation": 0.4717,
+          "prediabetes": 0.3269,
+          "electrolyte_imbalance": 0.2963,
+          "hypothyroidism": 0.278,
+          "kidney_disease": 0.144,
+          "iron_deficiency": 0.0966,
+          "anemia": 0.0451,
+          "liver": 0.0187,
+          "hepatitis": 0.0145,
+          "perimenopause": 0.0
+        },
+        "model_top5": {
+          "sleep_disorder": 0.5872,
+          "inflammation": 0.4717,
+          "prediabetes": 0.3269,
+          "electrolyte_imbalance": 0.2963,
+          "hypothyroidism": 0.278
+        },
+        "parse_success": true,
+        "top3_predictions": [
+          "iron_deficiency",
+          "sleep_disorder",
+          "perimenopause"
+        ],
+        "flagged_conditions": [
+          "iron_deficiency",
+          "sleep_disorder",
+          "perimenopause"
+        ],
+        "response": {
+          "personalizedSummary": "Your symptoms of fatigue, desire to weigh less, and occasional snoring may be connected. It's worth discussing these with your doctor to explore possible causes.",
+          "summaryPoints": [
+            "Feeling tired or having little energy",
+            "Desire to weigh less",
+            "Snoring occasionally"
+          ],
+          "insights": [
+            {
+              "diagnosisId": "iron_deficiency",
+              "personalNote": "Fatigue and desire to weigh less are common symptoms associated with iron deficiency anemia. However, this is just one possible explanation."
+            },
+            {
+              "diagnosisId": "sleep_disorder",
+              "personalNote": "Fatigue and snoring are common symptoms associated with sleep disorders. There may be other factors at play as well."
+            },
+            {
+              "diagnosisId": "perimenopause",
+              "personalNote": "Your age and irregular periods may suggest perimenopause, but other causes of irregular periods exist. It's essential to discuss this with your doctor."
+            }
+          ],
+          "recoveryOutlook": "Recovery is possible with proper diagnosis and treatment. It's essential to address the underlying cause of your symptoms.",
+          "nextSteps": "Schedule an appointment with a primary care physician or a specialist. Be prepared to discuss your symptoms and medical history.",
+          "doctorKitSummary": "I'm here to support you in understanding your symptoms and exploring possible causes. I'll help you prepare for your appointment and discuss your concerns with your doctor.",
+          "doctorKitQuestions": [],
+          "doctorKitArguments": [],
+          "recommendedDoctors": [
+            {
+              "specialty": "Primary Care Physician or Specialist",
+              "priority": "High",
+              "reason": "To discuss your symptoms and medical history and determine the best course of action.",
+              "symptomsToDiscuss": [
+                "Feeling tired or having little energy",
+                "Desire to weigh less",
+                "Snoring occasionally"
+              ],
+              "suggestedTests": [
+                "Complete Blood Count (CBC) including ferritin and iron studies",
+                "Sleep study (polysomnography)"
+              ]
+            }
+          ],
+          "doctorKits": [
+            {
+              "specialty": "Primary Care Physician or Specialist",
+              "openingSummary": "I'm here to support you in understanding your symptoms and exploring possible causes. I'll help you prepare for your appointment and discuss your concerns with your doctor.",
+              "concerningSymptoms": [
+                "Feeling tired or having little energy",
+                "Desire to weigh less",
+                "Snoring 0.5 times per night"
+              ],
+              "recommendedTests": [
+                "Complete Blood Count (CBC) including ferritin and iron studies",
+                "Sleep study (polysomnography)"
+              ],
+              "discussionPoints": [
+                "Fatigue and desire to weigh less may be related to iron deficiency anemia, but this is just one possible explanation.",
+                "Fatigue and snoring are common symptoms associated with sleep disorders, but other factors may be at play.",
+                "Your age and irregular periods may suggest perimenopause, but other causes of irregular periods exist."
+              ],
+              "bringToAppointment": [
+                "A list of your symptoms and when they started",
+                "Any relevant medical history or test results"
+              ],
+              "whatToSay": "I'm concerned about my symptoms and would like to discuss them with my doctor. I've been experiencing fatigue, a desire to weigh less, and occasional snoring."
+            }
+          ],
+          "allClear": false,
+          "declinedSuspicions": [
+            {
+              "diagnosisId": "hypothyroidism",
+              "reason": "This signal was reviewed but was not strong enough to prioritize after the full evidence check."
+            },
+            {
+              "diagnosisId": "kidney_disease",
+              "reason": "This signal was reviewed but was not strong enough to prioritize after the full evidence check."
+            },
+            {
+              "diagnosisId": "anemia",
+              "reason": "This signal was reviewed but was not strong enough to prioritize after the full evidence check."
+            },
+            {
+              "diagnosisId": "hepatitis",
+              "reason": "This signal was reviewed but was not strong enough to prioritize after the full evidence check."
+            },
+            {
+              "diagnosisId": "liver",
+              "reason": "This signal was reviewed but was not strong enough to prioritize after the full evidence check."
+            },
+            {
+              "diagnosisId": "prediabetes",
+              "reason": "This signal was reviewed but was not strong enough to prioritise after the full evidence check."
+            },
+            {
+              "diagnosisId": "inflammation",
+              "reason": "This signal was reviewed but was not strong enough to prioritise after the full evidence check."
+            },
+            {
+              "diagnosisId": "electrolyte_imbalance",
+              "reason": "This signal was reviewed but was not strong enough to prioritise after the full evidence check."
+            },
+            {
+              "diagnosisId": "vitamin_d_deficiency",
+              "reason": "This signal was reviewed but was not strong enough to prioritise after the full evidence check."
+            }
+          ]
+        },
+        "http_status": 200,
+        "error": null
+      },
+      {
+        "profile_id": "NHANES-C-30371",
+        "profile_type": "positive",
+        "target_condition": "hypothyroidism",
+        "expected_conditions": [
+          "hypothyroidism"
+        ],
+        "model_scores_all12": {
+          "hypothyroidism": 0.9213,
+          "sleep_disorder": 0.6501,
+          "electrolyte_imbalance": 0.5338,
+          "prediabetes": 0.4677,
+          "kidney_disease": 0.4043,
+          "anemia": 0.1947,
+          "inflammation": 0.1466,
+          "liver": 0.0188,
+          "iron_deficiency": 0.017,
+          "hepatitis": 0.0169,
+          "perimenopause": 0.0
+        },
+        "model_top5": {
+          "hypothyroidism": 0.9213,
+          "sleep_disorder": 0.6501,
+          "electrolyte_imbalance": 0.5338,
+          "prediabetes": 0.4677,
+          "kidney_disease": 0.4043
+        },
+        "parse_success": true,
+        "top3_predictions": [
+          "iron_deficiency",
+          "sleep_disorder",
+          "perimenopause"
+        ],
+        "flagged_conditions": [
+          "iron_deficiency",
+          "sleep_disorder",
+          "perimenopause"
+        ],
+        "response": {
+          "personalizedSummary": "Your fatigue and snoring may be connected. It's worth discussing these symptoms with your doctor to explore possible causes and develop a plan to address them.",
+          "summaryPoints": [
+            "Fatigue (0.9)",
+            "Snore (0.3)",
+            "Feeling tired or having little energy"
+          ],
+          "insights": [
+            {
+              "diagnosisId": "iron_deficiency",
+              "personalNote": "Based on your responses, this may be worth discussing with your GP."
+            },
+            {
+              "diagnosisId": "sleep_disorder",
+              "personalNote": "Your high fatigue score and snoring at night may suggest a sleep disorder, potentially obstructive sleep apnea. However, this is just a possibility and should be discussed with your doctor."
+            },
+            {
+              "diagnosisId": "perimenopause",
+              "personalNote": "Your age, sex, and irregular periods are consistent with perimenopause. However, this is just a possibility and should be discussed with your doctor."
+            }
+          ],
+          "recoveryOutlook": "With proper diagnosis and treatment, you may be able to feel better and improve your quality of life.",
+          "nextSteps": "Please schedule an appointment with a doctor to discuss your symptoms and test results. Be sure to bring a list of your medications and any relevant medical history.",
+          "doctorKitSummary": "As your doctor, I want to understand your symptoms and medical history to provide the best possible care. I'll also want to discuss your test results and create a personalized treatment plan.",
+          "doctorKitQuestions": [],
+          "doctorKitArguments": [],
+          "recommendedDoctors": [
+            {
+              "specialty": "Endocrinologist",
+              "priority": "High",
+              "reason": "They specialize in hormone-related disorders, which may be related to your symptoms.",
+              "symptomsToDiscuss": [
+                "Fatigue",
+                "Snoring"
+              ],
+              "suggestedTests": [
+                "Full Blood Count (FBC) including ferritin and iron saturation",
+                "Polysomnography (sleep study)"
+              ]
+            },
+            {
+              "specialty": "Gynecologist",
+              "priority": "Medium",
+              "reason": "They specialize in women's health and can help with irregular periods.",
+              "symptomsToDiscuss": [
+                "Irregular periods"
+              ],
+              "suggestedTests": []
+            }
+          ],
+          "doctorKits": [
+            {
+              "specialty": "Endocrinologist",
+              "openingSummary": "As your endocrinologist, I want to understand your symptoms and medical history to provide the best possible care. I'll also want to discuss your test results and create a personalized treatment plan.",
+              "concerningSymptoms": [
+                "Fatigue",
+                "Snoring"
+              ],
+              "recommendedTests": [
+                "Full Blood Count (FBC) including ferritin and iron saturation",
+                "Polysomnography (sleep study)"
+              ],
+              "discussionPoints": [
+                "Hormone-related disorders",
+                "Sleep apnea"
+              ],
+              "bringToAppointment": [
+                "List of medications",
+                "Medical history"
+              ],
+              "whatToSay": "I've been experiencing fatigue and snoring at night, and I'm concerned about my hormone levels and sleep quality."
+            },
+            {
+              "specialty": "Gynecologist",
+              "openingSummary": "As your gynecologist, I want to understand your symptoms and medical history to provide the best possible care. I'll also want to discuss your test results and create a personalized treatment plan.",
+              "concerningSymptoms": [
+                "Irregular periods"
+              ],
+              "recommendedTests": [],
+              "discussionPoints": [
+                "Irregular periods"
+              ],
+              "bringToAppointment": [
+                "List of medications",
+                "Medical history"
+              ],
+              "whatToSay": "I've been experiencing irregular periods, and I'm concerned about my reproductive health."
+            }
+          ],
+          "allClear": false,
+          "declinedSuspicions": [
+            {
+              "diagnosisId": "hypothyroidism",
+              "reason": "This signal was reviewed but was not strong enough to prioritize after the full evidence check."
+            },
+            {
+              "diagnosisId": "kidney_disease",
+              "reason": "This signal was reviewed but was not strong enough to prioritize after the full evidence check."
+            },
+            {
+              "diagnosisId": "anemia",
+              "reason": "This signal was reviewed but was not strong enough to prioritize after the full evidence check."
+            },
+            {
+              "diagnosisId": "hepatitis",
+              "reason": "This signal was reviewed but was not strong enough to prioritize after the full evidence check."
+            },
+            {
+              "diagnosisId": "liver",
+              "reason": "This signal was reviewed but was not strong enough to prioritize after the full evidence check."
+            },
+            {
+              "diagnosisId": "prediabetes",
+              "reason": "This signal was reviewed but was not strong enough to prioritise after the full evidence check."
+            },
+            {
+              "diagnosisId": "inflammation",
+              "reason": "This signal was reviewed but was not strong enough to prioritise after the full evidence check."
+            },
+            {
+              "diagnosisId": "electrolyte_imbalance",
+              "reason": "This signal was reviewed but was not strong enough to prioritise after the full evidence check."
+            },
+            {
+              "diagnosisId": "vitamin_d_deficiency",
+              "reason": "This signal was reviewed but was not strong enough to prioritise after the full evidence check."
+            }
+          ]
+        },
+        "http_status": 200,
+        "error": null
+      },
+      {
+        "profile_id": "NHANES-D-39005",
+        "profile_type": "positive",
+        "target_condition": "inflammation",
+        "expected_conditions": [
+          "inflammation"
+        ],
+        "model_scores_all12": {
+          "sleep_disorder": 0.4034,
+          "prediabetes": 0.2709,
+          "inflammation": 0.2223,
+          "electrolyte_imbalance": 0.2166,
+          "anemia": 0.1093,
+          "iron_deficiency": 0.0966,
+          "kidney_disease": 0.0633,
+          "hypothyroidism": 0.0267,
+          "liver": 0.008,
+          "hepatitis": 0.0046,
+          "perimenopause": 0.0
+        },
+        "model_top5": {
+          "sleep_disorder": 0.4034,
+          "prediabetes": 0.2709,
+          "inflammation": 0.2223,
+          "electrolyte_imbalance": 0.2166,
+          "anemia": 0.1093
+        },
+        "parse_success": true,
+        "top3_predictions": [
+          "iron_deficiency",
+          "sleep_disorder",
+          "perimenopause"
+        ],
+        "flagged_conditions": [
+          "iron_deficiency",
+          "sleep_disorder",
+          "perimenopause"
+        ],
+        "response": {
+          "personalizedSummary": "Your fatigue and low weight may be connected to several factors. It's worth discussing these with your doctor to determine the best course of action.",
+          "summaryPoints": [
+            "Feeling tired or having little energy",
+            "Low weight and irregular periods",
+            "Never snoring at night"
+          ],
+          "insights": [
+            {
+              "diagnosisId": "iron_deficiency",
+              "personalNote": "Your fatigue and low weight may suggest a potential iron deficiency anemia. Discussing your diet and iron levels with your doctor could be helpful."
+            },
+            {
+              "diagnosisId": "sleep_disorder",
+              "personalNote": "Your lack of snoring and fatigue may suggest a potential sleep disorder. Your doctor may recommend a sleep study to rule out obstructive sleep apnea."
+            },
+            {
+              "diagnosisId": "perimenopause",
+              "personalNote": "Your irregular periods and age make perimenopause a possible cause. However, this is less likely, and your doctor will need to discuss your menstrual history and hormone levels further."
+            }
+          ],
+          "recoveryOutlook": "With proper treatment and lifestyle changes, you may be able to manage your symptoms and improve your overall health.",
+          "nextSteps": "Schedule an appointment with your primary care physician to discuss your symptoms and potential causes. Be prepared to discuss your medical history, diet, and lifestyle.",
+          "doctorKitSummary": "I'd like to discuss potential causes of your fatigue and low weight with you.",
+          "doctorKitQuestions": [],
+          "doctorKitArguments": [],
+          "recommendedDoctors": [
+            {
+              "specialty": "Primary Care Physician",
+              "priority": "High",
+              "reason": "Your primary care physician can evaluate your overall health and discuss potential causes of your symptoms.",
+              "symptomsToDiscuss": [
+                "Fatigue",
+                "Low weight",
+                "Irregular periods"
+              ],
+              "suggestedTests": [
+                "Complete Blood Count (CBC) including ferritin and iron studies",
+                "Polysomnography (sleep study)",
+                "Clinical assessment including menstrual history and potentially hormone levels"
+              ]
+            }
+          ],
+          "doctorKits": [
+            {
+              "specialty": "Primary Care Physician",
+              "openingSummary": "I'd like to discuss potential causes of your fatigue and low weight with you.",
+              "concerningSymptoms": [
+                "Fatigue",
+                "Low weight",
+                "Irregular periods"
+              ],
+              "recommendedTests": [
+                "Complete Blood Count (CBC) including ferritin and iron studies",
+                "Polysomnography (sleep study)",
+                "Clinical assessment including menstrual history and potentially hormone levels"
+              ],
+              "discussionPoints": [
+                "Potential causes of fatigue and low weight",
+                "Importance of regular periods",
+                "Sleep quality and potential sleep disorders"
+              ],
+              "bringToAppointment": [
+                "Medical history",
+                "Dietary information",
+                "Lifestyle habits"
+              ],
+              "whatToSay": "I'd like to discuss potential causes of my fatigue and low weight with you."
+            }
+          ],
+          "allClear": false,
+          "declinedSuspicions": [
+            {
+              "diagnosisId": "hypothyroidism",
+              "reason": "This signal was reviewed but was not strong enough to prioritize after the full evidence check."
+            },
+            {
+              "diagnosisId": "kidney_disease",
+              "reason": "This signal was reviewed but was not strong enough to prioritize after the full evidence check."
+            },
+            {
+              "diagnosisId": "anemia",
+              "reason": "This signal was reviewed but was not strong enough to prioritize after the full evidence check."
+            },
+            {
+              "diagnosisId": "hepatitis",
+              "reason": "This signal was reviewed but was not strong enough to prioritize after the full evidence check."
+            },
+            {
+              "diagnosisId": "liver",
+              "reason": "This signal was reviewed but was not strong enough to prioritize after the full evidence check."
+            },
+            {
+              "diagnosisId": "prediabetes",
+              "reason": "This signal was reviewed but was not strong enough to prioritise after the full evidence check."
+            },
+            {
+              "diagnosisId": "inflammation",
+              "reason": "This signal was reviewed but was not strong enough to prioritise after the full evidence check."
+            },
+            {
+              "diagnosisId": "electrolyte_imbalance",
+              "reason": "This signal was reviewed but was not strong enough to prioritise after the full evidence check."
+            },
+            {
+              "diagnosisId": "vitamin_d_deficiency",
+              "reason": "This signal was reviewed but was not strong enough to prioritise after the full evidence check."
+            }
+          ]
+        },
+        "http_status": 200,
+        "error": null
+      },
+      {
+        "profile_id": "NHANES-D-41288",
+        "profile_type": "healthy",
+        "target_condition": null,
+        "expected_conditions": [],
+        "model_scores_all12": {
+          "anemia": 0.543,
+          "sleep_disorder": 0.4497,
+          "electrolyte_imbalance": 0.3344,
+          "prediabetes": 0.3088,
+          "inflammation": 0.2935,
+          "iron_deficiency": 0.0966,
+          "hypothyroidism": 0.0652,
+          "kidney_disease": 0.0596,
+          "liver": 0.0064,
+          "hepatitis": 0.0046,
+          "perimenopause": 0.0
+        },
+        "model_top5": {
+          "anemia": 0.543,
+          "sleep_disorder": 0.4497,
+          "electrolyte_imbalance": 0.3344,
+          "prediabetes": 0.3088,
+          "inflammation": 0.2935
+        },
+        "parse_success": true,
+        "top3_predictions": [
+          "iron_deficiency",
+          "sleep_disorder"
+        ],
+        "flagged_conditions": [
+          "iron_deficiency",
+          "sleep_disorder"
+        ],
+        "response": {
+          "personalizedSummary": "Your fatigue may be connected to your desire to weigh less and not snoring while sleeping. It's worth discussing these symptoms with your doctor to explore possible causes. Below, you can see some potential hypotheses and suggestions for your visit.",
+          "summaryPoints": [
+            "Desire to weigh less",
+            "Not snoring while sleeping",
+            "Feeling tired or having little energy"
+          ],
+          "insights": [
+            {
+              "diagnosisId": "iron_deficiency",
+              "personalNote": "Iron deficiency anemia is a possible cause of fatigue and weight loss."
+            },
+            {
+              "diagnosisId": "sleep_disorder",
+              "personalNote": "A sleep disorder, potentially obstructive sleep apnea, could be contributing to your fatigue and lack of snoring."
+            }
+          ],
+          "recoveryOutlook": "Based on your responses, this may be worth discussing with your GP.",
+          "nextSteps": "You may want to schedule an appointment with a primary care physician or a specialist, such as a hematologist or a pulmonologist, to discuss your symptoms and potential causes.",
+          "doctorKitSummary": "As your doctor, I would like to discuss your fatigue, desire to weigh less, and lack of snoring. I would also like to review your medical history and perform a physical examination to help identify potential causes.",
+          "doctorKitQuestions": [],
+          "doctorKitArguments": [],
+          "recommendedDoctors": [
+            {
+              "specialty": "Hematologist",
+              "priority": "High",
+              "reason": "To evaluate and treat potential iron deficiency anemia.",
+              "symptomsToDiscuss": [
+                "Feeling tired or having little energy",
+                "Desire to weigh less"
+              ],
+              "suggestedTests": [
+                "Complete Blood Count (CBC) with iron studies (ferritin, serum iron, TIBC, transferrin saturation)"
+              ]
+            },
+            {
+              "specialty": "Pulmonologist",
+              "priority": "Medium",
+              "reason": "To evaluate and treat potential sleep disorders.",
+              "symptomsToDiscuss": [
+                "Feeling tired or having little energy",
+                "Not snoring while sleeping"
+              ],
+              "suggestedTests": [
+                "Polysomnography (sleep study)"
+              ]
+            }
+          ],
+          "doctorKits": [
+            {
+              "specialty": "Hematologist",
+              "openingSummary": "As your hematologist, I would like to discuss your fatigue and desire to weigh less. I would also like to review your medical history and perform a physical examination to help identify potential causes.",
+              "concerningSymptoms": [
+                "Feeling tired or having little energy",
+                "Wanting to weigh less"
+              ],
+              "recommendedTests": [
+                "Complete Blood Count (CBC) with iron studies (ferritin, serum iron, TIBC, transferrin saturation)"
+              ],
+              "discussionPoints": [
+                "Symptoms and medical history",
+                "Physical examination and laboratory results"
+              ],
+              "bringToAppointment": [
+                "List of medications and supplements",
+                "Medical history and family medical history"
+              ],
+              "whatToSay": "I would like to discuss my fatigue and desire to weigh less with you, and I am concerned about potential iron deficiency anemia."
+            },
+            {
+              "specialty": "Pulmonologist",
+              "openingSummary": "As your pulmonologist, I would like to discuss your fatigue and lack of snoring. I would also like to review your medical history and perform a physical examination to help identify potential causes.",
+              "concerningSymptoms": [
+                "Feeling tired or having little energy",
+                "Never snoring while sleeping"
+              ],
+              "recommendedTests": [
+                "Polysomnography (sleep study)"
+              ],
+              "discussionPoints": [
+                "Symptoms and medical history",
+                "Physical examination and laboratory results"
+              ],
+              "bringToAppointment": [
+                "List of medications and supplements",
+                "Medical history and family medical history"
+              ],
+              "whatToSay": "I would like to discuss my fatigue and lack of snoring with you, and I am concerned about a potential sleep disorder."
+            }
+          ],
+          "allClear": false,
+          "declinedSuspicions": [
+            {
+              "diagnosisId": "perimenopause",
+              "reason": "This signal was reviewed but was not strong enough to prioritise after the full evidence check."
+            },
+            {
+              "diagnosisId": "hypothyroidism",
+              "reason": "This signal was reviewed but was not strong enough to prioritise after the full evidence check."
+            },
+            {
+              "diagnosisId": "kidney_disease",
+              "reason": "This signal was reviewed but was not strong enough to prioritise after the full evidence check."
+            },
+            {
+              "diagnosisId": "anemia",
+              "reason": "This signal was reviewed but was not strong enough to prioritise after the full evidence check."
+            },
+            {
+              "diagnosisId": "hepatitis",
+              "reason": "This signal was reviewed but was not strong enough to prioritise after the full evidence check."
+            },
+            {
+              "diagnosisId": "liver",
+              "reason": "This signal was reviewed but was not strong enough to prioritise after the full evidence check."
+            },
+            {
+              "diagnosisId": "prediabetes",
+              "reason": "This signal was reviewed but was not strong enough to prioritise after the full evidence check."
+            },
+            {
+              "diagnosisId": "inflammation",
+              "reason": "This signal was reviewed but was not strong enough to prioritise after the full evidence check."
+            },
+            {
+              "diagnosisId": "electrolyte_imbalance",
+              "reason": "This signal was reviewed but was not strong enough to prioritise after the full evidence check."
+            },
+            {
+              "diagnosisId": "vitamin_d_deficiency",
+              "reason": "This signal was reviewed but was not strong enough to prioritise after the full evidence check."
+            }
+          ]
+        },
+        "http_status": 200,
+        "error": null
+      },
+      {
+        "profile_id": "NHANES-D-38725",
+        "profile_type": "positive",
+        "target_condition": "sleep_disorder",
+        "expected_conditions": [
+          "sleep_disorder"
+        ],
+        "model_scores_all12": {
+          "hypothyroidism": 0.8003,
+          "sleep_disorder": 0.656,
+          "prediabetes": 0.4032,
+          "electrolyte_imbalance": 0.4,
+          "kidney_disease": 0.3858,
+          "inflammation": 0.2821,
+          "hepatitis": 0.0819,
+          "iron_deficiency": 0.0425,
+          "liver": 0.0369,
+          "anemia": 0.0193,
+          "perimenopause": 0.0
+        },
+        "model_top5": {
+          "hypothyroidism": 0.8003,
+          "sleep_disorder": 0.656,
+          "prediabetes": 0.4032,
+          "electrolyte_imbalance": 0.4,
+          "kidney_disease": 0.3858
+        },
+        "parse_success": true,
+        "top3_predictions": [
+          "iron_deficiency",
+          "sleep_disorder",
+          "perimenopause"
+        ],
+        "flagged_conditions": [
+          "iron_deficiency",
+          "sleep_disorder",
+          "perimenopause"
+        ],
+        "response": {
+          "personalizedSummary": "You've reported experiencing fatigue, snoring, and irregular periods. These symptoms may be worth discussing with your doctor to explore potential underlying causes.",
+          "summaryPoints": [
+            "Questionnaire answer: iron_deficiency (About You) - Answer: 1.7",
+            "Questionnaire answer: rhq031___had_regular_periods_in_past_12_months (Women's Health) - Answer: No",
+            "You experience fatigue and tiredness often"
+          ],
+          "insights": [
+            {
+              "diagnosisId": "iron_deficiency",
+              "personalNote": "Your fatigue score is elevated, and iron deficiency is a possibility worth discussing with your doctor."
+            },
+            {
+              "diagnosisId": "sleep_disorder",
+              "personalNote": "You report snoring frequently, which could be a symptom of a sleep disorder."
+            },
+            {
+              "diagnosisId": "perimenopause",
+              "personalNote": "You report irregular periods, which may be a symptom of perimenopause, especially given your age."
+            }
+          ],
+          "recoveryOutlook": "With proper diagnosis and treatment, you may be able to manage your symptoms and improve your quality of life.",
+          "nextSteps": "Schedule appointments with the recommended doctors to discuss your symptoms and test results.",
+          "doctorKitSummary": "I'm here to help you understand your symptoms and guide you through the diagnostic process. Please come prepared to discuss your experiences and any concerns you may have.",
+          "doctorKitQuestions": [],
+          "doctorKitArguments": [],
+          "recommendedDoctors": [
+            {
+              "specialty": "Hematology",
+              "priority": "High",
+              "reason": "To rule out iron deficiency anemia.",
+              "symptomsToDiscuss": [
+                "fatigue",
+                "tiredness"
+              ],
+              "suggestedTests": [
+                "Complete Blood Count (CBC) with iron studies"
+              ]
+            },
+            {
+              "specialty": "Sleep Medicine",
+              "priority": "High",
+              "reason": "To diagnose and treat sleep disorders.",
+              "symptomsToDiscuss": [
+                "snoring"
+              ],
+              "suggestedTests": [
+                "Polysomnography (sleep study)"
+              ]
+            },
+            {
+              "specialty": "Obstetrics and Gynecology",
+              "priority": "Medium",
+              "reason": "To assess menstrual irregularities and potential hormonal imbalances.",
+              "symptomsToDiscuss": [
+                "irregular periods"
+              ],
+              "suggestedTests": [
+                "Clinical assessment including menstrual history and potentially hormone levels"
+              ]
+            }
+          ],
+          "doctorKits": [
+            {
+              "specialty": "Hematology",
+              "openingSummary": "I'm here to help you understand your fatigue and tiredness. Please come prepared to discuss your experiences and any concerns you may have.",
+              "concerningSymptoms": [
+                "fatigue",
+                "tiredness"
+              ],
+              "recommendedTests": [
+                "Complete Blood Count (CBC) with iron studies"
+              ],
+              "discussionPoints": [
+                "iron deficiency anemia",
+                "fatigue management"
+              ],
+              "bringToAppointment": [
+                "lab results",
+                "questionnaire answers"
+              ],
+              "whatToSay": "I've been experiencing fatigue and tiredness often, and I'm concerned about my iron levels."
+            },
+            {
+              "specialty": "Sleep Medicine",
+              "openingSummary": "I'm here to help you understand your snoring and sleep quality. Please come prepared to discuss your experiences and any concerns you may have.",
+              "concerningSymptoms": [
+                "snoring"
+              ],
+              "recommendedTests": [
+                "Polysomnography (sleep study)"
+              ],
+              "discussionPoints": [
+                "sleep disorders",
+                "snoring management"
+              ],
+              "bringToAppointment": [
+                "sleep diary",
+                "questionnaire answers"
+              ],
+              "whatToSay": "I've been snoring frequently at night, and I'm concerned about my sleep quality."
+            },
+            {
+              "specialty": "Obstetrics and Gynecology",
+              "openingSummary": "I'm here to help you understand your menstrual irregularities and potential hormonal imbalances. Please come prepared to discuss your experiences and any concerns you may have.",
+              "concerningSymptoms": [
+                "irregular periods"
+              ],
+              "recommendedTests": [
+                "Clinical assessment including menstrual history and potentially hormone levels"
+              ],
+              "discussionPoints": [
+                "menstrual irregularities",
+                "hormonal imbalances"
+              ],
+              "bringToAppointment": [
+                "menstrual history",
+                "questionnaire answers"
+              ],
+              "whatToSay": "I've been experiencing irregular periods, and I'm concerned about my hormonal balance."
+            }
+          ],
+          "allClear": false,
+          "declinedSuspicions": [
+            {
+              "diagnosisId": "hypothyroidism",
+              "reason": "This signal was reviewed but was not strong enough to prioritize after the full evidence check."
+            },
+            {
+              "diagnosisId": "kidney_disease",
+              "reason": "This signal was reviewed but was not strong enough to prioritize after the full evidence check."
+            },
+            {
+              "diagnosisId": "anemia",
+              "reason": "This signal was reviewed but was not strong enough to prioritize after the full evidence check."
+            },
+            {
+              "diagnosisId": "hepatitis",
+              "reason": "This signal was reviewed but was not strong enough to prioritize after the full evidence check."
+            },
+            {
+              "diagnosisId": "liver",
+              "reason": "This signal was reviewed but was not strong enough to prioritize after the full evidence check."
+            },
+            {
+              "diagnosisId": "prediabetes",
+              "reason": "This signal was reviewed but was not strong enough to prioritise after the full evidence check."
+            },
+            {
+              "diagnosisId": "inflammation",
+              "reason": "This signal was reviewed but was not strong enough to prioritise after the full evidence check."
+            },
+            {
+              "diagnosisId": "electrolyte_imbalance",
+              "reason": "This signal was reviewed but was not strong enough to prioritise after the full evidence check."
+            },
+            {
+              "diagnosisId": "vitamin_d_deficiency",
+              "reason": "This signal was reviewed but was not strong enough to prioritise after the full evidence check."
+            }
+          ]
+        },
+        "http_status": 200,
+        "error": null
+      },
+      {
+        "profile_id": "NHANES-D-38181",
+        "profile_type": "positive",
+        "target_condition": "liver",
+        "expected_conditions": [
+          "liver"
+        ],
+        "model_scores_all12": {
+          "sleep_disorder": 0.5605,
+          "prediabetes": 0.3379,
+          "electrolyte_imbalance": 0.251,
+          "hypothyroidism": 0.1763,
+          "anemia": 0.1175,
+          "kidney_disease": 0.1098,
+          "inflammation": 0.1086,
+          "iron_deficiency": 0.0966,
+          "liver": 0.0126,
+          "hepatitis": 0.0046,
+          "perimenopause": 0.0
+        },
+        "model_top5": {
+          "sleep_disorder": 0.5605,
+          "prediabetes": 0.3379,
+          "electrolyte_imbalance": 0.251,
+          "hypothyroidism": 0.1763,
+          "anemia": 0.1175
+        },
+        "parse_success": true,
+        "top3_predictions": [
+          "iron_deficiency",
+          "sleep_disorder",
+          "perimenopause"
+        ],
+        "flagged_conditions": [
+          "iron_deficiency",
+          "sleep_disorder",
+          "perimenopause"
+        ],
+        "response": {
+          "personalizedSummary": "You've shared some symptoms that may be connected. It's worth discussing these with your doctor to explore possible causes. Below, you'll find some potential next steps and how to prepare for your visit.",
+          "summaryPoints": [
+            "Feeling tired or having little energy",
+            "Snoring (Rarely (1\u20132 nights a week))",
+            "Irregular periods in the past year"
+          ],
+          "insights": [
+            {
+              "diagnosisId": "iron_deficiency",
+              "personalNote": "Fatigue is a common symptom of iron deficiency anemia, and a full blood count can help determine if it's a possible cause."
+            },
+            {
+              "diagnosisId": "sleep_disorder",
+              "personalNote": "Snoring can be a symptom of obstructive sleep apnea or other sleep disorders, and a sleep study may help identify if it's a contributing factor."
+            },
+            {
+              "diagnosisId": "perimenopause",
+              "personalNote": "Irregular periods can be a symptom of perimenopause, and discussing menstrual history with a GP can help explore possible causes."
+            }
+          ],
+          "recoveryOutlook": "Recovery will depend on the underlying cause and treatment. With proper care, you can manage symptoms and improve your quality of life.",
+          "nextSteps": "Schedule appointments with a GP or specialist to discuss your symptoms and potential treatments. Be prepared to discuss your medical history and symptoms in detail.",
+          "doctorKitSummary": "As your doctor, I'll work with you to understand your symptoms and develop a treatment plan. I'll also help you prepare for any necessary tests or procedures.",
+          "doctorKitQuestions": [],
+          "doctorKitArguments": [],
+          "recommendedDoctors": [
+            {
+              "specialty": "GP or specialist",
+              "priority": "high",
+              "reason": "They can help explore possible causes and develop a treatment plan.",
+              "symptomsToDiscuss": [
+                "Feeling tired or having little energy",
+                "Snoring rarely (1\u20132 nights a week)",
+                "Irregular periods in the past year"
+              ],
+              "suggestedTests": [
+                "Full Blood Count (FBC)",
+                "Polysomnography (sleep study)",
+                "Hormone level testing"
+              ]
+            }
+          ],
+          "doctorKits": [
+            {
+              "specialty": "GP or specialist",
+              "openingSummary": "I'll work with you to understand your symptoms and develop a treatment plan. I'll also help you prepare for any necessary tests or procedures.",
+              "concerningSymptoms": [
+                "Feeling tired or having little energy",
+                "Snoring rarely (1\u20132 nights a week)",
+                "Irregular periods in the past year"
+              ],
+              "recommendedTests": [
+                "Full Blood Count (FBC)",
+                "Polysomnography (sleep study)",
+                "Hormone level testing"
+              ],
+              "discussionPoints": [
+                "Medical history",
+                "Symptom journal",
+                "Potential underlying causes"
+              ],
+              "bringToAppointment": [
+                "Medical history",
+                "Symptom journal"
+              ],
+              "whatToSay": "I'm concerned about my symptoms and want to work with you to develop a treatment plan. Can we discuss my medical history and potential underlying causes?"
+            }
+          ],
+          "allClear": false,
+          "declinedSuspicions": [
+            {
+              "diagnosisId": "hypothyroidism",
+              "reason": "This signal was reviewed but was not strong enough to prioritize after the full evidence check."
+            },
+            {
+              "diagnosisId": "kidney_disease",
+              "reason": "This signal was reviewed but was not strong enough to prioritize after the full evidence check."
+            },
+            {
+              "diagnosisId": "anemia",
+              "reason": "This signal was reviewed but was not strong enough to prioritize after the full evidence check."
+            },
+            {
+              "diagnosisId": "hepatitis",
+              "reason": "This signal was reviewed but was not strong enough to prioritize after the full evidence check."
+            },
+            {
+              "diagnosisId": "liver",
+              "reason": "This signal was reviewed but was not strong enough to prioritize after the full evidence check."
+            },
+            {
+              "diagnosisId": "prediabetes",
+              "reason": "This signal was reviewed but was not strong enough to prioritise after the full evidence check."
+            },
+            {
+              "diagnosisId": "inflammation",
+              "reason": "This signal was reviewed but was not strong enough to prioritise after the full evidence check."
+            },
+            {
+              "diagnosisId": "electrolyte_imbalance",
+              "reason": "This signal was reviewed but was not strong enough to prioritise after the full evidence check."
+            },
+            {
+              "diagnosisId": "vitamin_d_deficiency",
+              "reason": "This signal was reviewed but was not strong enough to prioritise after the full evidence check."
+            }
+          ]
+        },
+        "http_status": 200,
+        "error": null
+      },
+      {
+        "profile_id": "NHANES-C-27120",
+        "profile_type": "positive",
+        "target_condition": "vitamin_d_deficiency",
+        "expected_conditions": [
+          "vitamin_d_deficiency"
+        ],
+        "model_scores_all12": {
+          "anemia": 0.5934,
+          "sleep_disorder": 0.4225,
+          "electrolyte_imbalance": 0.3371,
+          "prediabetes": 0.2897,
+          "inflammation": 0.1593,
+          "iron_deficiency": 0.0966,
+          "hypothyroidism": 0.0486,
+          "kidney_disease": 0.0441,
+          "liver": 0.0064,
+          "hepatitis": 0.0046,
+          "perimenopause": 0.0
+        },
+        "model_top5": {
+          "anemia": 0.5934,
+          "sleep_disorder": 0.4225,
+          "electrolyte_imbalance": 0.3371,
+          "prediabetes": 0.2897,
+          "inflammation": 0.1593
+        },
+        "parse_success": true,
+        "top3_predictions": [
+          "iron_deficiency"
+        ],
+        "flagged_conditions": [
+          "iron_deficiency"
+        ],
+        "response": {
+          "personalizedSummary": "You've reported feeling tired or having little energy, which may be related to fatigue. This could be worth discussing with your doctor to explore possible causes.",
+          "summaryPoints": [
+            "Dpq040___feeling_tired_or_having_little_energy [dpq040___feeling_tired_or_having_little_energy] (About You) Answer: 0.3",
+            "Feeling tired or having little energy",
+            "Experiencing fatigue or exhaustion"
+          ],
+          "insights": [
+            {
+              "diagnosisId": "iron_deficiency",
+              "personalNote": "A full blood count test may be recommended to assess for anemia and iron deficiency. This could help identify any potential issues."
+            }
+          ],
+          "recoveryOutlook": "Recovery is possible with proper treatment and lifestyle changes, but it's best to discuss this with your doctor to determine the best course of action.",
+          "nextSteps": "Schedule a doctor's appointment to discuss your fatigue and get tested for anemia and iron deficiency. Your doctor can help determine the cause and develop a plan to address it.",
+          "doctorKitSummary": "I'd like to discuss your fatigue and explore possible causes, including anemia and iron deficiency. Let's review your symptoms and test results together.",
+          "doctorKitQuestions": [],
+          "doctorKitArguments": [],
+          "recommendedDoctors": [
+            {
+              "specialty": "Hematologist",
+              "priority": "High",
+              "reason": "They specialize in blood disorders and can assess for anemia and iron deficiency.",
+              "symptomsToDiscuss": [
+                "Fatigue",
+                "Lack of energy"
+              ],
+              "suggestedTests": [
+                "Full Blood Count (FBC)"
+              ]
+            }
+          ],
+          "doctorKits": [
+            {
+              "specialty": "Hematologist",
+              "openingSummary": "I'd like to discuss your fatigue and explore possible causes, including anemia and iron deficiency. Let's review your symptoms and test results together.",
+              "concerningSymptoms": [
+                "Fatigue",
+                "Lack of energy"
+              ],
+              "recommendedTests": [
+                "Full Blood Count (FBC)"
+              ],
+              "discussionPoints": [
+                "Your symptoms and medical history",
+                "The results of your tests"
+              ],
+              "bringToAppointment": [
+                "Your medical history",
+                "A list of your medications"
+              ],
+              "whatToSay": "I'd like to discuss my fatigue and explore possible causes, including anemia and iron deficiency. Let's review my symptoms and test results together."
+            }
+          ],
+          "allClear": false,
+          "declinedSuspicions": [
+            {
+              "diagnosisId": "perimenopause",
+              "reason": "This signal was reviewed but was not strong enough to prioritize after the full evidence check."
+            },
+            {
+              "diagnosisId": "hypothyroidism",
+              "reason": "This signal was reviewed but was not strong enough to prioritize after the full evidence check."
+            },
+            {
+              "diagnosisId": "kidney_disease",
+              "reason": "This signal was reviewed but was not strong enough to prioritize after the full evidence check."
+            },
+            {
+              "diagnosisId": "sleep_disorder",
+              "reason": "This signal was reviewed but was not strong enough to prioritize after the full evidence check."
+            },
+            {
+              "diagnosisId": "anemia",
+              "reason": "This signal was reviewed but was not strong enough to prioritize after the full evidence check."
+            },
+            {
+              "diagnosisId": "hepatitis",
+              "reason": "This signal was reviewed but was not strong enough to prioritize after the full evidence check."
+            },
+            {
+              "diagnosisId": "liver",
+              "reason": "This signal was reviewed but was not strong enough to prioritize after the full evidence check."
+            },
+            {
+              "diagnosisId": "prediabetes",
+              "reason": "This signal was reviewed but was not strong enough to prioritise after the full evidence check."
+            },
+            {
+              "diagnosisId": "inflammation",
+              "reason": "This signal was reviewed but was not strong enough to prioritise after the full evidence check."
+            },
+            {
+              "diagnosisId": "electrolyte_imbalance",
+              "reason": "This signal was reviewed but was not strong enough to prioritise after the full evidence check."
+            },
+            {
+              "diagnosisId": "vitamin_d_deficiency",
+              "reason": "This signal was reviewed but was not strong enough to prioritise after the full evidence check."
+            }
+          ]
+        },
+        "http_status": 200,
+        "error": null
+      },
+      {
+        "profile_id": "NHANES-D-31254",
+        "profile_type": "positive",
+        "target_condition": "electrolyte_imbalance",
+        "expected_conditions": [
+          "electrolyte_imbalance"
+        ],
+        "model_scores_all12": {
+          "sleep_disorder": 0.4945,
+          "prediabetes": 0.3137,
+          "electrolyte_imbalance": 0.2822,
+          "hypothyroidism": 0.1935,
+          "inflammation": 0.1319,
+          "kidney_disease": 0.109,
+          "iron_deficiency": 0.0966,
+          "anemia": 0.096,
+          "liver": 0.0132,
+          "hepatitis": 0.0046,
+          "perimenopause": 0.0
+        },
+        "model_top5": {
+          "sleep_disorder": 0.4945,
+          "prediabetes": 0.3137,
+          "electrolyte_imbalance": 0.2822,
+          "hypothyroidism": 0.1935,
+          "inflammation": 0.1319
+        },
+        "parse_success": true,
+        "top3_predictions": [
+          "iron_deficiency",
+          "sleep_disorder",
+          "perimenopause"
+        ],
+        "flagged_conditions": [
+          "iron_deficiency",
+          "sleep_disorder",
+          "perimenopause"
+        ],
+        "response": {
+          "personalizedSummary": "You've mentioned experiencing some concerning symptoms, including feeling tired or having little energy, snoring, and possibly irregular periods. It's worth discussing these with your doctor to understand what might be going on.",
+          "summaryPoints": [
+            "Snoring (slq030___how_often_do_you_snore?)",
+            "Feeling tired or having little energy (dpq040___feeling_tired_or_having_little_energy)",
+            "Periods not being regular in the past year (rhq031___had_regular_periods_in_past_12_months)"
+          ],
+          "insights": [
+            {
+              "diagnosisId": "iron_deficiency",
+              "personalNote": "Your low energy score combined with fatigue may suggest iron deficiency anemia. This is a common cause of anemia, but more testing would be needed to confirm."
+            },
+            {
+              "diagnosisId": "sleep_disorder",
+              "personalNote": "Your snoring frequency may indicate a potential sleep disorder, specifically obstructive sleep apnea, which can cause fatigue. However, more evaluation would be needed to confirm."
+            },
+            {
+              "diagnosisId": "perimenopause",
+              "personalNote": "While 30 is young for typical perimenopause, the reported irregularity of periods warrants consideration, especially given the fatigue. However, more testing would be needed to confirm."
+            }
+          ],
+          "recoveryOutlook": "Recovery depends on the underlying cause and treatment. It's essential to discuss your symptoms with a doctor to determine the best course of action.",
+          "nextSteps": "Schedule an appointment with a primary care physician or a specialist, such as a hematologist or a sleep specialist. Be prepared to discuss your symptoms and medical history.",
+          "doctorKitSummary": "As your doctor, I'll work with you to understand the root cause of your symptoms and develop a personalized treatment plan. I'll also help you prepare for any necessary tests or procedures.",
+          "doctorKitQuestions": [],
+          "doctorKitArguments": [],
+          "recommendedDoctors": [
+            {
+              "specialty": "Hematologist",
+              "priority": "High",
+              "reason": "To rule out iron deficiency anemia and other blood disorders.",
+              "symptomsToDiscuss": [
+                "Feeling tired or having little energy"
+              ],
+              "suggestedTests": [
+                "Full Blood Count (FBC) including haemoglobin, haematocrit, MCV, MCH, MCHC, ferritin, and iron saturation."
+              ]
+            },
+            {
+              "specialty": "Sleep Specialist",
+              "priority": "High",
+              "reason": "To evaluate and treat potential sleep disorders, such as obstructive sleep apnea.",
+              "symptomsToDiscuss": [
+                "Snoring or difficulty sleeping"
+              ],
+              "suggestedTests": [
+                "Polysomnography (sleep study)."
+              ]
+            },
+            {
+              "specialty": "Gynecologist",
+              "priority": "Medium",
+              "reason": "To discuss and evaluate potential hormonal imbalances or irregular periods.",
+              "symptomsToDiscuss": [
+                "Irregular periods or fatigue"
+              ],
+              "suggestedTests": [
+                "Consider discussing hormonal profile (e.g., FSH, LH)."
+              ]
+            }
+          ],
+          "doctorKits": [
+            {
+              "specialty": "Hematologist",
+              "openingSummary": "I'll work with you to understand the root cause of your fatigue and develop a personalized treatment plan. I'll also help you prepare for any necessary tests or procedures.",
+              "concerningSymptoms": [
+                "Feeling tired or having little energy"
+              ],
+              "recommendedTests": [
+                "Full Blood Count (FBC) including haemoglobin, haematocrit, MCV, MCH, MCHC, ferritin, and iron saturation."
+              ],
+              "discussionPoints": [
+                "Your symptoms, medical history, and any previous test results"
+              ],
+              "bringToAppointment": [
+                "Medical history, list of medications, and any relevant test results"
+              ],
+              "whatToSay": "I've been experiencing fatigue and was wondering if it could be related to iron deficiency anemia. I'd like to discuss my options for testing and treatment."
+            },
+            {
+              "specialty": "Sleep Specialist",
+              "openingSummary": "I'll work with you to evaluate and treat potential sleep disorders, such as obstructive sleep apnea. I'll also help you prepare for any necessary tests or procedures.",
+              "concerningSymptoms": [
+                "Snoring or difficulty sleeping"
+              ],
+              "recommendedTests": [
+                "Polysomnography (sleep study)."
+              ],
+              "discussionPoints": [
+                "Your symptoms, medical history, and any previous test results"
+              ],
+              "bringToAppointment": [
+                "Medical history, list of medications, and any relevant test results"
+              ],
+              "whatToSay": "I've been experiencing snoring and difficulty sleeping and was wondering if it could be related to a sleep disorder. I'd like to discuss my options for testing and treatment."
+            },
+            {
+              "specialty": "Gynecologist",
+              "openingSummary": "I'll work with you to discuss and evaluate potential hormonal imbalances or irregular periods. I'll also help you prepare for any necessary tests or procedures.",
+              "concerningSymptoms": [
+                "Irregular periods or fatigue"
+              ],
+              "recommendedTests": [
+                "Consider discussing hormonal profile (e.g., FSH, LH)."
+              ],
+              "discussionPoints": [
+                "Your symptoms, medical history, and any previous test results"
+              ],
+              "bringToAppointment": [
+                "Medical history, list of medications, and any relevant test results"
+              ],
+              "whatToSay": "I've been experiencing irregular periods and fatigue and was wondering if it could be related to hormonal imbalances. I'd like to discuss my options for testing and treatment."
+            }
+          ],
+          "allClear": false,
+          "declinedSuspicions": [
+            {
+              "diagnosisId": "hypothyroidism",
+              "reason": "This signal was reviewed but was not strong enough to prioritize after the full evidence check."
+            },
+            {
+              "diagnosisId": "kidney_disease",
+              "reason": "This signal was reviewed but was not strong enough to prioritize after the full evidence check."
+            },
+            {
+              "diagnosisId": "anemia",
+              "reason": "This signal was reviewed but was not strong enough to prioritize after the full evidence check."
+            },
+            {
+              "diagnosisId": "hepatitis",
+              "reason": "This signal was reviewed but was not strong enough to prioritize after the full evidence check."
+            },
+            {
+              "diagnosisId": "liver",
+              "reason": "This signal was reviewed but was not strong enough to prioritize after the full evidence check."
+            },
+            {
+              "diagnosisId": "prediabetes",
+              "reason": "This signal was reviewed but was not strong enough to prioritise after the full evidence check."
+            },
+            {
+              "diagnosisId": "inflammation",
+              "reason": "This signal was reviewed but was not strong enough to prioritise after the full evidence check."
+            },
+            {
+              "diagnosisId": "electrolyte_imbalance",
+              "reason": "This signal was reviewed but was not strong enough to prioritise after the full evidence check."
+            },
+            {
+              "diagnosisId": "vitamin_d_deficiency",
+              "reason": "This signal was reviewed but was not strong enough to prioritise after the full evidence check."
+            }
+          ]
+        },
+        "http_status": 200,
+        "error": null
+      },
+      {
+        "profile_id": "NHANES-C-28451",
+        "profile_type": "healthy",
+        "target_condition": null,
+        "expected_conditions": [],
+        "model_scores_all12": {
+          "sleep_disorder": 0.3975,
+          "prediabetes": 0.2669,
+          "electrolyte_imbalance": 0.2328,
+          "anemia": 0.1161,
+          "inflammation": 0.1024,
+          "iron_deficiency": 0.0966,
+          "kidney_disease": 0.0593,
+          "hypothyroidism": 0.0287,
+          "liver": 0.008,
+          "hepatitis": 0.0046,
+          "perimenopause": 0.0
+        },
+        "model_top5": {
+          "sleep_disorder": 0.3975,
+          "prediabetes": 0.2669,
+          "electrolyte_imbalance": 0.2328,
+          "anemia": 0.1161,
+          "inflammation": 0.1024
+        },
+        "parse_success": true,
+        "top3_predictions": [
+          "iron_deficiency",
+          "sleep_disorder",
+          "perimenopause"
+        ],
+        "flagged_conditions": [
+          "iron_deficiency",
+          "sleep_disorder",
+          "perimenopause"
+        ],
+        "response": {
+          "personalizedSummary": "You've shared some symptoms that may be connected. It's worth discussing your fatigue, snoring, and irregular periods with your doctor. They can help you explore possible causes and develop a plan.",
+          "summaryPoints": [
+            "Snoring 0.8 times per night",
+            "Periods not regular in the past year",
+            "Feeling tired or having little energy (Not at all)"
+          ],
+          "insights": [
+            {
+              "diagnosisId": "iron_deficiency",
+              "personalNote": "Your doctor may recommend a blood test to check your iron levels, which could help explain your fatigue."
+            },
+            {
+              "diagnosisId": "sleep_disorder",
+              "personalNote": "Your doctor may want to discuss your snoring habits and sleep patterns. A sleep study might be recommended to rule out any underlying sleep disorders."
+            },
+            {
+              "diagnosisId": "perimenopause",
+              "personalNote": "Your doctor may discuss your menopause symptoms and potentially recommend a thyroid function test. This can help rule out any underlying thyroid issues causing your irregular periods."
+            }
+          ],
+          "recoveryOutlook": "With proper diagnosis and treatment, you can manage your symptoms and improve your quality of life. It's essential to work closely with your doctor to develop a personalized treatment plan.",
+          "nextSteps": "Schedule an appointment with your primary care physician to discuss your symptoms and potential next steps. Be prepared to share your medical history and any relevant test results.",
+          "doctorKitSummary": "As your doctor, I'd like to discuss your recent symptoms and potential underlying causes. I'll work with you to develop a personalized treatment plan that addresses your unique needs.",
+          "doctorKitQuestions": [],
+          "doctorKitArguments": [],
+          "recommendedDoctors": [
+            {
+              "specialty": "Primary Care Physician",
+              "priority": "High",
+              "reason": "Your primary care physician can help you manage your symptoms and refer you to a specialist if needed.",
+              "symptomsToDiscuss": [
+                "Fatigue and energy levels",
+                "Snoring habits and sleep patterns",
+                "Menopause symptoms and irregular periods"
+              ],
+              "suggestedTests": [
+                "Full Blood Count (FBC)",
+                "Polysomnography (sleep study)",
+                "Thyroid function test"
+              ]
+            }
+          ],
+          "doctorKits": [
+            {
+              "specialty": "Primary Care Physician",
+              "openingSummary": "As your primary care physician, I'd like to discuss your recent symptoms and potential underlying causes. I'll work with you to develop a personalized treatment plan that addresses your unique needs.",
+              "concerningSymptoms": [
+                "Fatigue and energy levels",
+                "Snoring habits and sleep patterns",
+                "Menopause symptoms and irregular periods"
+              ],
+              "recommendedTests": [
+                "Full Blood Count (FBC)",
+                "Polysomnography (sleep study)",
+                "Thyroid function test"
+              ],
+              "discussionPoints": [
+                "Your medical history and any previous diagnoses",
+                "Your current symptoms and how they're impacting your daily life"
+              ],
+              "bringToAppointment": [
+                "A list of your medications and supplements",
+                "Any relevant medical records or test results"
+              ],
+              "whatToSay": "I'd like to discuss my recent symptoms and potential underlying causes with you. I'm concerned about my fatigue and energy levels, snoring habits, and irregular periods."
+            }
+          ],
+          "allClear": false,
+          "declinedSuspicions": [
+            {
+              "diagnosisId": "hypothyroidism",
+              "reason": "This signal was reviewed but was not strong enough to prioritize after the full evidence check."
+            },
+            {
+              "diagnosisId": "kidney_disease",
+              "reason": "This signal was reviewed but was not strong enough to prioritize after the full evidence check."
+            },
+            {
+              "diagnosisId": "anemia",
+              "reason": "This signal was reviewed but was not strong enough to prioritize after the full evidence check."
+            },
+            {
+              "diagnosisId": "hepatitis",
+              "reason": "This signal was reviewed but was not strong enough to prioritize after the full evidence check."
+            },
+            {
+              "diagnosisId": "liver",
+              "reason": "This signal was reviewed but was not strong enough to prioritize after the full evidence check."
+            },
+            {
+              "diagnosisId": "prediabetes",
+              "reason": "This signal was reviewed but was not strong enough to prioritise after the full evidence check."
+            },
+            {
+              "diagnosisId": "inflammation",
+              "reason": "This signal was reviewed but was not strong enough to prioritise after the full evidence check."
+            },
+            {
+              "diagnosisId": "electrolyte_imbalance",
+              "reason": "This signal was reviewed but was not strong enough to prioritise after the full evidence check."
+            },
+            {
+              "diagnosisId": "vitamin_d_deficiency",
+              "reason": "This signal was reviewed but was not strong enough to prioritise after the full evidence check."
+            }
+          ]
+        },
+        "http_status": 200,
+        "error": null
+      },
+      {
+        "profile_id": "NHANES-C-21592",
+        "profile_type": "positive",
+        "target_condition": "hepatitis",
+        "expected_conditions": [
+          "hepatitis"
+        ],
+        "model_scores_all12": {
+          "sleep_disorder": 0.5242,
+          "hepatitis": 0.5241,
+          "hypothyroidism": 0.4066,
+          "inflammation": 0.3676,
+          "prediabetes": 0.3521,
+          "electrolyte_imbalance": 0.3208,
+          "liver": 0.2409,
+          "kidney_disease": 0.2023,
+          "anemia": 0.0702,
+          "iron_deficiency": 0.0661,
+          "perimenopause": 0.0
+        },
+        "model_top5": {
+          "sleep_disorder": 0.5242,
+          "hepatitis": 0.5241,
+          "hypothyroidism": 0.4066,
+          "inflammation": 0.3676,
+          "prediabetes": 0.3521
+        },
+        "parse_success": true,
+        "top3_predictions": [],
+        "flagged_conditions": [],
+        "response": {
+          "personalizedSummary": "You've been experiencing fatigue, muscle weakness, and headaches. These symptoms have been affecting your daily life, including sleep disturbances. It's worth discussing these symptoms with your doctor to determine the best course of action.",
+          "summaryPoints": [
+            "Fatigue and muscle weakness are common symptoms",
+            "Headaches and joint pain are also reported",
+            "Sleep disturbances are affecting daily life"
+          ],
+          "insights": [],
+          "recoveryOutlook": "Recovery is possible with proper treatment and care. It's worth discussing your options with your doctor.",
+          "nextSteps": "Schedule an appointment with a recommended doctor and be prepared to discuss your symptoms and medical history.",
+          "doctorKitSummary": "As your doctor, I would like to discuss your symptoms and medical history to determine the best course of treatment.",
+          "doctorKitQuestions": [],
+          "doctorKitArguments": [],
+          "recommendedDoctors": [
+            {
+              "specialty": "copy",
+              "priority": "copy",
+              "reason": "It's worth discussing your symptoms with a specialist in this area.",
+              "symptomsToDiscuss": [
+                "copy"
+              ],
+              "suggestedTests": [
+                "copy"
+              ]
+            }
+          ],
+          "doctorKits": [
+            {
+              "specialty": "copy",
+              "openingSummary": "It's worth discussing your symptoms and medical history with your doctor to determine the best course of treatment.",
+              "concerningSymptoms": [
+                "copy"
+              ],
+              "recommendedTests": [
+                "copy"
+              ],
+              "discussionPoints": [
+                "It's worth discussing your symptoms and medical history with your doctor to determine the best course of treatment."
+              ],
+              "bringToAppointment": [
+                "practical items"
+              ],
+              "whatToSay": "It's worth discussing your symptoms and medical history with your doctor to determine the best course of treatment."
+            }
+          ],
+          "allClear": false,
+          "declinedSuspicions": [
+            {
+              "diagnosisId": "perimenopause",
+              "reason": "This signal was reviewed but was not strong enough to prioritize after the full evidence check."
+            },
+            {
+              "diagnosisId": "hypothyroidism",
+              "reason": "This signal was reviewed but was not strong enough to prioritize after the full evidence check."
+            },
+            {
+              "diagnosisId": "kidney_disease",
+              "reason": "This signal was reviewed but was not strong enough to prioritize after the full evidence check."
+            },
+            {
+              "diagnosisId": "sleep_disorder",
+              "reason": "This signal was reviewed but was not strong enough to prioritize after the full evidence check."
+            },
+            {
+              "diagnosisId": "anemia",
+              "reason": "This signal was reviewed but was not strong enough to prioritize after the full evidence check."
+            },
+            {
+              "diagnosisId": "iron_deficiency",
+              "reason": "This signal was reviewed but was not strong enough to prioritize after the full evidence check."
+            },
+            {
+              "diagnosisId": "hepatitis",
+              "reason": "This signal was reviewed but was not strong enough to prioritize after the full evidence check."
+            },
+            {
+              "diagnosisId": "liver",
+              "reason": "This signal was reviewed but was not strong enough to prioritize after the full evidence check."
+            },
+            {
+              "diagnosisId": "prediabetes",
+              "reason": "This signal was reviewed but was not strong enough to prioritise after the full evidence check."
+            },
+            {
+              "diagnosisId": "inflammation",
+              "reason": "This signal was reviewed but was not strong enough to prioritise after the full evidence check."
+            },
+            {
+              "diagnosisId": "electrolyte_imbalance",
+              "reason": "This signal was reviewed but was not strong enough to prioritise after the full evidence check."
+            },
+            {
+              "diagnosisId": "vitamin_d_deficiency",
+              "reason": "This signal was reviewed but was not strong enough to prioritise after the full evidence check."
+            }
+          ]
+        },
+        "http_status": 200,
+        "error": null
+      },
+      {
+        "profile_id": "NHANES-C-22809",
+        "profile_type": "positive",
+        "target_condition": "iron_deficiency",
+        "expected_conditions": [
+          "iron_deficiency"
+        ],
+        "model_scores_all12": {
+          "perimenopause": 0.6144,
+          "hypothyroidism": 0.5322,
+          "sleep_disorder": 0.5318,
+          "prediabetes": 0.5069,
+          "electrolyte_imbalance": 0.4324,
+          "anemia": 0.4185,
+          "inflammation": 0.3175,
+          "iron_deficiency": 0.2568,
+          "kidney_disease": 0.1367,
+          "liver": 0.0163,
+          "hepatitis": 0.0049
+        },
+        "model_top5": {
+          "perimenopause": 0.6144,
+          "hypothyroidism": 0.5322,
+          "sleep_disorder": 0.5318,
+          "prediabetes": 0.5069,
+          "electrolyte_imbalance": 0.4324
+        },
+        "parse_success": true,
+        "top3_predictions": [
+          "iron_deficiency",
+          "sleep_disorder",
+          "perimenopause"
+        ],
+        "flagged_conditions": [
+          "iron_deficiency",
+          "sleep_disorder",
+          "perimenopause"
+        ],
+        "response": {
+          "personalizedSummary": "You've reported feeling tired or having little energy and snoring 0.5 times per night. These symptoms may be related to various conditions, including iron deficiency anemia and sleep disorders. Below, you'll find some possible explanations and recommendations for your next steps.",
+          "summaryPoints": [
+            "Snoring 0.5 times per night (slq030___how_often_do_you_snore?)",
+            "Feeling tired or having little energy (dpq040___feeling_tired_or_having_little_energy)",
+            "Feeling tired or having little energy"
+          ],
+          "insights": [
+            {
+              "diagnosisId": "iron_deficiency",
+              "personalNote": "Iron deficiency anemia is a common condition that may be contributing to your symptoms. Your doctor may recommend a blood test to check for iron deficiency."
+            },
+            {
+              "diagnosisId": "sleep_disorder",
+              "personalNote": "Sleep disorders, such as sleep apnea, may be causing your snoring and fatigue. Your doctor may recommend a sleep study to diagnose the condition."
+            },
+            {
+              "diagnosisId": "perimenopause",
+              "personalNote": "Perimenopause is a natural phase of life that may be contributing to your fatigue and other symptoms. Your doctor may recommend lifestyle changes to manage your symptoms."
+            }
+          ],
+          "recoveryOutlook": "With proper treatment and management, you may be able to improve your symptoms and quality of life.",
+          "nextSteps": "Schedule an appointment with a primary care physician to discuss your symptoms and determine the best course of action.",
+          "doctorKitSummary": "I'd like to discuss your fatigue and snoring with a specialist to rule out any underlying conditions.",
+          "doctorKitQuestions": [],
+          "doctorKitArguments": [],
+          "recommendedDoctors": [
+            {
+              "specialty": "Primary Care Physician",
+              "priority": "High",
+              "reason": "To discuss your symptoms and determine the best course of action.",
+              "symptomsToDiscuss": [
+                "Fatigue",
+                "Snoring"
+              ],
+              "suggestedTests": [
+                "Blood test",
+                "Sleep study"
+              ]
+            }
+          ],
+          "doctorKits": [
+            {
+              "specialty": "Sleep Specialist",
+              "openingSummary": "I'd like to discuss your snoring and fatigue to rule out sleep apnea.",
+              "concerningSymptoms": [
+                "Snoring"
+              ],
+              "recommendedTests": [
+                "Sleep study"
+              ],
+              "discussionPoints": [
+                "Sleep patterns",
+                "Snoring habits"
+              ],
+              "bringToAppointment": [
+                "Sleep diary",
+                "Snoring device"
+              ],
+              "whatToSay": "I've been experiencing snoring and fatigue, and I'm concerned about my sleep quality."
+            }
+          ],
+          "allClear": false,
+          "declinedSuspicions": [
+            {
+              "diagnosisId": "hypothyroidism",
+              "reason": "This signal was reviewed but was not strong enough to prioritize after the full evidence check."
+            },
+            {
+              "diagnosisId": "kidney_disease",
+              "reason": "This signal was reviewed but was not strong enough to prioritize after the full evidence check."
+            },
+            {
+              "diagnosisId": "anemia",
+              "reason": "This signal was reviewed but was not strong enough to prioritize after the full evidence check."
+            },
+            {
+              "diagnosisId": "hepatitis",
+              "reason": "This signal was reviewed but was not strong enough to prioritize after the full evidence check."
+            },
+            {
+              "diagnosisId": "liver",
+              "reason": "This signal was reviewed but was not strong enough to prioritize after the full evidence check."
+            },
+            {
+              "diagnosisId": "prediabetes",
+              "reason": "This signal was reviewed but was not strong enough to prioritise after the full evidence check."
+            },
+            {
+              "diagnosisId": "inflammation",
+              "reason": "This signal was reviewed but was not strong enough to prioritise after the full evidence check."
+            },
+            {
+              "diagnosisId": "electrolyte_imbalance",
+              "reason": "This signal was reviewed but was not strong enough to prioritise after the full evidence check."
+            },
+            {
+              "diagnosisId": "vitamin_d_deficiency",
+              "reason": "This signal was reviewed but was not strong enough to prioritise after the full evidence check."
+            }
+          ]
+        },
+        "http_status": 200,
+        "error": null
+      },
+      {
+        "profile_id": "NHANES-C-27574",
+        "profile_type": "positive",
+        "target_condition": "perimenopause",
+        "expected_conditions": [
+          "perimenopause"
+        ],
+        "model_scores_all12": {
+          "hypothyroidism": 0.9372,
+          "sleep_disorder": 0.6556,
+          "electrolyte_imbalance": 0.5575,
+          "prediabetes": 0.4727,
+          "kidney_disease": 0.4215,
+          "anemia": 0.1914,
+          "inflammation": 0.081,
+          "liver": 0.0188,
+          "iron_deficiency": 0.017,
+          "hepatitis": 0.0145,
+          "perimenopause": 0.0
+        },
+        "model_top5": {
+          "hypothyroidism": 0.9372,
+          "sleep_disorder": 0.6556,
+          "electrolyte_imbalance": 0.5575,
+          "prediabetes": 0.4727,
+          "kidney_disease": 0.4215
+        },
+        "parse_success": true,
+        "top3_predictions": [
+          "iron_deficiency",
+          "sleep_disorder"
+        ],
+        "flagged_conditions": [
+          "iron_deficiency",
+          "sleep_disorder"
+        ],
+        "response": {
+          "personalizedSummary": "You've been experiencing fatigue and low energy levels over the past 2 weeks. This may be related to your tiredness or having little energy. Below you can see some potential explanations and which doctors to see first, and how to prepare for your visit.",
+          "summaryPoints": [
+            "Feeling tired or having little energy (dpq040___feeling_tired_or_having_little_energy)",
+            "Feeling tired or having little energy",
+            "Experiencing fatigue over the past 2 weeks"
+          ],
+          "insights": [
+            {
+              "diagnosisId": "iron_deficiency",
+              "personalNote": "The patient's questionnaire response indicates significant fatigue, which may be a symptom of iron deficiency anemia."
+            },
+            {
+              "diagnosisId": "sleep_disorder",
+              "personalNote": "The patient's questionnaire response indicates significant fatigue, which may be a symptom of sleep disorder."
+            }
+          ],
+          "recoveryOutlook": "Recovery is possible with proper diagnosis and treatment. It's essential to address the underlying cause of your symptoms.",
+          "nextSteps": "You'll need to discuss your symptoms with a doctor and undergo some tests to determine the cause of your fatigue. Be prepared to talk about your symptoms and any relevant medical history.",
+          "doctorKitSummary": "As your doctor, I'd like to discuss your fatigue and low energy levels. I'll need to know more about your symptoms and medical history to determine the best course of action.",
+          "doctorKitQuestions": [],
+          "doctorKitArguments": [],
+          "recommendedDoctors": [
+            {
+              "specialty": "Hematologist or Primary Care Physician",
+              "priority": "High",
+              "reason": "To rule out iron deficiency anemia and other underlying causes of fatigue.",
+              "symptomsToDiscuss": [
+                "Feeling tired or having little energy"
+              ],
+              "suggestedTests": [
+                "Full Blood Count (FBC) including haemoglobin, haematocrit, MCV, MCH, MCHC, ferritin, and iron saturation."
+              ]
+            }
+          ],
+          "doctorKits": [
+            {
+              "specialty": "Hematologist or Primary Care Physician",
+              "openingSummary": "I'd like to discuss your fatigue and low energy levels. I'll need to know more about your symptoms and medical history to determine the best course of action.",
+              "concerningSymptoms": [
+                "Feeling tired or having little energy"
+              ],
+              "recommendedTests": [
+                "Full Blood Count (FBC) including haemoglobin, haematocrit, MCV, MCH, MCHC, ferritin, and iron saturation."
+              ],
+              "discussionPoints": [
+                "The patient's questionnaire response indicates significant fatigue, which may be a symptom of iron deficiency anemia."
+              ],
+              "bringToAppointment": [
+                "Your medical history, a list of medications, and any relevant test results"
+              ],
+              "whatToSay": "I've been experiencing fatigue and low energy levels over the past 2 weeks. I'm concerned about the underlying cause of my symptoms."
+            }
+          ],
+          "allClear": false,
+          "declinedSuspicions": [
+            {
+              "diagnosisId": "perimenopause",
+              "reason": "This signal was reviewed but was not strong enough to prioritize after the full evidence check."
+            },
+            {
+              "diagnosisId": "hypothyroidism",
+              "reason": "This signal was reviewed but was not strong enough to prioritize after the full evidence check."
+            },
+            {
+              "diagnosisId": "kidney_disease",
+              "reason": "This signal was reviewed but was not strong enough to prioritize after the full evidence check."
+            },
+            {
+              "diagnosisId": "anemia",
+              "reason": "This signal was reviewed but was not strong enough to prioritize after the full evidence check."
+            },
+            {
+              "diagnosisId": "hepatitis",
+              "reason": "This signal was reviewed but was not strong enough to prioritize after the full evidence check."
+            },
+            {
+              "diagnosisId": "liver",
+              "reason": "This signal was reviewed but was not strong enough to prioritize after the full evidence check."
+            },
+            {
+              "diagnosisId": "prediabetes",
+              "reason": "This signal was reviewed but was not strong enough to prioritise after the full evidence check."
+            },
+            {
+              "diagnosisId": "inflammation",
+              "reason": "This signal was reviewed but was not strong enough to prioritise after the full evidence check."
+            },
+            {
+              "diagnosisId": "electrolyte_imbalance",
+              "reason": "This signal was reviewed but was not strong enough to prioritise after the full evidence check."
+            },
+            {
+              "diagnosisId": "vitamin_d_deficiency",
+              "reason": "This signal was reviewed but was not strong enough to prioritise after the full evidence check."
+            }
+          ]
+        },
+        "http_status": 200,
+        "error": null
+      }
+    ],
+    "hybrid_top5": [
+      {
+        "profile_id": "NHANES-D-40652",
+        "profile_type": "positive",
+        "target_condition": "anemia",
+        "expected_conditions": [
+          "anemia"
+        ],
+        "model_scores_all12": {
+          "sleep_disorder": 0.4416,
+          "anemia": 0.2935,
+          "prediabetes": 0.2355,
+          "electrolyte_imbalance": 0.2042,
+          "iron_deficiency": 0.0966,
+          "inflammation": 0.092,
+          "kidney_disease": 0.0608,
+          "hypothyroidism": 0.0147,
+          "liver": 0.008,
+          "hepatitis": 0.0046,
+          "perimenopause": 0.0
+        },
+        "model_top5": {
+          "sleep_disorder": 0.4416,
+          "anemia": 0.2935,
+          "prediabetes": 0.2355,
+          "electrolyte_imbalance": 0.2042,
+          "iron_deficiency": 0.0966
+        },
+        "parse_success": true,
+        "top3_predictions": [
+          "sleep_disorder"
+        ],
+        "flagged_conditions": [
+          "sleep_disorder"
+        ],
+        "response": {
+          "personalizedSummary": "You've reported feeling tired or having little energy over the past two weeks, which may suggest a sleep disorder. It's worth discussing your sleep patterns with your doctor to explore possible causes, such as difficulty sleeping or insomnia.",
+          "summaryPoints": [
+            "Feeling tired or having little energy",
+            "Experiencing fatigue over the past two weeks",
+            "Difficulty sleeping or insomnia"
+          ],
+          "insights": [
+            {
+              "diagnosisId": "sleep_disorder",
+              "personalNote": "It's essential to discuss your sleep patterns with your doctor to explore possible causes, such as difficulty sleeping or insomnia."
+            }
+          ],
+          "declinedSuspicions": [],
+          "recoveryOutlook": "With proper diagnosis and treatment, you may be able to manage your sleep disorder and improve your overall quality of life.",
+          "nextSteps": "Schedule a doctor's appointment to discuss your sleep patterns and potential sleep disorders. Be prepared to discuss your symptoms and medical history.",
+          "doctorKitSummary": "As your doctor, I'd like to discuss your sleep patterns and potential sleep disorders. Please come prepared to talk about your symptoms and medical history.",
+          "doctorKitQuestions": [],
+          "doctorKitArguments": [],
+          "recommendedDoctors": [
+            {
+              "specialty": "Sleep Medicine",
+              "priority": "High",
+              "reason": "Sleep specialists are trained to diagnose and treat sleep disorders. They can help you develop a personalized treatment plan.",
+              "symptomsToDiscuss": [
+                "Difficulty sleeping or insomnia"
+              ],
+              "suggestedTests": [
+                "Polysomnography (sleep study)"
+              ]
+            }
+          ],
+          "doctorKits": [
+            {
+              "specialty": "Sleep Medicine",
+              "openingSummary": "As your sleep specialist, I'd like to discuss your sleep patterns and potential sleep disorders. Please come prepared to talk about your symptoms and medical history.",
+              "concerningSymptoms": [
+                "Difficulty sleeping or insomnia"
+              ],
+              "recommendedTests": [
+                "Polysomnography (sleep study)"
+              ],
+              "discussionPoints": [
+                "Your sleep patterns and potential sleep disorders"
+              ],
+              "bringToAppointment": [
+                "A list of your medications",
+                "A detailed description of your sleep patterns"
+              ],
+              "whatToSay": "I've been experiencing difficulty sleeping or insomnia, and I'm concerned about my sleep patterns. I'd like to discuss this further with you."
+            }
+          ],
+          "allClear": false
+        },
+        "http_status": 200,
+        "error": null
+      },
+      {
+        "profile_id": "NHANES-C-26260",
+        "profile_type": "positive",
+        "target_condition": "kidney_disease",
+        "expected_conditions": [
+          "kidney_disease"
+        ],
+        "model_scores_all12": {
+          "hypothyroidism": 0.7375,
+          "sleep_disorder": 0.5912,
+          "prediabetes": 0.41,
+          "kidney_disease": 0.3775,
+          "electrolyte_imbalance": 0.3557,
+          "inflammation": 0.2692,
+          "iron_deficiency": 0.0519,
+          "anemia": 0.0348,
+          "liver": 0.0215,
+          "hepatitis": 0.0145,
+          "perimenopause": 0.0
+        },
+        "model_top5": {
+          "hypothyroidism": 0.7375,
+          "sleep_disorder": 0.5912,
+          "prediabetes": 0.41,
+          "kidney_disease": 0.3775,
+          "electrolyte_imbalance": 0.3557
+        },
+        "parse_success": false,
+        "top3_predictions": [],
+        "flagged_conditions": [],
+        "response": "",
+        "http_status": 500,
+        "error": "HTTP 500"
+      },
+      {
+        "profile_id": "NHANES-D-34687",
+        "profile_type": "positive",
+        "target_condition": "prediabetes",
+        "expected_conditions": [
+          "prediabetes"
+        ],
+        "model_scores_all12": {
+          "sleep_disorder": 0.5508,
+          "anemia": 0.4701,
+          "hypothyroidism": 0.4142,
+          "electrolyte_imbalance": 0.3979,
+          "prediabetes": 0.3733,
+          "inflammation": 0.3652,
+          "kidney_disease": 0.1138,
+          "iron_deficiency": 0.1077,
+          "liver": 0.0126,
+          "hepatitis": 0.0049,
+          "perimenopause": 0.0
+        },
+        "model_top5": {
+          "sleep_disorder": 0.5508,
+          "anemia": 0.4701,
+          "hypothyroidism": 0.4142,
+          "electrolyte_imbalance": 0.3979,
+          "prediabetes": 0.3733
+        },
+        "parse_success": true,
+        "top3_predictions": [],
+        "flagged_conditions": [],
+        "response": {
+          "personalizedSummary": "You've been experiencing some concerning symptoms, such as fatigue and muscle weakness, painful joints and swollen limbs, and difficulty sleeping at night. We're exploring possible causes and would like to discuss these further with you.",
+          "summaryPoints": [
+            "You've been experiencing fatigue and muscle weakness",
+            "You've been experiencing painful joints and swollen limbs",
+            "You've been having difficulty sleeping at night"
+          ],
+          "insights": [],
+          "recoveryOutlook": "Recovery is possible with proper treatment and care, but it's worth discussing with your doctor to determine the best course of action.",
+          "nextSteps": "Schedule an appointment with a recommended doctor to discuss your symptoms and test results, and work together to develop a plan to address your concerns.",
+          "doctorKitSummary": "As your doctor, I'll work with you to identify the root cause of your symptoms and develop a personalized treatment plan, taking into account your unique needs and circumstances.",
+          "doctorKitQuestions": [],
+          "doctorKitArguments": [],
+          "recommendedDoctors": [
+            {
+              "specialty": "copy",
+              "priority": "copy",
+              "reason": "This doctor has experience in treating symptoms similar to yours, and may be able to provide valuable insights and guidance.",
+              "symptomsToDiscuss": [
+                "Fatigue and muscle weakness"
+              ],
+              "suggestedTests": [
+                "copy"
+              ]
+            }
+          ],
+          "doctorKits": [
+            {
+              "specialty": "copy",
+              "openingSummary": "I'd like to discuss your symptoms and how they've been affecting your daily life, and explore possible causes and treatment options.",
+              "concerningSymptoms": [
+                "copy"
+              ],
+              "recommendedTests": [
+                "copy"
+              ],
+              "discussionPoints": [
+                "The importance of maintaining a healthy lifestyle, including regular exercise and a balanced diet"
+              ],
+              "bringToAppointment": [
+                "A list of your current medications and supplements"
+              ],
+              "whatToSay": "I've been experiencing some concerning symptoms, and I'm hoping to work with you to identify the root cause and develop a plan to address them."
+            }
+          ],
+          "allClear": false,
+          "declinedSuspicions": [
+            {
+              "diagnosisId": "sleep_disorder",
+              "reason": "This signal was reviewed but was not strong enough to prioritize after the full evidence check."
+            },
+            {
+              "diagnosisId": "anemia",
+              "reason": "This signal was reviewed but was not strong enough to prioritize after the full evidence check."
+            },
+            {
+              "diagnosisId": "hypothyroidism",
+              "reason": "This signal was reviewed but was not strong enough to prioritise after the full evidence check."
+            }
+          ]
+        },
+        "http_status": 200,
+        "error": null
+      },
+      {
+        "profile_id": "NHANES-C-26684",
+        "profile_type": "healthy",
+        "target_condition": null,
+        "expected_conditions": [],
+        "model_scores_all12": {
+          "sleep_disorder": 0.5872,
+          "inflammation": 0.4717,
+          "prediabetes": 0.3269,
+          "electrolyte_imbalance": 0.2963,
+          "hypothyroidism": 0.278,
+          "kidney_disease": 0.144,
+          "iron_deficiency": 0.0966,
+          "anemia": 0.0451,
+          "liver": 0.0187,
+          "hepatitis": 0.0145,
+          "perimenopause": 0.0
+        },
+        "model_top5": {
+          "sleep_disorder": 0.5872,
+          "inflammation": 0.4717,
+          "prediabetes": 0.3269,
+          "electrolyte_imbalance": 0.2963,
+          "hypothyroidism": 0.278
+        },
+        "parse_success": true,
+        "top3_predictions": [
+          "sleep_disorder",
+          "inflammation"
+        ],
+        "flagged_conditions": [
+          "sleep_disorder",
+          "inflammation"
+        ],
+        "response": {
+          "personalizedSummary": "Your fatigue may be connected to your questionnaire scores. It's worth discussing this further with your doctor. Below, you'll find some potential next steps and how to prepare for your visit.",
+          "summaryPoints": [
+            "Questionnaire scores",
+            "Feeling tired or having little energy",
+            "Feeling tired or having little energy"
+          ],
+          "insights": [
+            {
+              "diagnosisId": "sleep_disorder",
+              "personalNote": "A sleep study might provide more clarity on this hypothesis."
+            },
+            {
+              "diagnosisId": "inflammation",
+              "personalNote": "Further investigation into the underlying inflammatory process is warranted."
+            }
+          ],
+          "declinedSuspicions": [],
+          "recoveryOutlook": "With proper treatment and management, you may see improvements in your symptoms and overall well-being.",
+          "nextSteps": "We recommend scheduling a visit with a specialist to discuss your symptoms and potential next steps.",
+          "doctorKitSummary": "As your doctor, I'd like to discuss your recent questionnaire scores and potential underlying inflammatory process. I'd also like to review your medical history and perform a physical examination.",
+          "doctorKitQuestions": [],
+          "doctorKitArguments": [],
+          "recommendedDoctors": [
+            {
+              "specialty": "Sleep Specialist",
+              "priority": "High",
+              "reason": "To discuss your sleep disorder hypothesis and potential next steps.",
+              "symptomsToDiscuss": [
+                "Fatigue",
+                "Difficulty sleeping"
+              ],
+              "suggestedTests": [
+                "Polysomnography (sleep study)"
+              ]
+            }
+          ],
+          "doctorKits": [
+            {
+              "specialty": "Sleep Specialist",
+              "openingSummary": "As your sleep specialist, I'd like to discuss your recent questionnaire scores and potential sleep disorder. I'd also like to review your medical history and perform a physical examination.",
+              "concerningSymptoms": [
+                "Fatigue",
+                "Difficulty sleeping"
+              ],
+              "recommendedTests": [
+                "Polysomnography (sleep study)"
+              ],
+              "discussionPoints": [
+                "Potential underlying inflammatory process"
+              ],
+              "bringToAppointment": [
+                "Questionnaire scores",
+                "Medical history"
+              ],
+              "whatToSay": "I've been experiencing fatigue and difficulty sleeping, and I'm concerned about a potential sleep disorder."
+            }
+          ],
+          "allClear": false
+        },
+        "http_status": 200,
+        "error": null
+      },
+      {
+        "profile_id": "NHANES-C-30371",
+        "profile_type": "positive",
+        "target_condition": "hypothyroidism",
+        "expected_conditions": [
+          "hypothyroidism"
+        ],
+        "model_scores_all12": {
+          "hypothyroidism": 0.9213,
+          "sleep_disorder": 0.6501,
+          "electrolyte_imbalance": 0.5338,
+          "prediabetes": 0.4677,
+          "kidney_disease": 0.4043,
+          "anemia": 0.1947,
+          "inflammation": 0.1466,
+          "liver": 0.0188,
+          "iron_deficiency": 0.017,
+          "hepatitis": 0.0169,
+          "perimenopause": 0.0
+        },
+        "model_top5": {
+          "hypothyroidism": 0.9213,
+          "sleep_disorder": 0.6501,
+          "electrolyte_imbalance": 0.5338,
+          "prediabetes": 0.4677,
+          "kidney_disease": 0.4043
+        },
+        "parse_success": false,
+        "top3_predictions": [],
+        "flagged_conditions": [],
+        "response": "",
+        "http_status": 500,
+        "error": "HTTP 500"
+      },
+      {
+        "profile_id": "NHANES-D-39005",
+        "profile_type": "positive",
+        "target_condition": "inflammation",
+        "expected_conditions": [
+          "inflammation"
+        ],
+        "model_scores_all12": {
+          "sleep_disorder": 0.4034,
+          "prediabetes": 0.2709,
+          "inflammation": 0.2223,
+          "electrolyte_imbalance": 0.2166,
+          "anemia": 0.1093,
+          "iron_deficiency": 0.0966,
+          "kidney_disease": 0.0633,
+          "hypothyroidism": 0.0267,
+          "liver": 0.008,
+          "hepatitis": 0.0046,
+          "perimenopause": 0.0
+        },
+        "model_top5": {
+          "sleep_disorder": 0.4034,
+          "prediabetes": 0.2709,
+          "inflammation": 0.2223,
+          "electrolyte_imbalance": 0.2166,
+          "anemia": 0.1093
+        },
+        "parse_success": true,
+        "top3_predictions": [
+          "sleep_disorder"
+        ],
+        "flagged_conditions": [
+          "sleep_disorder"
+        ],
+        "response": {
+          "personalizedSummary": "You've reported feeling tired or having little energy 7 out of 10 times over the past 2 weeks. This might be a sign of a sleep issue. Below you can see some possible explanations and which doctors to see first, and how to prepare for your visit.",
+          "summaryPoints": [
+            "Dpq040___feeling_tired_or_having_little_energy (0.7)",
+            "Feeling tired or having little energy",
+            "Experiencing fatigue 7 out of 10 times"
+          ],
+          "insights": [
+            {
+              "diagnosisId": "sleep_disorder",
+              "personalNote": "The patient reported feeling tired or having little energy 7 out of 10 times over the past 2 weeks, which could be a symptom supporting a sleep disorder."
+            }
+          ],
+          "declinedSuspicions": [],
+          "recoveryOutlook": "With proper treatment, you may be able to manage your sleep symptoms and improve your overall well-being.",
+          "nextSteps": "Schedule a polysomnography (sleep study) to further investigate your sleep symptoms. Prepare to discuss your symptoms and sleep patterns with your doctor.",
+          "doctorKitSummary": "As your doctor, I would like to discuss your sleep symptoms and how they are impacting your daily life. I would also like to review your sleep study results and develop a treatment plan to help you manage your symptoms.",
+          "doctorKitQuestions": [],
+          "doctorKitArguments": [],
+          "recommendedDoctors": [
+            {
+              "specialty": "Sleep Medicine",
+              "priority": "High",
+              "reason": "Expertise in sleep disorders and sleep studies",
+              "symptomsToDiscuss": [
+                "Feeling tired or having little energy"
+              ],
+              "suggestedTests": [
+                "Polysomnography (sleep study)"
+              ]
+            }
+          ],
+          "doctorKits": [
+            {
+              "specialty": "Sleep Medicine",
+              "openingSummary": "As your doctor, I would like to discuss your sleep symptoms and how they are impacting your daily life. I would also like to review your sleep study results and develop a treatment plan to help you manage your symptoms.",
+              "concerningSymptoms": [
+                "Feeling tired or having little energy"
+              ],
+              "recommendedTests": [
+                "Polysomnography (sleep study)"
+              ],
+              "discussionPoints": [
+                "Sleep patterns",
+                "Symptoms and impact on daily life"
+              ],
+              "bringToAppointment": [
+                "Sleep diary",
+                "Sleep study results"
+              ],
+              "whatToSay": "I'm concerned about my sleep symptoms and how they're impacting my daily life. I'd like to discuss my sleep study results and develop a treatment plan to help me manage my symptoms."
+            }
+          ],
+          "allClear": false
+        },
+        "http_status": 200,
+        "error": null
+      },
+      {
+        "profile_id": "NHANES-D-41288",
+        "profile_type": "healthy",
+        "target_condition": null,
+        "expected_conditions": [],
+        "model_scores_all12": {
+          "anemia": 0.543,
+          "sleep_disorder": 0.4497,
+          "electrolyte_imbalance": 0.3344,
+          "prediabetes": 0.3088,
+          "inflammation": 0.2935,
+          "iron_deficiency": 0.0966,
+          "hypothyroidism": 0.0652,
+          "kidney_disease": 0.0596,
+          "liver": 0.0064,
+          "hepatitis": 0.0046,
+          "perimenopause": 0.0
+        },
+        "model_top5": {
+          "anemia": 0.543,
+          "sleep_disorder": 0.4497,
+          "electrolyte_imbalance": 0.3344,
+          "prediabetes": 0.3088,
+          "inflammation": 0.2935
+        },
+        "parse_success": true,
+        "top3_predictions": [
+          "anemia",
+          "sleep_disorder"
+        ],
+        "flagged_conditions": [
+          "anemia",
+          "sleep_disorder"
+        ],
+        "response": {
+          "personalizedSummary": "You've shared some concerns about fatigue and snoring. These symptoms may be connected and worth discussing with your doctor further. Below, you'll find some potential next steps and how to prepare for your visit.",
+          "summaryPoints": [
+            "Feeling tired or having little energy",
+            "Snoring while sleeping"
+          ],
+          "insights": [
+            {
+              "diagnosisId": "anemia",
+              "personalNote": "Anemia may be related to iron deficiency or a lack of vitamin B12. It's worth discussing with your doctor, who can help you determine the best course of action."
+            },
+            {
+              "diagnosisId": "sleep_disorder",
+              "personalNote": "Sleep disorders like sleep apnea may be caused by obesity, smoking, or a family history. They can be treated with lifestyle changes or medication, but it's best to discuss with your doctor first."
+            }
+          ],
+          "declinedSuspicions": [],
+          "recoveryOutlook": "With proper treatment, you may be able to manage your symptoms and improve your quality of life.",
+          "nextSteps": "Schedule an appointment with a primary care physician or a specialist, such as a hematologist or a pulmonologist.",
+          "doctorKitSummary": "I'd like to discuss your symptoms of fatigue and snoring further with a specialist.",
+          "doctorKitQuestions": [],
+          "doctorKitArguments": [],
+          "recommendedDoctors": [
+            {
+              "specialty": "Hematologist",
+              "priority": "High",
+              "reason": "To discuss anemia or iron deficiency.",
+              "symptomsToDiscuss": [
+                "Fatigue",
+                "Snoring"
+              ],
+              "suggestedTests": [
+                "Complete Blood Count (CBC)"
+              ]
+            },
+            {
+              "specialty": "Pulmonologist",
+              "priority": "Medium",
+              "reason": "To discuss sleep apnea or other sleep disorders.",
+              "symptomsToDiscuss": [
+                "Snoring"
+              ],
+              "suggestedTests": [
+                "Polysomnography (Sleep Study)"
+              ]
+            }
+          ],
+          "doctorKits": [
+            {
+              "specialty": "Hematologist",
+              "openingSummary": "I'd like to discuss your symptoms of fatigue and anemia with a specialist.",
+              "concerningSymptoms": [
+                "Fatigue"
+              ],
+              "recommendedTests": [
+                "Complete Blood Count (CBC)"
+              ],
+              "discussionPoints": [
+                "Anemia symptoms",
+                "Iron deficiency"
+              ],
+              "bringToAppointment": [
+                "Recent lab results",
+                "List of medications"
+              ],
+              "whatToSay": "I've been experiencing fatigue and I'm concerned about anemia. Can we discuss my options for treatment?"
+            },
+            {
+              "specialty": "Pulmonologist",
+              "openingSummary": "I'd like to discuss your symptoms of snoring and sleep apnea with a specialist.",
+              "concerningSymptoms": [
+                "Snoring"
+              ],
+              "recommendedTests": [
+                "Polysomnography (Sleep Study)"
+              ],
+              "discussionPoints": [
+                "Sleep apnea symptoms",
+                "Lifestyle changes"
+              ],
+              "bringToAppointment": [
+                "Sleep diary",
+                "List of medications"
+              ],
+              "whatToSay": "I've been snoring and I'm concerned about sleep apnea. Can we discuss my options for treatment?"
+            }
+          ],
+          "allClear": false
+        },
+        "http_status": 200,
+        "error": null
+      },
+      {
+        "profile_id": "NHANES-D-38725",
+        "profile_type": "positive",
+        "target_condition": "sleep_disorder",
+        "expected_conditions": [
+          "sleep_disorder"
+        ],
+        "model_scores_all12": {
+          "hypothyroidism": 0.8003,
+          "sleep_disorder": 0.656,
+          "prediabetes": 0.4032,
+          "electrolyte_imbalance": 0.4,
+          "kidney_disease": 0.3858,
+          "inflammation": 0.2821,
+          "hepatitis": 0.0819,
+          "iron_deficiency": 0.0425,
+          "liver": 0.0369,
+          "anemia": 0.0193,
+          "perimenopause": 0.0
+        },
+        "model_top5": {
+          "hypothyroidism": 0.8003,
+          "sleep_disorder": 0.656,
+          "prediabetes": 0.4032,
+          "electrolyte_imbalance": 0.4,
+          "kidney_disease": 0.3858
+        },
+        "parse_success": false,
+        "top3_predictions": [],
+        "flagged_conditions": [],
+        "response": "",
+        "http_status": 500,
+        "error": "HTTP 500"
+      },
+      {
+        "profile_id": "NHANES-D-38181",
+        "profile_type": "positive",
+        "target_condition": "liver",
+        "expected_conditions": [
+          "liver"
+        ],
+        "model_scores_all12": {
+          "sleep_disorder": 0.5605,
+          "prediabetes": 0.3379,
+          "electrolyte_imbalance": 0.251,
+          "hypothyroidism": 0.1763,
+          "anemia": 0.1175,
+          "kidney_disease": 0.1098,
+          "inflammation": 0.1086,
+          "iron_deficiency": 0.0966,
+          "liver": 0.0126,
+          "hepatitis": 0.0046,
+          "perimenopause": 0.0
+        },
+        "model_top5": {
+          "sleep_disorder": 0.5605,
+          "prediabetes": 0.3379,
+          "electrolyte_imbalance": 0.251,
+          "hypothyroidism": 0.1763,
+          "anemia": 0.1175
+        },
+        "parse_success": true,
+        "top3_predictions": [],
+        "flagged_conditions": [],
+        "response": {
+          "personalizedSummary": "Your fatigue might be connected to other symptoms you've mentioned, such as disrupted sleep and heavy periods. It's worth discussing these potential links with your doctor. Below are some possible next steps and how to prepare for your visit.",
+          "summaryPoints": [
+            "Fatigue reported",
+            "Disrupted sleep schedule"
+          ],
+          "insights": [],
+          "nextSteps": "You may want to start by speaking with your GP to discuss your symptoms. If necessary, your GP can refer you to a specialist for further evaluation.",
+          "doctorKitSummary": "I'm concerned about my fatigue and sleep schedule, and I'd like to discuss possible causes and solutions. I'm looking for guidance on how to improve my sleep and overall well-being.",
+          "doctorKitQuestions": [],
+          "doctorKitArguments": [],
+          "recommendedDoctors": [],
+          "doctorKits": [],
+          "allClear": false,
+          "declinedSuspicions": [
+            {
+              "diagnosisId": "sleep_disorder",
+              "reason": "This signal was reviewed but was not strong enough to prioritize after the full evidence check."
+            }
+          ]
+        },
+        "http_status": 200,
+        "error": null
+      },
+      {
+        "profile_id": "NHANES-C-27120",
+        "profile_type": "positive",
+        "target_condition": "vitamin_d_deficiency",
+        "expected_conditions": [
+          "vitamin_d_deficiency"
+        ],
+        "model_scores_all12": {
+          "anemia": 0.5934,
+          "sleep_disorder": 0.4225,
+          "electrolyte_imbalance": 0.3371,
+          "prediabetes": 0.2897,
+          "inflammation": 0.1593,
+          "iron_deficiency": 0.0966,
+          "hypothyroidism": 0.0486,
+          "kidney_disease": 0.0441,
+          "liver": 0.0064,
+          "hepatitis": 0.0046,
+          "perimenopause": 0.0
+        },
+        "model_top5": {
+          "anemia": 0.5934,
+          "sleep_disorder": 0.4225,
+          "electrolyte_imbalance": 0.3371,
+          "prediabetes": 0.2897,
+          "inflammation": 0.1593
+        },
+        "parse_success": true,
+        "top3_predictions": [],
+        "flagged_conditions": [],
+        "response": {
+          "personalizedSummary": "We've noticed some potential patterns in your symptoms, including fatigue and muscle weakness, headaches, and joint pain. These may be worth discussing with your doctor to better understand what's going on.",
+          "summaryPoints": [
+            "Fatigue and muscle weakness have been persistent",
+            "Headaches and joint pain occur frequently",
+            "Sleep disturbances and mood swings may be related"
+          ],
+          "insights": [],
+          "recoveryOutlook": "With proper treatment and lifestyle changes, you may be able to manage your symptoms and improve your quality of life.",
+          "nextSteps": "Schedule a follow-up appointment to discuss your symptoms and any changes you've noticed. Be prepared to share your concerns with your doctor.",
+          "doctorKitSummary": "As your doctor, I want to help you understand your symptoms and develop a personalized treatment plan. We'll work together to identify the underlying causes of your fatigue and pain.",
+          "doctorKitQuestions": [],
+          "doctorKitArguments": [],
+          "recommendedDoctors": [
+            {
+              "specialty": "copy",
+              "priority": "copy",
+              "reason": "It may be worth consulting a specialist for further evaluation.",
+              "symptomsToDiscuss": [
+                "fatigue"
+              ],
+              "suggestedTests": [
+                "copy"
+              ]
+            }
+          ],
+          "doctorKits": [
+            {
+              "specialty": "copy",
+              "openingSummary": "I'm concerned about your fatigue and pain, and I'd like to discuss some potential causes with you.",
+              "concerningSymptoms": [
+                "copy"
+              ],
+              "recommendedTests": [
+                "copy"
+              ],
+              "discussionPoints": [
+                "We may want to explore some lifestyle changes to help manage your symptoms"
+              ],
+              "bringToAppointment": [
+                "any relevant medical records or test results"
+              ],
+              "whatToSay": "I've been experiencing fatigue and pain, and I'm worried about what might be causing it."
+            }
+          ],
+          "allClear": false,
+          "declinedSuspicions": [
+            {
+              "diagnosisId": "anemia",
+              "reason": "This possibility was reviewed but wasn't strong enough to prioritize after a full evidence check."
+            },
+            {
+              "diagnosisId": "sleep_disorder",
+              "reason": "This possibility was reviewed but wasn't strong enough to prioritize after a full evidence check."
+            }
+          ]
+        },
+        "http_status": 200,
+        "error": null
+      },
+      {
+        "profile_id": "NHANES-D-31254",
+        "profile_type": "positive",
+        "target_condition": "electrolyte_imbalance",
+        "expected_conditions": [
+          "electrolyte_imbalance"
+        ],
+        "model_scores_all12": {
+          "sleep_disorder": 0.4945,
+          "prediabetes": 0.3137,
+          "electrolyte_imbalance": 0.2822,
+          "hypothyroidism": 0.1935,
+          "inflammation": 0.1319,
+          "kidney_disease": 0.109,
+          "iron_deficiency": 0.0966,
+          "anemia": 0.096,
+          "liver": 0.0132,
+          "hepatitis": 0.0046,
+          "perimenopause": 0.0
+        },
+        "model_top5": {
+          "sleep_disorder": 0.4945,
+          "prediabetes": 0.3137,
+          "electrolyte_imbalance": 0.2822,
+          "hypothyroidism": 0.1935,
+          "inflammation": 0.1319
+        },
+        "parse_success": true,
+        "top3_predictions": [
+          "sleep_disorder"
+        ],
+        "flagged_conditions": [
+          "sleep_disorder"
+        ],
+        "response": {
+          "personalizedSummary": "You've reported snoring rarely, which may be worth discussing with your doctor. This could be affecting your quality of life and energy levels. Below you can see some possibilities on the root causes and which doctors to see first, and how to prepare for your visit.",
+          "summaryPoints": [
+            "Snoring (rarely)",
+            "Snoring rarely at night",
+            "Sleeping poorly or not feeling rested"
+          ],
+          "insights": [
+            {
+              "diagnosisId": "sleep_disorder",
+              "personalNote": "Snoring rarely is a common symptom associated with sleep disorders. A sleep study might be helpful to explore this possibility."
+            }
+          ],
+          "declinedSuspicions": [],
+          "recoveryOutlook": "With proper diagnosis and treatment, you may be able to improve your sleep quality and overall well-being. It's worth addressing this issue to prevent potential complications.",
+          "nextSteps": "Schedule a sleep study to determine the cause of your snoring. Discuss your symptoms and test results with your doctor to create a personalized treatment plan.",
+          "doctorKitSummary": "I'm here to support you in understanding your symptoms and exploring possible causes. Please feel free to ask me any questions you may have.",
+          "doctorKitQuestions": [],
+          "doctorKitArguments": [],
+          "recommendedDoctors": [
+            {
+              "specialty": "GP",
+              "priority": "start_here",
+              "reason": "Your GP can initiate follow-up and discuss your symptoms and test results.",
+              "symptomsToDiscuss": [
+                "snoring (rarely)"
+              ],
+              "suggestedTests": [
+                "Polysomnography (sleep study)"
+              ]
+            }
+          ],
+          "doctorKits": [
+            {
+              "specialty": "GP",
+              "openingSummary": "I'm here to support you in understanding your symptoms and exploring possible causes. Please feel free to ask me any questions you may have.",
+              "concerningSymptoms": [
+                "snoring (rarely)"
+              ],
+              "recommendedTests": [
+                "Polysomnography (sleep study)"
+              ],
+              "discussionPoints": [
+                "Discuss the potential impact of snoring on your quality of life and energy levels."
+              ],
+              "bringToAppointment": [
+                "A list of your medications",
+                "Any relevant medical records"
+              ],
+              "whatToSay": "I've been experiencing snoring rarely at night, and I'm concerned it might be affecting my sleep quality. I'd like to discuss this further with my doctor and explore possible causes."
+            }
+          ],
+          "allClear": false
+        },
+        "http_status": 200,
+        "error": null
+      },
+      {
+        "profile_id": "NHANES-C-28451",
+        "profile_type": "healthy",
+        "target_condition": null,
+        "expected_conditions": [],
+        "model_scores_all12": {
+          "sleep_disorder": 0.3975,
+          "prediabetes": 0.2669,
+          "electrolyte_imbalance": 0.2328,
+          "anemia": 0.1161,
+          "inflammation": 0.1024,
+          "iron_deficiency": 0.0966,
+          "kidney_disease": 0.0593,
+          "hypothyroidism": 0.0287,
+          "liver": 0.008,
+          "hepatitis": 0.0046,
+          "perimenopause": 0.0
+        },
+        "model_top5": {
+          "sleep_disorder": 0.3975,
+          "prediabetes": 0.2669,
+          "electrolyte_imbalance": 0.2328,
+          "anemia": 0.1161,
+          "inflammation": 0.1024
+        },
+        "parse_success": true,
+        "top3_predictions": [
+          "sleep_disorder",
+          "prediabetes"
+        ],
+        "flagged_conditions": [
+          "sleep_disorder",
+          "prediabetes"
+        ],
+        "response": {
+          "personalizedSummary": "Based on your symptoms, we're exploring possible sleep disorders and prediabetes. You snore occasionally and have no family history of diabetes. Below you can see some potential next steps and how to prepare for your visit.",
+          "summaryPoints": [
+            "How often do you snore while sleeping?",
+            "You snore occasionally",
+            "Based on your responses, this may be worth discussing with your GP."
+          ],
+          "insights": [
+            {
+              "diagnosisId": "sleep_disorder",
+              "personalNote": "Snoring is a common symptom associated with sleep disorders. A sleep study may help identify the issue."
+            },
+            {
+              "diagnosisId": "prediabetes",
+              "personalNote": "No family history of diabetes reduces the likelihood but doesn't eliminate the possibility. A doctor may recommend an HbA1c test or fasting blood glucose test."
+            }
+          ],
+          "recoveryOutlook": "Recovery is possible with proper diagnosis and treatment. It's essential to work with a healthcare professional to develop a treatment plan.",
+          "nextSteps": "Schedule an appointment with a doctor to discuss your symptoms and potential next steps. Be prepared to discuss your snoring and abdominal pain.",
+          "doctorKitSummary": "As your doctor, I'd like to discuss your snoring and abdominal pain. I'll also consider recommending a sleep study and potentially an HbA1c test or fasting blood glucose test.",
+          "doctorKitQuestions": [],
+          "doctorKitArguments": [],
+          "recommendedDoctors": [
+            {
+              "specialty": "Sleep Specialist",
+              "priority": "High",
+              "reason": "Expertise in sleep disorders and sleep studies.",
+              "symptomsToDiscuss": [
+                "Snoring"
+              ],
+              "suggestedTests": [
+                "Polysomnography (sleep study)"
+              ]
+            },
+            {
+              "specialty": "Endocrinologist",
+              "priority": "Medium",
+              "reason": "Experience in diagnosing and treating prediabetes.",
+              "symptomsToDiscuss": [
+                "Abdominal pain"
+              ],
+              "suggestedTests": [
+                "HbA1c test",
+                "Fasting blood glucose test"
+              ]
+            }
+          ],
+          "doctorKits": [
+            {
+              "specialty": "Sleep Specialist",
+              "openingSummary": "As your sleep specialist, I'd like to discuss your snoring and potential sleep disorders. I'll also consider recommending a sleep study to help identify the issue.",
+              "concerningSymptoms": [
+                "Snoring"
+              ],
+              "recommendedTests": [
+                "Polysomnography (sleep study)"
+              ],
+              "discussionPoints": [
+                "Sleep patterns",
+                "Snoring history"
+              ],
+              "bringToAppointment": [
+                "Sleep diary",
+                "Snoring history"
+              ],
+              "whatToSay": "I've been experiencing snoring occasionally, and I'm concerned about sleep disorders."
+            },
+            {
+              "specialty": "Endocrinologist",
+              "openingSummary": "As your endocrinologist, I'd like to discuss your abdominal pain and potential prediabetes. I'll also consider recommending an HbA1c test or fasting blood glucose test to help identify the issue.",
+              "concerningSymptoms": [
+                "Abdominal pain"
+              ],
+              "recommendedTests": [
+                "HbA1c test",
+                "Fasting blood glucose test"
+              ],
+              "discussionPoints": [
+                "Abdominal pain",
+                "Family medical history"
+              ],
+              "bringToAppointment": [
+                "Abdominal pain history",
+                "Family medical history"
+              ],
+              "whatToSay": "I've been experiencing abdominal pain, and I'm concerned about prediabetes."
+            }
+          ],
+          "allClear": false
+        },
+        "http_status": 200,
+        "error": null
+      },
+      {
+        "profile_id": "NHANES-C-21592",
+        "profile_type": "positive",
+        "target_condition": "hepatitis",
+        "expected_conditions": [
+          "hepatitis"
+        ],
+        "model_scores_all12": {
+          "sleep_disorder": 0.5242,
+          "hepatitis": 0.5241,
+          "hypothyroidism": 0.4066,
+          "inflammation": 0.3676,
+          "prediabetes": 0.3521,
+          "electrolyte_imbalance": 0.3208,
+          "liver": 0.2409,
+          "kidney_disease": 0.2023,
+          "anemia": 0.0702,
+          "iron_deficiency": 0.0661,
+          "perimenopause": 0.0
+        },
+        "model_top5": {
+          "sleep_disorder": 0.5242,
+          "hepatitis": 0.5241,
+          "hypothyroidism": 0.4066,
+          "inflammation": 0.3676,
+          "prediabetes": 0.3521
+        },
+        "parse_success": true,
+        "top3_predictions": [
+          "sleep_disorder",
+          "hepatitis"
+        ],
+        "flagged_conditions": [
+          "sleep_disorder",
+          "hepatitis"
+        ],
+        "response": {
+          "personalizedSummary": "You've mentioned snoring occasionally while sleeping and abdominal pain. These symptoms may be related to sleep disorders or hepatitis. Below, you can see some potential hypotheses on the root causes and which doctors to see first, and how to prepare for your visit.",
+          "summaryPoints": [
+            "How often do you snore while sleeping?",
+            "You snore occasionally while sleeping",
+            "Based on your responses, this may be worth discussing with your GP."
+          ],
+          "insights": [
+            {
+              "diagnosisId": "sleep_disorder",
+              "personalNote": "Your snoring might be related to sleep disorders. It's worth discussing this with your doctor."
+            },
+            {
+              "diagnosisId": "hepatitis",
+              "personalNote": "Your abdominal pain and lack of close family history of diabetes might be related to hepatitis. Discuss this with your doctor."
+            }
+          ],
+          "declinedSuspicions": [
+            {
+              "diagnosisId": "hypothyroidism",
+              "reason": "This signal was reviewed but was not strong enough to prioritise after the full evidence check."
+            }
+          ],
+          "recoveryOutlook": "Recovery is possible with proper diagnosis and treatment. It's essential to work closely with your doctor.",
+          "nextSteps": "Schedule an appointment with your primary care physician to discuss your symptoms and potential next steps.",
+          "doctorKitSummary": "I've identified potential root causes of your symptoms, including sleep disorders and hepatitis. I recommend discussing these with your doctor.",
+          "doctorKitQuestions": [],
+          "doctorKitArguments": [],
+          "recommendedDoctors": [
+            {
+              "specialty": "Primary Care Physician",
+              "priority": "High",
+              "reason": "Your primary care physician can help you discuss your symptoms and potential next steps.",
+              "symptomsToDiscuss": [
+                "snoring",
+                "abdominal pain"
+              ],
+              "suggestedTests": [
+                "Polysomnography (sleep study)",
+                "Liver function tests (LFTs)"
+              ]
+            }
+          ],
+          "doctorKits": [
+            {
+              "specialty": "Primary Care Physician",
+              "openingSummary": "I've identified potential root causes of your symptoms, including sleep disorders and hepatitis. I recommend discussing these with your doctor.",
+              "concerningSymptoms": [
+                "snoring",
+                "abdominal pain"
+              ],
+              "recommendedTests": [
+                "Polysomnography (sleep study)",
+                "Liver function tests (LFTs)"
+              ],
+              "discussionPoints": [
+                "sleep disorders",
+                "hepatitis"
+              ],
+              "bringToAppointment": [
+                "sleep study results",
+                "lab results"
+              ],
+              "whatToSay": "I've been experiencing snoring and abdominal pain, and I'm concerned about potential root causes. Can we discuss these further?"
+            }
+          ],
+          "allClear": false
+        },
+        "http_status": 200,
+        "error": null
+      },
+      {
+        "profile_id": "NHANES-C-22809",
+        "profile_type": "positive",
+        "target_condition": "iron_deficiency",
+        "expected_conditions": [
+          "iron_deficiency"
+        ],
+        "model_scores_all12": {
+          "perimenopause": 0.6144,
+          "hypothyroidism": 0.5322,
+          "sleep_disorder": 0.5318,
+          "prediabetes": 0.5069,
+          "electrolyte_imbalance": 0.4324,
+          "anemia": 0.4185,
+          "inflammation": 0.3175,
+          "iron_deficiency": 0.2568,
+          "kidney_disease": 0.1367,
+          "liver": 0.0163,
+          "hepatitis": 0.0049
+        },
+        "model_top5": {
+          "perimenopause": 0.6144,
+          "hypothyroidism": 0.5322,
+          "sleep_disorder": 0.5318,
+          "prediabetes": 0.5069,
+          "electrolyte_imbalance": 0.4324
+        },
+        "parse_success": true,
+        "top3_predictions": [
+          "perimenopause",
+          "sleep_disorder"
+        ],
+        "flagged_conditions": [
+          "perimenopause",
+          "sleep_disorder"
+        ],
+        "response": {
+          "personalizedSummary": "It's possible that you're experiencing hormonal changes or sleep issues. You've also reported feeling tired, which could be related to your sleep. Below you can see some potential causes and which doctors to see first, and how to prepare for your visit.",
+          "summaryPoints": [
+            "Regular periods in the past 12 months",
+            "Feeling tired or having little energy (dpq040___feeling_tired_or_having_little_energy: 0.9)",
+            "Irregular periods over the past year"
+          ],
+          "insights": [
+            {
+              "diagnosisId": "perimenopause",
+              "personalNote": "Your age and recent periods may suggest hormonal changes. Discussing your hormonal profile with your doctor could help identify this."
+            },
+            {
+              "diagnosisId": "sleep_disorder",
+              "personalNote": "Your fatigue and low ML score may suggest a sleep disorder. Discussing sleep hygiene with your doctor could help improve your sleep."
+            }
+          ],
+          "recoveryOutlook": "With proper treatment, you may be able to manage your symptoms and improve your quality of life.",
+          "nextSteps": "Schedule an appointment with your primary care physician to discuss your symptoms and potential treatment options.",
+          "doctorKitSummary": "As your doctor, I'd like to discuss your recent periods and fatigue with you. We can work together to determine the cause and develop a treatment plan.",
+          "doctorKitQuestions": [],
+          "doctorKitArguments": [],
+          "recommendedDoctors": [
+            {
+              "specialty": "Obstetrics and Gynecology",
+              "priority": "High",
+              "reason": "Your symptoms may suggest a hormonal change, which is best evaluated by an OB-GYN.",
+              "symptomsToDiscuss": [
+                "Irregular periods",
+                "Feeling tired or having little energy"
+              ],
+              "suggestedTests": [
+                "Hormonal profile (e.g., FSH, LH, Estradiol)"
+              ]
+            },
+            {
+              "specialty": "Sleep Medicine",
+              "priority": "Medium",
+              "reason": "Your fatigue and low ML score may suggest a sleep disorder, which is best evaluated by a sleep specialist.",
+              "symptomsToDiscuss": [
+                "Feeling tired or having little energy"
+              ],
+              "suggestedTests": [
+                "Sleep hygiene discussion"
+              ]
+            }
+          ],
+          "doctorKits": [
+            {
+              "specialty": "Obstetrics and Gynecology",
+              "openingSummary": "I'd like to discuss your recent periods and fatigue with you. We can work together to determine the cause and develop a treatment plan.",
+              "concerningSymptoms": [
+                "Irregular periods",
+                "Feeling tired or having little energy"
+              ],
+              "recommendedTests": [
+                "Hormonal profile (e.g., FSH, LH, Estradiol)"
+              ],
+              "discussionPoints": [
+                "Hormonal changes and their impact on your periods",
+                "Sleep hygiene and its impact on your fatigue"
+              ],
+              "bringToAppointment": [
+                "A list of your recent periods",
+                "A sleep diary"
+              ],
+              "whatToSay": "I've been experiencing irregular periods and fatigue, and I'm concerned about the impact on my quality of life."
+            },
+            {
+              "specialty": "Sleep Medicine",
+              "openingSummary": "I'd like to discuss your fatigue with you. We can work together to determine the cause and develop a treatment plan.",
+              "concerningSymptoms": [
+                "Feeling tired or having little energy"
+              ],
+              "recommendedTests": [
+                "Sleep hygiene discussion"
+              ],
+              "discussionPoints": [
+                "Sleep hygiene and its impact on your fatigue",
+                "Potential underlying causes of your fatigue"
+              ],
+              "bringToAppointment": [
+                "A sleep diary",
+                "A list of your recent sleep patterns"
+              ],
+              "whatToSay": "I've been experiencing fatigue, and I'm concerned about the impact on my quality of life."
+            }
+          ],
+          "allClear": false,
+          "declinedSuspicions": [
+            {
+              "diagnosisId": "hypothyroidism",
+              "reason": "This signal was reviewed but was not strong enough to prioritize after the full evidence check."
+            },
+            {
+              "diagnosisId": "prediabetes",
+              "reason": "This signal was reviewed but was not strong enough to prioritise after the full evidence check."
+            },
+            {
+              "diagnosisId": "electrolyte_imbalance",
+              "reason": "This signal was reviewed but was not strong enough to prioritise after the full evidence check."
+            }
+          ]
+        },
+        "http_status": 200,
+        "error": null
+      },
+      {
+        "profile_id": "NHANES-C-27574",
+        "profile_type": "positive",
+        "target_condition": "perimenopause",
+        "expected_conditions": [
+          "perimenopause"
+        ],
+        "model_scores_all12": {
+          "hypothyroidism": 0.9372,
+          "sleep_disorder": 0.6556,
+          "electrolyte_imbalance": 0.5575,
+          "prediabetes": 0.4727,
+          "kidney_disease": 0.4215,
+          "anemia": 0.1914,
+          "inflammation": 0.081,
+          "liver": 0.0188,
+          "iron_deficiency": 0.017,
+          "hepatitis": 0.0145,
+          "perimenopause": 0.0
+        },
+        "model_top5": {
+          "hypothyroidism": 0.9372,
+          "sleep_disorder": 0.6556,
+          "electrolyte_imbalance": 0.5575,
+          "prediabetes": 0.4727,
+          "kidney_disease": 0.4215
+        },
+        "parse_success": false,
+        "top3_predictions": [],
+        "flagged_conditions": [],
+        "response": "",
+        "http_status": 500,
+        "error": "HTTP 500"
+      }
+    ]
+  }
+}

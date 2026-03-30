@@ -497,7 +497,7 @@ ${uploadedLabsText}
 Respond with valid JSON only. No markdown, no preamble:
 {
   "summaryPoints": [
-    "3-4 short symptom or wellness-pattern bullets grounded in this assessment. No conditions."
+    "Exactly 3-5 short bullets, each 4-12 words, grounded in this assessment. No conditions, tests, or doctors."
   ],
   "personalizedSummary": "2-3 sentences. Reference the specific things this person actually mentioned (sleep, energy dips, stress patterns — by name). Do NOT use generic phrases like 'your answers look reassuring'. Instead write something like: 'From what you shared, the tiredness you experience seems connected to [specific pattern] rather than pointing to an underlying condition. The screening didn't flag anything that would need urgent follow-up, which is genuinely good news.' No medical disclaimers in this field. Warm, direct, second-person voice.",
   "declinedSuspicions": [],
@@ -516,6 +516,7 @@ Rules:
 - Warm, positive tone throughout. Never create concern where none exists.
 - Do not invent conditions, red flags, or diagnostic urgency.
 - summaryPoints and recoveryOutlook are required.
+- summaryPoints: exactly 3-5 items, each 4-12 words, and each must be a symptom or wellness pattern only.
 - personalizedSummary must reference something specific from the answers — not generic.
 - Keep the answer lightweight when the fatigue signal is low.
 - Complete the full JSON without truncating.`;
@@ -574,6 +575,7 @@ CRITICAL INSTRUCTION FOR personalizedSummary:
 - Maximum 3 sentences.
 
 SECTION ROLE ASSIGNMENT — strictly enforce, no cross-section repetition:
+- summaryPoints: "What symptoms or patterns stand out?" — exactly 2-3 very short bullets. Symptoms only. No conditions, diagnoses, tests, or doctors.
 - personalizedSummary: "What is this person experiencing and how do their symptoms connect?" — symptom picture only. No conditions, tests, or doctors.
 - insights[].personalNote: "Why was this condition flagged for this specific patient?" — clinical evidence link only.
 - nextSteps: "Who to see first and why — 2 sentences max." Action only.
@@ -595,6 +597,12 @@ Use the risk calibration snapshot to tune language:
 
 ${oneShot ? `EXAMPLE OF A PERFECT OUTPUT (follow this quality and structure):\n${oneShot}\n` : ''}Respond with valid JSON only. No markdown, no preamble:
 {
+  "summaryPoints": [
+    "Exactly 2-3 bullet strings",
+    "Each bullet must be 3-10 words",
+    "Each bullet must describe a symptom or pattern only",
+    "No conditions, diagnoses, tests, doctors, or generic filler"
+  ],
   "personalizedSummary": "2-3 sentences. Open with the personalizedSummary opening instruction above. Name the actual symptoms from keySymptoms. Connect them to fatigue. End with the 'Below you can see...' sentence. No disclaimer.",
   "declinedSuspicions": [
     {
@@ -638,6 +646,10 @@ ${oneShot ? `EXAMPLE OF A PERFECT OUTPUT (follow this quality and structure):\n$
 }
 
 Rules:
+- summaryPoints are required.
+- summaryPoints: exactly 2-3 items, each 3-10 words.
+- summaryPoints must be concrete symptom or pattern bullets, not prose paragraphs.
+- summaryPoints must not mention conditions, diagnoses, tests, doctors, or treatment.
 - personalizedSummary: name actual symptoms, connect them, warm tone, end with 'Below you can see...', no disclaimer.
 - If supportedSuspicions plus declinedSuspicions exist, every diagnosisId from both must appear in insights or declinedSuspicions.
 - insights: one entry per supportedSuspicion. personalNote must NOT repeat personalizedSummary content.
@@ -649,4 +661,58 @@ Rules:
 - For unconfirmed suspicions: "may suggest", "could indicate", "worth ruling out".
 - Never use alarming language.
 - Complete the full JSON without truncating.`;
+}
+
+export function buildGroqSynthesisFallbackPromptV7({
+  groundingResultJson,
+  overallUrgency = 'routine',
+}: Pick<GroqSynthesisPromptV7Args, 'groundingResultJson' | 'overallUrgency'>): string {
+  const toneInstruction =
+    overallUrgency === 'urgent'
+      ? 'Stay calm, but clearly support prompt medical follow-up where the evidence already justifies it.'
+      : overallUrgency === 'soon'
+        ? 'Stay calm and encourage near-term follow-up for stronger signals.'
+        : 'Stay calm, supportive, and non-urgent.';
+
+  return `You are a medical communication writer. Convert the clinical evidence JSON into concise patient-facing JSON.
+
+Do not add medical content that is not already in the clinical evidence.
+${toneInstruction}
+
+Clinical evidence JSON:
+${groundingResultJson}
+
+Return valid JSON only:
+{
+  "summaryPoints": [
+    "Exactly 2-3 short bullets, each 3-10 words, symptoms or patterns only"
+  ],
+  "personalizedSummary": "2-3 sentences, warm and specific. Mention actual symptoms only. End with: 'Below you can see some hypotheses on the root causes and which doctors to see first, and how to prepare for your visit.'",
+  "declinedSuspicions": [
+    { "diagnosisId": "copy from clinical evidence", "reason": "translate briefly" }
+  ],
+  "insights": [
+    { "diagnosisId": "copy from supportedSuspicions", "confidence": "copy confidence", "personalNote": "2 short sentences" }
+  ],
+  "recoveryOutlook": "2 short sentences.",
+  "nextSteps": "2 sentences maximum.",
+  "doctorKitSummary": "2 first-person sentences.",
+  "doctorKitQuestions": [],
+  "doctorKitArguments": [],
+  "recommendedDoctors": [
+    { "specialty": "copy", "priority": "copy", "reason": "1-2 short sentences", "symptomsToDiscuss": ["copy"], "suggestedTests": ["copy"] }
+  ],
+  "doctorKits": [
+    { "specialty": "copy", "openingSummary": "2 first-person sentences", "bringToAppointment": ["practical items"], "concerningSymptoms": ["copy"], "recommendedTests": ["copy"], "discussionPoints": ["translate briefly"], "whatToSay": "2 first-person sentences" }
+  ],
+  "allClear": false
+}
+
+Rules:
+- summaryPoints are required: exactly 2-3 items, 3-10 words each.
+- summaryPoints must be symptoms/patterns only. No conditions, diagnoses, tests, or doctors.
+- Keep every diagnosisId from supportedSuspicions in insights.
+- Keep every diagnosisId from declinedSuspicions in declinedSuspicions.
+- Do not add new diagnosisIds, symptoms, tests, or specialties.
+- Keep arrays short and complete.`;
 }

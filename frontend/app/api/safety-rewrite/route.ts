@@ -14,6 +14,19 @@ export async function POST(req: NextRequest) {
   }
 
   const rewritten = await rewriteDeepAnalyzeTone(inputValidation.data);
-  const { data: safeData } = applyHardSafetyRules(rewritten);
-  return NextResponse.json(safeData);
+  const { data: safeData, warnings } = applyHardSafetyRules(rewritten.data);
+  const response = NextResponse.json(safeData);
+  response.headers.set('x-safety-rewrite-source', rewritten.rewriteSource);
+  response.headers.set('x-safety-hard-rules-applied', warnings.length > 0 ? 'true' : 'false');
+  response.headers.set('x-safety-hard-rule-count', String(warnings.length));
+  if (rewritten.model) {
+    response.headers.set('x-safety-rewrite-model', rewritten.model);
+  }
+  if (rewritten.status !== undefined) {
+    response.headers.set('x-safety-rewrite-status', String(rewritten.status));
+  }
+  if (rewritten.errorSnippet) {
+    response.headers.set('x-safety-rewrite-error-snippet', encodeURIComponent(rewritten.errorSnippet));
+  }
+  return response;
 }

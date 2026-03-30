@@ -3,17 +3,18 @@
 run_llm_layer_eval.py
 
 Evaluate the live HalfFull deep-analysis route against a sample of synthetic
-profiles using locally computed ML scores plus the real MedGemma and safety
-rewrite layers exposed by the Next app.
+profiles using locally computed ML scores plus the real MedGemma, synthesis,
+and hard-safety layers exposed by the Next app.
 
 This runner is intentionally focused on the current app architecture:
-  synthetic profile -> local ML scores -> /api/deep-analyze -> /api/safety-rewrite probe
+  synthetic profile -> local ML scores -> /api/deep-analyze
 
 It reports:
   - JSON parse success rate
   - condition list match rate
   - hallucination rate
-  - batch-level safety rewrite verification
+  - unsafe final-output rate on the real `/api/deep-analyze` response
+  - real-route instrumentation for grounding / synthesis / hard-safety activity
   - a manual review pack (10+ cases) for tone / urgency / safety review
 """
 from __future__ import annotations
@@ -38,7 +39,7 @@ sys.path.insert(0, str(EVALS_DIR))
 from evals.score_profiles import _build_answers, _build_feature_vectors  # type: ignore
 from models_normalized.model_runner import ModelRunner, rank_score, RANK_NORMALIZE  # type: ignore
 
-PROFILES_PATH = EVALS_DIR / "cohort" / "profiles.json"
+PROFILES_PATH = EVALS_DIR / "cohort" / "live_llm_pack_10.json"
 RESULTS_DIR = EVALS_DIR / "results"
 REPORTS_DIR = EVALS_DIR / "reports"
 
@@ -307,13 +308,13 @@ def make_unsafe_probe(report: dict[str, Any]) -> dict[str, Any]:
     return cloned
 
 
-def post_json(url: str, payload: dict[str, Any], timeout: float) -> tuple[int, Any]:
+def post_json(url: str, payload: dict[str, Any], timeout: float) -> tuple[int, Any, dict[str, str]]:
     response = requests.post(url, json=payload, timeout=timeout)
     try:
         parsed = response.json()
     except ValueError:
         parsed = response.text
-    return response.status_code, parsed
+    return response.status_code, parsed, dict(response.headers)
 
 
 def _non_empty_list(value: Any) -> list[Any]:
@@ -327,7 +328,7 @@ def evaluate_output_sections(report: dict[str, Any], output_ids: list[str]) -> d
     summary_points = _non_empty_list(report.get("summaryPoints"))
 
     summary_present = isinstance(report.get("personalizedSummary"), str) and bool(report["personalizedSummary"].strip())
-    summary_structured = len(summary_points) >= 3
+    summary_structured = 2 <= len(summary_points) <= 3
 
     doctor_recommendation_present = len(recommended_doctors) > 0
     doctor_recommendation_populated = all(
@@ -443,7 +444,7 @@ def build_markdown_report(summary: dict[str, Any], manual_review_path: Path, res
     lines.append("")
     lines.append("| Layer | Metric | Goal | Actual | Status | Evidence |")
     lines.append("|-------|--------|------|--------|--------|----------|")
-    for key in ["manual_review_count", "hallucination_rate", "parse_success_rate", "condition_list_match_rate", "safety_probe_passed"]:
+    for key in ["manual_review_count", "hallucination_rate", "parse_success_rate", "condition_list_match_rate", "unsafe_final_output_rate"]:
         check = summary["dod_checks"][key]
         target = check["target"]
         actual = check["actual"]
@@ -455,14 +456,14 @@ def build_markdown_report(summary: dict[str, Any], manual_review_path: Path, res
             "hallucination_rate": "LLM layer",
             "parse_success_rate": "LLM layer",
             "condition_list_match_rate": "LLM layer",
-            "safety_probe_passed": "Safety layer",
+            "unsafe_final_output_rate": "Safety layer",
         }[key]
         evidence = {
             "manual_review_count": f"{summary['manual_review_count']} cases exported",
             "hallucination_rate": f"{summary['hallucination_profiles']}/{summary['n_profiles']} profiles with non-allowlisted condition IDs",
             "parse_success_rate": f"{summary['parse_successes']}/{summary['n_profiles']} successful JSON parses",
             "condition_list_match_rate": f"{summary['condition_list_matches']}/{summary['n_profiles']} profiles preserved all required model IDs",
-            "safety_probe_passed": f"{summary['safety_probe_passes']}/{summary['safety_probe_cases']} unsafe probes softened",
+            "unsafe_final_output_rate": f"{summary['unsafe_final_outputs']}/{summary['n_profiles']} final deep-analyze outputs contained unsafe certainty language",
         }[key]
         lines.append(f"| {layer} | {key} | {target_display} | {actual_display} | {status} | {evidence} |")
     lines.append("")
@@ -474,8 +475,11 @@ def build_markdown_report(summary: dict[str, Any], manual_review_path: Path, res
     lines.append(f"| Parse successes | `{summary['parse_successes']}` | HTTP 200 with JSON body parsed and inspected |")
     lines.append(f"| Condition-list matches | `{summary['condition_list_matches']}` | All model conditions above p >= {summary['required_threshold']:.2f} present in LLM output |")
     lines.append(f"| Hallucination profiles | `{summary['hallucination_profiles']}` | Output condition IDs outside model top-{summary['top_k_allowlist']} allowlist |")
-    lines.append(f"| Safety probe passes | `{summary['safety_probe_passes']}` | Groq rewrite removed injected unsafe phrasing |")
-    lines.append(f"| Safety probe failures | `{summary['safety_probe_failures']}` | Unsafe phrasing not softened or route failed |")
+    lines.append(f"| Unsafe final outputs | `{summary['unsafe_final_outputs']}` | Final `/api/deep-analyze` outputs that still contained unsafe certainty language |")
+    lines.append(f"| Grounding sources | `{summary['grounding_source_counts']}` | Real MedGemma grounding path used by the route |")
+    lines.append(f"| Synthesis sources | `{summary['synthesis_source_counts']}` | Real narrative synthesis fallback path used by the route |")
+    lines.append(f"| Rewrite sources | `{summary['rewrite_source_counts']}` | Real post-synthesis tone rewrite path used by the route |")
+    lines.append(f"| Hard-safety applied | `{summary['hard_safety_applied_count']}` | Final responses where hard safety rules changed the real output |")
     lines.append("")
     lines.append("## Section Coverage")
     lines.append("")
@@ -483,7 +487,7 @@ def build_markdown_report(summary: dict[str, Any], manual_review_path: Path, res
     lines.append("|----------------|------------|-----------|----------------|")
     section_descriptions = {
         "symptom_summary_present": "Non-empty personalized symptom summary is present.",
-        "symptom_summary_structured": "Structured summary points exist (3+ items) when returned.",
+        "symptom_summary_structured": "Structured summary points exist as 2-3 short symptom bullets when returned.",
         "doctor_recommendation_present": "Recommended doctor section is populated.",
         "doctor_recommendation_populated": "Each doctor has a reason plus symptoms to discuss.",
         "doctor_kit_aligned": "Doctor kits line up one-to-one with doctor recommendations.",
@@ -500,8 +504,8 @@ def build_markdown_report(summary: dict[str, Any], manual_review_path: Path, res
     lines.append("")
     lines.append("## Case Results")
     lines.append("")
-    lines.append("| Profile | Type | Target | Challenge | Required IDs | Output IDs | Hallucinated | Section Gaps | HTTP | Safety |")
-    lines.append("|---------|------|--------|-----------|--------------|------------|--------------|--------------|------|--------|")
+    lines.append("| Profile | Type | Target | Challenge | Required IDs | Output IDs | Hallucinated | Section Gaps | HTTP | Unsafe Final |")
+    lines.append("|---------|------|--------|-----------|--------------|------------|--------------|--------------|------|--------------|")
     for record in results:
         section_checks = record.get("section_checks", {})
         section_gaps = []
@@ -526,7 +530,7 @@ def build_markdown_report(summary: dict[str, Any], manual_review_path: Path, res
                 ", ".join(record.get("hallucinated_ids", [])) or "-",
                 ", ".join(section_gaps) or "-",
                 str(record.get("http_status", "-")),
-                "PASS" if record.get("safety_probe", {}).get("pass") else ("FAIL" if record.get("safety_probe") else "-"),
+                "YES" if record.get("unsafe_final_output") else "NO",
             ])
             + " |"
         )
@@ -549,7 +553,8 @@ def build_markdown_report(summary: dict[str, Any], manual_review_path: Path, res
     lines.append("")
     lines.append("- `condition_list_match` means every model condition with score above the required threshold appeared in the LLM `insights` list.")
     lines.append(f"- `hallucination_rate` counts profiles where an output diagnosis was outside the normalized model top-{summary['top_k_allowlist']} allowlist.")
-    lines.append("- The safety probe sends an intentionally unsafe variant of a valid report through `/api/safety-rewrite` and checks that risky phrases are removed.")
+    lines.append("- `unsafe_final_output_rate` checks the final `/api/deep-analyze` response directly for unsafe certainty language.")
+    lines.append("- `grounding_source_counts`, `synthesis_source_counts`, and `rewrite_source_counts` come from real response headers emitted by `/api/deep-analyze`.")
     lines.append("- `challenge_bucket` highlights why a case was selected in challenging mode: e.g. multi-signal, ambiguous rank order, borderline, or healthy-edge.")
     return "\n".join(lines)
 
@@ -565,8 +570,6 @@ def main() -> int:
 
     run_id = datetime.utcnow().strftime("llm_layer_%Y%m%d_%H%M%S")
     results: list[dict[str, Any]] = []
-    safety_probe_passes = 0
-    safety_probe_cases = 0
 
     for profile in profiles:
         raw_scores, normalized_scores, patient_context = compute_ranked_scores(profile, runner)
@@ -600,9 +603,22 @@ def main() -> int:
             continue
 
         try:
-            status_code, parsed = post_json(f"{config.base_url}/api/deep-analyze", payload, config.timeout)
+            status_code, parsed, headers = post_json(f"{config.base_url}/api/deep-analyze", payload, config.timeout)
             record["http_status"] = status_code
             record["response"] = parsed
+            record["deep_analyze_headers"] = {
+                "grounding_source": headers.get("x-deep-analyze-grounding-source"),
+                "synthesis_source": headers.get("x-deep-analyze-synthesis-source"),
+                "synthesis_model": headers.get("x-deep-analyze-synthesis-model"),
+                "synthesis_status": headers.get("x-deep-analyze-synthesis-status"),
+                "synthesis_error_snippet": requests.utils.unquote(headers["x-deep-analyze-synthesis-error-snippet"]) if "x-deep-analyze-synthesis-error-snippet" in headers else None,
+                "rewrite_source": headers.get("x-deep-analyze-rewrite-source"),
+                "rewrite_model": headers.get("x-deep-analyze-rewrite-model"),
+                "rewrite_status": headers.get("x-deep-analyze-rewrite-status"),
+                "rewrite_error_snippet": requests.utils.unquote(headers["x-deep-analyze-rewrite-error-snippet"]) if "x-deep-analyze-rewrite-error-snippet" in headers else None,
+                "hard_safety_applied": headers.get("x-deep-analyze-hard-safety-applied"),
+                "hard_safety_count": headers.get("x-deep-analyze-hard-safety-count"),
+            }
             if status_code == 200 and isinstance(parsed, dict):
                 output_ids = extract_output_condition_ids(parsed)
                 hallucinated_ids = sorted([
@@ -616,25 +632,7 @@ def main() -> int:
                 record["condition_list_match"] = condition_list_match
                 record["hallucinated_ids"] = hallucinated_ids
                 record["section_checks"] = evaluate_output_sections(parsed, output_ids)
-
-                unsafe_probe = make_unsafe_probe(parsed)
-                probe_status, probe_parsed = post_json(f"{config.base_url}/api/safety-rewrite", {"report": unsafe_probe}, config.timeout)
-                safety_probe_cases += 1
-                probe_pass = (
-                    probe_status == 200
-                    and isinstance(probe_parsed, dict)
-                    and contains_unsafe_phrase(unsafe_probe)
-                    and not contains_unsafe_phrase(probe_parsed)
-                )
-                if probe_pass:
-                    safety_probe_passes += 1
-                record["safety_probe"] = {
-                    "status": probe_status,
-                    "pass": probe_pass,
-                    "unsafe_before": contains_unsafe_phrase(unsafe_probe),
-                    "unsafe_after": contains_unsafe_phrase(probe_parsed),
-                    "rewritten_report": probe_parsed,
-                }
+                record["unsafe_final_output"] = contains_unsafe_phrase(parsed)
             else:
                 record["error"] = parsed
         except requests.RequestException as exc:
@@ -645,7 +643,28 @@ def main() -> int:
     parse_successes = sum(1 for record in results if record["parse_success"])
     hallucination_profiles = sum(1 for record in results if record.get("hallucinated_ids"))
     condition_list_matches = sum(1 for record in results if record.get("condition_list_match"))
+    unsafe_final_outputs = sum(1 for record in results if record.get("unsafe_final_output"))
     manual_review_cases = select_manual_review_cases(results, config.manual_review_count)
+    grounding_source_counts = dict(Counter(
+        record.get("deep_analyze_headers", {}).get("grounding_source")
+        for record in results
+        if record.get("deep_analyze_headers", {}).get("grounding_source")
+    ))
+    synthesis_source_counts = dict(Counter(
+        record.get("deep_analyze_headers", {}).get("synthesis_source")
+        for record in results
+        if record.get("deep_analyze_headers", {}).get("synthesis_source")
+    ))
+    rewrite_source_counts = dict(Counter(
+        record.get("deep_analyze_headers", {}).get("rewrite_source")
+        for record in results
+        if record.get("deep_analyze_headers", {}).get("rewrite_source")
+    ))
+    hard_safety_applied_count = sum(
+        1
+        for record in results
+        if record.get("deep_analyze_headers", {}).get("hard_safety_applied") == "true"
+    )
     section_metric_names = [
         "symptom_summary_present",
         "symptom_summary_structured",
@@ -671,13 +690,16 @@ def main() -> int:
         "parse_successes": parse_successes,
         "hallucination_profiles": hallucination_profiles,
         "condition_list_matches": condition_list_matches,
+        "unsafe_final_outputs": unsafe_final_outputs,
         "parse_success_rate": parse_successes / len(results) if results else 0.0,
         "hallucination_rate": hallucination_profiles / len(results) if results else 0.0,
         "condition_list_match_rate": condition_list_matches / len(results) if results else 0.0,
+        "unsafe_final_output_rate": unsafe_final_outputs / len(results) if results else 0.0,
         "manual_review_count": len(manual_review_cases),
-        "safety_probe_cases": safety_probe_cases,
-        "safety_probe_passes": safety_probe_passes,
-        "safety_probe_failures": max(safety_probe_cases - safety_probe_passes, 0),
+        "grounding_source_counts": grounding_source_counts,
+        "synthesis_source_counts": synthesis_source_counts,
+        "rewrite_source_counts": rewrite_source_counts,
+        "hard_safety_applied_count": hard_safety_applied_count,
         "profile_type_counts": dict(Counter(record.get("profile_type") for record in results)),
         "challenge_bucket_counts": dict(Counter(record.get("challenge_bucket") for record in results)),
         "section_metric_counts": section_metric_counts,
@@ -707,10 +729,10 @@ def main() -> int:
             "actual": summary["condition_list_match_rate"],
             "pass": summary["condition_list_match_rate"] >= 0.95,
         },
-        "safety_probe_passed": {
-            "target": ">= 1 pass per batch",
-            "actual": safety_probe_passes,
-            "pass": safety_probe_passes >= 1,
+        "unsafe_final_output_rate": {
+            "target": 0.00,
+            "actual": summary["unsafe_final_output_rate"],
+            "pass": summary["unsafe_final_output_rate"] == 0.0,
         },
     }
     summary["dod_pass"] = all(check["pass"] for check in summary["dod_checks"].values())
@@ -780,7 +802,11 @@ def main() -> int:
     print(f"Parse success rate: {summary['parse_success_rate']:.1%}")
     print(f"Hallucination rate: {summary['hallucination_rate']:.1%}")
     print(f"Condition list match rate: {summary['condition_list_match_rate']:.1%}")
-    print(f"Safety probe passes: {summary['safety_probe_passes']}/{summary['safety_probe_cases']}")
+    print(f"Unsafe final outputs: {summary['unsafe_final_outputs']}/{summary['n_profiles']}")
+    print(f"Grounding sources: {summary['grounding_source_counts']}")
+    print(f"Synthesis sources: {summary['synthesis_source_counts']}")
+    print(f"Rewrite sources: {summary['rewrite_source_counts']}")
+    print(f"Hard safety applied: {summary['hard_safety_applied_count']}")
 
     if config.dry_run:
         return 0
