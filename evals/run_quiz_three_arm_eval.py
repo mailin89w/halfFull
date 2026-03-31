@@ -207,6 +207,9 @@ def _load_layer1_module():
     module_path = EVALS_DIR / "run_layer1_eval.py"
     if not module_path.exists():
         module_path = EVALS_DIR / "archive" / "run_layer1_eval.py"
+    module_dir = str(module_path.parent)
+    if module_dir not in sys.path:
+        sys.path.insert(0, module_dir)
     spec = importlib.util.spec_from_file_location("evals_archive_run_layer1_eval", module_path)
     if spec is None or spec.loader is None:
         raise RuntimeError(f"Could not load layer1 helper module from {module_path}")
@@ -382,7 +385,7 @@ def post_json(
     payload: dict[str, Any],
     timeout: float,
     extra_headers: dict[str, str] | None = None,
-) -> tuple[int, Any]:
+) -> tuple[int, Any, dict[str, str]]:
     data = json.dumps(payload).encode("utf-8")
     headers = {"Content-Type": "application/json"}
     if extra_headers:
@@ -397,14 +400,16 @@ def post_json(
         with urllib_request.urlopen(req, timeout=timeout) as response:
             raw = response.read().decode("utf-8")
             status_code = response.getcode()
+            response_headers = {key.lower(): value for key, value in response.getheaders()}
     except urllib_error.HTTPError as exc:
         raw = exc.read().decode("utf-8", errors="replace")
         status_code = exc.code
+        response_headers = {key.lower(): value for key, value in exc.headers.items()}
     try:
         parsed = json.loads(raw)
     except ValueError:
         parsed = raw
-    return status_code, parsed
+    return status_code, parsed, response_headers
 
 
 def extract_supported_ids(response: dict[str, Any]) -> list[str]:
@@ -462,6 +467,7 @@ def evaluate_models_only(profile: dict[str, Any], score_map: dict[str, float]) -
         "flagged_conditions": flagged_from_scores(score_map),
         "response": None,
         "http_status": None,
+        "response_headers": {},
         "error": None,
     }
 
@@ -478,6 +484,7 @@ def evaluate_deep_analyze_arm(
             "flagged_conditions": [],
             "response": None,
             "http_status": None,
+            "response_headers": {},
             "error": "dry_run",
         }
 
@@ -487,7 +494,7 @@ def evaluate_deep_analyze_arm(
             if payload.get("evalMode") == "medgemma_only" and config.eval_secret
             else None
         )
-        status_code, parsed = post_json(
+        status_code, parsed, response_headers = post_json(
             f"{config.base_url}/api/deep-analyze",
             payload,
             config.timeout,
@@ -500,6 +507,7 @@ def evaluate_deep_analyze_arm(
             "flagged_conditions": [],
             "response": None,
             "http_status": None,
+            "response_headers": {},
             "error": str(exc),
         }
 
@@ -510,6 +518,7 @@ def evaluate_deep_analyze_arm(
             "flagged_conditions": [],
             "response": parsed,
             "http_status": status_code,
+            "response_headers": response_headers,
             "error": f"HTTP {status_code}",
         }
 
@@ -520,6 +529,7 @@ def evaluate_deep_analyze_arm(
         "flagged_conditions": top3_predictions,
         "response": parsed,
         "http_status": status_code,
+        "response_headers": response_headers,
         "error": None,
     }
 
@@ -539,6 +549,25 @@ def score_arm_records(records: list[dict[str, Any]]) -> dict[str, Any]:
     labeled = [r for r in records if r.get("expected_conditions")]
     healthy = [r for r in records if r.get("profile_type") == "healthy"]
     parse_successes = sum(1 for r in records if r.get("parse_success"))
+    route_failures = sum(1 for r in records if r.get("error"))
+    grounding_successes = sum(
+        1
+        for r in records
+        if isinstance(r.get("response_headers"), dict)
+        and r["response_headers"].get("x-deep-analyze-grounding-source") == "live_medgemma_success"
+    )
+    cleanup_applied = sum(
+        1
+        for r in records
+        if isinstance(r.get("response_headers"), dict)
+        and int(r["response_headers"].get("x-deep-analyze-cleanup-count", "0") or 0) > 0
+    )
+    safety_replacements = sum(
+        1
+        for r in records
+        if isinstance(r.get("response_headers"), dict)
+        and int(r["response_headers"].get("x-deep-analyze-hard-safety-count", "0") or 0) > 0
+    )
     recall_hits = sum(
         1 for r in labeled
         if set(r.get("expected_conditions", [])) & set(r.get("top3_predictions", []))
@@ -583,6 +612,10 @@ def score_arm_records(records: list[dict[str, Any]]) -> dict[str, Any]:
         "n_labeled": len(labeled),
         "n_healthy": len(healthy),
         "parse_success_rate": round(parse_successes / len(records), 4) if records else 0.0,
+        "route_failure_rate": round(route_failures / len(records), 4) if records else 0.0,
+        "grounding_success_rate": round(grounding_successes / len(records), 4) if records else 0.0,
+        "cleanup_applied_rate": round(cleanup_applied / len(records), 4) if records else 0.0,
+        "safety_replacement_rate": round(safety_replacements / len(records), 4) if records else 0.0,
         "recall_at_3": round(recall_at_3, 4),
         "healthy_over_alert_rate": round(healthy_over_alert_rate, 4),
         "mean_false_positive_rate_absent": round(sum(false_positive_rates.values()) / len(false_positive_rates), 4),
@@ -646,6 +679,18 @@ def build_markdown(run_id: str, config: EvalConfig, sample_profiles_list: list[d
             f"| {arm_name} | {arm['recall_at_3']:.1%} | {arm['healthy_over_alert_rate']:.1%} | "
             f"{arm['mean_false_positive_rate_absent']:.1%} | {arm['mean_neighbour_false_positive_rate']:.1%} | "
             f"{arm['parse_success_rate']:.1%} |"
+        )
+    lines.append("")
+    lines.append("## MedGemma Route Quality")
+    lines.append("")
+    lines.append("| Arm | Parse success | Route failure | Grounding success | Cleanup applied | Safety replacements |")
+    lines.append("|-----|---------------|---------------|-------------------|-----------------|---------------------|")
+    for arm_name in ("medgemma_only", "medgemma_plus_bayesian", "hybrid_top5"):
+        arm = summary["arms"][arm_name]
+        lines.append(
+            f"| {arm_name} | {arm['parse_success_rate']:.1%} | {arm['route_failure_rate']:.1%} | "
+            f"{arm['grounding_success_rate']:.1%} | {arm['cleanup_applied_rate']:.1%} | "
+            f"{arm['safety_replacement_rate']:.1%} |"
         )
     lines.append("")
     lines.append("## Per-Condition Recommendation")
@@ -750,6 +795,14 @@ def main() -> int:
             f"healthy_over_alert={arm_summary['healthy_over_alert_rate']:.1%}, "
             f"neighbour_fp={arm_summary['mean_neighbour_false_positive_rate']:.1%}"
         )
+        if arm_name != "models_only":
+            print(
+                f"{arm_name}: parse_success={arm_summary['parse_success_rate']:.1%}, "
+                f"route_failure={arm_summary['route_failure_rate']:.1%}, "
+                f"grounding_success={arm_summary['grounding_success_rate']:.1%}, "
+                f"cleanup_applied={arm_summary['cleanup_applied_rate']:.1%}, "
+                f"safety_replacements={arm_summary['safety_replacement_rate']:.1%}"
+            )
     return 0
 
 

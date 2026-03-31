@@ -83,38 +83,65 @@ function buildRiskCalibrationText(signals: PromptCalibrationSignal[]): string {
  * Handles: incomplete strings, dangling commas, unclosed arrays/objects.
  */
 function repairAndParseJson(raw: string): Record<string, unknown> | null {
-  // First try straight parse
-  try { return JSON.parse(raw) as Record<string, unknown>; } catch { /* fall through */ }
+  const normalized = raw
+    .trim()
+    .replace(/^```(?:json)?\s*/i, '')
+    .replace(/\s*```$/i, '');
 
-  // Build a bracket stack to find what needs closing
-  let inString = false;
-  let escaped = false;
-  const stack: string[] = [];
-
-  for (let i = 0; i < raw.length; i++) {
-    const ch = raw[i];
-    if (escaped) { escaped = false; continue; }
-    if (ch === '\\' && inString) { escaped = true; continue; }
-    if (ch === '"') { inString = !inString; continue; }
-    if (inString) continue;
-    if (ch === '{') stack.push('}');
-    else if (ch === '[') stack.push(']');
-    else if ((ch === '}' || ch === ']') && stack.length > 0) stack.pop();
-  }
-
-  // Strip trailing comma / incomplete key-value, close any open string, close open structures
-  let trimmed = raw.trimEnd();
-  if (inString) trimmed += '"';                    // close dangling string
-  trimmed = trimmed.replace(/,\s*$/, '');          // remove trailing comma
-  const closing = stack.reverse().join('');
-
-  try { return JSON.parse(trimmed + closing) as Record<string, unknown>; } catch { /* fall through */ }
-
-  // Last resort: find the last valid } and try from the start to there
-  for (let end = trimmed.length - 1; end > 1; end--) {
-    if (trimmed[end] === '}') {
-      try { return JSON.parse(trimmed.slice(0, end + 1)) as Record<string, unknown>; } catch { /* continue */ }
+  const tryParseCandidate = (candidate: string): Record<string, unknown> | null => {
+    try {
+      return JSON.parse(candidate) as Record<string, unknown>;
+    } catch {
+      // fall through
     }
+
+    // Build a bracket stack to find what needs closing
+    let inString = false;
+    let escaped = false;
+    const stack: string[] = [];
+
+    for (let i = 0; i < candidate.length; i++) {
+      const ch = candidate[i];
+      if (escaped) { escaped = false; continue; }
+      if (ch === '\\' && inString) { escaped = true; continue; }
+      if (ch === '"') { inString = !inString; continue; }
+      if (inString) continue;
+      if (ch === '{') stack.push('}');
+      else if (ch === '[') stack.push(']');
+      else if ((ch === '}' || ch === ']') && stack.length > 0) stack.pop();
+    }
+
+    let trimmed = candidate.trimEnd();
+    if (inString) trimmed += '"';
+    trimmed = trimmed.replace(/,\s*$/, '');
+    const closing = stack.reverse().join('');
+    const repaired = (trimmed + closing).replace(/,\s*([}\]])/g, '$1');
+
+    try {
+      return JSON.parse(repaired) as Record<string, unknown>;
+    } catch {
+      return null;
+    }
+  };
+
+  // First try normalized raw content directly
+  const direct = tryParseCandidate(normalized);
+  if (direct) return direct;
+
+  // Progressively trim likely-incomplete trailing fragments and retry.
+  let candidate = normalized;
+  for (let attempt = 0; attempt < 80 && candidate.length > 2; attempt++) {
+    const parsed = tryParseCandidate(candidate);
+    if (parsed) return parsed;
+
+    const cutAt = Math.max(
+      candidate.lastIndexOf(','),
+      candidate.lastIndexOf('{'),
+      candidate.lastIndexOf('['),
+      candidate.lastIndexOf('\n'),
+    );
+    if (cutAt <= 1) break;
+    candidate = candidate.slice(0, cutAt);
   }
 
   return null;
@@ -223,11 +250,13 @@ function annotateDeepAnalyzeResponse(
     rewriteStatus?: number;
     rewriteErrorSnippet?: string;
     hardSafetyCount: number;
+    cleanupCount?: number;
   },
 ): NextResponse {
   response.headers.set('x-deep-analyze-grounding-source', metadata.groundingSource);
   response.headers.set('x-deep-analyze-synthesis-source', metadata.synthesisSource);
   response.headers.set('x-deep-analyze-hard-safety-count', String(metadata.hardSafetyCount));
+  response.headers.set('x-deep-analyze-cleanup-count', String(metadata.cleanupCount ?? 0));
   response.headers.set(
     'x-deep-analyze-hard-safety-applied',
     metadata.hardSafetyCount > 0 ? 'true' : 'false',
@@ -442,6 +471,7 @@ export async function POST(req: NextRequest) {
             synthesisStatus: allClearResult.status,
             synthesisErrorSnippet: allClearResult.errorSnippet,
             hardSafetyCount: 0,
+            cleanupCount: 0,
           },
         );
       }
@@ -499,6 +529,7 @@ export async function POST(req: NextRequest) {
           rewriteStatus: rewriteResult.status,
           rewriteErrorSnippet: rewriteResult.errorSnippet,
           hardSafetyCount: warnings.length,
+          cleanupCount: warnings.filter((warning) => warning.includes('Removed unsupported')).length,
         },
       );
     } catch (err) {
@@ -558,7 +589,7 @@ export async function POST(req: NextRequest) {
           { role: 'system', content: MEDGEMMA_JSON_SYSTEM_V1 },
           { role: 'user', content: groundingPrompt },
         ],
-        max_tokens: 800,
+        max_tokens: 1400,
         temperature: 0.1,
       }),
       signal: controller.signal,
@@ -625,6 +656,48 @@ export async function POST(req: NextRequest) {
     // Continue with empty grounding — Groq synthesis still runs
   }
 
+  const groundingIsEmpty =
+    groundingResult.supportedSuspicions.length === 0 &&
+    groundingResult.declinedSuspicions.length === 0 &&
+    groundingResult.medicationFlags.length === 0 &&
+    groundingResult.recommendedSpecialties.length === 0;
+
+  if (
+    evalMode === 'medgemma_only' &&
+    (groundingSource !== 'live_medgemma_success' || groundingIsEmpty)
+  ) {
+    const groundingFailureReason =
+      groundingSource !== 'live_medgemma_success'
+        ? `MedGemma grounding failed before synthesis (${groundingSource}).`
+        : 'MedGemma grounding returned an empty evidence object in eval mode.';
+
+    await writeLog('medgemma_eval_grounding_failed', {
+      anonymousId: privacy?.anonymousId ?? null,
+      groundingSource,
+      groundingIsEmpty,
+      hfApiUrl: HF_API_URL,
+      flaggedConditions,
+      confirmedConditions,
+    });
+
+    return annotateDeepAnalyzeResponse(
+      NextResponse.json(
+        {
+          error: groundingFailureReason,
+          groundingSource,
+          groundingIsEmpty,
+        },
+        { status: 503 },
+      ),
+      {
+        groundingSource,
+        synthesisSource: 'skipped_due_to_grounding_failure',
+        hardSafetyCount: 0,
+        cleanupCount: 0,
+      },
+    );
+  }
+
   // Derive top Bayesian gain conditions from clarification QA
   const bayesianGainMap: Record<string, number> = {};
   for (const qa of (clarificationQA ?? [])) {
@@ -674,6 +747,7 @@ export async function POST(req: NextRequest) {
           synthesisStatus: synthesisResult.status,
           synthesisErrorSnippet: synthesisResult.errorSnippet,
           hardSafetyCount: 0,
+          cleanupCount: 0,
         },
       );
     }
@@ -778,6 +852,7 @@ export async function POST(req: NextRequest) {
       rewriteResult.data,
       { allowedDiagnosisIds },
     );
+    const cleanupCount = safetyWarnings.filter((warning) => warning.includes('Removed unsupported')).length;
     if (safetyWarnings.length > 0) {
       await writeLog('deep_analyze_safety_replacements', {
         anonymousId: privacy?.anonymousId ?? null,
@@ -843,6 +918,7 @@ export async function POST(req: NextRequest) {
         rewriteStatus: rewriteResult.status,
         rewriteErrorSnippet: rewriteResult.errorSnippet,
         hardSafetyCount: safetyWarnings.length,
+        cleanupCount,
       },
     );
   } catch (err) {
