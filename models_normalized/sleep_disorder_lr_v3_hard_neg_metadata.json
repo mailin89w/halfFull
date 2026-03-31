@@ -1,0 +1,62 @@
+{
+  "model": "sleep_disorder_lr_v3_hard_neg.joblib",
+  "version": "v3",
+  "condition": "sleep_disorder",
+  "ml_ticket": "ML-SLEEP-02",
+  "algorithm": "LogisticRegression L2 C=0.15 class_weight=balanced",
+  "data_source": "nhanes_merged_adults_final_normalized.csv + 330 hard negatives",
+  "n_train_original": 7437,
+  "n_hard_negatives": 330,
+  "n_train_augmented": 7767,
+  "n_positives": 2403,
+  "prevalence": 0.3231,
+  "features": [
+    "gender_female",
+    "age_years",
+    "bmi",
+    "med_count",
+    "slq030___how_often_do_you_snore?",
+    "sld012___sleep_hours___weekdays_or_workdays",
+    "sld013___sleep_hours___weekends",
+    "kiq480___how_many_times_urinate_in_night?",
+    "dpq040___feeling_tired_or_having_little_energy",
+    "huq010___general_health_condition",
+    "bpq020___ever_told_you_had_high_blood_pressure",
+    "cdq010___shortness_of_breath_on_stairs/inclines",
+    "mcq010___ever_been_told_you_have_asthma",
+    "huq071___overnight_hospital_patient_in_last_year"
+  ],
+  "n_features": 14,
+  "cv_folds": 5,
+  "cv_auc_mean": 0.7766,
+  "cv_auc_std": 0.0065,
+  "cv_avg_precision": 0.6279,
+  "full_train_auc": 0.7656,
+  "full_train_auprc": 0.6303,
+  "flag_rate_at_pipeline_gate": 0.2731,
+  "flag_rate_at_recommended_thr": 0.1809,
+  "recall_at_pipeline_gate": 0.5227,
+  "recall_at_recommended_thr": 0.3862,
+  "pipeline_gate": 0.6,
+  "recommended_threshold": 0.7,
+  "hard_neg_validation": {
+    "n_hard_negatives": 330,
+    "pct_above_pipeline_gate": 0.0,
+    "pct_above_recommended_thr": 0.0,
+    "mean_score": 0.106,
+    "max_score": 0.309,
+    "passed": true
+  },
+  "pipeline_steps": [
+    "SimpleImputer(strategy=median, add_indicator=True)",
+    "LogisticRegression(L2, class_weight=balanced, C=0.15)"
+  ],
+  "changes_from_v2": [
+    "Dropped broad metabolic and unrelated disease proxy features",
+    "Kept compact sleep-phenotype anchors only",
+    "Added 330 hard negatives for fatigue, thyroid-like, anemia-like, perimenopause-like, and poor-sleep-hygiene lookalikes",
+    "Retuned thresholding for a narrower, less generic sleep signal"
+  ],
+  "random_seed": 42,
+  "created_at": "2026-03-31T09:01:01.680473+00:00"
+}
