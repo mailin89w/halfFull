@@ -117,10 +117,12 @@ MODEL_REGISTRY_AUDIT: dict[str, dict[str, str]] = {
         "candidate_held": "prediabetes_xgb_v3_hard_neg.joblib",
     },
     "sleep_disorder": {
-        "artifact": "sleep_disorder_lr_trimmed29_L2_v2.joblib",
-        "status": "retained",
+        "artifact": "sleep_disorder_lr_v3_hard_neg.joblib",
+        "status": "promoted",
         "decision_date": "2026-03-31",
-        "basis": "No newer validated candidate artifact found locally.",
+        "ticket": "ML-SLEEP-02",
+        "basis": "Promoted for validation: v3 rebuild narrows the feature set to sleep-pathology anchors and adds fatigue-lookalike hard negatives.",
+        "candidate_held": "sleep_disorder_lr_trimmed29_L2_v2.joblib",
     },
     "thyroid": {
         "artifact": "thyroid_lr_hardneg_v5.joblib",
@@ -178,7 +180,7 @@ RECOMMENDED_THRESHOLDS = {
     "kidney":                0.66,
     "liver":                 0.10,
     "prediabetes":           0.53,
-    "sleep_disorder":        0.55,
+    "sleep_disorder":        0.70,
     "thyroid":               0.60,
     "hidden_inflammation":   0.41,
     "perimenopause":         0.55,
@@ -219,8 +221,10 @@ RECOMMENDED_THRESHOLDS = {
 #   0.40  electrolyte_imbalance / perimenopause
 #                               — weakest model (EI AUC 0.717) or high cohort base
 #                                  rate (perimenopause 23%) → need clearer signal
-#   0.75  sleep_disorder        — optional stricter cleanup from 2026-03-26 sweep;
-#                                  (polysomnography); only surface strong signals
+#   0.70  sleep_disorder        — v3 hard-neg rebuild aims to separate true
+#                                  pathology anchors from generic tiredness, so
+#                                  the surfacing threshold can come down from the
+#                                  old defensive 0.75, but still stays fairly strict
 #   0.48  vitamin_d_deficiency   — raised from 0.40 on 2026-03-31 after
 #                                  latest 760 sweep: first threshold that brought
 #                                  healthy flag rate below 5%; recall cost remains
@@ -236,7 +240,7 @@ USER_FACING_THRESHOLDS = {
     "thyroid":               0.75,   # retained legacy strict cleanup after ML-THYROID-02 v3 validation failed to beat v2 cleanly on the 760 cohort
     "electrolyte_imbalance": 0.46,   # raised 0.40→0.46: flag 54%→34%, recall 40%→15%
     "perimenopause":         0.40,
-    "sleep_disorder":        0.75,   # raised 0.70→0.75 on 2026-03-26 optional cleanup: precision 10.9%→13.1%, flag 24.5%→16.5%, recall 25.0%→20.3%
+    "sleep_disorder":        0.70,   # ML-SLEEP-02 v3 rebuild: materially better recall than v2 at 0.75, while keeping healthy FP close to baseline
     "vitamin_d_deficiency":   0.48,
 }
 
@@ -254,7 +258,7 @@ BAYESIAN_TRIGGER_THRESHOLDS = {
     "thyroid":               0.50,
     "electrolyte_imbalance": 0.46,
     "perimenopause":         0.40,
-    "sleep_disorder":        0.70,
+    "sleep_disorder":        0.60,
     "vitamin_d_deficiency":   0.20,
 }
 
@@ -301,7 +305,7 @@ SCORE_RANGES: dict[str, tuple[float, float]] = {
     "kidney":                (0.059, 0.925),   # updated: eval max was 0.882, obs max now 0.916
     "liver":                 (0.007, 0.553),
     "prediabetes":           (0.267, 0.820),   # updated: eval max was 0.758, obs max now 0.815
-    "sleep_disorder":        (0.346, 0.995),
+    "sleep_disorder":        (0.068, 0.998),   # updated 2026-03-31 for ML-SLEEP-02 v3 cohort sweep
     "thyroid":               (0.078, 0.965),
     "hidden_inflammation":   (0.043, 0.750),   # v3 — 26 feats + bmi; max from eval (0.737)
     "perimenopause":         (0.000, 0.988),
@@ -323,7 +327,7 @@ SCORE_MEANS: dict[str, float] = {
     "kidney":                0.426,  # updated 2026-03-26: was 0.380
     "liver":                 0.072,  # updated 2026-03-26: was 0.060
     "prediabetes":           0.557,  # updated 2026-03-26: was 0.523
-    "sleep_disorder":        0.781,  # updated 2026-03-26: was 0.755; dominant — mean-floor correction critical
+    "sleep_disorder":        0.433,  # updated 2026-03-31 for ML-SLEEP-02 v3 on 760-cohort
     "thyroid":               0.662,  # updated 2026-03-26: was 0.643; dominant — mean-floor correction critical
     "hidden_inflammation":   0.217,  # v3 — eval cohort mean; was 0.104 v2 (bmi raises NHANES baseline to 0.423 but eval mean is lower)
     "perimenopause":         0.306,  # updated 2026-03-26: was 0.297
