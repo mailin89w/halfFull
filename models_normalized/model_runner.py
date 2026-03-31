@@ -113,8 +113,10 @@ MODEL_REGISTRY_AUDIT: dict[str, dict[str, str]] = {
         "artifact": "prediabetes_lr_deduped34_L2_C001_v2.joblib",
         "status": "retained",
         "decision_date": "2026-03-31",
-        "basis": "Kept v2 until xgb v3 hard-neg gets a clean 760-cohort validation pass.",
+        "ticket": "ML-PREDIAB-02A",
+        "basis": "Retained corrected v2 after fixing shared NHANES feature mapping: v2 regained nonzero prediabetes recall, while the held v3 hard-neg candidate stayed at zero recall under the same corrected input path.",
         "candidate_held": "prediabetes_xgb_v3_hard_neg.joblib",
+        "eval_report": "evals/reports/layer1_20260331_090209.md",
     },
     "sleep_disorder": {
         "artifact": "sleep_disorder_lr_trimmed29_L2_v2.joblib",
@@ -232,7 +234,7 @@ USER_FACING_THRESHOLDS = {
     "kidney":                0.35,   # raised 0.25→0.35 on 2026-03-27 second-pass tightening: trade recall for materially lower user-facing alert burden
     "anemia":                0.40,   # v6 symptom-bundle model promoted 2026-03-31 to recover recall after bias fix; local 760 tests held healthy FP at 2%
     "hidden_inflammation":   0.40,   # raised 0.30→0.40 on 2026-03-26 quick-win sweep: precision 6.3%→8.2%, flag 55.3%→36.5%, recall 46.7%→40.0%
-    "prediabetes":           0.45,   # raised 0.40→0.45 on 2026-03-27 second-pass tightening: high-recall yellow model still over-flagged
+    "prediabetes":           0.45,   # corrected v2 runtime threshold after fixing NHANES prediabetes feature mapping
     "thyroid":               0.75,   # retained legacy strict cleanup after ML-THYROID-02 v3 validation failed to beat v2 cleanly on the 760 cohort
     "electrolyte_imbalance": 0.46,   # raised 0.40→0.46: flag 54%→34%, recall 40%→15%
     "perimenopause":         0.40,
@@ -454,6 +456,23 @@ _PREGNANCY_CODES: dict[int, str] = {
     3: "Not sure",
 }
 
+# Temporary model-scoped suppression after the shared NHANES feature-path fix.
+# These exact fields woke prediabetes up, but also caused outsized shifts in
+# kidney and electrolyte_imbalance on the 760 cohort. Keep the shared fix
+# global, but withhold these columns from the two affected models until their
+# own baselines are revalidated.
+MODEL_FEATURE_SUPPRESSIONS: dict[str, set[str]] = {
+    "kidney": {
+        "mcq160b___ever_told_you_had_congestive_heart_failure",
+    },
+    "electrolyte_imbalance": {
+        "pregnancy_status_bin",
+        "bpq030___told_had_high_blood_pressure___2+_times",
+        "LBDLDL_ldl_cholesterol_friedewald_mg_dl",
+        "age_years",
+    },
+}
+
 
 # ── InputNormalizer ─────────────────────────────────────────────────────────────
 
@@ -539,13 +558,13 @@ class InputNormalizer:
         # gender_female
         if "gender" in out.columns:
             out["gender_female"] = (out["gender"] == "Female").astype(float)
-        else:
+        elif "gender_female" not in out.columns:
             out["gender_female"] = np.nan
 
         # education_ord
         if "education" in out.columns:
             out["education_ord"] = out["education"].map(_EDU_ORDER)
-        else:
+        elif "education_ord" not in out.columns:
             out["education_ord"] = np.nan
 
         # pregnancy_status_bin
@@ -554,7 +573,7 @@ class InputNormalizer:
                 out["pregnancy_status"] == "Yes, pregnant"
             ).astype(float)
             out.loc[out["pregnancy_status"].isna(), "pregnancy_status_bin"] = np.nan
-        else:
+        elif "pregnancy_status_bin" not in out.columns:
             out["pregnancy_status_bin"] = np.nan
 
         # anemia symptom bundle: helps the newer anemia model reward the
@@ -719,6 +738,9 @@ class InputNormalizer:
         norm_row = df_norm.iloc[0]
         for condition, feats in self._model_features.items():
             row_dict = {f: norm_row.get(f, np.nan) for f in feats}
+            for suppressed in MODEL_FEATURE_SUPPRESSIONS.get(condition, ()):
+                if suppressed in row_dict:
+                    row_dict[suppressed] = np.nan
             feature_vectors[condition] = pd.DataFrame([row_dict])
 
         return feature_vectors

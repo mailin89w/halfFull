@@ -69,12 +69,14 @@ warnings.filterwarnings(
 # ---------------------------------------------------------------------------
 # Path setup
 # ---------------------------------------------------------------------------
-EVALS_DIR             = Path(__file__).resolve().parent.parent  # script moved to archive/
+EVALS_DIR             = Path(__file__).resolve().parent
 PROJECT_ROOT          = EVALS_DIR.parent
 MODELS_NORMALIZED_DIR = PROJECT_ROOT / "models_normalized"
+EVALS_ARCHIVE_DIR     = EVALS_DIR / "archive"
 
 sys.path.insert(0, str(PROJECT_ROOT))
 sys.path.insert(0, str(EVALS_DIR))
+sys.path.insert(0, str(EVALS_ARCHIVE_DIR))
 sys.path.insert(0, str(MODELS_NORMALIZED_DIR))  # makes `import model_runner` work
 
 try:
@@ -325,6 +327,15 @@ def _build_raw_inputs_from_nhanes(profile: dict) -> dict[str, Any]:
     cigs_day = 10.0 if smq040 == 1 else 0.0
     smk_100  = 1.0 if smq040 in (1.0, 2.0) else 2.0
 
+    dr_reduce_fat = float(ni.get("dr_said_reduce_fat") or 2.0)
+    ldl_direct = ni.get("LBDLDL_ldl_cholesterol_friedewald_mg_dl", ni.get("ldl_cholesterol_mg_dl", ni.get("ldl_mg_dl", labs.get("ldl_cholesterol_mg_dl", labs.get("ldl_mg_dl")))))
+    bpq050a = float(ni.get("bpq050a___now_taking_prescribed_medicine_for_hbp") or bpq040)
+    bpq030 = float(ni.get("bpq030___told_had_high_blood_pressure___2+_times") or (1.0 if bpq020 == 1.0 else 2.0))
+    heart_failure = float(ni.get("mcq160b___ever_told_you_had_congestive_heart_failure") or ni.get("ever_told_heart_failure") or ni.get("heart_failure") or 2.0)
+    asthma_ever = float(ni.get("mcq010___ever_been_told_you_have_asthma") or 2.0)
+    education_ord = ni.get("education_ord")
+    pregnancy_status_bin = ni.get("pregnancy_status_bin")
+
     answers: dict[str, Any] = {
         # Demographics
         "age_years":    age, "gender": gender_code, "gender_female": gender_f,
@@ -339,6 +350,7 @@ def _build_raw_inputs_from_nhanes(profile: dict) -> dict[str, Any]:
         "total_cholesterol_mg_dl":    ni.get("total_cholesterol_mg_dl", labs.get("total_cholesterol_mg_dl")),
         "ldl_mg_dl":                  ni.get("ldl_mg_dl", labs.get("ldl_mg_dl")),
         "ldl_cholesterol_mg_dl":      ni.get("ldl_cholesterol_mg_dl", labs.get("ldl_cholesterol_mg_dl")),
+        "LBDLDL_ldl_cholesterol_friedewald_mg_dl": ldl_direct,
         "hdl_mg_dl":                  ni.get("hdl_mg_dl", labs.get("hdl_mg_dl")),
         "hdl_cholesterol_mg_dl":      ni.get("hdl_cholesterol_mg_dl", labs.get("hdl_cholesterol_mg_dl")),
         "triglycerides_mg_dl":        ni.get("triglycerides_mg_dl", labs.get("triglycerides_mg_dl")),
@@ -401,6 +413,7 @@ def _build_raw_inputs_from_nhanes(profile: dict) -> dict[str, Any]:
         # Weight
         "whq040___like_to_weigh_more,_less_or_same": whq040,
         "mcq080___doctor_ever_said_you_were_overweight": 1.0 if bmi >= 30 else 2.0,
+        "whq070___tried_to_lose_weight_in_past_year": 1.0 if bmi >= 30 else 2.0,
         # Medications
         "med_count": med_cnt,
         "mcq053___taking_treatment_for_anemia/past_3_mos": anemia_tx,
@@ -423,12 +436,17 @@ def _build_raw_inputs_from_nhanes(profile: dict) -> dict[str, Any]:
         # Blood pressure
         "bpq020___ever_told_you_had_high_blood_pressure": bpq020, "ever_told_high_bp": bpq020,
         "bpq040a___taking_prescription_for_hypertension": bpq040, "taking_bp_prescription": bpq040,
+        "bpq050a___now_taking_prescribed_medicine_for_hbp": bpq050a,
         "bpq080___doctor_told_you___high_cholesterol_level": 2.0, "ever_told_high_cholesterol": 2.0,
+        "bpq030___told_had_high_blood_pressure___2+_times": bpq030,
         # Diabetes
         "diq010___doctor_told_you_have_diabetes": diq010, "ever_told_diabetes": diq010, "diabetes": diq010,
         "diq160___told_by_doctor_have_prediabetes": diq160,
         "diq050___taking_insulin_now": 2.0, "diq070___take_diabetic_pills_to_lower_blood_sugar": 2.0,
         "mcq300c___close_relative_had_diabetes": 2.0,
+        "mcq366d___doctor_told_to_reduce_fat_in_diet": dr_reduce_fat,
+        "mcq160b___ever_told_you_had_congestive_heart_failure": heart_failure,
+        "mcq010___ever_been_told_you_have_asthma": asthma_ever,
         # Kidney
         "kiq022___ever_told_you_had_weak/failing_kidneys?": kidney_weak, "kidney_disease": kidney_weak,
         "kiq480___how_many_times_urinate_in_night?": nocturia, "times_urinate_in_night": nocturia,
@@ -447,6 +465,7 @@ def _build_raw_inputs_from_nhanes(profile: dict) -> dict[str, Any]:
         "rhq131___ever_been_pregnant?": ever_preg,
         "rhq160___how_many_times_have_been_pregnant?": 2.0,
         "pregnancy_status": 2.0,
+        "pregnancy_status_bin": pregnancy_status_bin,
         # Thyroid history
         "mcq160m___ever_told_you_had_thyroid_problem": thyroid_ever,
         "mcq170m___still_have_thyroid_problem": thyroid_active,
@@ -454,7 +473,7 @@ def _build_raw_inputs_from_nhanes(profile: dict) -> dict[str, Any]:
         "huq051___#times_receive_healthcare_over_past_year": float(np.clip(1.0 + med_cnt * 1.5, 0.0, 16.0)),
         "huq071___overnight_hospital_patient_in_last_year": 2.0,
         "rxd_disease_list": rxd,
-        "dmdeduc2": 3.0, "education": 3.0,
+        "dmdeduc2": 3.0, "education": 3.0, "education_ord": education_ord,
     }
 
     # Merge profile lab_values under their original keys
