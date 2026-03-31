@@ -1,0 +1,1486 @@
+{
+  "summary": {
+    "n_inflam_profiles": 49,
+    "group_counts": {
+      "missed_both": 30,
+      "found_by_v3_only": 19
+    },
+    "fuzzy_label_flag": false,
+    "mean_generic_score_found": 1.1174526315789475,
+    "mean_generic_score_missed": 1.0702633333333333
+  },
+  "feature_analysis": [
+    {
+      "feature": "huq010___general_health_condition",
+      "type": "generic_illness",
+      "found_by_v4": null,
+      "found_by_v3_only": 2.842,
+      "missed_both": 2.367
+    },
+    {
+      "feature": "med_count",
+      "type": "generic_illness",
+      "found_by_v4": null,
+      "found_by_v3_only": -0.449,
+      "missed_both": -0.471
+    },
+    {
+      "feature": "huq051___#times_receive_healthcare_over_past_year",
+      "type": "generic_illness",
+      "found_by_v4": null,
+      "found_by_v3_only": null,
+      "missed_both": null
+    },
+    {
+      "feature": "cdq010___shortness_of_breath_on_stairs/inclines",
+      "type": "generic_illness",
+      "found_by_v4": null,
+      "found_by_v3_only": 1.842,
+      "missed_both": 1.933
+    },
+    {
+      "feature": "sld012___sleep_hours___weekdays_or_workdays",
+      "type": "generic_illness",
+      "found_by_v4": null,
+      "found_by_v3_only": -0.279,
+      "missed_both": -0.311
+    },
+    {
+      "feature": "bpq030___told_had_high_blood_pressure___2+_times",
+      "type": "generic_illness",
+      "found_by_v4": null,
+      "found_by_v3_only": 1.632,
+      "missed_both": 1.833
+    },
+    {
+      "feature": "mcq053___taking_treatment_for_anemia/past_3_mos",
+      "type": "generic_illness",
+      "found_by_v4": null,
+      "found_by_v3_only": null,
+      "missed_both": null
+    },
+    {
+      "feature": "waist_cm",
+      "type": "true_inflammation",
+      "found_by_v4": null,
+      "found_by_v3_only": 0.142,
+      "missed_both": -0.184
+    },
+    {
+      "feature": "waist_elevated_female",
+      "type": "true_inflammation",
+      "found_by_v4": null,
+      "found_by_v3_only": 0.158,
+      "missed_both": 0.0
+    },
+    {
+      "feature": "waist_elevated_male",
+      "type": "true_inflammation",
+      "found_by_v4": null,
+      "found_by_v3_only": 0.0,
+      "missed_both": 0.0
+    },
+    {
+      "feature": "hdl_cholesterol_mg_dl",
+      "type": "true_inflammation",
+      "found_by_v4": null,
+      "found_by_v3_only": -0.378,
+      "missed_both": -0.374
+    },
+    {
+      "feature": "bpq080___doctor_told_you___high_cholesterol_level",
+      "type": "true_inflammation",
+      "found_by_v4": null,
+      "found_by_v3_only": null,
+      "missed_both": null
+    },
+    {
+      "feature": "mcq195___which_type_of_arthritis_was_it?",
+      "type": "true_inflammation",
+      "found_by_v4": null,
+      "found_by_v3_only": 2.842,
+      "missed_both": 2.867
+    },
+    {
+      "feature": "alq130___avg_#_alcoholic_drinks/day___past_12_mos",
+      "type": "true_inflammation",
+      "found_by_v4": null,
+      "found_by_v3_only": -0.284,
+      "missed_both": -0.062
+    }
+  ],
+  "profiles": [
+    {
+      "profile_id": "NHANES-D-39185",
+      "score_v3": 0.3535,
+      "score_v4": 0.0758,
+      "fires_v3": false,
+      "fires_v4": false,
+      "group": "missed_both",
+      "expected": [
+        "inflammation"
+      ],
+      "generic_score": 1.1308,
+      "features": {
+        "huq010___general_health_condition": 3.0,
+        "med_count": -0.9093131169032433,
+        "huq051___#times_receive_healthcare_over_past_year": NaN,
+        "cdq010___shortness_of_breath_on_stairs/inclines": 2.0,
+        "sld012___sleep_hours___weekdays_or_workdays": -0.43665055709983014,
+        "bpq030___told_had_high_blood_pressure___2+_times": 2.0,
+        "mcq053___taking_treatment_for_anemia/past_3_mos": NaN,
+        "waist_cm": -0.08431372549019603,
+        "waist_elevated_female": 0.0,
+        "waist_elevated_male": 0.0,
+        "hdl_cholesterol_mg_dl": -0.7,
+        "bpq080___doctor_told_you___high_cholesterol_level": NaN,
+        "mcq195___which_type_of_arthritis_was_it?": 3.0,
+        "alq130___avg_#_alcoholic_drinks/day___past_12_mos": -0.11997116213095808
+      }
+    },
+    {
+      "profile_id": "NHANES-D-39005",
+      "score_v3": 0.3604,
+      "score_v4": 0.0758,
+      "fires_v3": false,
+      "fires_v4": false,
+      "group": "missed_both",
+      "expected": [
+        "inflammation"
+      ],
+      "generic_score": 1.1678,
+      "features": {
+        "huq010___general_health_condition": 3.0,
+        "med_count": -0.9093131169032433,
+        "huq051___#times_receive_healthcare_over_past_year": NaN,
+        "cdq010___shortness_of_breath_on_stairs/inclines": 2.0,
+        "sld012___sleep_hours___weekdays_or_workdays": -0.251807245778171,
+        "bpq030___told_had_high_blood_pressure___2+_times": 2.0,
+        "mcq053___taking_treatment_for_anemia/past_3_mos": NaN,
+        "waist_cm": -0.0598039215686274,
+        "waist_elevated_female": 0.0,
+        "waist_elevated_male": 0.0,
+        "hdl_cholesterol_mg_dl": -1.0,
+        "bpq080___doctor_told_you___high_cholesterol_level": NaN,
+        "mcq195___which_type_of_arthritis_was_it?": 3.0,
+        "alq130___avg_#_alcoholic_drinks/day___past_12_mos": -0.11997116213095808
+      }
+    },
+    {
+      "profile_id": "NHANES-D-33954",
+      "score_v3": 0.5808,
+      "score_v4": 0.1094,
+      "fires_v3": true,
+      "fires_v4": false,
+      "group": "found_by_v3_only",
+      "expected": [
+        "inflammation"
+      ],
+      "generic_score": 0.8955,
+      "features": {
+        "huq010___general_health_condition": 2.0,
+        "med_count": -1.1260643813027496,
+        "huq051___#times_receive_healthcare_over_past_year": NaN,
+        "cdq010___shortness_of_breath_on_stairs/inclines": 2.0,
+        "sld012___sleep_hours___weekdays_or_workdays": -0.39635346249702746,
+        "bpq030___told_had_high_blood_pressure___2+_times": 2.0,
+        "mcq053___taking_treatment_for_anemia/past_3_mos": NaN,
+        "waist_cm": 0.1875,
+        "waist_elevated_female": 0.0,
+        "waist_elevated_male": 0.0,
+        "hdl_cholesterol_mg_dl": 0.4666666666666667,
+        "bpq080___doctor_told_you___high_cholesterol_level": NaN,
+        "mcq195___which_type_of_arthritis_was_it?": 3.0,
+        "alq130___avg_#_alcoholic_drinks/day___past_12_mos": -0.18715965664134607
+      }
+    },
+    {
+      "profile_id": "NHANES-D-39773",
+      "score_v3": 0.2439,
+      "score_v4": 0.0196,
+      "fires_v3": false,
+      "fires_v4": false,
+      "group": "missed_both",
+      "expected": [
+        "inflammation"
+      ],
+      "generic_score": 2.0027,
+      "features": {
+        "huq010___general_health_condition": 4.0,
+        "med_count": 1.8008804691721119,
+        "huq051___#times_receive_healthcare_over_past_year": NaN,
+        "cdq010___shortness_of_breath_on_stairs/inclines": 1.0,
+        "sld012___sleep_hours___weekdays_or_workdays": 2.2127702385106187,
+        "bpq030___told_had_high_blood_pressure___2+_times": 1.0,
+        "mcq053___taking_treatment_for_anemia/past_3_mos": NaN,
+        "waist_cm": -0.253921568627451,
+        "waist_elevated_female": 0.0,
+        "waist_elevated_male": 0.0,
+        "hdl_cholesterol_mg_dl": 0.35,
+        "bpq080___doctor_told_you___high_cholesterol_level": NaN,
+        "mcq195___which_type_of_arthritis_was_it?": 2.0,
+        "alq130___avg_#_alcoholic_drinks/day___past_12_mos": -0.11997116213095808
+      }
+    },
+    {
+      "profile_id": "NHANES-D-34211",
+      "score_v3": 0.4072,
+      "score_v4": 0.0758,
+      "fires_v3": true,
+      "fires_v4": false,
+      "group": "found_by_v3_only",
+      "expected": [
+        "inflammation"
+      ],
+      "generic_score": 0.725,
+      "features": {
+        "huq010___general_health_condition": 1.0,
+        "med_count": -0.934851637706448,
+        "huq051___#times_receive_healthcare_over_past_year": NaN,
+        "cdq010___shortness_of_breath_on_stairs/inclines": 2.0,
+        "sld012___sleep_hours___weekdays_or_workdays": -0.4400783204788461,
+        "bpq030___told_had_high_blood_pressure___2+_times": 2.0,
+        "mcq053___taking_treatment_for_anemia/past_3_mos": NaN,
+        "waist_cm": -0.1147727272727272,
+        "waist_elevated_female": 0.0,
+        "waist_elevated_male": 0.0,
+        "hdl_cholesterol_mg_dl": 0.06666666666666667,
+        "bpq080___doctor_told_you___high_cholesterol_level": NaN,
+        "mcq195___which_type_of_arthritis_was_it?": 3.0,
+        "alq130___avg_#_alcoholic_drinks/day___past_12_mos": -0.09359948671940088
+      }
+    },
+    {
+      "profile_id": "NHANES-D-35405",
+      "score_v3": 0.3475,
+      "score_v4": 0.082,
+      "fires_v3": false,
+      "fires_v4": false,
+      "group": "missed_both",
+      "expected": [
+        "inflammation"
+      ],
+      "generic_score": 1.7126,
+      "features": {
+        "huq010___general_health_condition": 4.0,
+        "med_count": 1.1802172133603508,
+        "huq051___#times_receive_healthcare_over_past_year": NaN,
+        "cdq010___shortness_of_breath_on_stairs/inclines": 2.0,
+        "sld012___sleep_hours___weekdays_or_workdays": -0.6171745409766463,
+        "bpq030___told_had_high_blood_pressure___2+_times": 2.0,
+        "mcq053___taking_treatment_for_anemia/past_3_mos": NaN,
+        "waist_cm": -0.13522727272727278,
+        "waist_elevated_female": 0.0,
+        "waist_elevated_male": 0.0,
+        "hdl_cholesterol_mg_dl": -1.1333333333333333,
+        "bpq080___doctor_told_you___high_cholesterol_level": NaN,
+        "mcq195___which_type_of_arthritis_was_it?": 3.0,
+        "alq130___avg_#_alcoholic_drinks/day___past_12_mos": -0.09359948671940088
+      }
+    },
+    {
+      "profile_id": "NHANES-D-34601",
+      "score_v3": 0.2018,
+      "score_v4": 0.0422,
+      "fires_v3": false,
+      "fires_v4": false,
+      "group": "missed_both",
+      "expected": [
+        "inflammation"
+      ],
+      "generic_score": 1.1132,
+      "features": {
+        "huq010___general_health_condition": 3.0,
+        "med_count": -0.934851637706448,
+        "huq051___#times_receive_healthcare_over_past_year": NaN,
+        "cdq010___shortness_of_breath_on_stairs/inclines": 2.0,
+        "sld012___sleep_hours___weekdays_or_workdays": -0.499110393978113,
+        "bpq030___told_had_high_blood_pressure___2+_times": 2.0,
+        "mcq053___taking_treatment_for_anemia/past_3_mos": NaN,
+        "waist_cm": -0.26136363636363635,
+        "waist_elevated_female": 0.0,
+        "waist_elevated_male": 0.0,
+        "hdl_cholesterol_mg_dl": -0.8,
+        "bpq080___doctor_told_you___high_cholesterol_level": NaN,
+        "mcq195___which_type_of_arthritis_was_it?": 3.0,
+        "alq130___avg_#_alcoholic_drinks/day___past_12_mos": -0.09359948671940088
+      }
+    },
+    {
+      "profile_id": "NHANES-D-37942",
+      "score_v3": 0.339,
+      "score_v4": 0.0422,
+      "fires_v3": false,
+      "fires_v4": false,
+      "group": "missed_both",
+      "expected": [
+        "inflammation"
+      ],
+      "generic_score": 0.5819,
+      "features": {
+        "huq010___general_health_condition": 1.0,
+        "med_count": -1.5333191715587728,
+        "huq051___#times_receive_healthcare_over_past_year": NaN,
+        "cdq010___shortness_of_breath_on_stairs/inclines": 2.0,
+        "sld012___sleep_hours___weekdays_or_workdays": -0.5572388567086364,
+        "bpq030___told_had_high_blood_pressure___2+_times": 2.0,
+        "mcq053___taking_treatment_for_anemia/past_3_mos": NaN,
+        "waist_cm": -0.07499999999999994,
+        "waist_elevated_female": 0.0,
+        "waist_elevated_male": 0.0,
+        "hdl_cholesterol_mg_dl": 1.6,
+        "bpq080___doctor_told_you___high_cholesterol_level": NaN,
+        "mcq195___which_type_of_arthritis_was_it?": 3.0,
+        "alq130___avg_#_alcoholic_drinks/day___past_12_mos": -0.08238133771712429
+      }
+    },
+    {
+      "profile_id": "NHANES-D-38001",
+      "score_v3": 0.5488,
+      "score_v4": 0.1532,
+      "fires_v3": true,
+      "fires_v4": false,
+      "group": "found_by_v3_only",
+      "expected": [
+        "inflammation"
+      ],
+      "generic_score": 1.2896,
+      "features": {
+        "huq010___general_health_condition": 4.0,
+        "med_count": -0.934851637706448,
+        "huq051___#times_receive_healthcare_over_past_year": NaN,
+        "cdq010___shortness_of_breath_on_stairs/inclines": 2.0,
+        "sld012___sleep_hours___weekdays_or_workdays": -0.6171745409766463,
+        "bpq030___told_had_high_blood_pressure___2+_times": 2.0,
+        "mcq053___taking_treatment_for_anemia/past_3_mos": NaN,
+        "waist_cm": 0.1693181818181819,
+        "waist_elevated_female": 0.0,
+        "waist_elevated_male": 0.0,
+        "hdl_cholesterol_mg_dl": -1.8666666666666667,
+        "bpq080___doctor_told_you___high_cholesterol_level": NaN,
+        "mcq195___which_type_of_arthritis_was_it?": 3.0,
+        "alq130___avg_#_alcoholic_drinks/day___past_12_mos": -0.09359948671940088
+      }
+    },
+    {
+      "profile_id": "NHANES-D-40888",
+      "score_v3": 0.3529,
+      "score_v4": 0.0522,
+      "fires_v3": false,
+      "fires_v4": false,
+      "group": "missed_both",
+      "expected": [
+        "inflammation"
+      ],
+      "generic_score": 0.9678,
+      "features": {
+        "huq010___general_health_condition": 2.0,
+        "med_count": -0.9093131169032433,
+        "huq051___#times_receive_healthcare_over_past_year": NaN,
+        "cdq010___shortness_of_breath_on_stairs/inclines": 2.0,
+        "sld012___sleep_hours___weekdays_or_workdays": -0.251807245778171,
+        "bpq030___told_had_high_blood_pressure___2+_times": 2.0,
+        "mcq053___taking_treatment_for_anemia/past_3_mos": NaN,
+        "waist_cm": -0.02156862745098042,
+        "waist_elevated_female": 0.0,
+        "waist_elevated_male": 0.0,
+        "hdl_cholesterol_mg_dl": -1.15,
+        "bpq080___doctor_told_you___high_cholesterol_level": NaN,
+        "mcq195___which_type_of_arthritis_was_it?": 3.0,
+        "alq130___avg_#_alcoholic_drinks/day___past_12_mos": -0.11997116213095808
+      }
+    },
+    {
+      "profile_id": "NHANES-D-31172",
+      "score_v3": 0.7456,
+      "score_v4": 0.2572,
+      "fires_v3": true,
+      "fires_v4": false,
+      "group": "found_by_v3_only",
+      "expected": [
+        "inflammation"
+      ],
+      "generic_score": 1.0963,
+      "features": {
+        "huq010___general_health_condition": 4.0,
+        "med_count": -1.5333191715587728,
+        "huq051___#times_receive_healthcare_over_past_year": NaN,
+        "cdq010___shortness_of_breath_on_stairs/inclines": 2.0,
+        "sld012___sleep_hours___weekdays_or_workdays": 0.014977895764521843,
+        "bpq030___told_had_high_blood_pressure___2+_times": 1.0,
+        "mcq053___taking_treatment_for_anemia/past_3_mos": NaN,
+        "waist_cm": 0.530681818181818,
+        "waist_elevated_female": 1.0,
+        "waist_elevated_male": 0.0,
+        "hdl_cholesterol_mg_dl": -0.4666666666666667,
+        "bpq080___doctor_told_you___high_cholesterol_level": NaN,
+        "mcq195___which_type_of_arthritis_was_it?": 3.0,
+        "alq130___avg_#_alcoholic_drinks/day___past_12_mos": -0.1166995053129554
+      }
+    },
+    {
+      "profile_id": "NHANES-D-36802",
+      "score_v3": 0.4057,
+      "score_v4": 0.0784,
+      "fires_v3": true,
+      "fires_v4": false,
+      "group": "found_by_v3_only",
+      "expected": [
+        "inflammation"
+      ],
+      "generic_score": 1.3252,
+      "features": {
+        "huq010___general_health_condition": 3.0,
+        "med_count": -1.5333191715587728,
+        "huq051___#times_receive_healthcare_over_past_year": NaN,
+        "cdq010___shortness_of_breath_on_stairs/inclines": 2.0,
+        "sld012___sleep_hours___weekdays_or_workdays": 1.1594114007108383,
+        "bpq030___told_had_high_blood_pressure___2+_times": 2.0,
+        "mcq053___taking_treatment_for_anemia/past_3_mos": NaN,
+        "waist_cm": -0.08068181818181812,
+        "waist_elevated_female": 0.0,
+        "waist_elevated_male": 0.0,
+        "hdl_cholesterol_mg_dl": -1.1333333333333333,
+        "bpq080___doctor_told_you___high_cholesterol_level": NaN,
+        "mcq195___which_type_of_arthritis_was_it?": 3.0,
+        "alq130___avg_#_alcoholic_drinks/day___past_12_mos": -0.08238133771712429
+      }
+    },
+    {
+      "profile_id": "NHANES-D-37798",
+      "score_v3": 0.3702,
+      "score_v4": 0.0776,
+      "fires_v3": false,
+      "fires_v4": false,
+      "group": "missed_both",
+      "expected": [
+        "inflammation"
+      ],
+      "generic_score": 0.7604,
+      "features": {
+        "huq010___general_health_condition": 1.0,
+        "med_count": -0.934851637706448,
+        "huq051___#times_receive_healthcare_over_past_year": NaN,
+        "cdq010___shortness_of_breath_on_stairs/inclines": 2.0,
+        "sld012___sleep_hours___weekdays_or_workdays": -0.2629820999810464,
+        "bpq030___told_had_high_blood_pressure___2+_times": 2.0,
+        "mcq053___taking_treatment_for_anemia/past_3_mos": NaN,
+        "waist_cm": -0.03409090909090909,
+        "waist_elevated_female": 0.0,
+        "waist_elevated_male": 0.0,
+        "hdl_cholesterol_mg_dl": -0.8,
+        "bpq080___doctor_told_you___high_cholesterol_level": NaN,
+        "mcq195___which_type_of_arthritis_was_it?": 3.0,
+        "alq130___avg_#_alcoholic_drinks/day___past_12_mos": -0.09359948671940088
+      }
+    },
+    {
+      "profile_id": "NHANES-D-35706",
+      "score_v3": 0.4176,
+      "score_v4": 0.0837,
+      "fires_v3": true,
+      "fires_v4": false,
+      "group": "found_by_v3_only",
+      "expected": [
+        "inflammation"
+      ],
+      "generic_score": 1.1678,
+      "features": {
+        "huq010___general_health_condition": 3.0,
+        "med_count": -0.9093131169032433,
+        "huq051___#times_receive_healthcare_over_past_year": NaN,
+        "cdq010___shortness_of_breath_on_stairs/inclines": 2.0,
+        "sld012___sleep_hours___weekdays_or_workdays": -0.251807245778171,
+        "bpq030___told_had_high_blood_pressure___2+_times": 2.0,
+        "mcq053___taking_treatment_for_anemia/past_3_mos": NaN,
+        "waist_cm": 0.007843137254901933,
+        "waist_elevated_female": 0.0,
+        "waist_elevated_male": 0.0,
+        "hdl_cholesterol_mg_dl": -0.7,
+        "bpq080___doctor_told_you___high_cholesterol_level": NaN,
+        "mcq195___which_type_of_arthritis_was_it?": 3.0,
+        "alq130___avg_#_alcoholic_drinks/day___past_12_mos": -0.11997116213095808
+      }
+    },
+    {
+      "profile_id": "NHANES-D-32163",
+      "score_v3": 0.542,
+      "score_v4": 0.0941,
+      "fires_v3": true,
+      "fires_v4": false,
+      "group": "found_by_v3_only",
+      "expected": [
+        "inflammation"
+      ],
+      "generic_score": 0.9531,
+      "features": {
+        "huq010___general_health_condition": 4.0,
+        "med_count": -0.9501463955835265,
+        "huq051___#times_receive_healthcare_over_past_year": NaN,
+        "cdq010___shortness_of_breath_on_stairs/inclines": 1.0,
+        "sld012___sleep_hours___weekdays_or_workdays": -0.2844797907033721,
+        "bpq030___told_had_high_blood_pressure___2+_times": 1.0,
+        "mcq053___taking_treatment_for_anemia/past_3_mos": NaN,
+        "waist_cm": 0.1147727272727272,
+        "waist_elevated_female": 0.0,
+        "waist_elevated_male": 0.0,
+        "hdl_cholesterol_mg_dl": 0.6666666666666666,
+        "bpq080___doctor_told_you___high_cholesterol_level": NaN,
+        "mcq195___which_type_of_arthritis_was_it?": 3.0,
+        "alq130___avg_#_alcoholic_drinks/day___past_12_mos": -0.8197938051714211
+      }
+    },
+    {
+      "profile_id": "NHANES-D-38083",
+      "score_v3": 0.4196,
+      "score_v4": 0.1031,
+      "fires_v3": true,
+      "fires_v4": false,
+      "group": "found_by_v3_only",
+      "expected": [
+        "inflammation"
+      ],
+      "generic_score": 0.8332,
+      "features": {
+        "huq010___general_health_condition": 1.0,
+        "med_count": -0.5118378674930882,
+        "huq051___#times_receive_healthcare_over_past_year": NaN,
+        "cdq010___shortness_of_breath_on_stairs/inclines": 2.0,
+        "sld012___sleep_hours___weekdays_or_workdays": -0.3220141734803133,
+        "bpq030___told_had_high_blood_pressure___2+_times": 2.0,
+        "mcq053___taking_treatment_for_anemia/past_3_mos": NaN,
+        "waist_cm": -0.011363636363636364,
+        "waist_elevated_female": 0.0,
+        "waist_elevated_male": 0.0,
+        "hdl_cholesterol_mg_dl": -2.933333333333333,
+        "bpq080___doctor_told_you___high_cholesterol_level": NaN,
+        "mcq195___which_type_of_arthritis_was_it?": 3.0,
+        "alq130___avg_#_alcoholic_drinks/day___past_12_mos": -0.09359948671940088
+      }
+    },
+    {
+      "profile_id": "NHANES-D-38494",
+      "score_v3": 0.3296,
+      "score_v4": 0.0557,
+      "fires_v3": false,
+      "fires_v4": false,
+      "group": "missed_both",
+      "expected": [
+        "inflammation"
+      ],
+      "generic_score": 1.0724,
+      "features": {
+        "huq010___general_health_condition": 3.0,
+        "med_count": 0.16871529749799913,
+        "huq051___#times_receive_healthcare_over_past_year": NaN,
+        "cdq010___shortness_of_breath_on_stairs/inclines": 2.0,
+        "sld012___sleep_hours___weekdays_or_workdays": -0.8064683231568707,
+        "bpq030___told_had_high_blood_pressure___2+_times": 1.0,
+        "mcq053___taking_treatment_for_anemia/past_3_mos": NaN,
+        "waist_cm": -0.07352941176470588,
+        "waist_elevated_female": 0.0,
+        "waist_elevated_male": 0.0,
+        "hdl_cholesterol_mg_dl": -1.75,
+        "bpq080___doctor_told_you___high_cholesterol_level": NaN,
+        "mcq195___which_type_of_arthritis_was_it?": 2.0,
+        "alq130___avg_#_alcoholic_drinks/day___past_12_mos": -0.8319365695224873
+      }
+    },
+    {
+      "profile_id": "NHANES-D-39813",
+      "score_v3": 0.2715,
+      "score_v4": 0.0419,
+      "fires_v3": false,
+      "fires_v4": false,
+      "group": "missed_both",
+      "expected": [
+        "inflammation"
+      ],
+      "generic_score": 0.9195,
+      "features": {
+        "huq010___general_health_condition": 1.0,
+        "med_count": -0.9507785325280514,
+        "huq051___#times_receive_healthcare_over_past_year": NaN,
+        "cdq010___shortness_of_breath_on_stairs/inclines": 2.0,
+        "sld012___sleep_hours___weekdays_or_workdays": 0.5482435755914232,
+        "bpq030___told_had_high_blood_pressure___2+_times": 2.0,
+        "mcq053___taking_treatment_for_anemia/past_3_mos": NaN,
+        "waist_cm": -0.17254901960784308,
+        "waist_elevated_female": 0.0,
+        "waist_elevated_male": 0.0,
+        "hdl_cholesterol_mg_dl": -1.3,
+        "bpq080___doctor_told_you___high_cholesterol_level": NaN,
+        "mcq195___which_type_of_arthritis_was_it?": 3.0,
+        "alq130___avg_#_alcoholic_drinks/day___past_12_mos": 1.2292807597479614
+      }
+    },
+    {
+      "profile_id": "NHANES-D-32357",
+      "score_v3": 0.2566,
+      "score_v4": 0.039,
+      "fires_v3": false,
+      "fires_v4": false,
+      "group": "missed_both",
+      "expected": [
+        "inflammation"
+      ],
+      "generic_score": 1.5522,
+      "features": {
+        "huq010___general_health_condition": 4.0,
+        "med_count": 0.5188863184826772,
+        "huq051___#times_receive_healthcare_over_past_year": NaN,
+        "cdq010___shortness_of_breath_on_stairs/inclines": 2.0,
+        "sld012___sleep_hours___weekdays_or_workdays": -0.7579448726656053,
+        "bpq030___told_had_high_blood_pressure___2+_times": 2.0,
+        "mcq053___taking_treatment_for_anemia/past_3_mos": NaN,
+        "waist_cm": -0.24019607843137256,
+        "waist_elevated_female": 0.0,
+        "waist_elevated_male": 0.0,
+        "hdl_cholesterol_mg_dl": -0.55,
+        "bpq080___doctor_told_you___high_cholesterol_level": NaN,
+        "mcq195___which_type_of_arthritis_was_it?": 3.0,
+        "alq130___avg_#_alcoholic_drinks/day___past_12_mos": -0.5073541016590752
+      }
+    },
+    {
+      "profile_id": "NHANES-D-33196",
+      "score_v3": 0.4964,
+      "score_v4": 0.0837,
+      "fires_v3": true,
+      "fires_v4": false,
+      "group": "found_by_v3_only",
+      "expected": [
+        "inflammation"
+      ],
+      "generic_score": 1.6233,
+      "features": {
+        "huq010___general_health_condition": 2.0,
+        "med_count": 2.1016935906707017,
+        "huq051___#times_receive_healthcare_over_past_year": NaN,
+        "cdq010___shortness_of_breath_on_stairs/inclines": 2.0,
+        "sld012___sleep_hours___weekdays_or_workdays": 0.014977895764521843,
+        "bpq030___told_had_high_blood_pressure___2+_times": 2.0,
+        "mcq053___taking_treatment_for_anemia/past_3_mos": NaN,
+        "waist_cm": -0.050000000000000065,
+        "waist_elevated_female": 0.0,
+        "waist_elevated_male": 0.0,
+        "hdl_cholesterol_mg_dl": 0.4666666666666667,
+        "bpq080___doctor_told_you___high_cholesterol_level": NaN,
+        "mcq195___which_type_of_arthritis_was_it?": 3.0,
+        "alq130___avg_#_alcoholic_drinks/day___past_12_mos": -0.10526011611434503
+      }
+    },
+    {
+      "profile_id": "NHANES-D-34977",
+      "score_v3": 0.8632,
+      "score_v4": 0.2771,
+      "fires_v3": true,
+      "fires_v4": false,
+      "group": "found_by_v3_only",
+      "expected": [
+        "inflammation"
+      ],
+      "generic_score": 1.1387,
+      "features": {
+        "huq010___general_health_condition": 3.0,
+        "med_count": -0.3216482508156146,
+        "huq051___#times_receive_healthcare_over_past_year": NaN,
+        "cdq010___shortness_of_breath_on_stairs/inclines": 2.0,
+        "sld012___sleep_hours___weekdays_or_workdays": 0.014977895764521843,
+        "bpq030___told_had_high_blood_pressure___2+_times": 1.0,
+        "mcq053___taking_treatment_for_anemia/past_3_mos": NaN,
+        "waist_cm": 0.5909090909090909,
+        "waist_elevated_female": 1.0,
+        "waist_elevated_male": 0.0,
+        "hdl_cholesterol_mg_dl": -0.26666666666666666,
+        "bpq080___doctor_told_you___high_cholesterol_level": NaN,
+        "mcq195___which_type_of_arthritis_was_it?": 3.0,
+        "alq130___avg_#_alcoholic_drinks/day___past_12_mos": -0.08238133771712429
+      }
+    },
+    {
+      "profile_id": "NHANES-D-32066",
+      "score_v3": 0.293,
+      "score_v4": 0.0458,
+      "fires_v3": false,
+      "fires_v4": false,
+      "group": "missed_both",
+      "expected": [
+        "inflammation"
+      ],
+      "generic_score": 1.3378,
+      "features": {
+        "huq010___general_health_condition": 4.0,
+        "med_count": 0.49107268540582333,
+        "huq051___#times_receive_healthcare_over_past_year": NaN,
+        "cdq010___shortness_of_breath_on_stairs/inclines": 2.0,
+        "sld012___sleep_hours___weekdays_or_workdays": -0.8019905046694563,
+        "bpq030___told_had_high_blood_pressure___2+_times": 1.0,
+        "mcq053___taking_treatment_for_anemia/past_3_mos": NaN,
+        "waist_cm": -0.096078431372549,
+        "waist_elevated_female": 0.0,
+        "waist_elevated_male": 0.0,
+        "hdl_cholesterol_mg_dl": -0.6,
+        "bpq080___doctor_told_you___high_cholesterol_level": NaN,
+        "mcq195___which_type_of_arthritis_was_it?": 2.0,
+        "alq130___avg_#_alcoholic_drinks/day___past_12_mos": -0.12098709228560917
+      }
+    },
+    {
+      "profile_id": "NHANES-D-35766",
+      "score_v3": 0.2094,
+      "score_v4": 0.0287,
+      "fires_v3": false,
+      "fires_v4": false,
+      "group": "missed_both",
+      "expected": [
+        "inflammation"
+      ],
+      "generic_score": 1.3813,
+      "features": {
+        "huq010___general_health_condition": 3.0,
+        "med_count": -0.45761418589068414,
+        "huq051___#times_receive_healthcare_over_past_year": NaN,
+        "cdq010___shortness_of_breath_on_stairs/inclines": 2.0,
+        "sld012___sleep_hours___weekdays_or_workdays": 0.36433712529402645,
+        "bpq030___told_had_high_blood_pressure___2+_times": 2.0,
+        "mcq053___taking_treatment_for_anemia/past_3_mos": NaN,
+        "waist_cm": -0.22647058823529406,
+        "waist_elevated_female": 0.0,
+        "waist_elevated_male": 0.0,
+        "hdl_cholesterol_mg_dl": -0.8,
+        "bpq080___doctor_told_you___high_cholesterol_level": NaN,
+        "mcq195___which_type_of_arthritis_was_it?": 3.0,
+        "alq130___avg_#_alcoholic_drinks/day___past_12_mos": -0.09521891761914188
+      }
+    },
+    {
+      "profile_id": "NHANES-D-34511",
+      "score_v3": 0.1633,
+      "score_v4": 0.0248,
+      "fires_v3": false,
+      "fires_v4": false,
+      "group": "missed_both",
+      "expected": [
+        "inflammation"
+      ],
+      "generic_score": 0.9801,
+      "features": {
+        "huq010___general_health_condition": 2.0,
+        "med_count": -0.9093131169032433,
+        "huq051___#times_receive_healthcare_over_past_year": NaN,
+        "cdq010___shortness_of_breath_on_stairs/inclines": 2.0,
+        "sld012___sleep_hours___weekdays_or_workdays": -0.19019280867095148,
+        "bpq030___told_had_high_blood_pressure___2+_times": 2.0,
+        "mcq053___taking_treatment_for_anemia/past_3_mos": NaN,
+        "waist_cm": -0.3627450980392157,
+        "waist_elevated_female": 0.0,
+        "waist_elevated_male": 0.0,
+        "hdl_cholesterol_mg_dl": -0.35,
+        "bpq080___doctor_told_you___high_cholesterol_level": NaN,
+        "mcq195___which_type_of_arthritis_was_it?": 3.0,
+        "alq130___avg_#_alcoholic_drinks/day___past_12_mos": -0.11997116213095808
+      }
+    },
+    {
+      "profile_id": "NHANES-D-32381",
+      "score_v3": 0.4772,
+      "score_v4": 0.0775,
+      "fires_v3": true,
+      "fires_v4": false,
+      "group": "found_by_v3_only",
+      "expected": [
+        "inflammation"
+      ],
+      "generic_score": 0.5691,
+      "features": {
+        "huq010___general_health_condition": 1.0,
+        "med_count": -1.1260643813027496,
+        "huq051___#times_receive_healthcare_over_past_year": NaN,
+        "cdq010___shortness_of_breath_on_stairs/inclines": 2.0,
+        "sld012___sleep_hours___weekdays_or_workdays": -1.0285536134220385,
+        "bpq030___told_had_high_blood_pressure___2+_times": 2.0,
+        "mcq053___taking_treatment_for_anemia/past_3_mos": NaN,
+        "waist_cm": 0.050000000000000065,
+        "waist_elevated_female": 0.0,
+        "waist_elevated_male": 0.0,
+        "hdl_cholesterol_mg_dl": 0.0,
+        "bpq080___doctor_told_you___high_cholesterol_level": NaN,
+        "mcq195___which_type_of_arthritis_was_it?": 3.0,
+        "alq130___avg_#_alcoholic_drinks/day___past_12_mos": -0.7724589465015553
+      }
+    },
+    {
+      "profile_id": "NHANES-D-32198",
+      "score_v3": 0.3963,
+      "score_v4": 0.0672,
+      "fires_v3": false,
+      "fires_v4": false,
+      "group": "missed_both",
+      "expected": [
+        "inflammation"
+      ],
+      "generic_score": 1.48,
+      "features": {
+        "huq010___general_health_condition": 3.0,
+        "med_count": 2.1016935906707017,
+        "huq051___#times_receive_healthcare_over_past_year": NaN,
+        "cdq010___shortness_of_breath_on_stairs/inclines": 2.0,
+        "sld012___sleep_hours___weekdays_or_workdays": -1.7016723616549527,
+        "bpq030___told_had_high_blood_pressure___2+_times": 2.0,
+        "mcq053___taking_treatment_for_anemia/past_3_mos": NaN,
+        "waist_cm": -0.20113636363636367,
+        "waist_elevated_female": 0.0,
+        "waist_elevated_male": 0.0,
+        "hdl_cholesterol_mg_dl": 1.9333333333333333,
+        "bpq080___doctor_told_you___high_cholesterol_level": NaN,
+        "mcq195___which_type_of_arthritis_was_it?": 3.0,
+        "alq130___avg_#_alcoholic_drinks/day___past_12_mos": -0.05950255931990355
+      }
+    },
+    {
+      "profile_id": "NHANES-D-41397",
+      "score_v3": 0.204,
+      "score_v4": 0.0422,
+      "fires_v3": false,
+      "fires_v4": false,
+      "group": "missed_both",
+      "expected": [
+        "inflammation"
+      ],
+      "generic_score": 0.9486,
+      "features": {
+        "huq010___general_health_condition": 2.0,
+        "med_count": -0.934851637706448,
+        "huq051___#times_receive_healthcare_over_past_year": NaN,
+        "cdq010___shortness_of_breath_on_stairs/inclines": 2.0,
+        "sld012___sleep_hours___weekdays_or_workdays": -0.3220141734803133,
+        "bpq030___told_had_high_blood_pressure___2+_times": 2.0,
+        "mcq053___taking_treatment_for_anemia/past_3_mos": NaN,
+        "waist_cm": -0.26136363636363635,
+        "waist_elevated_female": 0.0,
+        "waist_elevated_male": 0.0,
+        "hdl_cholesterol_mg_dl": -0.8,
+        "bpq080___doctor_told_you___high_cholesterol_level": NaN,
+        "mcq195___which_type_of_arthritis_was_it?": 3.0,
+        "alq130___avg_#_alcoholic_drinks/day___past_12_mos": -0.09359948671940088
+      }
+    },
+    {
+      "profile_id": "NHANES-D-33364",
+      "score_v3": 0.3312,
+      "score_v4": 0.0557,
+      "fires_v3": false,
+      "fires_v4": false,
+      "group": "missed_both",
+      "expected": [
+        "inflammation"
+      ],
+      "generic_score": 0.545,
+      "features": {
+        "huq010___general_health_condition": 1.0,
+        "med_count": -0.45904449997696706,
+        "huq051___#times_receive_healthcare_over_past_year": NaN,
+        "cdq010___shortness_of_breath_on_stairs/inclines": 2.0,
+        "sld012___sleep_hours___weekdays_or_workdays": -0.8160131650959689,
+        "bpq030___told_had_high_blood_pressure___2+_times": 1.0,
+        "mcq053___taking_treatment_for_anemia/past_3_mos": NaN,
+        "waist_cm": -0.09117647058823526,
+        "waist_elevated_female": 0.0,
+        "waist_elevated_male": 0.0,
+        "hdl_cholesterol_mg_dl": -0.95,
+        "bpq080___doctor_told_you___high_cholesterol_level": NaN,
+        "mcq195___which_type_of_arthritis_was_it?": 3.0,
+        "alq130___avg_#_alcoholic_drinks/day___past_12_mos": -0.012367009655412075
+      }
+    },
+    {
+      "profile_id": "NHANES-D-33983",
+      "score_v3": 0.2904,
+      "score_v4": 0.025,
+      "fires_v3": false,
+      "fires_v4": false,
+      "group": "missed_both",
+      "expected": [
+        "inflammation"
+      ],
+      "generic_score": 0.6955,
+      "features": {
+        "huq010___general_health_condition": 1.0,
+        "med_count": -1.1260643813027496,
+        "huq051___#times_receive_healthcare_over_past_year": NaN,
+        "cdq010___shortness_of_breath_on_stairs/inclines": 2.0,
+        "sld012___sleep_hours___weekdays_or_workdays": -0.39635346249702746,
+        "bpq030___told_had_high_blood_pressure___2+_times": 2.0,
+        "mcq053___taking_treatment_for_anemia/past_3_mos": NaN,
+        "waist_cm": -0.17159090909090902,
+        "waist_elevated_female": 0.0,
+        "waist_elevated_male": 0.0,
+        "hdl_cholesterol_mg_dl": 2.2,
+        "bpq080___doctor_told_you___high_cholesterol_level": NaN,
+        "mcq195___which_type_of_arthritis_was_it?": 3.0,
+        "alq130___avg_#_alcoholic_drinks/day___past_12_mos": -0.18715965664134607
+      }
+    },
+    {
+      "profile_id": "NHANES-D-32829",
+      "score_v3": 0.2234,
+      "score_v4": 0.0358,
+      "fires_v3": false,
+      "fires_v4": false,
+      "group": "missed_both",
+      "expected": [
+        "inflammation"
+      ],
+      "generic_score": 1.0884,
+      "features": {
+        "huq010___general_health_condition": 4.0,
+        "med_count": 1.4445393726009144,
+        "huq051___#times_receive_healthcare_over_past_year": NaN,
+        "cdq010___shortness_of_breath_on_stairs/inclines": 2.0,
+        "sld012___sleep_hours___weekdays_or_workdays": -3.0022995279963274,
+        "bpq030___told_had_high_blood_pressure___2+_times": 1.0,
+        "mcq053___taking_treatment_for_anemia/past_3_mos": NaN,
+        "waist_cm": -0.28039215686274505,
+        "waist_elevated_female": 0.0,
+        "waist_elevated_male": 0.0,
+        "hdl_cholesterol_mg_dl": -0.45,
+        "bpq080___doctor_told_you___high_cholesterol_level": NaN,
+        "mcq195___which_type_of_arthritis_was_it?": 3.0,
+        "alq130___avg_#_alcoholic_drinks/day___past_12_mos": -0.05582894510031271
+      }
+    },
+    {
+      "profile_id": "NHANES-D-39700",
+      "score_v3": 0.4409,
+      "score_v4": 0.076,
+      "fires_v3": true,
+      "fires_v4": false,
+      "group": "found_by_v3_only",
+      "expected": [
+        "inflammation"
+      ],
+      "generic_score": 0.9819,
+      "features": {
+        "huq010___general_health_condition": 3.0,
+        "med_count": -1.5333191715587728,
+        "huq051___#times_receive_healthcare_over_past_year": NaN,
+        "cdq010___shortness_of_breath_on_stairs/inclines": 2.0,
+        "sld012___sleep_hours___weekdays_or_workdays": -0.5572388567086364,
+        "bpq030___told_had_high_blood_pressure___2+_times": 2.0,
+        "mcq053___taking_treatment_for_anemia/past_3_mos": NaN,
+        "waist_cm": -0.04318181818181815,
+        "waist_elevated_female": 0.0,
+        "waist_elevated_male": 0.0,
+        "hdl_cholesterol_mg_dl": 1.1333333333333333,
+        "bpq080___doctor_told_you___high_cholesterol_level": NaN,
+        "mcq195___which_type_of_arthritis_was_it?": 3.0,
+        "alq130___avg_#_alcoholic_drinks/day___past_12_mos": -0.07094194851851393
+      }
+    },
+    {
+      "profile_id": "NHANES-D-41108",
+      "score_v3": 0.6512,
+      "score_v4": 0.153,
+      "fires_v3": true,
+      "fires_v4": false,
+      "group": "found_by_v3_only",
+      "expected": [
+        "inflammation"
+      ],
+      "generic_score": 1.0963,
+      "features": {
+        "huq010___general_health_condition": 3.0,
+        "med_count": -1.5333191715587728,
+        "huq051___#times_receive_healthcare_over_past_year": NaN,
+        "cdq010___shortness_of_breath_on_stairs/inclines": 2.0,
+        "sld012___sleep_hours___weekdays_or_workdays": 0.014977895764521843,
+        "bpq030___told_had_high_blood_pressure___2+_times": 2.0,
+        "mcq053___taking_treatment_for_anemia/past_3_mos": NaN,
+        "waist_cm": 0.27045454545454545,
+        "waist_elevated_female": 0.0,
+        "waist_elevated_male": 0.0,
+        "hdl_cholesterol_mg_dl": 0.13333333333333333,
+        "bpq080___doctor_told_you___high_cholesterol_level": NaN,
+        "mcq195___which_type_of_arthritis_was_it?": 3.0,
+        "alq130___avg_#_alcoholic_drinks/day___past_12_mos": -0.09382072691573466
+      }
+    },
+    {
+      "profile_id": "NHANES-D-35907",
+      "score_v3": 0.1738,
+      "score_v4": 0.0156,
+      "fires_v3": false,
+      "fires_v4": false,
+      "group": "missed_both",
+      "expected": [
+        "inflammation"
+      ],
+      "generic_score": 0.7349,
+      "features": {
+        "huq010___general_health_condition": 1.0,
+        "med_count": -0.45761418589068414,
+        "huq051___#times_receive_healthcare_over_past_year": NaN,
+        "cdq010___shortness_of_breath_on_stairs/inclines": 2.0,
+        "sld012___sleep_hours___weekdays_or_workdays": -0.8679516168503685,
+        "bpq030___told_had_high_blood_pressure___2+_times": 2.0,
+        "mcq053___taking_treatment_for_anemia/past_3_mos": NaN,
+        "waist_cm": -0.31666666666666665,
+        "waist_elevated_female": 0.0,
+        "waist_elevated_male": 0.0,
+        "hdl_cholesterol_mg_dl": -0.1,
+        "bpq080___doctor_told_you___high_cholesterol_level": NaN,
+        "mcq195___which_type_of_arthritis_was_it?": 2.0,
+        "alq130___avg_#_alcoholic_drinks/day___past_12_mos": -0.09521891761914188
+      }
+    },
+    {
+      "profile_id": "NHANES-D-32819",
+      "score_v3": 0.1454,
+      "score_v4": 0.022,
+      "fires_v3": false,
+      "fires_v4": false,
+      "group": "missed_both",
+      "expected": [
+        "inflammation"
+      ],
+      "generic_score": 0.3894,
+      "features": {
+        "huq010___general_health_condition": 1.0,
+        "med_count": -1.922937922906004,
+        "huq051___#times_receive_healthcare_over_past_year": NaN,
+        "cdq010___shortness_of_breath_on_stairs/inclines": 2.0,
+        "sld012___sleep_hours___weekdays_or_workdays": -1.1303020491621525,
+        "bpq030___told_had_high_blood_pressure___2+_times": 2.0,
+        "mcq053___taking_treatment_for_anemia/past_3_mos": NaN,
+        "waist_cm": -0.3490196078431372,
+        "waist_elevated_female": 0.0,
+        "waist_elevated_male": 0.0,
+        "hdl_cholesterol_mg_dl": -1.1,
+        "bpq080___doctor_told_you___high_cholesterol_level": NaN,
+        "mcq195___which_type_of_arthritis_was_it?": 3.0,
+        "alq130___avg_#_alcoholic_drinks/day___past_12_mos": -0.13075090605744233
+      }
+    },
+    {
+      "profile_id": "NHANES-D-32033",
+      "score_v3": 0.1602,
+      "score_v4": 0.0229,
+      "fires_v3": false,
+      "fires_v4": false,
+      "group": "missed_both",
+      "expected": [
+        "inflammation"
+      ],
+      "generic_score": 1.1375,
+      "features": {
+        "huq010___general_health_condition": 1.0,
+        "med_count": -0.9093131169032433,
+        "huq051___#times_receive_healthcare_over_past_year": NaN,
+        "cdq010___shortness_of_breath_on_stairs/inclines": 2.0,
+        "sld012___sleep_hours___weekdays_or_workdays": 1.5966258674384213,
+        "bpq030___told_had_high_blood_pressure___2+_times": 2.0,
+        "mcq053___taking_treatment_for_anemia/past_3_mos": NaN,
+        "waist_cm": -0.3627450980392157,
+        "waist_elevated_female": 0.0,
+        "waist_elevated_male": 0.0,
+        "hdl_cholesterol_mg_dl": -0.3,
+        "bpq080___doctor_told_you___high_cholesterol_level": NaN,
+        "mcq195___which_type_of_arthritis_was_it?": 3.0,
+        "alq130___avg_#_alcoholic_drinks/day___past_12_mos": -0.11997116213095808
+      }
+    },
+    {
+      "profile_id": "NHANES-D-33612",
+      "score_v3": 0.369,
+      "score_v4": 0.071,
+      "fires_v3": false,
+      "fires_v4": false,
+      "group": "missed_both",
+      "expected": [
+        "inflammation"
+      ],
+      "generic_score": 0.9415,
+      "features": {
+        "huq010___general_health_condition": 2.0,
+        "med_count": -1.1420649243030636,
+        "huq051___#times_receive_healthcare_over_past_year": NaN,
+        "cdq010___shortness_of_breath_on_stairs/inclines": 2.0,
+        "sld012___sleep_hours___weekdays_or_workdays": -0.15045347659654343,
+        "bpq030___told_had_high_blood_pressure___2+_times": 2.0,
+        "mcq053___taking_treatment_for_anemia/past_3_mos": NaN,
+        "waist_cm": -0.018627450980392212,
+        "waist_elevated_female": 0.0,
+        "waist_elevated_male": 0.0,
+        "hdl_cholesterol_mg_dl": -0.85,
+        "bpq080___doctor_told_you___high_cholesterol_level": NaN,
+        "mcq195___which_type_of_arthritis_was_it?": 3.0,
+        "alq130___avg_#_alcoholic_drinks/day___past_12_mos": 0.8843308644189757
+      }
+    },
+    {
+      "profile_id": "NHANES-D-35072",
+      "score_v3": 0.2129,
+      "score_v4": 0.0419,
+      "fires_v3": false,
+      "fires_v4": false,
+      "group": "missed_both",
+      "expected": [
+        "inflammation"
+      ],
+      "generic_score": 0.7014,
+      "features": {
+        "huq010___general_health_condition": 1.0,
+        "med_count": -0.934851637706448,
+        "huq051___#times_receive_healthcare_over_past_year": NaN,
+        "cdq010___shortness_of_breath_on_stairs/inclines": 2.0,
+        "sld012___sleep_hours___weekdays_or_workdays": -0.5581424674773794,
+        "bpq030___told_had_high_blood_pressure___2+_times": 2.0,
+        "mcq053___taking_treatment_for_anemia/past_3_mos": NaN,
+        "waist_cm": -0.26136363636363635,
+        "waist_elevated_female": 0.0,
+        "waist_elevated_male": 0.0,
+        "hdl_cholesterol_mg_dl": -1.8,
+        "bpq080___doctor_told_you___high_cholesterol_level": NaN,
+        "mcq195___which_type_of_arthritis_was_it?": 3.0,
+        "alq130___avg_#_alcoholic_drinks/day___past_12_mos": -0.09359948671940088
+      }
+    },
+    {
+      "profile_id": "NHANES-D-39265",
+      "score_v3": 0.3045,
+      "score_v4": 0.0458,
+      "fires_v3": false,
+      "fires_v4": false,
+      "group": "missed_both",
+      "expected": [
+        "inflammation"
+      ],
+      "generic_score": 1.6853,
+      "features": {
+        "huq010___general_health_condition": 4.0,
+        "med_count": 0.4457836761344342,
+        "huq051___#times_receive_healthcare_over_past_year": NaN,
+        "cdq010___shortness_of_breath_on_stairs/inclines": 1.0,
+        "sld012___sleep_hours___weekdays_or_workdays": 0.9804814963662238,
+        "bpq030___told_had_high_blood_pressure___2+_times": 2.0,
+        "mcq053___taking_treatment_for_anemia/past_3_mos": NaN,
+        "waist_cm": -0.20196078431372544,
+        "waist_elevated_female": 0.0,
+        "waist_elevated_male": 0.0,
+        "hdl_cholesterol_mg_dl": -0.35,
+        "bpq080___doctor_told_you___high_cholesterol_level": NaN,
+        "mcq195___which_type_of_arthritis_was_it?": 3.0,
+        "alq130___avg_#_alcoholic_drinks/day___past_12_mos": -0.11997116213095808
+      }
+    },
+    {
+      "profile_id": "NHANES-D-38337",
+      "score_v3": 0.5552,
+      "score_v4": 0.1097,
+      "fires_v3": true,
+      "fires_v4": false,
+      "group": "found_by_v3_only",
+      "expected": [
+        "inflammation"
+      ],
+      "generic_score": 1.3614,
+      "features": {
+        "huq010___general_health_condition": 3.0,
+        "med_count": 0.49107268540582333,
+        "huq051___#times_receive_healthcare_over_past_year": NaN,
+        "cdq010___shortness_of_breath_on_stairs/inclines": 2.0,
+        "sld012___sleep_hours___weekdays_or_workdays": 0.31585082702805245,
+        "bpq030___told_had_high_blood_pressure___2+_times": 1.0,
+        "mcq053___taking_treatment_for_anemia/past_3_mos": NaN,
+        "waist_cm": 0.19803921568627453,
+        "waist_elevated_female": 0.0,
+        "waist_elevated_male": 0.0,
+        "hdl_cholesterol_mg_dl": -1.1,
+        "bpq080___doctor_told_you___high_cholesterol_level": NaN,
+        "mcq195___which_type_of_arthritis_was_it?": 2.0,
+        "alq130___avg_#_alcoholic_drinks/day___past_12_mos": -0.07586817664029397
+      }
+    },
+    {
+      "profile_id": "NHANES-D-41192",
+      "score_v3": 0.2144,
+      "score_v4": 0.0287,
+      "fires_v3": false,
+      "fires_v4": false,
+      "group": "missed_both",
+      "expected": [
+        "inflammation"
+      ],
+      "generic_score": 1.0284,
+      "features": {
+        "huq010___general_health_condition": 3.0,
+        "med_count": -1.056037185543557,
+        "huq051___#times_receive_healthcare_over_past_year": NaN,
+        "cdq010___shortness_of_breath_on_stairs/inclines": 2.0,
+        "sld012___sleep_hours___weekdays_or_workdays": -0.8019905046694563,
+        "bpq030___told_had_high_blood_pressure___2+_times": 2.0,
+        "mcq053___taking_treatment_for_anemia/past_3_mos": NaN,
+        "waist_cm": -0.20882352941176469,
+        "waist_elevated_female": 0.0,
+        "waist_elevated_male": 0.0,
+        "hdl_cholesterol_mg_dl": -1.1,
+        "bpq080___doctor_told_you___high_cholesterol_level": NaN,
+        "mcq195___which_type_of_arthritis_was_it?": 3.0,
+        "alq130___avg_#_alcoholic_drinks/day___past_12_mos": -0.10970736337428036
+      }
+    },
+    {
+      "profile_id": "NHANES-D-38033",
+      "score_v3": 0.3712,
+      "score_v4": 0.0454,
+      "fires_v3": false,
+      "fires_v4": false,
+      "group": "missed_both",
+      "expected": [
+        "inflammation"
+      ],
+      "generic_score": 0.8108,
+      "features": {
+        "huq010___general_health_condition": 1.0,
+        "med_count": -1.5333191715587728,
+        "huq051___#times_receive_healthcare_over_past_year": NaN,
+        "cdq010___shortness_of_breath_on_stairs/inclines": 2.0,
+        "sld012___sleep_hours___weekdays_or_workdays": 0.5871946482376801,
+        "bpq030___told_had_high_blood_pressure___2+_times": 2.0,
+        "mcq053___taking_treatment_for_anemia/past_3_mos": NaN,
+        "waist_cm": -0.06590909090909088,
+        "waist_elevated_female": 0.0,
+        "waist_elevated_male": 0.0,
+        "hdl_cholesterol_mg_dl": 0.6666666666666666,
+        "bpq080___doctor_told_you___high_cholesterol_level": NaN,
+        "mcq195___which_type_of_arthritis_was_it?": 3.0,
+        "alq130___avg_#_alcoholic_drinks/day___past_12_mos": -0.1166995053129554
+      }
+    },
+    {
+      "profile_id": "NHANES-D-38651",
+      "score_v3": 0.1509,
+      "score_v4": 0.012,
+      "fires_v3": false,
+      "fires_v4": false,
+      "group": "missed_both",
+      "expected": [
+        "inflammation"
+      ],
+      "generic_score": 1.291,
+      "features": {
+        "huq010___general_health_condition": 3.0,
+        "med_count": -0.9093131169032433,
+        "huq051___#times_receive_healthcare_over_past_year": NaN,
+        "cdq010___shortness_of_breath_on_stairs/inclines": 2.0,
+        "sld012___sleep_hours___weekdays_or_workdays": 0.36433712529402645,
+        "bpq030___told_had_high_blood_pressure___2+_times": 2.0,
+        "mcq053___taking_treatment_for_anemia/past_3_mos": NaN,
+        "waist_cm": -0.30294117647058827,
+        "waist_elevated_female": 0.0,
+        "waist_elevated_male": 0.0,
+        "hdl_cholesterol_mg_dl": -0.15,
+        "bpq080___doctor_told_you___high_cholesterol_level": NaN,
+        "mcq195___which_type_of_arthritis_was_it?": 3.0,
+        "alq130___avg_#_alcoholic_drinks/day___past_12_mos": -0.045714428595509476
+      }
+    },
+    {
+      "profile_id": "NHANES-D-32783",
+      "score_v3": 0.7059,
+      "score_v4": 0.2106,
+      "fires_v3": true,
+      "fires_v4": false,
+      "group": "found_by_v3_only",
+      "expected": [
+        "inflammation"
+      ],
+      "generic_score": 1.1014,
+      "features": {
+        "huq010___general_health_condition": 3.0,
+        "med_count": -0.934851637706448,
+        "huq051___#times_receive_healthcare_over_past_year": NaN,
+        "cdq010___shortness_of_breath_on_stairs/inclines": 2.0,
+        "sld012___sleep_hours___weekdays_or_workdays": -0.5581424674773794,
+        "bpq030___told_had_high_blood_pressure___2+_times": 2.0,
+        "mcq053___taking_treatment_for_anemia/past_3_mos": NaN,
+        "waist_cm": 0.2261363636363637,
+        "waist_elevated_female": 0.0,
+        "waist_elevated_male": 0.0,
+        "hdl_cholesterol_mg_dl": -1.2666666666666666,
+        "bpq080___doctor_told_you___high_cholesterol_level": NaN,
+        "mcq195___which_type_of_arthritis_was_it?": 3.0,
+        "alq130___avg_#_alcoholic_drinks/day___past_12_mos": -0.09359948671940088
+      }
+    },
+    {
+      "profile_id": "NHANES-D-34254",
+      "score_v3": 0.8254,
+      "score_v4": 0.267,
+      "fires_v3": true,
+      "fires_v4": false,
+      "group": "found_by_v3_only",
+      "expected": [
+        "inflammation"
+      ],
+      "generic_score": 0.7885,
+      "features": {
+        "huq010___general_health_condition": 4.0,
+        "med_count": -0.31116783163274575,
+        "huq051___#times_receive_healthcare_over_past_year": NaN,
+        "cdq010___shortness_of_breath_on_stairs/inclines": 2.0,
+        "sld012___sleep_hours___weekdays_or_workdays": -2.746398146400384,
+        "bpq030___told_had_high_blood_pressure___2+_times": 1.0,
+        "mcq053___taking_treatment_for_anemia/past_3_mos": NaN,
+        "waist_cm": 0.5238636363636363,
+        "waist_elevated_female": 1.0,
+        "waist_elevated_male": 0.0,
+        "hdl_cholesterol_mg_dl": -0.6,
+        "bpq080___doctor_told_you___high_cholesterol_level": NaN,
+        "mcq195___which_type_of_arthritis_was_it?": 3.0,
+        "alq130___avg_#_alcoholic_drinks/day___past_12_mos": -1.4609076211364374
+      }
+    },
+    {
+      "profile_id": "NHANES-D-40221",
+      "score_v3": 0.4176,
+      "score_v4": 0.0659,
+      "fires_v3": true,
+      "fires_v4": false,
+      "group": "found_by_v3_only",
+      "expected": [
+        "inflammation"
+      ],
+      "generic_score": 1.3387,
+      "features": {
+        "huq010___general_health_condition": 3.0,
+        "med_count": -0.3216482508156146,
+        "huq051___#times_receive_healthcare_over_past_year": NaN,
+        "cdq010___shortness_of_breath_on_stairs/inclines": 2.0,
+        "sld012___sleep_hours___weekdays_or_workdays": 0.014977895764521843,
+        "bpq030___told_had_high_blood_pressure___2+_times": 2.0,
+        "mcq053___taking_treatment_for_anemia/past_3_mos": NaN,
+        "waist_cm": -0.045454545454545456,
+        "waist_elevated_female": 0.0,
+        "waist_elevated_male": 0.0,
+        "hdl_cholesterol_mg_dl": 1.6666666666666667,
+        "bpq080___doctor_told_you___high_cholesterol_level": NaN,
+        "mcq195___which_type_of_arthritis_was_it?": 3.0,
+        "alq130___avg_#_alcoholic_drinks/day___past_12_mos": -0.1166995053129554
+      }
+    },
+    {
+      "profile_id": "NHANES-D-31376",
+      "score_v3": 0.1993,
+      "score_v4": 0.0388,
+      "fires_v3": false,
+      "fires_v4": false,
+      "group": "missed_both",
+      "expected": [
+        "inflammation"
+      ],
+      "generic_score": 1.1678,
+      "features": {
+        "huq010___general_health_condition": 3.0,
+        "med_count": -0.9093131169032433,
+        "huq051___#times_receive_healthcare_over_past_year": NaN,
+        "cdq010___shortness_of_breath_on_stairs/inclines": 2.0,
+        "sld012___sleep_hours___weekdays_or_workdays": -0.251807245778171,
+        "bpq030___told_had_high_blood_pressure___2+_times": 2.0,
+        "mcq053___taking_treatment_for_anemia/past_3_mos": NaN,
+        "waist_cm": -0.3147058823529411,
+        "waist_elevated_female": 0.0,
+        "waist_elevated_male": 0.0,
+        "hdl_cholesterol_mg_dl": -1.1,
+        "bpq080___doctor_told_you___high_cholesterol_level": NaN,
+        "mcq195___which_type_of_arthritis_was_it?": 3.0,
+        "alq130___avg_#_alcoholic_drinks/day___past_12_mos": -0.11997116213095808
+      }
+    },
+    {
+      "profile_id": "NHANES-D-38713",
+      "score_v3": 0.3871,
+      "score_v4": 0.0429,
+      "fires_v3": false,
+      "fires_v4": false,
+      "group": "missed_both",
+      "expected": [
+        "inflammation"
+      ],
+      "generic_score": 0.7819,
+      "features": {
+        "huq010___general_health_condition": 2.0,
+        "med_count": -1.5333191715587728,
+        "huq051___#times_receive_healthcare_over_past_year": NaN,
+        "cdq010___shortness_of_breath_on_stairs/inclines": 2.0,
+        "sld012___sleep_hours___weekdays_or_workdays": -0.5572388567086364,
+        "bpq030___told_had_high_blood_pressure___2+_times": 2.0,
+        "mcq053___taking_treatment_for_anemia/past_3_mos": NaN,
+        "waist_cm": -0.013636363636363669,
+        "waist_elevated_female": 0.0,
+        "waist_elevated_male": 0.0,
+        "hdl_cholesterol_mg_dl": 2.0,
+        "bpq080___doctor_told_you___high_cholesterol_level": NaN,
+        "mcq195___which_type_of_arthritis_was_it?": 3.0,
+        "alq130___avg_#_alcoholic_drinks/day___past_12_mos": -0.09382072691573466
+      }
+    },
+    {
+      "profile_id": "NHANES-D-40963",
+      "score_v3": 0.6022,
+      "score_v4": 0.1261,
+      "fires_v3": true,
+      "fires_v4": false,
+      "group": "found_by_v3_only",
+      "expected": [
+        "inflammation"
+      ],
+      "generic_score": 1.4994,
+      "features": {
+        "huq010___general_health_condition": 3.0,
+        "med_count": 1.3465087552697448,
+        "huq051___#times_receive_healthcare_over_past_year": NaN,
+        "cdq010___shortness_of_breath_on_stairs/inclines": 1.0,
+        "sld012___sleep_hours___weekdays_or_workdays": 1.150681618627178,
+        "bpq030___told_had_high_blood_pressure___2+_times": 1.0,
+        "mcq053___taking_treatment_for_anemia/past_3_mos": NaN,
+        "waist_cm": 0.14411764705882354,
+        "waist_elevated_female": 0.0,
+        "waist_elevated_male": 0.0,
+        "hdl_cholesterol_mg_dl": -0.6,
+        "bpq080___doctor_told_you___high_cholesterol_level": NaN,
+        "mcq195___which_type_of_arthritis_was_it?": 2.0,
+        "alq130___avg_#_alcoholic_drinks/day___past_12_mos": -0.8319365695224873
+      }
+    },
+    {
+      "profile_id": "NHANES-D-37455",
+      "score_v3": 0.5086,
+      "score_v4": 0.1007,
+      "fires_v3": true,
+      "fires_v4": false,
+      "group": "found_by_v3_only",
+      "expected": [
+        "inflammation"
+      ],
+      "generic_score": 1.4472,
+      "features": {
+        "huq010___general_health_condition": 4.0,
+        "med_count": 2.0381825563552036,
+        "huq051___#times_receive_healthcare_over_past_year": NaN,
+        "cdq010___shortness_of_breath_on_stairs/inclines": 1.0,
+        "sld012___sleep_hours___weekdays_or_workdays": -0.8019905046694563,
+        "bpq030___told_had_high_blood_pressure___2+_times": 1.0,
+        "mcq053___taking_treatment_for_anemia/past_3_mos": NaN,
+        "waist_cm": 0.029411764705882353,
+        "waist_elevated_female": 0.0,
+        "waist_elevated_male": 0.0,
+        "hdl_cholesterol_mg_dl": -0.85,
+        "bpq080___doctor_told_you___high_cholesterol_level": NaN,
+        "mcq195___which_type_of_arthritis_was_it?": 2.0,
+        "alq130___avg_#_alcoholic_drinks/day___past_12_mos": -0.08714790555162277
+      }
+    }
+  ]
+}

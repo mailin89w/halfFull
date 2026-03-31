@@ -1,0 +1,2409 @@
+{
+  "summary": {
+    "total_profiles": 760,
+    "total_fps": 201,
+    "fp_rate": 0.2645,
+    "threshold_used": 0.35,
+    "mean_score_all": 0.2425,
+    "flag_rate_all": 0.2842,
+    "bucket_counts": {
+      "other": 109,
+      "metabolic": 51,
+      "hypertensive": 32,
+      "healthy": 9
+    },
+    "top_confounders": [
+      [
+        "perimenopause",
+        81
+      ],
+      [
+        "liver",
+        38
+      ],
+      [
+        "hypothyroidism",
+        33
+      ],
+      [
+        "electrolyte_imbalance",
+        32
+      ],
+      [
+        "sleep_disorder",
+        29
+      ],
+      [
+        "prediabetes",
+        25
+      ],
+      [
+        "inflammation",
+        24
+      ],
+      [
+        "anemia",
+        21
+      ],
+      [
+        "vitamin_d_deficiency",
+        19
+      ],
+      [
+        "hepatitis",
+        13
+      ]
+    ]
+  },
+  "fp_records": [
+    {
+      "profile_id": "NHANES-C-30212",
+      "profile_type": "positive",
+      "target_condition": "perimenopause",
+      "kidney_score": 0.6282,
+      "expected_conditions": [
+        "perimenopause"
+      ],
+      "fp_bucket": "other",
+      "n_conditions": 1
+    },
+    {
+      "profile_id": "NHANES-C-23517",
+      "profile_type": "multi",
+      "target_condition": "hypothyroidism",
+      "kidney_score": 0.4628,
+      "expected_conditions": [
+        "hypothyroidism",
+        "perimenopause"
+      ],
+      "fp_bucket": "other",
+      "n_conditions": 2
+    },
+    {
+      "profile_id": "NHANES-D-37440",
+      "profile_type": "multi",
+      "target_condition": "sleep_disorder",
+      "kidney_score": 0.6026,
+      "expected_conditions": [
+        "sleep_disorder",
+        "inflammation",
+        "vitamin_d_deficiency"
+      ],
+      "fp_bucket": "metabolic",
+      "n_conditions": 3
+    },
+    {
+      "profile_id": "NHANES-C-27257",
+      "profile_type": "multi",
+      "target_condition": "hepatitis",
+      "kidney_score": 0.596,
+      "expected_conditions": [
+        "hepatitis",
+        "liver",
+        "perimenopause"
+      ],
+      "fp_bucket": "other",
+      "n_conditions": 3
+    },
+    {
+      "profile_id": "NHANES-D-39773",
+      "profile_type": "positive",
+      "target_condition": "inflammation",
+      "kidney_score": 0.8298,
+      "expected_conditions": [
+        "inflammation"
+      ],
+      "fp_bucket": "other",
+      "n_conditions": 1
+    },
+    {
+      "profile_id": "NHANES-D-39959",
+      "profile_type": "multi",
+      "target_condition": "sleep_disorder",
+      "kidney_score": 0.3619,
+      "expected_conditions": [
+        "sleep_disorder",
+        "electrolyte_imbalance",
+        "prediabetes"
+      ],
+      "fp_bucket": "hypertensive",
+      "n_conditions": 3
+    },
+    {
+      "profile_id": "NHANES-C-23879",
+      "profile_type": "multi",
+      "target_condition": "hypothyroidism",
+      "kidney_score": 0.9079,
+      "expected_conditions": [
+        "hypothyroidism",
+        "perimenopause"
+      ],
+      "fp_bucket": "other",
+      "n_conditions": 2
+    },
+    {
+      "profile_id": "NHANES-D-39584",
+      "profile_type": "multi",
+      "target_condition": "kidney_disease",
+      "kidney_score": 0.6596,
+      "expected_conditions": [
+        "kidney_disease",
+        "perimenopause"
+      ],
+      "fp_bucket": "other",
+      "n_conditions": 2
+    },
+    {
+      "profile_id": "NHANES-D-37039",
+      "profile_type": "multi",
+      "target_condition": "hypothyroidism",
+      "kidney_score": 0.3542,
+      "expected_conditions": [
+        "hypothyroidism",
+        "perimenopause"
+      ],
+      "fp_bucket": "other",
+      "n_conditions": 2
+    },
+    {
+      "profile_id": "NHANES-D-38393",
+      "profile_type": "multi",
+      "target_condition": "sleep_disorder",
+      "kidney_score": 0.5815,
+      "expected_conditions": [
+        "sleep_disorder",
+        "electrolyte_imbalance"
+      ],
+      "fp_bucket": "hypertensive",
+      "n_conditions": 2
+    },
+    {
+      "profile_id": "NHANES-C-28860",
+      "profile_type": "positive",
+      "target_condition": "liver",
+      "kidney_score": 0.4683,
+      "expected_conditions": [
+        "liver"
+      ],
+      "fp_bucket": "other",
+      "n_conditions": 1
+    },
+    {
+      "profile_id": "NHANES-D-39856",
+      "profile_type": "positive",
+      "target_condition": "sleep_disorder",
+      "kidney_score": 0.8006,
+      "expected_conditions": [
+        "sleep_disorder"
+      ],
+      "fp_bucket": "other",
+      "n_conditions": 1
+    },
+    {
+      "profile_id": "NHANES-C-29464",
+      "profile_type": "multi",
+      "target_condition": "perimenopause",
+      "kidney_score": 0.6621,
+      "expected_conditions": [
+        "perimenopause",
+        "electrolyte_imbalance"
+      ],
+      "fp_bucket": "hypertensive",
+      "n_conditions": 2
+    },
+    {
+      "profile_id": "NHANES-C-28783",
+      "profile_type": "positive",
+      "target_condition": "perimenopause",
+      "kidney_score": 0.7411,
+      "expected_conditions": [
+        "perimenopause"
+      ],
+      "fp_bucket": "other",
+      "n_conditions": 1
+    },
+    {
+      "profile_id": "NHANES-D-35092",
+      "profile_type": "multi",
+      "target_condition": "sleep_disorder",
+      "kidney_score": 0.5219,
+      "expected_conditions": [
+        "sleep_disorder",
+        "perimenopause"
+      ],
+      "fp_bucket": "other",
+      "n_conditions": 2
+    },
+    {
+      "profile_id": "NHANES-C-27610",
+      "profile_type": "positive",
+      "target_condition": "hypothyroidism",
+      "kidney_score": 0.71,
+      "expected_conditions": [
+        "hypothyroidism"
+      ],
+      "fp_bucket": "other",
+      "n_conditions": 1
+    },
+    {
+      "profile_id": "NHANES-C-24998",
+      "profile_type": "multi",
+      "target_condition": "kidney_disease",
+      "kidney_score": 0.4782,
+      "expected_conditions": [
+        "kidney_disease",
+        "liver"
+      ],
+      "fp_bucket": "other",
+      "n_conditions": 2
+    },
+    {
+      "profile_id": "NHANES-D-38987",
+      "profile_type": "multi",
+      "target_condition": "liver",
+      "kidney_score": 0.403,
+      "expected_conditions": [
+        "liver",
+        "inflammation"
+      ],
+      "fp_bucket": "other",
+      "n_conditions": 2
+    },
+    {
+      "profile_id": "NHANES-C-24064",
+      "profile_type": "positive",
+      "target_condition": "perimenopause",
+      "kidney_score": 0.7165,
+      "expected_conditions": [
+        "perimenopause"
+      ],
+      "fp_bucket": "other",
+      "n_conditions": 1
+    },
+    {
+      "profile_id": "NHANES-D-34618",
+      "profile_type": "multi",
+      "target_condition": "hepatitis",
+      "kidney_score": 0.3513,
+      "expected_conditions": [
+        "hepatitis",
+        "electrolyte_imbalance"
+      ],
+      "fp_bucket": "hypertensive",
+      "n_conditions": 2
+    },
+    {
+      "profile_id": "NHANES-D-33861",
+      "profile_type": "positive",
+      "target_condition": "sleep_disorder",
+      "kidney_score": 0.5051,
+      "expected_conditions": [
+        "sleep_disorder"
+      ],
+      "fp_bucket": "other",
+      "n_conditions": 1
+    },
+    {
+      "profile_id": "NHANES-C-28674",
+      "profile_type": "positive",
+      "target_condition": "anemia",
+      "kidney_score": 0.8428,
+      "expected_conditions": [
+        "anemia"
+      ],
+      "fp_bucket": "metabolic",
+      "n_conditions": 1
+    },
+    {
+      "profile_id": "NHANES-C-28248",
+      "profile_type": "positive",
+      "target_condition": "perimenopause",
+      "kidney_score": 0.5102,
+      "expected_conditions": [
+        "perimenopause"
+      ],
+      "fp_bucket": "other",
+      "n_conditions": 1
+    },
+    {
+      "profile_id": "NHANES-C-25601",
+      "profile_type": "positive",
+      "target_condition": "anemia",
+      "kidney_score": 0.7474,
+      "expected_conditions": [
+        "anemia"
+      ],
+      "fp_bucket": "metabolic",
+      "n_conditions": 1
+    },
+    {
+      "profile_id": "NHANES-D-40643",
+      "profile_type": "positive",
+      "target_condition": "electrolyte_imbalance",
+      "kidney_score": 0.6817,
+      "expected_conditions": [
+        "electrolyte_imbalance"
+      ],
+      "fp_bucket": "hypertensive",
+      "n_conditions": 1
+    },
+    {
+      "profile_id": "NHANES-C-21790",
+      "profile_type": "multi",
+      "target_condition": "hypothyroidism",
+      "kidney_score": 0.3525,
+      "expected_conditions": [
+        "hypothyroidism",
+        "liver",
+        "perimenopause"
+      ],
+      "fp_bucket": "other",
+      "n_conditions": 3
+    },
+    {
+      "profile_id": "NHANES-D-36374",
+      "profile_type": "multi",
+      "target_condition": "prediabetes",
+      "kidney_score": 0.4127,
+      "expected_conditions": [
+        "prediabetes",
+        "vitamin_d_deficiency"
+      ],
+      "fp_bucket": "metabolic",
+      "n_conditions": 2
+    },
+    {
+      "profile_id": "NHANES-D-36947",
+      "profile_type": "multi",
+      "target_condition": "perimenopause",
+      "kidney_score": 0.6009,
+      "expected_conditions": [
+        "perimenopause",
+        "inflammation"
+      ],
+      "fp_bucket": "other",
+      "n_conditions": 2
+    },
+    {
+      "profile_id": "NHANES-D-35473",
+      "profile_type": "positive",
+      "target_condition": "liver",
+      "kidney_score": 0.7903,
+      "expected_conditions": [
+        "liver"
+      ],
+      "fp_bucket": "other",
+      "n_conditions": 1
+    },
+    {
+      "profile_id": "NHANES-C-24062",
+      "profile_type": "positive",
+      "target_condition": "electrolyte_imbalance",
+      "kidney_score": 0.6383,
+      "expected_conditions": [
+        "electrolyte_imbalance"
+      ],
+      "fp_bucket": "hypertensive",
+      "n_conditions": 1
+    },
+    {
+      "profile_id": "NHANES-D-31175",
+      "profile_type": "multi",
+      "target_condition": "liver",
+      "kidney_score": 0.5197,
+      "expected_conditions": [
+        "liver",
+        "vitamin_d_deficiency"
+      ],
+      "fp_bucket": "metabolic",
+      "n_conditions": 2
+    },
+    {
+      "profile_id": "NHANES-C-29952",
+      "profile_type": "positive",
+      "target_condition": "liver",
+      "kidney_score": 0.4042,
+      "expected_conditions": [
+        "liver"
+      ],
+      "fp_bucket": "other",
+      "n_conditions": 1
+    },
+    {
+      "profile_id": "NHANES-C-26675",
+      "profile_type": "multi",
+      "target_condition": "liver",
+      "kidney_score": 0.4802,
+      "expected_conditions": [
+        "liver",
+        "perimenopause"
+      ],
+      "fp_bucket": "other",
+      "n_conditions": 2
+    },
+    {
+      "profile_id": "NHANES-C-27455",
+      "profile_type": "healthy",
+      "target_condition": null,
+      "kidney_score": 0.6083,
+      "expected_conditions": [],
+      "fp_bucket": "healthy",
+      "n_conditions": 0
+    },
+    {
+      "profile_id": "NHANES-D-41451",
+      "profile_type": "multi",
+      "target_condition": "hypothyroidism",
+      "kidney_score": 0.781,
+      "expected_conditions": [
+        "hypothyroidism",
+        "perimenopause"
+      ],
+      "fp_bucket": "other",
+      "n_conditions": 2
+    },
+    {
+      "profile_id": "NHANES-C-27821",
+      "profile_type": "multi",
+      "target_condition": "kidney_disease",
+      "kidney_score": 0.8802,
+      "expected_conditions": [
+        "kidney_disease",
+        "perimenopause"
+      ],
+      "fp_bucket": "other",
+      "n_conditions": 2
+    },
+    {
+      "profile_id": "NHANES-D-38637",
+      "profile_type": "positive",
+      "target_condition": "prediabetes",
+      "kidney_score": 0.5084,
+      "expected_conditions": [
+        "prediabetes"
+      ],
+      "fp_bucket": "metabolic",
+      "n_conditions": 1
+    },
+    {
+      "profile_id": "NHANES-C-23733",
+      "profile_type": "healthy",
+      "target_condition": null,
+      "kidney_score": 0.4167,
+      "expected_conditions": [],
+      "fp_bucket": "healthy",
+      "n_conditions": 0
+    },
+    {
+      "profile_id": "NHANES-D-37066",
+      "profile_type": "positive",
+      "target_condition": "liver",
+      "kidney_score": 0.9168,
+      "expected_conditions": [
+        "liver"
+      ],
+      "fp_bucket": "other",
+      "n_conditions": 1
+    },
+    {
+      "profile_id": "NHANES-C-30722",
+      "profile_type": "positive",
+      "target_condition": "perimenopause",
+      "kidney_score": 0.5442,
+      "expected_conditions": [
+        "perimenopause"
+      ],
+      "fp_bucket": "other",
+      "n_conditions": 1
+    },
+    {
+      "profile_id": "NHANES-C-23579",
+      "profile_type": "healthy",
+      "target_condition": null,
+      "kidney_score": 0.4162,
+      "expected_conditions": [],
+      "fp_bucket": "healthy",
+      "n_conditions": 0
+    },
+    {
+      "profile_id": "NHANES-D-35008",
+      "profile_type": "positive",
+      "target_condition": "sleep_disorder",
+      "kidney_score": 0.5618,
+      "expected_conditions": [
+        "sleep_disorder"
+      ],
+      "fp_bucket": "other",
+      "n_conditions": 1
+    },
+    {
+      "profile_id": "NHANES-D-35077",
+      "profile_type": "multi",
+      "target_condition": "hypothyroidism",
+      "kidney_score": 0.6601,
+      "expected_conditions": [
+        "hypothyroidism",
+        "sleep_disorder",
+        "perimenopause",
+        "inflammation"
+      ],
+      "fp_bucket": "other",
+      "n_conditions": 4
+    },
+    {
+      "profile_id": "NHANES-D-35439",
+      "profile_type": "multi",
+      "target_condition": "anemia",
+      "kidney_score": 0.8039,
+      "expected_conditions": [
+        "anemia",
+        "kidney_disease",
+        "perimenopause",
+        "electrolyte_imbalance",
+        "prediabetes"
+      ],
+      "fp_bucket": "hypertensive",
+      "n_conditions": 5
+    },
+    {
+      "profile_id": "NHANES-C-25223",
+      "profile_type": "multi",
+      "target_condition": "perimenopause",
+      "kidney_score": 0.3558,
+      "expected_conditions": [
+        "perimenopause",
+        "vitamin_d_deficiency"
+      ],
+      "fp_bucket": "metabolic",
+      "n_conditions": 2
+    },
+    {
+      "profile_id": "NHANES-D-33551",
+      "profile_type": "positive",
+      "target_condition": "liver",
+      "kidney_score": 0.8148,
+      "expected_conditions": [
+        "liver"
+      ],
+      "fp_bucket": "other",
+      "n_conditions": 1
+    },
+    {
+      "profile_id": "NHANES-C-22071",
+      "profile_type": "multi",
+      "target_condition": "hypothyroidism",
+      "kidney_score": 0.5802,
+      "expected_conditions": [
+        "hypothyroidism",
+        "perimenopause"
+      ],
+      "fp_bucket": "other",
+      "n_conditions": 2
+    },
+    {
+      "profile_id": "NHANES-C-26400",
+      "profile_type": "multi",
+      "target_condition": "anemia",
+      "kidney_score": 0.5169,
+      "expected_conditions": [
+        "anemia",
+        "hypothyroidism",
+        "perimenopause",
+        "electrolyte_imbalance"
+      ],
+      "fp_bucket": "hypertensive",
+      "n_conditions": 4
+    },
+    {
+      "profile_id": "NHANES-D-37014",
+      "profile_type": "positive",
+      "target_condition": "prediabetes",
+      "kidney_score": 0.7133,
+      "expected_conditions": [
+        "prediabetes"
+      ],
+      "fp_bucket": "metabolic",
+      "n_conditions": 1
+    },
+    {
+      "profile_id": "NHANES-C-25809",
+      "profile_type": "positive",
+      "target_condition": "perimenopause",
+      "kidney_score": 0.3782,
+      "expected_conditions": [
+        "perimenopause"
+      ],
+      "fp_bucket": "other",
+      "n_conditions": 1
+    },
+    {
+      "profile_id": "NHANES-D-37460",
+      "profile_type": "multi",
+      "target_condition": "perimenopause",
+      "kidney_score": 0.456,
+      "expected_conditions": [
+        "perimenopause",
+        "inflammation"
+      ],
+      "fp_bucket": "other",
+      "n_conditions": 2
+    },
+    {
+      "profile_id": "NHANES-C-24162",
+      "profile_type": "multi",
+      "target_condition": "hepatitis",
+      "kidney_score": 0.4652,
+      "expected_conditions": [
+        "hepatitis",
+        "electrolyte_imbalance"
+      ],
+      "fp_bucket": "hypertensive",
+      "n_conditions": 2
+    },
+    {
+      "profile_id": "NHANES-D-33096",
+      "profile_type": "positive",
+      "target_condition": "prediabetes",
+      "kidney_score": 0.6593,
+      "expected_conditions": [
+        "prediabetes"
+      ],
+      "fp_bucket": "metabolic",
+      "n_conditions": 1
+    },
+    {
+      "profile_id": "NHANES-D-34060",
+      "profile_type": "multi",
+      "target_condition": "liver",
+      "kidney_score": 0.4074,
+      "expected_conditions": [
+        "liver",
+        "perimenopause"
+      ],
+      "fp_bucket": "other",
+      "n_conditions": 2
+    },
+    {
+      "profile_id": "NHANES-C-22872",
+      "profile_type": "multi",
+      "target_condition": "anemia",
+      "kidney_score": 0.741,
+      "expected_conditions": [
+        "anemia",
+        "electrolyte_imbalance"
+      ],
+      "fp_bucket": "hypertensive",
+      "n_conditions": 2
+    },
+    {
+      "profile_id": "NHANES-C-23730",
+      "profile_type": "healthy",
+      "target_condition": null,
+      "kidney_score": 0.4849,
+      "expected_conditions": [],
+      "fp_bucket": "healthy",
+      "n_conditions": 0
+    },
+    {
+      "profile_id": "NHANES-C-29059",
+      "profile_type": "positive",
+      "target_condition": "anemia",
+      "kidney_score": 0.7687,
+      "expected_conditions": [
+        "anemia"
+      ],
+      "fp_bucket": "metabolic",
+      "n_conditions": 1
+    },
+    {
+      "profile_id": "NHANES-D-33543",
+      "profile_type": "positive",
+      "target_condition": "prediabetes",
+      "kidney_score": 0.4678,
+      "expected_conditions": [
+        "prediabetes"
+      ],
+      "fp_bucket": "metabolic",
+      "n_conditions": 1
+    },
+    {
+      "profile_id": "NHANES-C-25561",
+      "profile_type": "positive",
+      "target_condition": "liver",
+      "kidney_score": 0.3798,
+      "expected_conditions": [
+        "liver"
+      ],
+      "fp_bucket": "other",
+      "n_conditions": 1
+    },
+    {
+      "profile_id": "NHANES-D-38250",
+      "profile_type": "positive",
+      "target_condition": "perimenopause",
+      "kidney_score": 0.8269,
+      "expected_conditions": [
+        "perimenopause"
+      ],
+      "fp_bucket": "other",
+      "n_conditions": 1
+    },
+    {
+      "profile_id": "NHANES-D-38974",
+      "profile_type": "multi",
+      "target_condition": "kidney_disease",
+      "kidney_score": 0.6283,
+      "expected_conditions": [
+        "kidney_disease",
+        "inflammation"
+      ],
+      "fp_bucket": "other",
+      "n_conditions": 2
+    },
+    {
+      "profile_id": "NHANES-D-35551",
+      "profile_type": "multi",
+      "target_condition": "hypothyroidism",
+      "kidney_score": 0.8107,
+      "expected_conditions": [
+        "hypothyroidism",
+        "perimenopause",
+        "inflammation"
+      ],
+      "fp_bucket": "other",
+      "n_conditions": 3
+    },
+    {
+      "profile_id": "NHANES-C-27217",
+      "profile_type": "positive",
+      "target_condition": "hepatitis",
+      "kidney_score": 0.4051,
+      "expected_conditions": [
+        "hepatitis"
+      ],
+      "fp_bucket": "other",
+      "n_conditions": 1
+    },
+    {
+      "profile_id": "NHANES-C-25247",
+      "profile_type": "multi",
+      "target_condition": "kidney_disease",
+      "kidney_score": 0.6138,
+      "expected_conditions": [
+        "kidney_disease",
+        "electrolyte_imbalance"
+      ],
+      "fp_bucket": "hypertensive",
+      "n_conditions": 2
+    },
+    {
+      "profile_id": "NHANES-C-22413",
+      "profile_type": "multi",
+      "target_condition": "kidney_disease",
+      "kidney_score": 0.6207,
+      "expected_conditions": [
+        "kidney_disease",
+        "electrolyte_imbalance",
+        "vitamin_d_deficiency"
+      ],
+      "fp_bucket": "hypertensive",
+      "n_conditions": 3
+    },
+    {
+      "profile_id": "NHANES-D-36340",
+      "profile_type": "multi",
+      "target_condition": "sleep_disorder",
+      "kidney_score": 0.424,
+      "expected_conditions": [
+        "sleep_disorder",
+        "electrolyte_imbalance"
+      ],
+      "fp_bucket": "hypertensive",
+      "n_conditions": 2
+    },
+    {
+      "profile_id": "NHANES-C-22897",
+      "profile_type": "multi",
+      "target_condition": "hypothyroidism",
+      "kidney_score": 0.7951,
+      "expected_conditions": [
+        "hypothyroidism",
+        "kidney_disease",
+        "liver"
+      ],
+      "fp_bucket": "other",
+      "n_conditions": 3
+    },
+    {
+      "profile_id": "NHANES-C-30859",
+      "profile_type": "multi",
+      "target_condition": "hypothyroidism",
+      "kidney_score": 0.4066,
+      "expected_conditions": [
+        "hypothyroidism",
+        "perimenopause"
+      ],
+      "fp_bucket": "other",
+      "n_conditions": 2
+    },
+    {
+      "profile_id": "NHANES-D-36548",
+      "profile_type": "multi",
+      "target_condition": "kidney_disease",
+      "kidney_score": 0.5767,
+      "expected_conditions": [
+        "kidney_disease",
+        "perimenopause"
+      ],
+      "fp_bucket": "other",
+      "n_conditions": 2
+    },
+    {
+      "profile_id": "NHANES-D-37138",
+      "profile_type": "positive",
+      "target_condition": "anemia",
+      "kidney_score": 0.3862,
+      "expected_conditions": [
+        "anemia"
+      ],
+      "fp_bucket": "metabolic",
+      "n_conditions": 1
+    },
+    {
+      "profile_id": "NHANES-D-39324",
+      "profile_type": "multi",
+      "target_condition": "kidney_disease",
+      "kidney_score": 0.5792,
+      "expected_conditions": [
+        "kidney_disease",
+        "perimenopause",
+        "electrolyte_imbalance"
+      ],
+      "fp_bucket": "hypertensive",
+      "n_conditions": 3
+    },
+    {
+      "profile_id": "NHANES-C-23914",
+      "profile_type": "multi",
+      "target_condition": "kidney_disease",
+      "kidney_score": 0.4034,
+      "expected_conditions": [
+        "kidney_disease",
+        "perimenopause"
+      ],
+      "fp_bucket": "other",
+      "n_conditions": 2
+    },
+    {
+      "profile_id": "NHANES-C-29714",
+      "profile_type": "multi",
+      "target_condition": "kidney_disease",
+      "kidney_score": 0.757,
+      "expected_conditions": [
+        "kidney_disease",
+        "perimenopause",
+        "vitamin_d_deficiency"
+      ],
+      "fp_bucket": "metabolic",
+      "n_conditions": 3
+    },
+    {
+      "profile_id": "NHANES-C-22384",
+      "profile_type": "multi",
+      "target_condition": "liver",
+      "kidney_score": 0.3638,
+      "expected_conditions": [
+        "liver",
+        "perimenopause"
+      ],
+      "fp_bucket": "other",
+      "n_conditions": 2
+    },
+    {
+      "profile_id": "NHANES-D-32624",
+      "profile_type": "multi",
+      "target_condition": "hypothyroidism",
+      "kidney_score": 0.5869,
+      "expected_conditions": [
+        "hypothyroidism",
+        "sleep_disorder",
+        "liver",
+        "perimenopause"
+      ],
+      "fp_bucket": "other",
+      "n_conditions": 4
+    },
+    {
+      "profile_id": "NHANES-D-39000",
+      "profile_type": "multi",
+      "target_condition": "sleep_disorder",
+      "kidney_score": 0.5941,
+      "expected_conditions": [
+        "sleep_disorder",
+        "perimenopause"
+      ],
+      "fp_bucket": "other",
+      "n_conditions": 2
+    },
+    {
+      "profile_id": "NHANES-C-27653",
+      "profile_type": "positive",
+      "target_condition": "liver",
+      "kidney_score": 0.423,
+      "expected_conditions": [
+        "liver"
+      ],
+      "fp_bucket": "other",
+      "n_conditions": 1
+    },
+    {
+      "profile_id": "NHANES-C-25779",
+      "profile_type": "positive",
+      "target_condition": "anemia",
+      "kidney_score": 0.6941,
+      "expected_conditions": [
+        "anemia"
+      ],
+      "fp_bucket": "metabolic",
+      "n_conditions": 1
+    },
+    {
+      "profile_id": "NHANES-C-26181",
+      "profile_type": "positive",
+      "target_condition": "perimenopause",
+      "kidney_score": 0.4606,
+      "expected_conditions": [
+        "perimenopause"
+      ],
+      "fp_bucket": "other",
+      "n_conditions": 1
+    },
+    {
+      "profile_id": "NHANES-C-26228",
+      "profile_type": "multi",
+      "target_condition": "hypothyroidism",
+      "kidney_score": 0.563,
+      "expected_conditions": [
+        "hypothyroidism",
+        "liver",
+        "electrolyte_imbalance"
+      ],
+      "fp_bucket": "hypertensive",
+      "n_conditions": 3
+    },
+    {
+      "profile_id": "NHANES-D-34850",
+      "profile_type": "positive",
+      "target_condition": "electrolyte_imbalance",
+      "kidney_score": 0.7903,
+      "expected_conditions": [
+        "electrolyte_imbalance"
+      ],
+      "fp_bucket": "hypertensive",
+      "n_conditions": 1
+    },
+    {
+      "profile_id": "NHANES-D-33534",
+      "profile_type": "positive",
+      "target_condition": "prediabetes",
+      "kidney_score": 0.4355,
+      "expected_conditions": [
+        "prediabetes"
+      ],
+      "fp_bucket": "metabolic",
+      "n_conditions": 1
+    },
+    {
+      "profile_id": "NHANES-C-21502",
+      "profile_type": "healthy",
+      "target_condition": null,
+      "kidney_score": 0.6626,
+      "expected_conditions": [],
+      "fp_bucket": "healthy",
+      "n_conditions": 0
+    },
+    {
+      "profile_id": "NHANES-C-25677",
+      "profile_type": "multi",
+      "target_condition": "liver",
+      "kidney_score": 0.3596,
+      "expected_conditions": [
+        "liver",
+        "perimenopause"
+      ],
+      "fp_bucket": "other",
+      "n_conditions": 2
+    },
+    {
+      "profile_id": "NHANES-C-28078",
+      "profile_type": "multi",
+      "target_condition": "kidney_disease",
+      "kidney_score": 0.6044,
+      "expected_conditions": [
+        "kidney_disease",
+        "vitamin_d_deficiency"
+      ],
+      "fp_bucket": "metabolic",
+      "n_conditions": 2
+    },
+    {
+      "profile_id": "NHANES-D-38618",
+      "profile_type": "positive",
+      "target_condition": "hypothyroidism",
+      "kidney_score": 0.4878,
+      "expected_conditions": [
+        "hypothyroidism"
+      ],
+      "fp_bucket": "other",
+      "n_conditions": 1
+    },
+    {
+      "profile_id": "NHANES-C-29641",
+      "profile_type": "positive",
+      "target_condition": "electrolyte_imbalance",
+      "kidney_score": 0.7378,
+      "expected_conditions": [
+        "electrolyte_imbalance"
+      ],
+      "fp_bucket": "hypertensive",
+      "n_conditions": 1
+    },
+    {
+      "profile_id": "NHANES-C-29544",
+      "profile_type": "multi",
+      "target_condition": "hepatitis",
+      "kidney_score": 0.3673,
+      "expected_conditions": [
+        "hepatitis",
+        "perimenopause"
+      ],
+      "fp_bucket": "other",
+      "n_conditions": 2
+    },
+    {
+      "profile_id": "NHANES-C-28430",
+      "profile_type": "multi",
+      "target_condition": "anemia",
+      "kidney_score": 0.7763,
+      "expected_conditions": [
+        "anemia",
+        "kidney_disease",
+        "perimenopause"
+      ],
+      "fp_bucket": "metabolic",
+      "n_conditions": 3
+    },
+    {
+      "profile_id": "NHANES-C-28614",
+      "profile_type": "positive",
+      "target_condition": "perimenopause",
+      "kidney_score": 0.4552,
+      "expected_conditions": [
+        "perimenopause"
+      ],
+      "fp_bucket": "other",
+      "n_conditions": 1
+    },
+    {
+      "profile_id": "NHANES-D-39295",
+      "profile_type": "multi",
+      "target_condition": "hypothyroidism",
+      "kidney_score": 0.9025,
+      "expected_conditions": [
+        "hypothyroidism",
+        "sleep_disorder"
+      ],
+      "fp_bucket": "other",
+      "n_conditions": 2
+    },
+    {
+      "profile_id": "NHANES-D-37515",
+      "profile_type": "multi",
+      "target_condition": "sleep_disorder",
+      "kidney_score": 0.867,
+      "expected_conditions": [
+        "sleep_disorder",
+        "perimenopause",
+        "electrolyte_imbalance"
+      ],
+      "fp_bucket": "hypertensive",
+      "n_conditions": 3
+    },
+    {
+      "profile_id": "NHANES-C-23883",
+      "profile_type": "multi",
+      "target_condition": "kidney_disease",
+      "kidney_score": 0.6241,
+      "expected_conditions": [
+        "kidney_disease",
+        "perimenopause",
+        "vitamin_d_deficiency"
+      ],
+      "fp_bucket": "metabolic",
+      "n_conditions": 3
+    },
+    {
+      "profile_id": "NHANES-C-25189",
+      "profile_type": "positive",
+      "target_condition": "anemia",
+      "kidney_score": 0.3691,
+      "expected_conditions": [
+        "anemia"
+      ],
+      "fp_bucket": "metabolic",
+      "n_conditions": 1
+    },
+    {
+      "profile_id": "NHANES-C-24905",
+      "profile_type": "positive",
+      "target_condition": "hepatitis",
+      "kidney_score": 0.7108,
+      "expected_conditions": [
+        "hepatitis"
+      ],
+      "fp_bucket": "other",
+      "n_conditions": 1
+    },
+    {
+      "profile_id": "NHANES-D-31471",
+      "profile_type": "multi",
+      "target_condition": "sleep_disorder",
+      "kidney_score": 0.4152,
+      "expected_conditions": [
+        "sleep_disorder",
+        "perimenopause",
+        "electrolyte_imbalance"
+      ],
+      "fp_bucket": "hypertensive",
+      "n_conditions": 3
+    },
+    {
+      "profile_id": "NHANES-D-38146",
+      "profile_type": "positive",
+      "target_condition": "prediabetes",
+      "kidney_score": 0.6212,
+      "expected_conditions": [
+        "prediabetes"
+      ],
+      "fp_bucket": "metabolic",
+      "n_conditions": 1
+    },
+    {
+      "profile_id": "NHANES-C-28886",
+      "profile_type": "positive",
+      "target_condition": "perimenopause",
+      "kidney_score": 0.5526,
+      "expected_conditions": [
+        "perimenopause"
+      ],
+      "fp_bucket": "other",
+      "n_conditions": 1
+    },
+    {
+      "profile_id": "NHANES-D-38617",
+      "profile_type": "positive",
+      "target_condition": "hepatitis",
+      "kidney_score": 0.4364,
+      "expected_conditions": [
+        "hepatitis"
+      ],
+      "fp_bucket": "other",
+      "n_conditions": 1
+    },
+    {
+      "profile_id": "NHANES-C-27418",
+      "profile_type": "healthy",
+      "target_condition": null,
+      "kidney_score": 0.4912,
+      "expected_conditions": [],
+      "fp_bucket": "healthy",
+      "n_conditions": 0
+    },
+    {
+      "profile_id": "NHANES-C-29741",
+      "profile_type": "multi",
+      "target_condition": "perimenopause",
+      "kidney_score": 0.5749,
+      "expected_conditions": [
+        "perimenopause",
+        "electrolyte_imbalance"
+      ],
+      "fp_bucket": "hypertensive",
+      "n_conditions": 2
+    },
+    {
+      "profile_id": "NHANES-D-40523",
+      "profile_type": "multi",
+      "target_condition": "sleep_disorder",
+      "kidney_score": 0.602,
+      "expected_conditions": [
+        "sleep_disorder",
+        "electrolyte_imbalance"
+      ],
+      "fp_bucket": "hypertensive",
+      "n_conditions": 2
+    },
+    {
+      "profile_id": "NHANES-C-26702",
+      "profile_type": "multi",
+      "target_condition": "anemia",
+      "kidney_score": 0.7745,
+      "expected_conditions": [
+        "anemia",
+        "hypothyroidism",
+        "kidney_disease",
+        "liver"
+      ],
+      "fp_bucket": "metabolic",
+      "n_conditions": 4
+    },
+    {
+      "profile_id": "NHANES-D-34641",
+      "profile_type": "multi",
+      "target_condition": "hepatitis",
+      "kidney_score": 0.3863,
+      "expected_conditions": [
+        "hepatitis",
+        "liver",
+        "iron_deficiency",
+        "inflammation",
+        "vitamin_d_deficiency"
+      ],
+      "fp_bucket": "metabolic",
+      "n_conditions": 5
+    },
+    {
+      "profile_id": "NHANES-C-29450",
+      "profile_type": "positive",
+      "target_condition": "liver",
+      "kidney_score": 0.3936,
+      "expected_conditions": [
+        "liver"
+      ],
+      "fp_bucket": "other",
+      "n_conditions": 1
+    },
+    {
+      "profile_id": "NHANES-C-21986",
+      "profile_type": "positive",
+      "target_condition": "vitamin_d_deficiency",
+      "kidney_score": 0.6556,
+      "expected_conditions": [
+        "vitamin_d_deficiency"
+      ],
+      "fp_bucket": "metabolic",
+      "n_conditions": 1
+    },
+    {
+      "profile_id": "NHANES-C-26203",
+      "profile_type": "multi",
+      "target_condition": "hypothyroidism",
+      "kidney_score": 0.7301,
+      "expected_conditions": [
+        "hypothyroidism",
+        "perimenopause"
+      ],
+      "fp_bucket": "other",
+      "n_conditions": 2
+    },
+    {
+      "profile_id": "NHANES-D-33928",
+      "profile_type": "positive",
+      "target_condition": "prediabetes",
+      "kidney_score": 0.3507,
+      "expected_conditions": [
+        "prediabetes"
+      ],
+      "fp_bucket": "metabolic",
+      "n_conditions": 1
+    },
+    {
+      "profile_id": "NHANES-D-37769",
+      "profile_type": "multi",
+      "target_condition": "kidney_disease",
+      "kidney_score": 0.5296,
+      "expected_conditions": [
+        "kidney_disease",
+        "liver",
+        "perimenopause"
+      ],
+      "fp_bucket": "other",
+      "n_conditions": 3
+    },
+    {
+      "profile_id": "NHANES-D-34086",
+      "profile_type": "positive",
+      "target_condition": "prediabetes",
+      "kidney_score": 0.7224,
+      "expected_conditions": [
+        "prediabetes"
+      ],
+      "fp_bucket": "metabolic",
+      "n_conditions": 1
+    },
+    {
+      "profile_id": "NHANES-C-24005",
+      "profile_type": "multi",
+      "target_condition": "hepatitis",
+      "kidney_score": 0.5044,
+      "expected_conditions": [
+        "hepatitis",
+        "electrolyte_imbalance"
+      ],
+      "fp_bucket": "hypertensive",
+      "n_conditions": 2
+    },
+    {
+      "profile_id": "NHANES-C-24088",
+      "profile_type": "multi",
+      "target_condition": "kidney_disease",
+      "kidney_score": 0.8995,
+      "expected_conditions": [
+        "kidney_disease",
+        "perimenopause"
+      ],
+      "fp_bucket": "other",
+      "n_conditions": 2
+    },
+    {
+      "profile_id": "NHANES-C-25562",
+      "profile_type": "positive",
+      "target_condition": "hepatitis",
+      "kidney_score": 0.5375,
+      "expected_conditions": [
+        "hepatitis"
+      ],
+      "fp_bucket": "other",
+      "n_conditions": 1
+    },
+    {
+      "profile_id": "NHANES-D-41208",
+      "profile_type": "positive",
+      "target_condition": "prediabetes",
+      "kidney_score": 0.4039,
+      "expected_conditions": [
+        "prediabetes"
+      ],
+      "fp_bucket": "metabolic",
+      "n_conditions": 1
+    },
+    {
+      "profile_id": "NHANES-D-34288",
+      "profile_type": "multi",
+      "target_condition": "hypothyroidism",
+      "kidney_score": 0.6483,
+      "expected_conditions": [
+        "hypothyroidism",
+        "sleep_disorder"
+      ],
+      "fp_bucket": "other",
+      "n_conditions": 2
+    },
+    {
+      "profile_id": "NHANES-C-28769",
+      "profile_type": "multi",
+      "target_condition": "kidney_disease",
+      "kidney_score": 0.6535,
+      "expected_conditions": [
+        "kidney_disease",
+        "perimenopause"
+      ],
+      "fp_bucket": "other",
+      "n_conditions": 2
+    },
+    {
+      "profile_id": "NHANES-D-38433",
+      "profile_type": "multi",
+      "target_condition": "hypothyroidism",
+      "kidney_score": 0.8295,
+      "expected_conditions": [
+        "hypothyroidism",
+        "perimenopause"
+      ],
+      "fp_bucket": "other",
+      "n_conditions": 2
+    },
+    {
+      "profile_id": "NHANES-C-21619",
+      "profile_type": "multi",
+      "target_condition": "hypothyroidism",
+      "kidney_score": 0.8039,
+      "expected_conditions": [
+        "hypothyroidism",
+        "perimenopause"
+      ],
+      "fp_bucket": "other",
+      "n_conditions": 2
+    },
+    {
+      "profile_id": "NHANES-C-23332",
+      "profile_type": "positive",
+      "target_condition": "hepatitis",
+      "kidney_score": 0.4432,
+      "expected_conditions": [
+        "hepatitis"
+      ],
+      "fp_bucket": "other",
+      "n_conditions": 1
+    },
+    {
+      "profile_id": "NHANES-C-24090",
+      "profile_type": "multi",
+      "target_condition": "liver",
+      "kidney_score": 0.6054,
+      "expected_conditions": [
+        "liver",
+        "electrolyte_imbalance"
+      ],
+      "fp_bucket": "hypertensive",
+      "n_conditions": 2
+    },
+    {
+      "profile_id": "NHANES-D-32066",
+      "profile_type": "positive",
+      "target_condition": "inflammation",
+      "kidney_score": 0.6275,
+      "expected_conditions": [
+        "inflammation"
+      ],
+      "fp_bucket": "other",
+      "n_conditions": 1
+    },
+    {
+      "profile_id": "NHANES-D-37114",
+      "profile_type": "multi",
+      "target_condition": "anemia",
+      "kidney_score": 0.7219,
+      "expected_conditions": [
+        "anemia",
+        "hypothyroidism",
+        "sleep_disorder",
+        "iron_deficiency"
+      ],
+      "fp_bucket": "metabolic",
+      "n_conditions": 4
+    },
+    {
+      "profile_id": "NHANES-D-38978",
+      "profile_type": "multi",
+      "target_condition": "hypothyroidism",
+      "kidney_score": 0.3856,
+      "expected_conditions": [
+        "hypothyroidism",
+        "perimenopause",
+        "electrolyte_imbalance"
+      ],
+      "fp_bucket": "hypertensive",
+      "n_conditions": 3
+    },
+    {
+      "profile_id": "NHANES-C-23796",
+      "profile_type": "multi",
+      "target_condition": "anemia",
+      "kidney_score": 0.7093,
+      "expected_conditions": [
+        "anemia",
+        "perimenopause"
+      ],
+      "fp_bucket": "metabolic",
+      "n_conditions": 2
+    },
+    {
+      "profile_id": "NHANES-D-37977",
+      "profile_type": "multi",
+      "target_condition": "kidney_disease",
+      "kidney_score": 0.5021,
+      "expected_conditions": [
+        "kidney_disease",
+        "prediabetes"
+      ],
+      "fp_bucket": "metabolic",
+      "n_conditions": 2
+    },
+    {
+      "profile_id": "NHANES-C-25489",
+      "profile_type": "multi",
+      "target_condition": "liver",
+      "kidney_score": 0.8088,
+      "expected_conditions": [
+        "liver",
+        "perimenopause"
+      ],
+      "fp_bucket": "other",
+      "n_conditions": 2
+    },
+    {
+      "profile_id": "NHANES-C-27766",
+      "profile_type": "multi",
+      "target_condition": "hypothyroidism",
+      "kidney_score": 0.3686,
+      "expected_conditions": [
+        "hypothyroidism",
+        "liver"
+      ],
+      "fp_bucket": "other",
+      "n_conditions": 2
+    },
+    {
+      "profile_id": "NHANES-C-21632",
+      "profile_type": "positive",
+      "target_condition": "perimenopause",
+      "kidney_score": 0.4751,
+      "expected_conditions": [
+        "perimenopause"
+      ],
+      "fp_bucket": "other",
+      "n_conditions": 1
+    },
+    {
+      "profile_id": "NHANES-C-28709",
+      "profile_type": "positive",
+      "target_condition": "perimenopause",
+      "kidney_score": 0.3819,
+      "expected_conditions": [
+        "perimenopause"
+      ],
+      "fp_bucket": "other",
+      "n_conditions": 1
+    },
+    {
+      "profile_id": "NHANES-D-40391",
+      "profile_type": "multi",
+      "target_condition": "hypothyroidism",
+      "kidney_score": 0.4949,
+      "expected_conditions": [
+        "hypothyroidism",
+        "sleep_disorder"
+      ],
+      "fp_bucket": "other",
+      "n_conditions": 2
+    },
+    {
+      "profile_id": "NHANES-C-25104",
+      "profile_type": "multi",
+      "target_condition": "liver",
+      "kidney_score": 0.8918,
+      "expected_conditions": [
+        "liver",
+        "vitamin_d_deficiency"
+      ],
+      "fp_bucket": "metabolic",
+      "n_conditions": 2
+    },
+    {
+      "profile_id": "NHANES-C-30371",
+      "profile_type": "positive",
+      "target_condition": "hypothyroidism",
+      "kidney_score": 0.5768,
+      "expected_conditions": [
+        "hypothyroidism"
+      ],
+      "fp_bucket": "other",
+      "n_conditions": 1
+    },
+    {
+      "profile_id": "NHANES-C-28473",
+      "profile_type": "healthy",
+      "target_condition": null,
+      "kidney_score": 0.3625,
+      "expected_conditions": [],
+      "fp_bucket": "healthy",
+      "n_conditions": 0
+    },
+    {
+      "profile_id": "NHANES-D-32327",
+      "profile_type": "positive",
+      "target_condition": "prediabetes",
+      "kidney_score": 0.4236,
+      "expected_conditions": [
+        "prediabetes"
+      ],
+      "fp_bucket": "metabolic",
+      "n_conditions": 1
+    },
+    {
+      "profile_id": "NHANES-C-26954",
+      "profile_type": "positive",
+      "target_condition": "liver",
+      "kidney_score": 0.4798,
+      "expected_conditions": [
+        "liver"
+      ],
+      "fp_bucket": "other",
+      "n_conditions": 1
+    },
+    {
+      "profile_id": "NHANES-C-30942",
+      "profile_type": "multi",
+      "target_condition": "liver",
+      "kidney_score": 0.4899,
+      "expected_conditions": [
+        "liver",
+        "perimenopause",
+        "electrolyte_imbalance"
+      ],
+      "fp_bucket": "hypertensive",
+      "n_conditions": 3
+    },
+    {
+      "profile_id": "NHANES-C-22188",
+      "profile_type": "multi",
+      "target_condition": "liver",
+      "kidney_score": 0.4242,
+      "expected_conditions": [
+        "liver",
+        "electrolyte_imbalance",
+        "vitamin_d_deficiency"
+      ],
+      "fp_bucket": "hypertensive",
+      "n_conditions": 3
+    },
+    {
+      "profile_id": "NHANES-C-22734",
+      "profile_type": "positive",
+      "target_condition": "perimenopause",
+      "kidney_score": 0.4903,
+      "expected_conditions": [
+        "perimenopause"
+      ],
+      "fp_bucket": "other",
+      "n_conditions": 1
+    },
+    {
+      "profile_id": "NHANES-D-32804",
+      "profile_type": "multi",
+      "target_condition": "inflammation",
+      "kidney_score": 0.6271,
+      "expected_conditions": [
+        "inflammation",
+        "prediabetes"
+      ],
+      "fp_bucket": "metabolic",
+      "n_conditions": 2
+    },
+    {
+      "profile_id": "NHANES-C-23594",
+      "profile_type": "multi",
+      "target_condition": "kidney_disease",
+      "kidney_score": 0.3736,
+      "expected_conditions": [
+        "kidney_disease",
+        "liver",
+        "vitamin_d_deficiency"
+      ],
+      "fp_bucket": "metabolic",
+      "n_conditions": 3
+    },
+    {
+      "profile_id": "NHANES-D-31668",
+      "profile_type": "positive",
+      "target_condition": "perimenopause",
+      "kidney_score": 0.4919,
+      "expected_conditions": [
+        "perimenopause"
+      ],
+      "fp_bucket": "other",
+      "n_conditions": 1
+    },
+    {
+      "profile_id": "NHANES-D-34582",
+      "profile_type": "multi",
+      "target_condition": "sleep_disorder",
+      "kidney_score": 0.4731,
+      "expected_conditions": [
+        "sleep_disorder",
+        "kidney_disease",
+        "hepatitis",
+        "liver"
+      ],
+      "fp_bucket": "other",
+      "n_conditions": 4
+    },
+    {
+      "profile_id": "NHANES-C-29195",
+      "profile_type": "healthy",
+      "target_condition": null,
+      "kidney_score": 0.4915,
+      "expected_conditions": [],
+      "fp_bucket": "healthy",
+      "n_conditions": 0
+    },
+    {
+      "profile_id": "NHANES-D-35907",
+      "profile_type": "positive",
+      "target_condition": "inflammation",
+      "kidney_score": 0.4792,
+      "expected_conditions": [
+        "inflammation"
+      ],
+      "fp_bucket": "other",
+      "n_conditions": 1
+    },
+    {
+      "profile_id": "NHANES-D-39811",
+      "profile_type": "positive",
+      "target_condition": "hypothyroidism",
+      "kidney_score": 0.4658,
+      "expected_conditions": [
+        "hypothyroidism"
+      ],
+      "fp_bucket": "other",
+      "n_conditions": 1
+    },
+    {
+      "profile_id": "NHANES-D-38378",
+      "profile_type": "multi",
+      "target_condition": "hypothyroidism",
+      "kidney_score": 0.643,
+      "expected_conditions": [
+        "hypothyroidism",
+        "perimenopause"
+      ],
+      "fp_bucket": "other",
+      "n_conditions": 2
+    },
+    {
+      "profile_id": "NHANES-C-23998",
+      "profile_type": "positive",
+      "target_condition": "perimenopause",
+      "kidney_score": 0.5509,
+      "expected_conditions": [
+        "perimenopause"
+      ],
+      "fp_bucket": "other",
+      "n_conditions": 1
+    },
+    {
+      "profile_id": "NHANES-D-38181",
+      "profile_type": "positive",
+      "target_condition": "liver",
+      "kidney_score": 0.8931,
+      "expected_conditions": [
+        "liver"
+      ],
+      "fp_bucket": "other",
+      "n_conditions": 1
+    },
+    {
+      "profile_id": "NHANES-D-36275",
+      "profile_type": "positive",
+      "target_condition": "prediabetes",
+      "kidney_score": 0.4121,
+      "expected_conditions": [
+        "prediabetes"
+      ],
+      "fp_bucket": "metabolic",
+      "n_conditions": 1
+    },
+    {
+      "profile_id": "NHANES-C-26333",
+      "profile_type": "positive",
+      "target_condition": "liver",
+      "kidney_score": 0.6529,
+      "expected_conditions": [
+        "liver"
+      ],
+      "fp_bucket": "other",
+      "n_conditions": 1
+    },
+    {
+      "profile_id": "NHANES-D-33731",
+      "profile_type": "positive",
+      "target_condition": "vitamin_d_deficiency",
+      "kidney_score": 0.6569,
+      "expected_conditions": [
+        "vitamin_d_deficiency"
+      ],
+      "fp_bucket": "metabolic",
+      "n_conditions": 1
+    },
+    {
+      "profile_id": "NHANES-C-23740",
+      "profile_type": "positive",
+      "target_condition": "perimenopause",
+      "kidney_score": 0.3938,
+      "expected_conditions": [
+        "perimenopause"
+      ],
+      "fp_bucket": "other",
+      "n_conditions": 1
+    },
+    {
+      "profile_id": "NHANES-C-28194",
+      "profile_type": "positive",
+      "target_condition": "hypothyroidism",
+      "kidney_score": 0.5541,
+      "expected_conditions": [
+        "hypothyroidism"
+      ],
+      "fp_bucket": "other",
+      "n_conditions": 1
+    },
+    {
+      "profile_id": "NHANES-C-28049",
+      "profile_type": "multi",
+      "target_condition": "anemia",
+      "kidney_score": 0.6341,
+      "expected_conditions": [
+        "anemia",
+        "electrolyte_imbalance"
+      ],
+      "fp_bucket": "hypertensive",
+      "n_conditions": 2
+    },
+    {
+      "profile_id": "NHANES-D-31344",
+      "profile_type": "positive",
+      "target_condition": "perimenopause",
+      "kidney_score": 0.4729,
+      "expected_conditions": [
+        "perimenopause"
+      ],
+      "fp_bucket": "other",
+      "n_conditions": 1
+    },
+    {
+      "profile_id": "NHANES-C-25397",
+      "profile_type": "positive",
+      "target_condition": "perimenopause",
+      "kidney_score": 0.3934,
+      "expected_conditions": [
+        "perimenopause"
+      ],
+      "fp_bucket": "other",
+      "n_conditions": 1
+    },
+    {
+      "profile_id": "NHANES-D-33640",
+      "profile_type": "positive",
+      "target_condition": "prediabetes",
+      "kidney_score": 0.6806,
+      "expected_conditions": [
+        "prediabetes"
+      ],
+      "fp_bucket": "metabolic",
+      "n_conditions": 1
+    },
+    {
+      "profile_id": "NHANES-D-39688",
+      "profile_type": "positive",
+      "target_condition": "sleep_disorder",
+      "kidney_score": 0.8461,
+      "expected_conditions": [
+        "sleep_disorder"
+      ],
+      "fp_bucket": "other",
+      "n_conditions": 1
+    },
+    {
+      "profile_id": "NHANES-D-38239",
+      "profile_type": "positive",
+      "target_condition": "prediabetes",
+      "kidney_score": 0.4874,
+      "expected_conditions": [
+        "prediabetes"
+      ],
+      "fp_bucket": "metabolic",
+      "n_conditions": 1
+    },
+    {
+      "profile_id": "NHANES-D-41025",
+      "profile_type": "multi",
+      "target_condition": "sleep_disorder",
+      "kidney_score": 0.9384,
+      "expected_conditions": [
+        "sleep_disorder",
+        "inflammation"
+      ],
+      "fp_bucket": "other",
+      "n_conditions": 2
+    },
+    {
+      "profile_id": "NHANES-D-39265",
+      "profile_type": "positive",
+      "target_condition": "inflammation",
+      "kidney_score": 0.4126,
+      "expected_conditions": [
+        "inflammation"
+      ],
+      "fp_bucket": "other",
+      "n_conditions": 1
+    },
+    {
+      "profile_id": "NHANES-D-38337",
+      "profile_type": "positive",
+      "target_condition": "inflammation",
+      "kidney_score": 0.6496,
+      "expected_conditions": [
+        "inflammation"
+      ],
+      "fp_bucket": "other",
+      "n_conditions": 1
+    },
+    {
+      "profile_id": "NHANES-C-26726",
+      "profile_type": "multi",
+      "target_condition": "anemia",
+      "kidney_score": 0.4597,
+      "expected_conditions": [
+        "anemia",
+        "kidney_disease",
+        "perimenopause"
+      ],
+      "fp_bucket": "metabolic",
+      "n_conditions": 3
+    },
+    {
+      "profile_id": "NHANES-D-41436",
+      "profile_type": "positive",
+      "target_condition": "electrolyte_imbalance",
+      "kidney_score": 0.431,
+      "expected_conditions": [
+        "electrolyte_imbalance"
+      ],
+      "fp_bucket": "hypertensive",
+      "n_conditions": 1
+    },
+    {
+      "profile_id": "NHANES-D-41092",
+      "profile_type": "multi",
+      "target_condition": "perimenopause",
+      "kidney_score": 0.559,
+      "expected_conditions": [
+        "perimenopause",
+        "prediabetes"
+      ],
+      "fp_bucket": "metabolic",
+      "n_conditions": 2
+    },
+    {
+      "profile_id": "NHANES-C-30468",
+      "profile_type": "multi",
+      "target_condition": "liver",
+      "kidney_score": 0.4795,
+      "expected_conditions": [
+        "liver",
+        "electrolyte_imbalance",
+        "vitamin_d_deficiency"
+      ],
+      "fp_bucket": "hypertensive",
+      "n_conditions": 3
+    },
+    {
+      "profile_id": "NHANES-D-41280",
+      "profile_type": "positive",
+      "target_condition": "sleep_disorder",
+      "kidney_score": 0.4265,
+      "expected_conditions": [
+        "sleep_disorder"
+      ],
+      "fp_bucket": "other",
+      "n_conditions": 1
+    },
+    {
+      "profile_id": "NHANES-D-37134",
+      "profile_type": "multi",
+      "target_condition": "anemia",
+      "kidney_score": 0.8883,
+      "expected_conditions": [
+        "anemia",
+        "sleep_disorder",
+        "perimenopause",
+        "electrolyte_imbalance",
+        "inflammation"
+      ],
+      "fp_bucket": "hypertensive",
+      "n_conditions": 5
+    },
+    {
+      "profile_id": "NHANES-D-37886",
+      "profile_type": "positive",
+      "target_condition": "sleep_disorder",
+      "kidney_score": 0.5377,
+      "expected_conditions": [
+        "sleep_disorder"
+      ],
+      "fp_bucket": "other",
+      "n_conditions": 1
+    },
+    {
+      "profile_id": "NHANES-D-39454",
+      "profile_type": "positive",
+      "target_condition": "prediabetes",
+      "kidney_score": 0.4303,
+      "expected_conditions": [
+        "prediabetes"
+      ],
+      "fp_bucket": "metabolic",
+      "n_conditions": 1
+    },
+    {
+      "profile_id": "NHANES-D-31601",
+      "profile_type": "multi",
+      "target_condition": "perimenopause",
+      "kidney_score": 0.5867,
+      "expected_conditions": [
+        "perimenopause",
+        "inflammation"
+      ],
+      "fp_bucket": "other",
+      "n_conditions": 2
+    },
+    {
+      "profile_id": "NHANES-D-32272",
+      "profile_type": "multi",
+      "target_condition": "anemia",
+      "kidney_score": 0.7248,
+      "expected_conditions": [
+        "anemia",
+        "kidney_disease",
+        "perimenopause"
+      ],
+      "fp_bucket": "metabolic",
+      "n_conditions": 3
+    },
+    {
+      "profile_id": "NHANES-C-21894",
+      "profile_type": "positive",
+      "target_condition": "perimenopause",
+      "kidney_score": 0.4727,
+      "expected_conditions": [
+        "perimenopause"
+      ],
+      "fp_bucket": "other",
+      "n_conditions": 1
+    },
+    {
+      "profile_id": "NHANES-C-31014",
+      "profile_type": "multi",
+      "target_condition": "anemia",
+      "kidney_score": 0.8268,
+      "expected_conditions": [
+        "anemia",
+        "vitamin_d_deficiency"
+      ],
+      "fp_bucket": "metabolic",
+      "n_conditions": 2
+    },
+    {
+      "profile_id": "NHANES-C-28805",
+      "profile_type": "multi",
+      "target_condition": "hepatitis",
+      "kidney_score": 0.4615,
+      "expected_conditions": [
+        "hepatitis",
+        "liver",
+        "perimenopause",
+        "vitamin_d_deficiency"
+      ],
+      "fp_bucket": "metabolic",
+      "n_conditions": 4
+    },
+    {
+      "profile_id": "NHANES-D-34254",
+      "profile_type": "positive",
+      "target_condition": "inflammation",
+      "kidney_score": 0.3803,
+      "expected_conditions": [
+        "inflammation"
+      ],
+      "fp_bucket": "other",
+      "n_conditions": 1
+    },
+    {
+      "profile_id": "NHANES-D-37388",
+      "profile_type": "positive",
+      "target_condition": "sleep_disorder",
+      "kidney_score": 0.5051,
+      "expected_conditions": [
+        "sleep_disorder"
+      ],
+      "fp_bucket": "other",
+      "n_conditions": 1
+    },
+    {
+      "profile_id": "NHANES-D-35665",
+      "profile_type": "positive",
+      "target_condition": "prediabetes",
+      "kidney_score": 0.5141,
+      "expected_conditions": [
+        "prediabetes"
+      ],
+      "fp_bucket": "metabolic",
+      "n_conditions": 1
+    },
+    {
+      "profile_id": "NHANES-C-27166",
+      "profile_type": "positive",
+      "target_condition": "hypothyroidism",
+      "kidney_score": 0.5947,
+      "expected_conditions": [
+        "hypothyroidism"
+      ],
+      "fp_bucket": "other",
+      "n_conditions": 1
+    },
+    {
+      "profile_id": "NHANES-D-35490",
+      "profile_type": "positive",
+      "target_condition": "prediabetes",
+      "kidney_score": 0.374,
+      "expected_conditions": [
+        "prediabetes"
+      ],
+      "fp_bucket": "metabolic",
+      "n_conditions": 1
+    },
+    {
+      "profile_id": "NHANES-C-30518",
+      "profile_type": "multi",
+      "target_condition": "hypothyroidism",
+      "kidney_score": 0.5098,
+      "expected_conditions": [
+        "hypothyroidism",
+        "perimenopause",
+        "electrolyte_imbalance"
+      ],
+      "fp_bucket": "hypertensive",
+      "n_conditions": 3
+    },
+    {
+      "profile_id": "NHANES-D-40298",
+      "profile_type": "multi",
+      "target_condition": "kidney_disease",
+      "kidney_score": 0.6007,
+      "expected_conditions": [
+        "kidney_disease",
+        "inflammation"
+      ],
+      "fp_bucket": "other",
+      "n_conditions": 2
+    },
+    {
+      "profile_id": "NHANES-C-28804",
+      "profile_type": "multi",
+      "target_condition": "kidney_disease",
+      "kidney_score": 0.7431,
+      "expected_conditions": [
+        "kidney_disease",
+        "perimenopause"
+      ],
+      "fp_bucket": "other",
+      "n_conditions": 2
+    },
+    {
+      "profile_id": "NHANES-C-25123",
+      "profile_type": "multi",
+      "target_condition": "kidney_disease",
+      "kidney_score": 0.3745,
+      "expected_conditions": [
+        "kidney_disease",
+        "perimenopause"
+      ],
+      "fp_bucket": "other",
+      "n_conditions": 2
+    },
+    {
+      "profile_id": "NHANES-D-35215",
+      "profile_type": "multi",
+      "target_condition": "sleep_disorder",
+      "kidney_score": 0.604,
+      "expected_conditions": [
+        "sleep_disorder",
+        "perimenopause",
+        "inflammation"
+      ],
+      "fp_bucket": "other",
+      "n_conditions": 3
+    },
+    {
+      "profile_id": "NHANES-D-36331",
+      "profile_type": "multi",
+      "target_condition": "kidney_disease",
+      "kidney_score": 0.5785,
+      "expected_conditions": [
+        "kidney_disease",
+        "perimenopause"
+      ],
+      "fp_bucket": "other",
+      "n_conditions": 2
+    },
+    {
+      "profile_id": "NHANES-D-37902",
+      "profile_type": "multi",
+      "target_condition": "sleep_disorder",
+      "kidney_score": 0.8317,
+      "expected_conditions": [
+        "sleep_disorder",
+        "perimenopause",
+        "vitamin_d_deficiency"
+      ],
+      "fp_bucket": "metabolic",
+      "n_conditions": 3
+    },
+    {
+      "profile_id": "NHANES-C-27872",
+      "profile_type": "positive",
+      "target_condition": "liver",
+      "kidney_score": 0.485,
+      "expected_conditions": [
+        "liver"
+      ],
+      "fp_bucket": "other",
+      "n_conditions": 1
+    },
+    {
+      "profile_id": "NHANES-D-40963",
+      "profile_type": "positive",
+      "target_condition": "inflammation",
+      "kidney_score": 0.5549,
+      "expected_conditions": [
+        "inflammation"
+      ],
+      "fp_bucket": "other",
+      "n_conditions": 1
+    },
+    {
+      "profile_id": "NHANES-C-21489",
+      "profile_type": "multi",
+      "target_condition": "anemia",
+      "kidney_score": 0.4923,
+      "expected_conditions": [
+        "anemia",
+        "liver",
+        "electrolyte_imbalance"
+      ],
+      "fp_bucket": "hypertensive",
+      "n_conditions": 3
+    },
+    {
+      "profile_id": "NHANES-D-39792",
+      "profile_type": "positive",
+      "target_condition": "perimenopause",
+      "kidney_score": 0.3727,
+      "expected_conditions": [
+        "perimenopause"
+      ],
+      "fp_bucket": "other",
+      "n_conditions": 1
+    },
+    {
+      "profile_id": "NHANES-D-34573",
+      "profile_type": "positive",
+      "target_condition": "prediabetes",
+      "kidney_score": 0.6276,
+      "expected_conditions": [
+        "prediabetes"
+      ],
+      "fp_bucket": "metabolic",
+      "n_conditions": 1
+    },
+    {
+      "profile_id": "NHANES-C-27349",
+      "profile_type": "multi",
+      "target_condition": "hypothyroidism",
+      "kidney_score": 0.6377,
+      "expected_conditions": [
+        "hypothyroidism",
+        "perimenopause"
+      ],
+      "fp_bucket": "other",
+      "n_conditions": 2
+    },
+    {
+      "profile_id": "NHANES-D-33998",
+      "profile_type": "multi",
+      "target_condition": "anemia",
+      "kidney_score": 0.9997,
+      "expected_conditions": [
+        "anemia",
+        "sleep_disorder",
+        "kidney_disease",
+        "perimenopause",
+        "inflammation",
+        "vitamin_d_deficiency"
+      ],
+      "fp_bucket": "metabolic",
+      "n_conditions": 6
+    },
+    {
+      "profile_id": "NHANES-D-39490",
+      "profile_type": "multi",
+      "target_condition": "sleep_disorder",
+      "kidney_score": 0.593,
+      "expected_conditions": [
+        "sleep_disorder",
+        "kidney_disease",
+        "inflammation"
+      ],
+      "fp_bucket": "other",
+      "n_conditions": 3
+    },
+    {
+      "profile_id": "NHANES-D-34073",
+      "profile_type": "healthy",
+      "target_condition": null,
+      "kidney_score": 1.0,
+      "expected_conditions": [],
+      "fp_bucket": "healthy",
+      "n_conditions": 0
+    },
+    {
+      "profile_id": "NHANES-D-37455",
+      "profile_type": "positive",
+      "target_condition": "inflammation",
+      "kidney_score": 0.9488,
+      "expected_conditions": [
+        "inflammation"
+      ],
+      "fp_bucket": "other",
+      "n_conditions": 1
+    },
+    {
+      "profile_id": "NHANES-C-23405",
+      "profile_type": "positive",
+      "target_condition": "hypothyroidism",
+      "kidney_score": 0.7939,
+      "expected_conditions": [
+        "hypothyroidism"
+      ],
+      "fp_bucket": "other",
+      "n_conditions": 1
+    },
+    {
+      "profile_id": "NHANES-D-37994",
+      "profile_type": "positive",
+      "target_condition": "prediabetes",
+      "kidney_score": 0.818,
+      "expected_conditions": [
+        "prediabetes"
+      ],
+      "fp_bucket": "metabolic",
+      "n_conditions": 1
+    },
+    {
+      "profile_id": "NHANES-D-36458",
+      "profile_type": "positive",
+      "target_condition": "prediabetes",
+      "kidney_score": 0.8775,
+      "expected_conditions": [
+        "prediabetes"
+      ],
+      "fp_bucket": "metabolic",
+      "n_conditions": 1
+    },
+    {
+      "profile_id": "NHANES-C-29052",
+      "profile_type": "multi",
+      "target_condition": "anemia",
+      "kidney_score": 0.6159,
+      "expected_conditions": [
+        "anemia",
+        "kidney_disease",
+        "perimenopause"
+      ],
+      "fp_bucket": "metabolic",
+      "n_conditions": 3
+    }
+  ]
+}

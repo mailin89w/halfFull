@@ -1,0 +1,38 @@
+{
+  "summary": {
+    "total_profiles": 760,
+    "errors": 0,
+    "recall_off_floor_thr": 0.15,
+    "recommendation": "PROCEED_TO_MISSED_POSITIVE_AUDIT"
+  },
+  "v3_production": {
+    "threshold": 0.4,
+    "tp": 19,
+    "fp": 239,
+    "fn": 30,
+    "recall": 0.3878,
+    "precision": 0.0736,
+    "flag_rate": 0.3395,
+    "healthy_fp_n": 10,
+    "healthy_fp_rate": 0.1,
+    "mean_score_pos": 0.3844,
+    "mean_score_neg": 0.3623,
+    "p50_pos": 0.3604,
+    "p50_neg": 0.3265
+  },
+  "v4_candidate": {
+    "threshold": 0.4,
+    "tp": 0,
+    "fp": 1,
+    "fn": 49,
+    "recall": 0.0,
+    "precision": 0.0,
+    "flag_rate": 0.0013,
+    "healthy_fp_n": 0,
+    "healthy_fp_rate": 0.0,
+    "mean_score_pos": 0.0779,
+    "mean_score_neg": 0.0717,
+    "p50_pos": 0.0659,
+    "p50_neg": 0.0522
+  }
+}
