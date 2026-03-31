@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
-# Known issue: gender_female coefficient (+1.32) in anemia model will dominate
-# top-1 rankings for female profiles. This is a model-level issue documented in
-# evals/cohort/optimization_report.md, not a script bug.
+# Known issue: iron_deficiency still has structural demographic bias in the
+# underlying artifact. Runtime gates now suppress much of the old overfiring,
+# but the remaining tradeoff is still a model-level issue rather than a script
+# bug.
 """
 run_layer1_eval.py — Standalone ML Layer 1 evaluation (no MedGemma required).
 
@@ -25,8 +26,9 @@ are explicitly marked as skipped.
 
 Known structural limitations
 -----------------------------
-  - Iron deficiency: gender_female LR coefficient +1.32 dominates all female
-    profiles, often displacing the true top-1 for other female-skewed conditions.
+  - Iron deficiency: the underlying artifact still carries demographic bias.
+    Runtime gates reduce much of the worst overfiring, but the model remains
+    calibration-sensitive and can still interfere with ranking.
 
 Usage
 -----
@@ -41,6 +43,7 @@ import argparse
 import json
 import logging
 import random
+import subprocess
 import sys
 import types
 import warnings
@@ -91,9 +94,15 @@ except ImportError:
     _TQDM = False
 
 from pipeline.profile_loader import ProfileLoader
+from layer1_metrics_exporter import build_layer1_metrics_export
 
 try:
-    from model_runner import ModelRunner, FILTER_CRITERIA, RECOMMENDED_THRESHOLDS
+    from model_runner import (
+        FILTER_CRITERIA,
+        MODEL_REGISTRY,
+        ModelRunner,
+        RECOMMENDED_THRESHOLDS,
+    )
 except ImportError as exc:
     print(
         f"ERROR: Could not import ModelRunner from models_normalized/: {exc}\n"
@@ -118,6 +127,78 @@ logging.basicConfig(
 logger = logging.getLogger("run_layer1_eval")
 logging.getLogger("model_runner").setLevel(logging.WARNING)
 logging.getLogger("pipeline.profile_loader").setLevel(logging.WARNING)
+
+
+def _safe_git_sha() -> str | None:
+    """Return current git commit SHA if available."""
+    try:
+        proc = subprocess.run(
+            ["git", "rev-parse", "HEAD"],
+            cwd=PROJECT_ROOT,
+            check=True,
+            capture_output=True,
+            text=True,
+        )
+        sha = proc.stdout.strip()
+        return sha or None
+    except Exception:
+        return None
+
+
+def _model_eval_metadata(model_key: str) -> dict[str, Any]:
+    """Collect artifact + metadata details for a model key used in this run."""
+    artifact = MODEL_REGISTRY.get(model_key)
+    meta: dict[str, Any] = {
+        "artifact": artifact,
+        "metadata_file": None,
+        "metadata_version": None,
+        "metadata_created_at": None,
+        "recommended_threshold": RECOMMENDED_THRESHOLDS.get(model_key),
+        "user_facing_threshold": FILTER_CRITERIA.get(model_key, 0.35),
+    }
+
+    if not artifact:
+        return meta
+
+    metadata_path = MODELS_NORMALIZED_DIR / artifact.replace(".joblib", "_metadata.json")
+    meta["metadata_file"] = metadata_path.name
+    if not metadata_path.exists():
+        return meta
+
+    try:
+        metadata = json.loads(metadata_path.read_text())
+    except Exception:
+        return meta
+
+    meta["metadata_version"] = metadata.get("version")
+    meta["metadata_created_at"] = metadata.get("created_at")
+    return meta
+
+
+def _build_run_metadata(
+    run_id: str,
+    profiles_path: Path,
+    args: argparse.Namespace,
+) -> dict[str, Any]:
+    """Capture the exact model/threshold config that produced this run."""
+    per_model = {
+        model_key: _model_eval_metadata(model_key)
+        for model_key in sorted(ACTIVE_MODEL_KEYS_12)
+    }
+    return {
+        "run_id": run_id,
+        "generated_at_utc": datetime.utcnow().isoformat() + "Z",
+        "git_sha": _safe_git_sha(),
+        "profiles_path": str(profiles_path),
+        "filters": {
+            "condition": args.condition,
+            "profile_type": args.profile_type,
+            "exclude": args.exclude,
+            "sample_n": args.n,
+            "seed": args.seed,
+        },
+        "model_registry": per_model,
+    }
 
 # ---------------------------------------------------------------------------
 # Condition name mapping
@@ -906,6 +987,7 @@ def _aggregate(results: list[dict]) -> dict:
 
     # ── per_condition metrics ──────────────────────────────────────────────
     per_condition: dict[str, dict] = {}
+    healthy_per_condition: dict[str, dict] = {}
     for eval_cond, model_key in CONDITION_TO_MODEL_KEY.items():
         if model_key is None:
             continue
@@ -918,6 +1000,10 @@ def _aggregate(results: list[dict]) -> dict:
         # All profiles where this model's score >= threshold
         flagged = [
             r for r in scored
+            if r.get("scores", {}).get(model_key, 0.0) >= threshold
+        ]
+        healthy_flagged = [
+            r for r in healthy
             if r.get("scores", {}).get(model_key, 0.0) >= threshold
         ]
         # True positives: positive-type profiles targeting this condition AND flagged
@@ -938,6 +1024,8 @@ def _aggregate(results: list[dict]) -> dict:
 
         per_condition[eval_cond] = {
             "model_key":          model_key,
+            "artifact":           MODEL_REGISTRY.get(model_key),
+            "metadata_version":   _model_eval_metadata(model_key).get("metadata_version"),
             "threshold":          threshold,
             "n_target_profiles":  len(target_profiles),
             "n_positive_target":  len(positive_target),
@@ -947,6 +1035,14 @@ def _aggregate(results: list[dict]) -> dict:
             "precision":          round(precision, 4) if precision is not None else None,
             "flag_rate":          round(flag_rate, 4),
             "mean_target_score":  round(mean_target_score, 4) if mean_target_score is not None else None,
+        }
+        healthy_per_condition[eval_cond] = {
+            "model_key": model_key,
+            "artifact": MODEL_REGISTRY.get(model_key),
+            "threshold": threshold,
+            "n_healthy_profiles": len(healthy),
+            "n_healthy_flagged": len(healthy_flagged),
+            "healthy_flag_rate": round(len(healthy_flagged) / len(healthy), 4) if healthy else 0.0,
         }
 
     # ── DoD checks ────────────────────────────────────────────────────────
@@ -974,6 +1070,7 @@ def _aggregate(results: list[dict]) -> dict:
         "medgemma_metrics":        "skipped — ML-only run",
         "by_quiz_path":            by_quiz_path,
         "per_condition":           per_condition,
+        "healthy_per_condition":   healthy_per_condition,
         "dod_checks":              dod_checks,
         "dod_pass":                dod_pass,
     }
@@ -985,10 +1082,20 @@ def _aggregate(results: list[dict]) -> dict:
 
 def _to_markdown(report: dict, run_id: str) -> str:
     lines: list[str] = []
+    run_meta = report.get("run_metadata", {})
     lines.append(f"# HalfFull Layer 1 Eval — {run_id}")
     lines.append("")
     lines.append("> ML models only. MedGemma metrics skipped.")
     lines.append("")
+
+    if run_meta:
+        lines.append("## Run Metadata")
+        lines.append("")
+        lines.append("| Field | Value |")
+        lines.append("|-------|-------|")
+        lines.append(f"| Git SHA | {run_meta.get('git_sha') or 'unknown'} |")
+        lines.append(f"| Profiles Path | `{run_meta.get('profiles_path', '')}` |")
+        lines.append("")
 
     lines.append("## Summary")
     lines.append("")
@@ -1048,9 +1155,23 @@ def _to_markdown(report: dict, run_id: str) -> str:
         )
     lines.append("")
 
+    lines.append("## Healthy False Positives")
+    lines.append("")
+    lines.append("| Condition | Model Key | Threshold | Healthy Flagged | Healthy Flag Rate |")
+    lines.append("|-----------|-----------|-----------|-----------------|-------------------|")
+    for cond in sorted(report["healthy_per_condition"]):
+        s = report["healthy_per_condition"][cond]
+        lines.append(
+            f"| {cond} | {s['model_key']} | {s['threshold']} "
+            f"| {s['n_healthy_flagged']} | {s['healthy_flag_rate']:.1%} |"
+        )
+    lines.append("")
+
     lines.append(
-        "> `iron_deficiency` gender_female coefficient (+1.32) dominates all "
-        "female profiles, often displacing true top-1 for other conditions."
+        "> `iron_deficiency` still carries structural demographic bias in the "
+        "underlying artifact. Runtime gates reduce the worst overfiring, but "
+        "the model remains sensitive to calibration and can still interfere "
+        "with ranking."
     )
     lines.append("")
     vit_d = report["per_condition"].get("vitamin_d_deficiency")
@@ -1267,6 +1388,7 @@ def main() -> int:
     # -- Aggregate ------------------------------------------------------------
     report = _aggregate(eval_results)
     report["run_id"] = run_id
+    report["run_metadata"] = _build_run_metadata(run_id, profiles_path, args)
 
     # -- Write results JSON ---------------------------------------------------
     results_path = results_dir / f"{run_id}.json"
@@ -1279,8 +1401,27 @@ def main() -> int:
         clean_results = eval_results
 
     with results_path.open("w") as f:
-        json.dump({"report": report, "results": clean_results}, f, indent=2)
+        json.dump(
+            {
+                "run_metadata": report["run_metadata"],
+                "report": report,
+                "results": clean_results,
+            },
+            f,
+            indent=2,
+        )
     logger.info("Results written to %s", results_path)
+
+    export_payload = {
+        "run_metadata": report["run_metadata"],
+        "report": report,
+        "results": clean_results,
+    }
+    metrics_export_path = results_dir / f"{run_id}_metrics_export.json"
+    with metrics_export_path.open("w") as f:
+        json.dump(build_layer1_metrics_export(export_payload), f, indent=2)
+        f.write("\n")
+    logger.info("Metrics export written to %s", metrics_export_path)
 
     # -- Write Markdown report ------------------------------------------------
     report_path = REPORTS_DIR / f"{run_id}.md"

@@ -65,28 +65,112 @@ log = logging.getLogger("model_runner")
 _DIR  = Path(os.path.dirname(os.path.abspath(__file__)))
 _ROOT = _DIR.parent
 
-# ── Registry — v2 normalised models ────────────────────────────────────────────
+# ── Registry — promoted production artifacts ───────────────────────────────────
+#
+# Keep promotion decisions explicit here rather than implicitly selecting the
+# newest filename on disk. Several newer candidate artifacts exist, but they are
+# only promoted after a cohort-level eval confirms the tradeoff is worth it.
+#
+# Fields:
+#   artifact       model file loaded in production / evals
+#   status         promoted | retained
+#   decision_date  when the current choice was last reviewed
+#   basis          short human-readable rationale
+#   eval_report    cohort-level evidence when available
+#   candidate_held newer artifact intentionally NOT promoted yet
+
+MODEL_REGISTRY_AUDIT: dict[str, dict[str, str]] = {
+    "anemia": {
+        "artifact": "anemia_lr_symptom_bundle_v6.joblib",
+        "status": "promoted",
+        "decision_date": "2026-03-31",
+        "ticket": "ML-ANEMIA-02",
+        "basis": "Promoted for validation: v6 adds symptom-bundle features and lighter hard negatives to recover recall after the v5 bias fix.",
+        "candidate_held": "anemia_lr_repro_hist_v5.joblib",
+    },
+    "electrolyte_imbalance": {
+        "artifact": "electrolyte_imbalance_lr_deduped28_L2_v2.joblib",
+        "status": "retained",
+        "decision_date": "2026-03-31",
+        "basis": "No newer validated candidate artifact found locally.",
+    },
+    "kidney": {
+        "artifact": "kidney_lr_deduped17_L2_v2.joblib",
+        "status": "retained",
+        "decision_date": "2026-03-31",
+        "ticket": "ML-KIDNEY-01",
+        "basis": "Retained v2 after 760-cohort A/B showed v3 hard-neg cut recall too sharply despite lower flag rate.",
+        "eval_report": "evals/reports/layer1_20260330_224345.md",
+        "candidate_held": "kidney_lr_v3_hard_neg.joblib",
+    },
+    "liver": {
+        "artifact": "liver_rf_cal_deduped19_v2.joblib",
+        "status": "retained",
+        "decision_date": "2026-03-31",
+        "basis": "No newer validated candidate artifact found locally.",
+    },
+    "prediabetes": {
+        "artifact": "prediabetes_lr_deduped34_L2_C001_v2.joblib",
+        "status": "retained",
+        "decision_date": "2026-03-31",
+        "basis": "Kept v2 until xgb v3 hard-neg gets a clean 760-cohort validation pass.",
+        "candidate_held": "prediabetes_xgb_v3_hard_neg.joblib",
+    },
+    "sleep_disorder": {
+        "artifact": "sleep_disorder_lr_trimmed29_L2_v2.joblib",
+        "status": "retained",
+        "decision_date": "2026-03-31",
+        "basis": "No newer validated candidate artifact found locally.",
+    },
+    "thyroid": {
+        "artifact": "thyroid_lr_l2_reduced-12feat_v2.joblib",
+        "status": "retained",
+        "decision_date": "2026-03-31",
+        "basis": "No newer validated candidate artifact found locally.",
+    },
+    "hidden_inflammation": {
+        "artifact": "hidden_inflammation_lr_deduped26_L2_v3.joblib",
+        "status": "retained",
+        "decision_date": "2026-03-31",
+        "basis": "Kept v3 until v4 hard-neg gets a clean 760-cohort validation pass.",
+        "candidate_held": "hidden_inflammation_lr_v4_hard_neg.joblib",
+    },
+    "perimenopause": {
+        "artifact": "perimenopause_lr_deduped21_L2_v2.joblib",
+        "status": "retained",
+        "decision_date": "2026-03-31",
+        "basis": "No newer validated candidate artifact found locally.",
+    },
+    "hepatitis_bc": {
+        "artifact": "hepatitis_bc_rf_cal_deduped20_v2.joblib",
+        "status": "retained",
+        "decision_date": "2026-03-31",
+        "basis": "No newer validated candidate artifact found locally.",
+    },
+    "iron_deficiency": {
+        "artifact": "iron_deficiency_rf_cal_deduped35_v4.joblib",
+        "status": "retained",
+        "decision_date": "2026-03-31",
+        "basis": "Current product-safe no-CBC model; no newer validated runtime-safe candidate artifact found locally.",
+    },
+    "vitamin_d_deficiency": {
+        "artifact": "vitamin_d_deficiency_2017_2018_rf_cal_aligned.joblib",
+        "status": "retained",
+        "decision_date": "2026-03-31",
+        "ticket": "ML-VITD-02",
+        "basis": "Retained current aligned artifact, but tightened user-facing threshold to 0.48 after 760-cohort sweep to reduce healthy alerts and overall dominance.",
+    },
+}
 
 MODEL_REGISTRY = {
-    "anemia":                "anemia_lr_deduped35_L2_C1_v4.joblib",
-    "electrolyte_imbalance": "electrolyte_imbalance_lr_deduped28_L2_v2.joblib",
-    "kidney":                "kidney_lr_deduped17_L2_v2.joblib",
-    "liver":                 "liver_rf_cal_deduped19_v2.joblib",
-    "prediabetes":           "prediabetes_lr_deduped34_L2_C001_v2.joblib",
-    "sleep_disorder":        "sleep_disorder_lr_trimmed29_L2_v2.joblib",
-    "thyroid":               "thyroid_lr_l2_reduced-12feat_v2.joblib",
-    "hidden_inflammation":   "hidden_inflammation_lr_deduped26_L2_v3.joblib",
-    "perimenopause":         "perimenopause_lr_deduped21_L2_v2.joblib",
-    "hepatitis_bc":          "hepatitis_bc_rf_cal_deduped20_v2.joblib",
-    "iron_deficiency":       "iron_deficiency_rf_cal_deduped35_v4.joblib",
-    "vitamin_b12_deficiency": "vitamin_b12_deficiency_2003_2006_lr_roadmap.joblib",
-    "vitamin_d_deficiency":   "vitamin_d_deficiency_2017_2018_rf_cal_aligned.joblib",
+    condition: audit["artifact"]
+    for condition, audit in MODEL_REGISTRY_AUDIT.items()
 }
 
 # Per-model recommended operating thresholds
 # (lowest t where OOF precision >= 17%, maximising recall — internal model property)
 RECOMMENDED_THRESHOLDS = {
-    "anemia":                0.35,
+    "anemia":                0.40,
     "electrolyte_imbalance": 0.60,
     "kidney":                0.66,
     "liver":                 0.10,
@@ -97,7 +181,6 @@ RECOMMENDED_THRESHOLDS = {
     "perimenopause":         0.55,
     "hepatitis_bc":          0.15,
     "iron_deficiency":       0.15,
-    "vitamin_b12_deficiency": 0.80,
     "vitamin_d_deficiency":   0.40,
 }
 
@@ -122,9 +205,9 @@ RECOMMENDED_THRESHOLDS = {
 #   0.40  hidden_inflammation   — current 600-profile benchmark showed a clear
 #                                  quick win at 0.40 vs 0.30: much lower flag burden
 #                                  and healthy over-alert with only modest recall loss
-#   0.60  anemia                — current 600-profile benchmark showed a moderate
-#                                  quick win at 0.60 vs 0.50: better precision and lower
-#                                  flag burden with acceptable recall loss
+#   0.40  anemia                — v6 symptom-bundle model: lower than v5's 0.60
+#                                  to recover recall while still staying far below
+#                                  the old spammy alert burden
 #   0.35  prediabetes / thyroid — reversible / manageable; weakest models in group;
 #                                  need reasonable confidence before surfacing
 #   0.40  electrolyte_imbalance / perimenopause
@@ -132,27 +215,23 @@ RECOMMENDED_THRESHOLDS = {
 #                                  rate (perimenopause 23%) → need clearer signal
 #   0.75  sleep_disorder        — optional stricter cleanup from 2026-03-26 sweep;
 #                                  (polysomnography); only surface strong signals
-#   0.80  vitamin_b12_deficiency — very low-prevalence model; only surface the
-#                                  strongest scores until we have product-side
-#                                  validation on real user traffic
-#   0.40  vitamin_d_deficiency   — raised from 0.25 on 2026-03-30 after
-#                                  NHANES 760 threshold sweep: far lower alert
-#                                  burden and healthy false positives while
-#                                  keeping a usable recall level
+#   0.48  vitamin_d_deficiency   — raised from 0.40 on 2026-03-31 after
+#                                  latest 760 sweep: first threshold that brought
+#                                  healthy flag rate below 5%; recall cost remains
+#                                  material, so keep Bayesian trigger lower
 USER_FACING_THRESHOLDS = {
     "hepatitis_bc":          0.10,
     "liver":                 0.07,
     "iron_deficiency":       0.20,
     "kidney":                0.35,   # raised 0.25→0.35 on 2026-03-27 second-pass tightening: trade recall for materially lower user-facing alert burden
-    "anemia":                0.60,   # raised 0.50→0.60 on 2026-03-26 quick-win sweep: precision 16.9%→21.8%, flag 41.3%→26.0%, recall 62.7%→50.7%
+    "anemia":                0.40,   # v6 symptom-bundle model promoted 2026-03-31 to recover recall after bias fix; local 760 tests held healthy FP at 2%
     "hidden_inflammation":   0.40,   # raised 0.30→0.40 on 2026-03-26 quick-win sweep: precision 6.3%→8.2%, flag 55.3%→36.5%, recall 46.7%→40.0%
     "prediabetes":           0.45,   # raised 0.40→0.45 on 2026-03-27 second-pass tightening: high-recall yellow model still over-flagged
     "thyroid":               0.75,   # raised 0.60→0.75 on 2026-03-27: eval shows 5/12 healthy FP suppressed; tradeoff is 7/58 TP lost (85%→75% recall) — model produces 0.85-0.95 saturated scores that cannot be separated by threshold alone; proper fix is ML-02 recalibration
     "electrolyte_imbalance": 0.46,   # raised 0.40→0.46: flag 54%→34%, recall 40%→15%
     "perimenopause":         0.40,
     "sleep_disorder":        0.75,   # raised 0.70→0.75 on 2026-03-26 optional cleanup: precision 10.9%→13.1%, flag 24.5%→16.5%, recall 25.0%→20.3%
-    "vitamin_b12_deficiency": 0.80,
-    "vitamin_d_deficiency":   0.40,
+    "vitamin_d_deficiency":   0.48,
 }
 
 # Lower thresholds used only to decide which conditions enter Bayesian review.
@@ -163,14 +242,13 @@ BAYESIAN_TRIGGER_THRESHOLDS = {
     "liver":                 0.10,
     "iron_deficiency":       0.15,
     "kidney":                0.25,
-    "anemia":                0.50,
+    "anemia":                0.35,
     "hidden_inflammation":   0.30,
     "prediabetes":           0.40,
     "thyroid":               0.50,
     "electrolyte_imbalance": 0.46,
     "perimenopause":         0.40,
     "sleep_disorder":        0.70,
-    "vitamin_b12_deficiency": 0.60,
     "vitamin_d_deficiency":   0.20,
 }
 
@@ -223,7 +301,6 @@ SCORE_RANGES: dict[str, tuple[float, float]] = {
     "perimenopause":         (0.000, 0.988),
     "hepatitis_bc":          (0.005, 0.524),
     "iron_deficiency":       (0.006, 0.451),   # v4 — 35 feats, no CBC markers (600-profile cohort: min 0.0056, max 0.4511)
-    "vitamin_b12_deficiency": (0.000, 0.976),  # NHANES 2003-2006 roadmap LR model
     "vitamin_d_deficiency":   (0.000, 0.942),  # NHANES 2017-2018 aligned RF+cal model
 }
 
@@ -246,7 +323,6 @@ SCORE_MEANS: dict[str, float] = {
     "perimenopause":         0.306,  # updated 2026-03-26: was 0.297
     "hepatitis_bc":          0.044,
     "iron_deficiency":       0.082,  # v4 — 600-profile cohort mean (was 0.038 v3 with CBC features)
-    "vitamin_b12_deficiency": 0.125,  # NHANES 2003-2006 roadmap LR model mean score
     "vitamin_d_deficiency":   0.283,  # NHANES 2017-2018 aligned RF+cal model mean score
 }
 
@@ -389,9 +465,10 @@ class InputNormalizer:
          - Other numeric → sex-/age-group z-score (fallback: sex-only, global)
          - String / binary / ordinal cols → passed through unchanged
     4. Add derived columns:
-         - ``gender_female``       (float 0/1)
-         - ``education_ord``       (int 0–4, NaN if unknown)
+         - ``gender_female``        (float 0/1)
+         - ``education_ord``        (int 0–4, NaN if unknown)
          - ``pregnancy_status_bin`` (float 0/1, NaN if question not answered)
+         - anemia-specific symptom/reproductive bundle features
     5. Slice one single-row DataFrame per model using the feature list from
        each model's *_metadata.json file.
 
@@ -450,7 +527,7 @@ class InputNormalizer:
 
     @staticmethod
     def _add_derived_columns(df: pd.DataFrame) -> pd.DataFrame:
-        """Add gender_female, education_ord, pregnancy_status_bin."""
+        """Add derived features consumed by the production model set."""
         out = df.copy()
 
         # gender_female
@@ -473,6 +550,43 @@ class InputNormalizer:
             out.loc[out["pregnancy_status"].isna(), "pregnancy_status_bin"] = np.nan
         else:
             out["pregnancy_status_bin"] = np.nan
+
+        # anemia symptom bundle: helps the newer anemia model reward the
+        # combination of fatigue + shortness of breath + poor health burden,
+        # rather than requiring a single dominant demographic shortcut.
+        fat = out.get(
+            "dpq040___feeling_tired_or_having_little_energy",
+            pd.Series(0.0, index=out.index),
+        ).fillna(0)
+        sob = out.get(
+            "cdq010___shortness_of_breath_on_stairs/inclines",
+            pd.Series(9.0, index=out.index),
+        ).fillna(9)
+        health = out.get(
+            "huq010___general_health_condition",
+            pd.Series(3.0, index=out.index),
+        ).fillna(3)
+        hosp = out.get(
+            "huq071___overnight_hospital_patient_in_last_year",
+            pd.Series(2.0, index=out.index),
+        ).fillna(2)
+        reg_periods = out.get(
+            "rhq031___had_regular_periods_in_past_12_months",
+            pd.Series(9.0, index=out.index),
+        ).fillna(9)
+        preg_now = out.get(
+            "rhd143___are_you_pregnant_now?",
+            pd.Series(9.0, index=out.index),
+        ).fillna(9)
+
+        out["anemia_symptom_burden"] = (
+            (fat >= 1).astype(float)
+            + (sob <= 2).astype(float)
+            + (health >= 3).astype(float)
+            + (hosp == 1).astype(float)
+        )
+        out["fatigue_sob_combo"] = ((fat >= 1) & (sob <= 2)).astype(float)
+        out["female_repro_signal"] = ((reg_periods == 1) | (preg_now == 1)).astype(float)
 
         return out
 
@@ -735,7 +849,7 @@ class ModelRunner:
         Raw probabilities are modified in-place on the shallow copy; the original
         caller dict is never mutated.
 
-        Iron-deficiency menstrual gate
+        Iron-deficiency demographic gates
         ------------------------------
         The iron_deficiency model has strong gender_female signal from the NHANES
         training data (menstrual blood loss is the primary iron-loss mechanism in
@@ -745,6 +859,13 @@ class ModelRunner:
         Gate: if female AND age > 45 AND regular_periods == No (encoded 2.0),
         the main menstrual blood-loss pathway is not active.  Downweight ×0.4.
         NaN for regular_periods (question not answered / male) → gate not applied.
+
+        A second cleanup gate handles the remaining low-confidence male alerts.
+        In the 760-profile benchmark, most residual healthy false positives after
+        the menstrual gate are male, while true iron-deficiency positives remain
+        overwhelmingly female.  Male iron deficiency is clinically real but much
+        rarer, so low-confidence male scores should not surface without stronger
+        evidence.  Gate: if male AND score < 0.30, downweight ×0.25.
 
         Prediabetes gate
         ----------------
@@ -787,6 +908,7 @@ class ModelRunner:
         # ── Iron-deficiency menstrual gate ──────────────────────────────────────
         if "iron_deficiency" in scores:
             female = str(ctx.get("gender", "")).lower() == "female"
+            male   = str(ctx.get("gender", "")).lower() == "male"
             age    = float(ctx.get("age_years", 0) or 0)
             if female and age > 45:
                 # Read rhq031 from patient_context (threaded in by score_raw from
@@ -807,6 +929,16 @@ class ModelRunner:
                             )
                     except (TypeError, ValueError):
                         pass
+
+            if male:
+                original = scores["iron_deficiency"]
+                if original < 0.30:
+                    scores["iron_deficiency"] = round(original * 0.25, 4)
+                    log.debug(
+                        "iron_deficiency male cleanup gate applied (score < 0.30): "
+                        "%.4f → %.4f",
+                        original, scores["iron_deficiency"],
+                    )
 
         # ── Prediabetes gate ────────────────────────────────────────────────────
         # Only suppress for users who are both very lean (BMI < 21) AND have
