@@ -235,7 +235,7 @@ USER_FACING_THRESHOLDS = {
     "prediabetes":           0.45,   # raised 0.40→0.45 on 2026-03-27 second-pass tightening: high-recall yellow model still over-flagged
     "thyroid":               0.75,   # retained legacy strict cleanup after ML-THYROID-02 v3 validation failed to beat v2 cleanly on the 760 cohort
     "electrolyte_imbalance": 0.46,   # raised 0.40→0.46: flag 54%→34%, recall 40%→15%
-    "perimenopause":         0.40,
+    "perimenopause":         0.30,
     "sleep_disorder":        0.75,   # raised 0.70→0.75 on 2026-03-26 optional cleanup: precision 10.9%→13.1%, flag 24.5%→16.5%, recall 25.0%→20.3%
     "vitamin_d_deficiency":   0.48,
 }
