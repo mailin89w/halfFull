@@ -62,7 +62,7 @@ logging.basicConfig(
 )
 log = logging.getLogger("model_runner")
 
-_DIR  = Path(os.path.dirname(os.path.abspath(__file__)))
+_DIR = Path(os.path.dirname(os.path.abspath(__file__)))
 _ROOT = _DIR.parent
 
 # ── Registry — promoted production artifacts ───────────────────────────────────
@@ -166,25 +166,24 @@ MODEL_REGISTRY_AUDIT: dict[str, dict[str, str]] = {
 }
 
 MODEL_REGISTRY = {
-    condition: audit["artifact"]
-    for condition, audit in MODEL_REGISTRY_AUDIT.items()
+    condition: audit["artifact"] for condition, audit in MODEL_REGISTRY_AUDIT.items()
 }
 
 # Per-model recommended operating thresholds
 # (lowest t where OOF precision >= 17%, maximising recall — internal model property)
 RECOMMENDED_THRESHOLDS = {
-    "anemia":                0.40,
+    "anemia": 0.40,
     "electrolyte_imbalance": 0.60,
-    "kidney":                0.66,
-    "liver":                 0.10,
-    "prediabetes":           0.53,
-    "sleep_disorder":        0.55,
-    "thyroid":               0.60,
-    "hidden_inflammation":   0.41,
-    "perimenopause":         0.55,
-    "hepatitis_bc":          0.15,
-    "iron_deficiency":       0.15,
-    "vitamin_d_deficiency":   0.40,
+    "kidney": 0.66,
+    "liver": 0.10,
+    "prediabetes": 0.53,
+    "sleep_disorder": 0.75,
+    "thyroid": 0.60,
+    "hidden_inflammation": 0.41,
+    "perimenopause": 0.30,
+    "hepatitis_bc": 0.15,
+    "iron_deficiency": 0.15,
+    "vitamin_d_deficiency": 0.40,
 }
 
 # Per-disease user-facing filtering criteria
@@ -226,36 +225,36 @@ RECOMMENDED_THRESHOLDS = {
 #                                  healthy flag rate below 5%; recall cost remains
 #                                  material, so keep Bayesian trigger lower
 USER_FACING_THRESHOLDS = {
-    "hepatitis_bc":          0.10,
-    "liver":                 0.07,
-    "iron_deficiency":       0.20,
-    "kidney":                0.35,   # raised 0.25→0.35 on 2026-03-27 second-pass tightening: trade recall for materially lower user-facing alert burden
-    "anemia":                0.40,   # v6 symptom-bundle model promoted 2026-03-31 to recover recall after bias fix; local 760 tests held healthy FP at 2%
-    "hidden_inflammation":   0.40,   # raised 0.30→0.40 on 2026-03-26 quick-win sweep: precision 6.3%→8.2%, flag 55.3%→36.5%, recall 46.7%→40.0%
-    "prediabetes":           0.45,   # raised 0.40→0.45 on 2026-03-27 second-pass tightening: high-recall yellow model still over-flagged
-    "thyroid":               0.75,   # retained legacy strict cleanup after ML-THYROID-02 v3 validation failed to beat v2 cleanly on the 760 cohort
-    "electrolyte_imbalance": 0.46,   # raised 0.40→0.46: flag 54%→34%, recall 40%→15%
-    "perimenopause":         0.30,
-    "sleep_disorder":        0.75,   # raised 0.70→0.75 on 2026-03-26 optional cleanup: precision 10.9%→13.1%, flag 24.5%→16.5%, recall 25.0%→20.3%
-    "vitamin_d_deficiency":   0.48,
+    "hepatitis_bc": 0.10,
+    "liver": 0.07,
+    "iron_deficiency": 0.20,
+    "kidney": 0.35,  # raised 0.25→0.35 on 2026-03-27 second-pass tightening: trade recall for materially lower user-facing alert burden
+    "anemia": 0.40,  # v6 symptom-bundle model promoted 2026-03-31 to recover recall after bias fix; local 760 tests held healthy FP at 2%
+    "hidden_inflammation": 0.40,  # raised 0.30→0.40 on 2026-03-26 quick-win sweep: precision 6.3%→8.2%, flag 55.3%→36.5%, recall 46.7%→40.0%
+    "prediabetes": 0.45,  # raised 0.40→0.45 on 2026-03-27 second-pass tightening: high-recall yellow model still over-flagged
+    "thyroid": 0.75,  # retained legacy strict cleanup after ML-THYROID-02 v3 validation failed to beat v2 cleanly on the 760 cohort
+    "electrolyte_imbalance": 0.46,  # raised 0.40→0.46: flag 54%→34%, recall 40%→15%
+    "perimenopause": 0.30,
+    "sleep_disorder": 0.75,  # raised 0.70→0.75 on 2026-03-26 optional cleanup: precision 10.9%→13.1%, flag 24.5%→16.5%, recall 25.0%→20.3%
+    "vitamin_d_deficiency": 0.48,
 }
 
 # Lower thresholds used only to decide which conditions enter Bayesian review.
 # This keeps borderline cases alive for follow-up questions without forcing
 # them into the user-facing shortlist.
 BAYESIAN_TRIGGER_THRESHOLDS = {
-    "hepatitis_bc":          0.10,
-    "liver":                 0.10,
-    "iron_deficiency":       0.15,
-    "kidney":                0.25,
-    "anemia":                0.35,
-    "hidden_inflammation":   0.30,
-    "prediabetes":           0.40,
-    "thyroid":               0.50,
+    "hepatitis_bc": 0.10,
+    "liver": 0.10,
+    "iron_deficiency": 0.15,
+    "kidney": 0.25,
+    "anemia": 0.35,
+    "hidden_inflammation": 0.30,
+    "prediabetes": 0.40,
+    "thyroid": 0.50,
     "electrolyte_imbalance": 0.46,
-    "perimenopause":         0.40,
-    "sleep_disorder":        0.70,
-    "vitamin_d_deficiency":   0.20,
+    "perimenopause": 0.40,
+    "sleep_disorder": 0.70,
+    "vitamin_d_deficiency": 0.20,
 }
 
 # Backward-compatible alias: existing eval/report code expects FILTER_CRITERIA
@@ -296,18 +295,24 @@ SCORE_RANGES: dict[str, tuple[float, float]] = {
     # Observed across 600-profile eval cohort (evals/cohort/profiles.json).
     # v3 models (anemia, iron_deficiency, hidden_inflammation) re-calibrated 2026-03-23.
     # All other models re-calibrated 2026-03-26 (eval obs max/min updated for v3 pipeline).
-    "anemia":                (0.025, 0.991),   # v3 — C=0.05, 38 feats
-    "electrolyte_imbalance": (0.213, 0.740),   # updated: eval max was 0.690, obs max now 0.730
-    "kidney":                (0.059, 0.925),   # updated: eval max was 0.882, obs max now 0.916
-    "liver":                 (0.007, 0.553),
-    "prediabetes":           (0.267, 0.820),   # updated: eval max was 0.758, obs max now 0.815
-    "sleep_disorder":        (0.346, 0.995),
-    "thyroid":               (0.078, 0.965),
-    "hidden_inflammation":   (0.043, 0.750),   # v3 — 26 feats + bmi; max from eval (0.737)
-    "perimenopause":         (0.000, 0.988),
-    "hepatitis_bc":          (0.005, 0.524),
-    "iron_deficiency":       (0.006, 0.451),   # v4 — 35 feats, no CBC markers (600-profile cohort: min 0.0056, max 0.4511)
-    "vitamin_d_deficiency":   (0.000, 0.942),  # NHANES 2017-2018 aligned RF+cal model
+    "anemia": (0.025, 0.991),  # v3 — C=0.05, 38 feats
+    "electrolyte_imbalance": (
+        0.213,
+        0.740,
+    ),  # updated: eval max was 0.690, obs max now 0.730
+    "kidney": (0.059, 0.925),  # updated: eval max was 0.882, obs max now 0.916
+    "liver": (0.007, 0.553),
+    "prediabetes": (0.267, 0.820),  # updated: eval max was 0.758, obs max now 0.815
+    "sleep_disorder": (0.346, 0.995),
+    "thyroid": (0.078, 0.965),
+    "hidden_inflammation": (0.043, 0.750),  # v3 — 26 feats + bmi; max from eval (0.737)
+    "perimenopause": (0.000, 0.988),
+    "hepatitis_bc": (0.005, 0.524),
+    "iron_deficiency": (
+        0.006,
+        0.451,
+    ),  # v4 — 35 feats, no CBC markers (600-profile cohort: min 0.0056, max 0.4511)
+    "vitamin_d_deficiency": (0.000, 0.942),  # NHANES 2017-2018 aligned RF+cal model
 }
 
 # Population-mean score across ALL profiles (positive + negative + healthy).
@@ -318,18 +323,18 @@ SCORE_RANGES: dict[str, tuple[float, float]] = {
 # (sleep_disorder mean=0.755, thyroid mean=0.643) are correctly de-weighted
 # relative to models with lower baselines and higher discriminating power.
 SCORE_MEANS: dict[str, float] = {
-    "anemia":                0.498,   # v3 — eval cohort mean (600 profiles); was 0.478 v2
+    "anemia": 0.498,  # v3 — eval cohort mean (600 profiles); was 0.478 v2
     "electrolyte_imbalance": 0.491,  # updated 2026-03-26: was 0.458
-    "kidney":                0.426,  # updated 2026-03-26: was 0.380
-    "liver":                 0.072,  # updated 2026-03-26: was 0.060
-    "prediabetes":           0.557,  # updated 2026-03-26: was 0.523
-    "sleep_disorder":        0.781,  # updated 2026-03-26: was 0.755; dominant — mean-floor correction critical
-    "thyroid":               0.662,  # updated 2026-03-26: was 0.643; dominant — mean-floor correction critical
-    "hidden_inflammation":   0.217,  # v3 — eval cohort mean; was 0.104 v2 (bmi raises NHANES baseline to 0.423 but eval mean is lower)
-    "perimenopause":         0.306,  # updated 2026-03-26: was 0.297
-    "hepatitis_bc":          0.044,
-    "iron_deficiency":       0.082,  # v4 — 600-profile cohort mean (was 0.038 v3 with CBC features)
-    "vitamin_d_deficiency":   0.283,  # NHANES 2017-2018 aligned RF+cal model mean score
+    "kidney": 0.426,  # updated 2026-03-26: was 0.380
+    "liver": 0.072,  # updated 2026-03-26: was 0.060
+    "prediabetes": 0.557,  # updated 2026-03-26: was 0.523
+    "sleep_disorder": 0.781,  # updated 2026-03-26: was 0.755; dominant — mean-floor correction critical
+    "thyroid": 0.662,  # updated 2026-03-26: was 0.643; dominant — mean-floor correction critical
+    "hidden_inflammation": 0.217,  # v3 — eval cohort mean; was 0.104 v2 (bmi raises NHANES baseline to 0.423 but eval mean is lower)
+    "perimenopause": 0.306,  # updated 2026-03-26: was 0.297
+    "hepatitis_bc": 0.044,
+    "iron_deficiency": 0.082,  # v4 — 600-profile cohort mean (was 0.038 v3 with CBC features)
+    "vitamin_d_deficiency": 0.283,  # NHANES 2017-2018 aligned RF+cal model mean score
 }
 
 # Sex-specific floors for iron_deficiency.
@@ -340,8 +345,9 @@ IRON_DEF_SEX_FLOORS: dict[str, float] = {
     # v3 — per-sex baseline from eval cohort (non-iron profiles only, 2026-03-23)
     # v2 was Female=0.010, Male=0.004 (v2 model max 0.155); v3 CBC features push range to 0.85
     "Female": 0.009,
-    "Male":   0.006,
+    "Male": 0.006,
 }
+
 
 def rank_score(condition: str, prob: float, gender: str | None = None) -> float:
     """
@@ -405,10 +411,10 @@ def _gender_from_context(patient_context: dict | None) -> str | None:
 
 # Education ordinal encoding (mirrors training setup)
 _EDU_ORDER = {
-    "Less than 9th grade":      0,
-    "9-11th grade":             1,
-    "High school / GED":        2,
-    "Some college / AA":        3,
+    "Less than 9th grade": 0,
+    "9-11th grade": 1,
+    "High school / GED": 2,
+    "Some college / AA": 3,
     "College graduate or above": 4,
 }
 
@@ -419,19 +425,19 @@ _EDU_ORDER = {
 # human-readable names, and is applied BEFORE normalization.
 QUIZ_FIELD_ALIASES: dict[str, str] = {
     # old quiz name                   →  model / normalizer column name
-    "ldl_cholesterol_mg_dl":           "LBDLDL_ldl_cholesterol_friedewald_mg_dl",
-    "total_protein_g_dl":              "LBXSTP_total_protein_g_dl",
-    "wbc_1000_cells_ul":               "LBXWBCSI_white_blood_cell_count_1000_cells_ul",
+    "ldl_cholesterol_mg_dl": "LBDLDL_ldl_cholesterol_friedewald_mg_dl",
+    "total_protein_g_dl": "LBXSTP_total_protein_g_dl",
+    "wbc_1000_cells_ul": "LBXWBCSI_white_blood_cell_count_1000_cells_ul",
     # quiz education field → canonical name expected by _add_derived_columns
-    "dmdeduc2":                        "education",
+    "dmdeduc2": "education",
     # dbp_mean / sbp_mean removed from quiz — kept here so stale submissions
     # are silently dropped rather than passed through to the normalizer
-    "dbp_mean":                        None,
-    "sbp_mean":                        None,
-    "glucose_mg_dl":                   None,
+    "dbp_mean": None,
+    "sbp_mean": None,
+    "glucose_mg_dl": None,
     "bpq040a___taking_prescription_for_hypertension": None,
-    "mcq040___had_asthma_attack_in_past_year":        None,
-    "paq605___vigorous_work_activity":                None,
+    "mcq040___had_asthma_attack_in_past_year": None,
+    "paq605___vigorous_work_activity": None,
     "alq170_helper_times_4_5_drinks_one_occasion_30d": None,
 }
 
@@ -456,6 +462,7 @@ _PREGNANCY_CODES: dict[int, str] = {
 
 
 # ── InputNormalizer ─────────────────────────────────────────────────────────────
+
 
 class InputNormalizer:
     """
@@ -526,8 +533,11 @@ class InputNormalizer:
                 log.warning("Could not load feature list for '%s': %s", condition, e)
                 self._model_features[condition] = []
 
-        log.info("InputNormalizer ready — %d models, %d sentinel rules",
-                 len(self._model_features), len(self._sentinel_map))
+        log.info(
+            "InputNormalizer ready — %d models, %d sentinel rules",
+            len(self._model_features),
+            len(self._sentinel_map),
+        )
 
     # ── Internal helpers ────────────────────────────────────────────────────────
 
@@ -592,7 +602,9 @@ class InputNormalizer:
             + (hosp == 1).astype(float)
         )
         out["fatigue_sob_combo"] = ((fat >= 1) & (sob <= 2)).astype(float)
-        out["female_repro_signal"] = ((reg_periods == 1) | (preg_now == 1)).astype(float)
+        out["female_repro_signal"] = ((reg_periods == 1) | (preg_now == 1)).astype(
+            float
+        )
 
         # thyroid-specific bundles: reward a more hypothyroid-shaped metabolic
         # pattern while making the sleep-heavy lookalike pattern explicit.
@@ -644,7 +656,9 @@ class InputNormalizer:
         out["male_chronic_illness_bundle"] = (
             (out["gender_female"].fillna(0) < 0.5).astype(float)
             + (health >= 3).astype(float)
-            + (out.get("med_count", pd.Series(0.0, index=out.index)).fillna(0) >= 3).astype(float)
+            + (
+                out.get("med_count", pd.Series(0.0, index=out.index)).fillna(0) >= 3
+            ).astype(float)
             + (sleep_trouble == 2).astype(float)
         )
 
@@ -687,7 +701,7 @@ class InputNormalizer:
                 target = QUIZ_FIELD_ALIASES[k]
                 if target is None:
                     log.debug("Dropping deprecated quiz field '%s'", k)
-                    continue           # silently drop removed fields
+                    continue  # silently drop removed fields
                 log.debug("Remapping quiz field '%s' → '%s'", k, target)
                 resolved[target] = v
             else:
@@ -695,10 +709,16 @@ class InputNormalizer:
 
         # Decode NHANES numeric codes to text labels expected by _add_derived_columns
         if "gender" in resolved and isinstance(resolved["gender"], (int, float)):
-            resolved["gender"] = _GENDER_CODES.get(int(resolved["gender"]), resolved["gender"])
+            resolved["gender"] = _GENDER_CODES.get(
+                int(resolved["gender"]), resolved["gender"]
+            )
         if "education" in resolved and isinstance(resolved["education"], (int, float)):
-            resolved["education"] = _EDU_CODES.get(int(resolved["education"]), resolved["education"])
-        if "pregnancy_status" in resolved and isinstance(resolved["pregnancy_status"], (int, float)):
+            resolved["education"] = _EDU_CODES.get(
+                int(resolved["education"]), resolved["education"]
+            )
+        if "pregnancy_status" in resolved and isinstance(
+            resolved["pregnancy_status"], (int, float)
+        ):
             resolved["pregnancy_status"] = _PREGNANCY_CODES.get(
                 int(resolved["pregnancy_status"]), resolved["pregnancy_status"]
             )
@@ -726,6 +746,7 @@ class InputNormalizer:
 
 # ── ModelRunner ─────────────────────────────────────────────────────────────────
 
+
 class ModelRunner:
     """
     Loads all v2 disease models on construction and scores inputs in parallel.
@@ -750,8 +771,10 @@ class ModelRunner:
         Normalization helper (loaded lazily on first call to score_raw()).
     """
 
-    _NORMALIZER_PATH    = _ROOT / "models" / "nhanes_hybrid_normalizer.joblib"
-    _SENTINEL_META_PATH = _ROOT / "data" / "processed" / "normalized" / "nhanes_ml_ready_metadata.json"
+    _NORMALIZER_PATH = _ROOT / "models" / "nhanes_hybrid_normalizer.joblib"
+    _SENTINEL_META_PATH = (
+        _ROOT / "data" / "processed" / "normalized" / "nhanes_ml_ready_metadata.json"
+    )
 
     def __init__(
         self,
@@ -760,13 +783,15 @@ class ModelRunner:
     ) -> None:
         import joblib
 
-        self._models_dir  = Path(models_dir)
+        self._models_dir = Path(models_dir)
         self._max_workers = max_workers
-        self._pipelines:  dict = {}
+        self._pipelines: dict = {}
         self._normalizer: Optional[InputNormalizer] = None
         self.failed_models: list = []
 
-        log.info("Loading %d disease models from %s", len(MODEL_REGISTRY), self._models_dir)
+        log.info(
+            "Loading %d disease models from %s", len(MODEL_REGISTRY), self._models_dir
+        )
 
         for condition, filename in MODEL_REGISTRY.items():
             path = self._models_dir / filename
@@ -782,8 +807,10 @@ class ModelRunner:
 
         log.info(
             "Loaded %d / %d models  (%d failed: %s)",
-            len(self._pipelines), len(MODEL_REGISTRY),
-            len(self.failed_models), self.failed_models or "none",
+            len(self._pipelines),
+            len(MODEL_REGISTRY),
+            len(self.failed_models),
+            self.failed_models or "none",
         )
 
     # ── Lazy normalizer ─────────────────────────────────────────────────────────
@@ -791,15 +818,17 @@ class ModelRunner:
     def _get_normalizer(self) -> InputNormalizer:
         if self._normalizer is None:
             self._normalizer = InputNormalizer(
-                models_dir        = self._models_dir,
-                normalizer_path   = self._NORMALIZER_PATH,
-                sentinel_meta_path = self._SENTINEL_META_PATH,
+                models_dir=self._models_dir,
+                normalizer_path=self._NORMALIZER_PATH,
+                sentinel_meta_path=self._SENTINEL_META_PATH,
             )
         return self._normalizer
 
     # ── Eligibility gate ────────────────────────────────────────────────────────
 
-    def _is_perimenopause_eligible(self, patient_context: dict[str, Any] | None) -> bool:
+    def _is_perimenopause_eligible(
+        self, patient_context: dict[str, Any] | None
+    ) -> bool:
         """
         Returns True only if patient is confirmed female AND aged 35-55.
         Defaults to False when context is absent or incomplete.
@@ -807,7 +836,7 @@ class ModelRunner:
         if not patient_context:
             return False
 
-        age    = patient_context.get("age_years")
+        age = patient_context.get("age_years")
         gender = patient_context.get("gender")
 
         if age is None or gender is None:
@@ -821,7 +850,7 @@ class ModelRunner:
         if isinstance(gender, str):
             is_female = gender.strip().lower() == "female"
         else:
-            is_female = (gender == 2)
+            is_female = gender == 2
 
         return is_female and 35.0 <= age <= 55.0
 
@@ -865,7 +894,9 @@ class ModelRunner:
             # Perimenopause hard gate
             if condition == "perimenopause":
                 if not self._is_perimenopause_eligible(patient_context):
-                    log.info("perimenopause ineligible (not female 35-55) — returning 0.0")
+                    log.info(
+                        "perimenopause ineligible (not female 35-55) — returning 0.0"
+                    )
                     return condition, 0.0
 
             if condition not in feature_vectors:
@@ -883,14 +914,18 @@ class ModelRunner:
                 log.warning("Inference error for '%s': %s", condition, exc)
                 return condition, None
 
-        with concurrent.futures.ThreadPoolExecutor(max_workers=self._max_workers) as pool:
+        with concurrent.futures.ThreadPoolExecutor(
+            max_workers=self._max_workers
+        ) as pool:
             futures = {pool.submit(_score_one, cond): cond for cond in self._pipelines}
             for future in concurrent.futures.as_completed(futures):
                 condition, prob = future.result()
                 if prob is not None:
                     results[condition] = round(prob, 4)
 
-        results = self._apply_post_score_gates(results, feature_vectors, patient_context)
+        results = self._apply_post_score_gates(
+            results, feature_vectors, patient_context
+        )
         return results
 
     # ── Post-score gates ─────────────────────────────────────────────────────────
@@ -983,8 +1018,8 @@ class ModelRunner:
         # ── Iron-deficiency menstrual gate ──────────────────────────────────────
         if "iron_deficiency" in scores:
             female = str(ctx.get("gender", "")).lower() == "female"
-            male   = str(ctx.get("gender", "")).lower() == "male"
-            age    = float(ctx.get("age_years", 0) or 0)
+            male = str(ctx.get("gender", "")).lower() == "male"
+            age = float(ctx.get("age_years", 0) or 0)
             if female and age > 45:
                 # Read rhq031 from patient_context (threaded in by score_raw from
                 # raw_inputs). Raw NHANES encoding: 1 = yes (regular), 2 = no.
@@ -1000,7 +1035,9 @@ class ModelRunner:
                             log.debug(
                                 "iron_deficiency menstrual gate applied (female, age=%.0f, "
                                 "no regular periods): %.4f → %.4f",
-                                age, original, scores["iron_deficiency"],
+                                age,
+                                original,
+                                scores["iron_deficiency"],
                             )
                     except (TypeError, ValueError):
                         pass
@@ -1012,7 +1049,8 @@ class ModelRunner:
                     log.debug(
                         "iron_deficiency male cleanup gate applied (score < 0.30): "
                         "%.4f → %.4f",
-                        original, scores["iron_deficiency"],
+                        original,
+                        scores["iron_deficiency"],
                     )
 
         # ── Prediabetes gate ────────────────────────────────────────────────────
@@ -1031,12 +1069,20 @@ class ModelRunner:
                 raw_glucose = float(ctx.get("raw_fasting_glucose") or 0) or None
             except (TypeError, ValueError):
                 raw_glucose = None
-            if raw_bmi is not None and raw_bmi < 21.0 and raw_glucose is not None and raw_glucose < 85.0:
+            if (
+                raw_bmi is not None
+                and raw_bmi < 21.0
+                and raw_glucose is not None
+                and raw_glucose < 85.0
+            ):
                 original = scores["prediabetes"]
                 scores["prediabetes"] = round(original * 0.5, 4)
                 log.debug(
                     "prediabetes gate applied (raw_bmi=%.1f, raw_glucose=%.1f): %.4f → %.4f",
-                    raw_bmi, raw_glucose, original, scores["prediabetes"],
+                    raw_bmi,
+                    raw_glucose,
+                    original,
+                    scores["prediabetes"],
                 )
 
         # ── Thyroid gate ────────────────────────────────────────────────────────
@@ -1045,14 +1091,17 @@ class ModelRunner:
         # energy" (0 = not at all, 1 = several days, 2 = more than half the days,
         # 3 = nearly every day).  Values < 2 indicate absent/mild fatigue only.
         if "thyroid" in scores:
-            age    = float(ctx.get("age_years", 0) or 0)
+            age = float(ctx.get("age_years", 0) or 0)
             dpq040 = _fv("dpq040___feeling_tired_or_having_little_energy")
             if age < 25.0 and dpq040 is not None and dpq040 < 2.0:
                 original = scores["thyroid"]
                 scores["thyroid"] = round(original * 0.4, 4)
                 log.debug(
                     "thyroid gate applied (age=%.0f, dpq040=%.1f): %.4f → %.4f",
-                    age, dpq040, original, scores["thyroid"],
+                    age,
+                    dpq040,
+                    original,
+                    scores["thyroid"],
                 )
 
             metabolic = _fv("thyroid_metabolic_bundle")
@@ -1071,20 +1120,36 @@ class ModelRunner:
                 scores["thyroid"] = round(original * 0.55, 4)
                 log.debug(
                     "thyroid sleep-heavy cleanup gate applied (sleep=%.1f, sleepish=%.1f, metabolic=%.1f): %.4f → %.4f",
-                    sleep_trouble, sleepish, metabolic, original, scores["thyroid"],
+                    sleep_trouble,
+                    sleepish,
+                    metabolic,
+                    original,
+                    scores["thyroid"],
                 )
 
             gender = str(_gender_from_context(ctx) or "")
             try:
-                general_health = float(ctx.get("raw_general_health")) if ctx.get("raw_general_health") is not None else None
+                general_health = (
+                    float(ctx.get("raw_general_health"))
+                    if ctx.get("raw_general_health") is not None
+                    else None
+                )
             except (TypeError, ValueError):
                 general_health = None
             try:
-                med_count = float(ctx.get("raw_med_count")) if ctx.get("raw_med_count") is not None else None
+                med_count = (
+                    float(ctx.get("raw_med_count"))
+                    if ctx.get("raw_med_count") is not None
+                    else None
+                )
             except (TypeError, ValueError):
                 med_count = None
             try:
-                raw_sleep_trouble = float(ctx.get("raw_sleep_trouble")) if ctx.get("raw_sleep_trouble") is not None else None
+                raw_sleep_trouble = (
+                    float(ctx.get("raw_sleep_trouble"))
+                    if ctx.get("raw_sleep_trouble") is not None
+                    else None
+                )
             except (TypeError, ValueError):
                 raw_sleep_trouble = None
             if (
@@ -1101,7 +1166,11 @@ class ModelRunner:
                 scores["thyroid"] = round(original * 0.6, 4)
                 log.debug(
                     "thyroid older-male polypharmacy gate applied (age=%.0f, health=%.1f, meds=%.1f): %.4f → %.4f",
-                    age, general_health, med_count, original, scores["thyroid"],
+                    age,
+                    general_health,
+                    med_count,
+                    original,
+                    scores["thyroid"],
                 )
 
         # ── Electrolyte gate ────────────────────────────────────────────────────
@@ -1117,7 +1186,10 @@ class ModelRunner:
                 scores["electrolyte_imbalance"] = round(elec_score * 0.3, 4)
                 log.debug(
                     "electrolyte gate applied (kiq044=%.0f, score=%.4f): %.4f → %.4f",
-                    kiq044, elec_score, elec_score, scores["electrolyte_imbalance"],
+                    kiq044,
+                    elec_score,
+                    elec_score,
+                    scores["electrolyte_imbalance"],
                 )
 
         return scores
@@ -1178,13 +1250,15 @@ class ModelRunner:
             if prob < FILTER_CRITERIA.get(cond, 0.35):
                 continue
             rs = rank_score(cond, prob, gender) if RANK_NORMALIZE else prob
-            above.append({
-                "condition":             cond,
-                "probability":           prob,
-                "rank_score":            round(rs, 4),
-                "filter_criterion":      FILTER_CRITERIA.get(cond, 0.35),
-                "recommended_threshold": RECOMMENDED_THRESHOLDS.get(cond),
-            })
+            above.append(
+                {
+                    "condition": cond,
+                    "probability": prob,
+                    "rank_score": round(rs, 4),
+                    "filter_criterion": FILTER_CRITERIA.get(cond, 0.35),
+                    "recommended_threshold": RECOMMENDED_THRESHOLDS.get(cond),
+                }
+            )
 
         return sorted(above, key=lambda x: x["rank_score"], reverse=True)[:top_n]
 
@@ -1225,7 +1299,7 @@ class ModelRunner:
         # Infer patient_context from raw_inputs if not supplied separately
         if patient_context is None:
             patient_context = {
-                "gender":    raw_inputs.get("gender"),
+                "gender": raw_inputs.get("gender"),
                 "age_years": raw_inputs.get("age_years"),
             }
 
@@ -1238,13 +1312,19 @@ class ModelRunner:
         )
         patient_context["raw_bmi"] = raw_inputs.get("bmi")
         patient_context["raw_fasting_glucose"] = raw_inputs.get("fasting_glucose_mg_dl")
-        patient_context["raw_general_health"] = raw_inputs.get("huq010___general_health_condition")
+        patient_context["raw_general_health"] = raw_inputs.get(
+            "huq010___general_health_condition"
+        )
         patient_context["raw_med_count"] = raw_inputs.get("med_count")
-        patient_context["raw_sleep_trouble"] = raw_inputs.get("slq050___ever_told_doctor_had_trouble_sleeping?")
+        patient_context["raw_sleep_trouble"] = raw_inputs.get(
+            "slq050___ever_told_doctor_had_trouble_sleeping?"
+        )
 
         feature_vectors = self._get_normalizer().build_feature_vectors(raw_inputs)
-        scores          = self.run_all_with_context(feature_vectors, patient_context)
-        return self.filter_and_rank(scores, top_n=top_n, patient_context=patient_context)
+        scores = self.run_all_with_context(feature_vectors, patient_context)
+        return self.filter_and_rank(
+            scores, top_n=top_n, patient_context=patient_context
+        )
 
     def score(
         self,
@@ -1257,8 +1337,12 @@ class ModelRunner:
 
         For production use prefer ``score_raw()`` which handles normalization.
         """
-        scores = self.run_all_with_context(feature_vectors, patient_context=patient_context)
-        return self.filter_and_rank(scores, top_n=top_n, patient_context=patient_context)
+        scores = self.run_all_with_context(
+            feature_vectors, patient_context=patient_context
+        )
+        return self.filter_and_rank(
+            scores, top_n=top_n, patient_context=patient_context
+        )
 
 
 # ── Standalone smoke-test ───────────────────────────────────────────────────────
@@ -1275,8 +1359,8 @@ if __name__ == "__main__":
     # ── Test A: all raw scores + per-disease filtering ───────────────────────
     print("\n-- All 11 scores (female 42, minimal input) --")
     raw_minimal = {"gender": "Female", "age_years": 42}
-    norm   = runner._get_normalizer()
-    fvecs  = norm.build_feature_vectors(raw_minimal)
+    norm = runner._get_normalizer()
+    fvecs = norm.build_feature_vectors(raw_minimal)
     ctx_f42 = {"gender": "Female", "age_years": 42}
     all_scores = runner.run_all_with_context(fvecs, patient_context=ctx_f42)
 
@@ -1284,27 +1368,35 @@ if __name__ == "__main__":
     print("  " + "-" * 52)
     for cond, prob in sorted(all_scores.items(), key=lambda x: x[1], reverse=True):
         criterion = FILTER_CRITERIA.get(cond, 0.35)
-        passes    = "✓" if prob >= criterion else "·"
+        passes = "✓" if prob >= criterion else "·"
         print(f"  {cond:<24}  {prob:>7.4f}  {criterion:>7.2f}  {passes:>6}")
 
     print("\n-- filter_and_rank (per-disease criteria, top_n=3) --")
     shortlist = runner.filter_and_rank(all_scores, top_n=3)
     if shortlist:
         for rank, item in enumerate(shortlist, 1):
-            print(f"  #{rank}  {item['condition']:<24}  p={item['probability']:.4f}"
-                  f"  filter={item['filter_criterion']}  rec_thr={item['recommended_threshold']}")
+            print(
+                f"  #{rank}  {item['condition']:<24}  p={item['probability']:.4f}"
+                f"  filter={item['filter_criterion']}  rec_thr={item['recommended_threshold']}"
+            )
     else:
         print("  No condition cleared its per-disease criterion.")
 
     # ── Test B: perimenopause eligibility checks ─────────────────────────────
     print("\n-- perimenopause eligibility --")
-    no_ctx   = runner.run_all_with_context(fvecs, patient_context=None)
-    male_ctx = runner.run_all_with_context(fvecs, patient_context={"gender": "Male",   "age_years": 42})
-    f60_ctx  = runner.run_all_with_context(fvecs, patient_context={"gender": "Female", "age_years": 60})
+    no_ctx = runner.run_all_with_context(fvecs, patient_context=None)
+    male_ctx = runner.run_all_with_context(
+        fvecs, patient_context={"gender": "Male", "age_years": 42}
+    )
+    f60_ctx = runner.run_all_with_context(
+        fvecs, patient_context={"gender": "Female", "age_years": 60}
+    )
 
     print(f"  no context            → {no_ctx.get('perimenopause')}  (expect 0.0)")
     print(f"  Male 42               → {male_ctx.get('perimenopause')}  (expect 0.0)")
-    print(f"  Female 42             → {all_scores.get('perimenopause')}  (expect scored)")
+    print(
+        f"  Female 42             → {all_scores.get('perimenopause')}  (expect scored)"
+    )
     print(f"  Female 60 (too old)   → {f60_ctx.get('perimenopause')}  (expect 0.0)")
 
     if runner.failed_models:
