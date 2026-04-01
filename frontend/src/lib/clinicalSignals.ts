@@ -139,6 +139,8 @@ const URGENCY_RULES: Record<string, { urgent: string[]; soon: string[] }> = {
 
 function normalizeConditionId(conditionId: string): string {
   if (conditionId === 'hepatitis_bc') return 'hepatitis';
+  if (conditionId === 'hypothyroidism') return 'thyroid';
+  if (conditionId === 'kidney_disease') return 'kidney';
   if (conditionId === 'electrolyte_imbalance') return 'electrolytes';
   return conditionId;
 }
