@@ -105,6 +105,7 @@ MUST_ASK_CONDITIONS = {
     "thyroid",
     "kidney",
     "prediabetes",
+    "perimenopause",
 }
 DISEASE_LAYER_POLICY = {
     # End-to-end orchestration policy per disease. We keep Bayes itself fixed,
@@ -119,7 +120,7 @@ DISEASE_LAYER_POLICY = {
     "hepatitis": {"max_questions": 4, "screen_priority": 1.12},
     "electrolytes": {"max_questions": 4, "screen_priority": 1.04},
     "sleep_disorder": {"max_questions": 3, "screen_priority": 1.02},
-    "perimenopause": {"max_questions": 3, "screen_priority": 1.00},
+    "perimenopause": {"max_questions": 5, "screen_priority": 1.12},
     "prediabetes": {"max_questions": 3, "screen_priority": 0.90},
     "liver": {"max_questions": 3, "screen_priority": 0.88},
     "vitamin_d_deficiency": {"max_questions": 2, "screen_priority": 0.82},
