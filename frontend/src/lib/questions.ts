@@ -133,6 +133,24 @@ export function getQuestion(id: string): Question | undefined {
   return QUESTION_MAP[id];
 }
 
+export function getQuestionDisplayText(
+  question: Question,
+  answers?: Record<string, unknown>
+): string {
+  if (question.id === 'alq151___ever_have_4/5_or_more_drinks_every_day?') {
+    const gender = String(answers?.gender ?? '');
+    if (gender === '2') {
+      return 'Have you ever had 4 or more drinks on almost every day?';
+    }
+    if (gender === '1') {
+      return 'Have you ever had 5 or more drinks on almost every day?';
+    }
+    return 'Have you ever had 5 or more drinks on almost every day?';
+  }
+
+  return question.text;
+}
+
 function evaluateConditional(
   conditional: Conditional,
   parentQuestion: Question | undefined,

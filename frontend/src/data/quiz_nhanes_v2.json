@@ -131,13 +131,14 @@
           {
             "id": "height_cm",
             "text": "What is your height?",
-            "help_text": "Used with your weight to calculate BMI in the background. Leave blank if unsure.",
+            "help_text": "Leave blank if unsure.",
             "type": "numeric",
             "feature_name": "height_cm",
             "options": [
               {
                 "value": "height_cm",
-                "label": "Height (cm)"
+                "label": "Height (cm)",
+                "unit": "cm"
               }
             ],
             "shown_in_paths": [
@@ -154,13 +155,14 @@
           {
             "id": "weight_kg",
             "text": "What is your weight?",
-            "help_text": "Used with your height to calculate BMI in the background. Leave blank if unsure.",
+            "help_text": "Leave blank if unsure.",
             "type": "numeric",
             "feature_name": "weight_kg",
             "options": [
               {
                 "value": "weight_kg",
-                "label": "Weight (kg)"
+                "label": "Weight (kg)",
+                "unit": "kg"
               }
             ],
             "shown_in_paths": [
@@ -177,13 +179,14 @@
           {
             "id": "waist_cm",
             "text": "What is your waist circumference?",
-            "help_text": "Measure around your belly button in cm. Used to assess metabolic health risk. Leave blank if unsure.",
+            "help_text": "Measure around your belly button. Leave blank if unsure.",
             "type": "numeric",
             "feature_name": "waist_cm",
             "options": [
               {
                 "value": "waist_cm",
-                "label": "Waist (cm)"
+                "label": "Waist (cm)",
+                "unit": "cm"
               }
             ],
             "shown_in_paths": [
@@ -649,7 +652,6 @@
               "full"
             ],
             "screen_group": "weight_goals",
-            "answer_layout": "inline",
             "validation": {
               "required": true
             }
@@ -667,17 +669,18 @@
           {
             "id": "sleep_hours",
             "text": "How many hours do you usually sleep?",
-            "help_text": "Count from when you fall asleep to when you wake up.",
             "type": "dual_numeric",
             "feature_name": "sleep_hours",
             "options": [
               {
                 "value": "sld012___sleep_hours___weekdays_or_workdays",
-                "label": "Weeknights"
+                "label": "Weeknights",
+                "unit": "hrs"
               },
               {
                 "value": "sld013___sleep_hours___weekends",
-                "label": "Weekends"
+                "label": "Weekends",
+                "unit": "hrs"
               }
             ],
             "shown_in_paths": [
@@ -806,7 +809,8 @@
             "options": [
               {
                 "value": "",
-                "label": "Hours per week"
+                "label": "Hours per week",
+                "unit": "hrs"
               }
             ],
             "conditional": {
@@ -921,7 +925,7 @@
           },
           {
             "id": "alq151___ever_have_4/5_or_more_drinks_every_day?",
-            "text": "Have you ever had 4 or more drinks (if female) / 5 or more drinks (if male) on almost every day?",
+            "text": "Have you ever had 4 or more drinks on almost every day?",
             "type": "binary",
             "feature_name": "alq151___ever_have_4/5_or_more_drinks_every_day?",
             "options": [
@@ -1088,7 +1092,7 @@
         "questions": [
           {
             "id": "symptoms_physical",
-            "text": "Physical symptoms",
+            "text": "Do any of these physical symptoms apply to you?",
             "type": "dual_numeric",
             "feature_name": "symptoms_physical",
             "options": [

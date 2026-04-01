@@ -1,7 +1,7 @@
 'use client';
 
 import type { Question } from '@/src/lib/questions';
-import { MODULE_COLORS, MODULE_LABELS } from '@/src/lib/questions';
+import { MODULE_COLORS, MODULE_LABELS, getQuestionDisplayText } from '@/src/lib/questions';
 import { AnswerSingle } from './AnswerSingle';
 import { AnswerNumeric } from './AnswerNumeric';
 
@@ -38,6 +38,7 @@ function renderInput(
           min={question.validation?.min}
           max={question.validation?.max}
           error={typeof error === 'string' ? error : undefined}
+          unit={question.options[0]?.unit}
         />
       );
     default:
@@ -51,6 +52,11 @@ export function QuestionGroupCard({ questions, answers, onAnswer, errors = {} }:
   const first = questions[0];
   const accentColor = MODULE_COLORS[first.module] ?? '#A2B6CB';
   const moduleLabel = MODULE_LABELS[first.module] ?? first.moduleTitle;
+  const leadQuestionIds = new Set([
+    'kiq005___how_often_have_urinary_leakage?',
+    'med_count',
+    'smq020___smoked_at_least_100_cigarettes_in_life',
+  ]);
 
   return (
     <div className="section-card flex flex-col gap-6 p-6">
@@ -65,9 +71,15 @@ export function QuestionGroupCard({ questions, answers, onAnswer, errors = {} }:
       {/* Individual questions */}
       {questions.map((q) => (
         <div key={q.id} className="flex flex-col gap-3">
-          <h3 className="text-[1.15rem] font-semibold leading-snug tracking-[-0.03em] text-[var(--color-ink)]">
-            {q.text}
-          </h3>
+          {leadQuestionIds.has(q.id) ? (
+            <h2 className="text-[1.75rem] font-bold leading-[1] tracking-[-0.05em] text-[var(--color-ink)] sm:text-[2rem]">
+              {getQuestionDisplayText(q, answers)}
+            </h2>
+          ) : (
+            <h3 className="text-[1.15rem] font-semibold leading-snug tracking-[-0.03em] text-[var(--color-ink)]">
+              {getQuestionDisplayText(q, answers)}
+            </h3>
+          )}
           {q.help_text && (
             <p className="-mt-1 max-w-[30rem] text-sm leading-6 text-[var(--color-ink-soft)]">
               {q.help_text}

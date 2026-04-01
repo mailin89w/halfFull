@@ -17,6 +17,10 @@ interface Props {
   min?: number;
   max?: number;
   errors?: Record<string, string>;
+  labelClassName?: string;
+  helpTextClassName?: string;
+  binaryLayout?: 'stacked' | 'inline';
+  stackHelpText?: boolean;
 }
 
 export function AnswerDualNumeric({
@@ -24,6 +28,10 @@ export function AnswerDualNumeric({
   value = {},
   onChange,
   errors = {},
+  labelClassName = 'text-sm font-medium text-[var(--color-ink)]',
+  helpTextClassName = 'ml-1.5 text-xs text-[var(--color-ink-soft)]',
+  binaryLayout = 'inline',
+  stackHelpText = false,
 }: Props) {
   const handleChange = (key: string, raw: string) => {
     onChange({ ...value, [key]: raw });
@@ -34,14 +42,17 @@ export function AnswerDualNumeric({
       {fields.map((field) => (
         <div key={field.value} className="flex flex-col gap-1.5">
           <div>
-            <span className="text-sm font-medium text-[var(--color-ink)]">{field.label}</span>
-            {field.help_text && (
-              <span className="ml-1.5 text-xs text-[var(--color-ink-soft)]">{field.help_text}</span>
+            <span className={labelClassName}>{field.label}</span>
+            {field.help_text && !stackHelpText && (
+              <span className={helpTextClassName}>{field.help_text}</span>
+            )}
+            {field.help_text && stackHelpText && (
+              <p className={helpTextClassName}>{field.help_text}</p>
             )}
           </div>
 
           {field.sub_type === 'binary' ? (
-            <div className="flex gap-2">
+            <div className={binaryLayout === 'stacked' ? 'flex flex-col gap-3' : 'flex gap-2'}>
               {[{ val: '1', label: 'Yes' }, { val: '2', label: 'No' }].map(({ val, label }) => {
                 const selected = value[field.value] === val;
                 return (
@@ -50,13 +61,26 @@ export function AnswerDualNumeric({
                     type="button"
                     onClick={() => handleChange(field.value, val)}
                     className={[
-                      'flex-1 rounded-[1.35rem] border px-4 py-2.5 text-sm font-medium transition-colors',
+                      'rounded-[1.35rem] border px-5 py-4 transition-all duration-150 active:scale-[0.98]',
+                      binaryLayout === 'stacked' ? 'w-full text-left text-base' : 'flex-1 text-sm font-medium',
                       selected
-                        ? 'border-[var(--color-accent)] bg-[var(--color-accent)] text-white'
-                        : 'border-[rgba(151,166,210,0.4)] bg-white text-[var(--color-ink)] hover:border-[var(--color-accent)]',
+                        ? 'border-[rgba(119,101,244,0.2)] bg-[var(--color-accent-soft)] text-[var(--color-ink)] shadow-[0_10px_18px_rgba(119,101,244,0.16)]'
+                        : 'border-[rgba(151,166,210,0.28)] bg-white text-[var(--color-ink)]',
                     ].join(' ')}
                   >
-                    {label}
+                    <div className={binaryLayout === 'stacked' ? 'flex items-center justify-between gap-4' : 'flex items-center justify-center gap-3'}>
+                      <span className={binaryLayout === 'stacked' ? 'font-medium' : ''}>{label}</span>
+                      <span
+                        className={[
+                          'flex h-6 w-6 shrink-0 items-center justify-center rounded-full border text-xs font-bold',
+                          selected
+                            ? 'border-[var(--color-accent)] bg-[var(--color-accent)] text-white'
+                            : 'border-[rgba(9,9,15,0.15)] text-transparent',
+                        ].join(' ')}
+                      >
+                        ✓
+                      </span>
+                    </div>
                   </button>
                 );
               })}
