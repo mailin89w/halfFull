@@ -51,7 +51,7 @@ async function callOpenAIRewrite(
   openaiKey: string,
 ): Promise<RewriteToneResult> {
   const controller = new AbortController();
-  const timeout = setTimeout(() => controller.abort(), 8000);
+  const timeout = setTimeout(() => controller.abort(), 45000);
 
   try {
     const response = await fetch(OPENAI_API_URL, {
