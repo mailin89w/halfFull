@@ -485,13 +485,17 @@ export default function ResultsPage() {
           </div>
 
           {(deep?.nextSteps || recommendedDoctors.length > 0) && (
-            <div className="section-card border-[var(--color-lime)] bg-[rgba(215,240,104,0.18)] px-5 py-4">
-              <h3 className="card-title text-[1.15rem] font-black tracking-[-0.03em] text-[var(--color-ink)]">
-                Next steps - Talk to a doctor
-              </h3>
-              {deep?.nextSteps && <p className="mt-2 text-sm leading-6 text-[var(--color-ink)]">{deep.nextSteps}</p>}
+            <div className="flex flex-col gap-3">
+              <div>
+                <h2 className="text-2xl font-bold tracking-[-0.04em] text-[var(--color-ink)]">
+                  Next steps - Talk to a doctor
+                </h2>
+                {deep?.nextSteps && (
+                  <p className="mt-1 text-sm text-[var(--color-ink-soft)]">{deep.nextSteps}</p>
+                )}
+              </div>
               {recommendedDoctors.length > 0 && (
-                <div className="mt-4 space-y-3">
+                <div className="space-y-3">
                   {recommendedDoctors.map((doctor, index) => {
                     const kit = doctorKits[index];
                     const isOpen = expandedDoctors.includes(index);
@@ -505,19 +509,21 @@ export default function ResultsPage() {
                     return (
                       <div
                         key={`${doctor.specialty}-${index}`}
-                        className="overflow-hidden rounded-[1.2rem] bg-white/85 shadow-[0_6px_18px_rgba(86,98,145,0.1)]"
+                        className="overflow-hidden rounded-[1.8rem] border border-[rgba(151,166,210,0.25)] bg-[var(--color-card)]"
                       >
                         <button
                           type="button"
                           onClick={() => toggleDoctor(index)}
-                          className="flex w-full items-center gap-3 px-4 py-3 text-left"
+                          className="flex w-full items-center gap-4 px-5 py-4 text-left"
                         >
-                          <span className="shrink-0 text-[1.9rem] leading-none">
+                          <span className="shrink-0 text-[2rem] leading-none">
                             {doctorEmojiForSpecialty(doctor.specialty)}
                           </span>
                           <div className="min-w-0 flex-1">
                             <div className="flex flex-wrap items-center gap-2">
-                              <span className="font-bold text-sm text-[var(--color-ink)]">{doctor.specialty}</span>
+                              <span className="card-title text-[1.05rem] font-black tracking-[-0.03em] text-[var(--color-ink)]">
+                                {doctor.specialty}
+                              </span>
                               <span className="rounded-full bg-[var(--color-lime)] px-2 py-0.5 text-[10px] font-bold text-[var(--color-ink)]">
                                 {priorityLabel}
                               </span>
@@ -544,7 +550,7 @@ export default function ResultsPage() {
                         </button>
 
                         {isOpen && kit && (
-                          <div className="space-y-4 border-t border-[rgba(119,101,244,0.15)] px-4 pb-4 pt-3">
+                          <div className="space-y-4 border-t border-[rgba(119,101,244,0.15)] bg-[var(--color-card)] px-5 pb-6 pt-4">
                             {kit.whatToSay && (
                               <div className="rounded-[1rem] border border-[rgba(119,101,244,0.3)] bg-[rgba(119,101,244,0.06)] px-3 py-3">
                                 <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-[var(--color-ink-soft)]">

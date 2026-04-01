@@ -184,9 +184,9 @@ export function DiagnosisCard({ diagnosis, personalNote, confidence, urgency, re
           <p className="text-sm leading-6 text-[var(--color-ink-soft)]">{diagnosis.description}</p>
 
           {(confidence || urgency) && (
-            <div className="grid gap-3 md:grid-cols-2">
+            <div className="grid gap-4 sm:grid-cols-2">
               {confidence && (
-                <div className="rounded-2xl border border-[#d7f06859] bg-[#d7f06859] p-4">
+                <div className="min-w-0 rounded-2xl border border-[#d7f06859] bg-[#d7f06859] p-4">
                   <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-[var(--color-ink-soft)]">
                     Confidence
                   </p>
@@ -199,7 +199,7 @@ export function DiagnosisCard({ diagnosis, personalNote, confidence, urgency, re
                 </div>
               )}
               {urgency && (
-                <div className={`rounded-2xl border p-4 ${URGENCY_CONFIG[urgency.level].border} ${URGENCY_CONFIG[urgency.level].bg}`}>
+                <div className={`min-w-0 rounded-2xl border p-4 ${URGENCY_CONFIG[urgency.level].border} ${URGENCY_CONFIG[urgency.level].bg}`}>
                   <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-[var(--color-ink-soft)]">
                     Urgency
                   </p>
