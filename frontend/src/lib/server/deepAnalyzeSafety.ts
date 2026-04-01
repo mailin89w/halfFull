@@ -24,11 +24,18 @@ Rules:
 - Return valid JSON only, same schema as input`;
 
 type RewriteSource =
+  | 'live_openai_rewrite_success'
+  | 'live_groq_rewrite_fallback_success'
   | 'live_groq_rewrite_success'
+  | 'fallback_no_api_keys'
   | 'fallback_no_groq_key'
+  | 'fallback_openai_http_error'
   | 'fallback_groq_http_error'
+  | 'fallback_openai_parse_failed'
   | 'fallback_parse_failed'
+  | 'fallback_openai_schema_failed'
   | 'fallback_schema_failed'
+  | 'fallback_openai_exception'
   | 'fallback_exception';
 
 export interface RewriteToneResult {
@@ -37,6 +44,83 @@ export interface RewriteToneResult {
   model?: string;
   status?: number;
   errorSnippet?: string;
+}
+
+async function callOpenAIRewrite(
+  report: DeepAnalyzeResult,
+  openaiKey: string,
+): Promise<RewriteToneResult> {
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), 8000);
+
+  try {
+    const response = await fetch(OPENAI_API_URL, {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${openaiKey}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        model: OPENAI_SYNTHESIS_MODEL,
+        messages: [
+          { role: 'system', content: SAFETY_SYSTEM_PROMPT },
+          { role: 'user', content: JSON.stringify(report) },
+        ],
+        max_tokens: 2500,
+        temperature: 0.2,
+        response_format: { type: 'json_object' },
+      }),
+      signal: controller.signal,
+    });
+
+    if (!response.ok) {
+      const errBody = await response.text().catch(() => '');
+      return {
+        data: report,
+        rewriteSource: 'fallback_openai_http_error',
+        model: OPENAI_SYNTHESIS_MODEL,
+        status: response.status,
+        errorSnippet: errBody.slice(0, 200),
+      };
+    }
+
+    const data = await response.json();
+    const content: string = data.choices?.[0]?.message?.content ?? '';
+    const parsed = parseJsonObject(content);
+    if (!parsed) {
+      return {
+        data: report,
+        rewriteSource: 'fallback_openai_parse_failed',
+        model: OPENAI_SYNTHESIS_MODEL,
+        errorSnippet: content.slice(0, 200),
+      };
+    }
+
+    const validation = validateDeepAnalyzeSchema(parsed);
+    if (!validation.ok) {
+      return {
+        data: report,
+        rewriteSource: 'fallback_openai_schema_failed',
+        model: OPENAI_SYNTHESIS_MODEL,
+        errorSnippet: validation.reason.slice(0, 200),
+      };
+    }
+
+    return {
+      data: mergeWithImmutableFields(report, validation.data),
+      rewriteSource: 'live_openai_rewrite_success',
+      model: OPENAI_SYNTHESIS_MODEL,
+    };
+  } catch (err) {
+    return {
+      data: report,
+      rewriteSource: 'fallback_openai_exception',
+      model: OPENAI_SYNTHESIS_MODEL,
+      errorSnippet: String(err).slice(0, 200),
+    };
+  } finally {
+    clearTimeout(timeout);
+  }
 }
 
 function mergeStringArray(original: string[], rewritten?: string[]): string[] {
@@ -343,6 +427,7 @@ export async function synthesizeNarrativeWithGroqV6(
 ): Promise<{
   data: DeepAnalyzeResult | null;
   synthesisSource:
+    | 'live_openai_primary_success'
     | 'live_groq_primary_success'
     | 'live_groq_fallback_success'
     | 'live_openai_fallback_success'
@@ -368,7 +453,25 @@ export async function synthesizeNarrativeWithGroqV6(
     ? synthesisPrompt
     : (synthesisPrompt.fallbackPrompt ?? synthesisPrompt.primaryPrompt);
 
-  // 1. Try primary Groq model (45s)
+  // 1. Prefer OpenAI when available and do not fan out to Groq in that case.
+  if (openaiKey) {
+    const openaiPrimary = await callOpenAISynthesis(primaryPrompt, openaiKey, 45_000);
+    return openaiPrimary.data
+      ? {
+          data: openaiPrimary.data,
+          synthesisSource: 'live_openai_primary_success',
+          model: openaiPrimary.model,
+        }
+      : {
+          data: null,
+          synthesisSource: openaiPrimary.source,
+          model: openaiPrimary.model,
+          status: openaiPrimary.status,
+          errorSnippet: openaiPrimary.errorSnippet,
+        };
+  }
+
+  // 2. Try primary Groq model (45s)
   if (groqKey) {
     const primary = await callGroqSynthesis(primaryPrompt, groqKey, GROQ_SYNTHESIS_MODEL, 45_000);
     if (primary.data) {
@@ -379,7 +482,7 @@ export async function synthesizeNarrativeWithGroqV6(
       };
     }
 
-    // 2. Try smaller Groq model (30s)
+    // 3. Try smaller Groq model (30s)
     console.warn('[synthesis] Primary Groq failed — retrying with Groq fallback model');
     const groqFallback = await callGroqSynthesis(fallbackPrompt, groqKey, GROQ_SYNTHESIS_FALLBACK_MODEL, 30_000);
     if (groqFallback.data) {
@@ -401,19 +504,6 @@ export async function synthesizeNarrativeWithGroqV6(
     }
   }
 
-  // 3. Try OpenAI as final fallback
-  if (openaiKey) {
-    console.warn('[synthesis] Groq exhausted — trying OpenAI fallback');
-    const openaiResult = await callOpenAISynthesis(primaryPrompt, openaiKey, 45_000);
-    return {
-      data: openaiResult.data,
-      synthesisSource: openaiResult.source,
-      model: openaiResult.model,
-      status: openaiResult.status,
-      errorSnippet: openaiResult.errorSnippet,
-    };
-  }
-
   return {
     data: null,
     synthesisSource: 'fallback_no_api_keys',
@@ -424,10 +514,16 @@ export async function rewriteDeepAnalyzeTone(
   report: DeepAnalyzeResult,
 ): Promise<RewriteToneResult> {
   const groqKey = process.env.GROQ_API_KEY;
+  const openaiKey = process.env.OPENAI_API_KEY;
+
+  if (openaiKey) {
+    return callOpenAIRewrite(report, openaiKey);
+  }
+
   if (!groqKey) {
     return {
       data: report,
-      rewriteSource: 'fallback_no_groq_key',
+      rewriteSource: openaiKey ? 'fallback_no_api_keys' : 'fallback_no_groq_key',
     };
   }
 
@@ -498,7 +594,7 @@ export async function rewriteDeepAnalyzeTone(
 
         return {
           data: mergeWithImmutableFields(report, validation.data),
-          rewriteSource: 'live_groq_rewrite_success',
+          rewriteSource: openaiKey ? 'live_groq_rewrite_fallback_success' : 'live_groq_rewrite_success',
           model: GROQ_MODEL,
         };
       } finally {

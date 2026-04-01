@@ -479,6 +479,8 @@ def build_markdown_report(summary: dict[str, Any], manual_review_path: Path, res
     lines.append(f"| Grounding sources | `{summary['grounding_source_counts']}` | Real MedGemma grounding path used by the route |")
     lines.append(f"| Synthesis sources | `{summary['synthesis_source_counts']}` | Real narrative synthesis fallback path used by the route |")
     lines.append(f"| Rewrite sources | `{summary['rewrite_source_counts']}` | Real post-synthesis tone rewrite path used by the route |")
+    lines.append(f"| Cache hit rate | `{summary['cache_hit_rate']:.1%}` | Profiles whose deep-analyze response reused cached LLM work |")
+    lines.append(f"| Cache stage counts | `{summary['cache_stage_counts']}` | Reuse counts by stage: grounding, synthesis, rewrite, all-clear variants |")
     lines.append(f"| Hard-safety applied | `{summary['hard_safety_applied_count']}` | Final responses where hard safety rules changed the real output |")
     lines.append("")
     lines.append("## Section Coverage")
@@ -618,6 +620,7 @@ def main() -> int:
                 "rewrite_error_snippet": requests.utils.unquote(headers["x-deep-analyze-rewrite-error-snippet"]) if "x-deep-analyze-rewrite-error-snippet" in headers else None,
                 "hard_safety_applied": headers.get("x-deep-analyze-hard-safety-applied"),
                 "hard_safety_count": headers.get("x-deep-analyze-hard-safety-count"),
+                "cache_info": headers.get("x-deep-analyze-cache"),
             }
             if status_code == 200 and isinstance(parsed, dict):
                 output_ids = extract_output_condition_ids(parsed)
@@ -660,6 +663,16 @@ def main() -> int:
         for record in results
         if record.get("deep_analyze_headers", {}).get("rewrite_source")
     ))
+    cache_hit_profiles = sum(
+        1
+        for record in results
+        if (record.get("deep_analyze_headers", {}).get("cache_info") or "").strip()
+    )
+    cache_stage_counter = Counter()
+    for record in results:
+        raw_cache = record.get("deep_analyze_headers", {}).get("cache_info") or ""
+        for stage in [part.strip() for part in raw_cache.split(",") if part.strip()]:
+            cache_stage_counter[stage] += 1
     hard_safety_applied_count = sum(
         1
         for record in results
@@ -699,6 +712,8 @@ def main() -> int:
         "grounding_source_counts": grounding_source_counts,
         "synthesis_source_counts": synthesis_source_counts,
         "rewrite_source_counts": rewrite_source_counts,
+        "cache_hit_rate": cache_hit_profiles / len(results) if results else 0.0,
+        "cache_stage_counts": dict(cache_stage_counter),
         "hard_safety_applied_count": hard_safety_applied_count,
         "profile_type_counts": dict(Counter(record.get("profile_type") for record in results)),
         "challenge_bucket_counts": dict(Counter(record.get("challenge_bucket") for record in results)),

@@ -216,7 +216,10 @@ Rules:
 // ─── V6: MedGemma Grounding Prompt (Call 1 — clinical evidence only) ──────────
 
 export type MedGemmaGroundingPromptArgs = {
+  symptomsText: string;
   answeredQuestionsText: string;
+  uploadedLabsText: string;
+  structuredAnswersJson: string;
   bayesianEvidenceText: string;
   scoreSummaryJson: string;
   prioritizedConditions: string[];
@@ -227,7 +230,10 @@ export type MedGemmaGroundingPromptArgs = {
 };
 
 export function buildMedGemmaGroundingPromptV6({
+  symptomsText,
   answeredQuestionsText,
+  uploadedLabsText,
+  structuredAnswersJson,
   bayesianEvidenceText,
   scoreSummaryJson,
   prioritizedConditions,
@@ -259,8 +265,17 @@ ${candidateList}
 ALREADY CONFIRMED CONDITIONS (treat as established facts, do not re-evaluate):
 ${confirmedText}
 
+PATIENT SUMMARY BLOCK:
+${symptomsText}
+
 PATIENT QUESTIONNAIRE ANSWERS:
 ${answeredQuestionsText}
+
+RAW STRUCTURED ANSWERS JSON:
+${structuredAnswersJson}
+
+UPLOADED LABS (raw extracted text plus structured values before normalization):
+${uploadedLabsText}
 
 BAYESIAN CLARIFICATION EVIDENCE:
 ${bayesianEvidenceText}
