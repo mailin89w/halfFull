@@ -156,13 +156,13 @@ async def knn_score(answers: dict):
     distance, and return lab signals that are disproportionately abnormal in
     that neighbourhood (vs. population baseline).
 
-    Toggle off by setting USE_KNN=false in the environment.
+    Toggle on only by setting USE_KNN=true in the environment.
 
     Returns:
         { lab_signals: [...], n_signals: int, k_neighbours: int }
         or { lab_signals: [], n_signals: 0, k_neighbours: 50, disabled: true }
     """
-    if os.environ.get("USE_KNN", "true").lower() == "false":
+    if os.environ.get("USE_KNN", "false").lower() != "true":
         return {"lab_signals": [], "n_signals": 0, "k_neighbours": 50, "disabled": True}
 
     try:

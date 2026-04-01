@@ -21,7 +21,6 @@ interface Props {
     mlScore?: number;
     threshold?: number;
     bayesian?: BayesianConditionTrace | null;
-    clusterSummary?: string;
     synthesisSummary?: string;
   };
 }
@@ -139,15 +138,8 @@ function ReasoningTrace({
             )}
           </div>
 
-          <div className="rounded-[1rem] bg-[rgba(239,185,115,0.14)] px-3 py-3">
-            <p className="text-xs font-semibold text-[var(--color-ink)]">3. KNN / cluster layer</p>
-            <p className="mt-1 text-sm leading-6 text-[var(--color-ink-soft)]">
-              {trace.clusterSummary ?? 'Cluster: no neighbour support available'}
-            </p>
-          </div>
-
           <div className="rounded-[1rem] bg-[rgba(158,169,211,0.14)] px-3 py-3">
-            <p className="text-xs font-semibold text-[var(--color-ink)]">4. MedGemma synthesis</p>
+            <p className="text-xs font-semibold text-[var(--color-ink)]">3. MedGemma synthesis</p>
             <p className="mt-1 text-sm leading-6 text-[var(--color-ink-soft)]">
               {trace.synthesisSummary ?? 'Synthesis: included in MedGemma report narrative'}
             </p>

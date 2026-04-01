@@ -35,6 +35,16 @@ HEADLINE_DEFINITIONS: dict[str, dict[str, str]] = {
         "scope": "healthy_profiles_only",
         "definition": "Fraction of healthy profiles with at least one condition score at or above that condition's user-facing surfacing threshold.",
     },
+    "top1_accuracy_any_true": {
+        "label": "Top-1 Accuracy (any true condition)",
+        "scope": "all_scored_profiles",
+        "definition": "Fraction of scored profiles where the top-ranked model matches any condition present in expected_conditions[].",
+    },
+    "top3_coverage_any_true": {
+        "label": "Top-3 Coverage (any true condition)",
+        "scope": "all_scored_profiles",
+        "definition": "Fraction of scored profiles where at least one model in the top 3 matches any condition present in expected_conditions[].",
+    },
 }
 
 
@@ -61,6 +71,8 @@ def build_layer1_metrics_export(payload: dict[str, Any]) -> dict[str, Any]:
         _headline_row("top1_accuracy_all", report.get("top1_accuracy", 0.0)),
         _headline_row("top1_accuracy_positives_only", report.get("positives_top1_accuracy", 0.0)),
         _headline_row("top3_coverage_all", report.get("top3_coverage", 0.0)),
+        _headline_row("top1_accuracy_any_true", report.get("top1_accuracy_any", 0.0)),
+        _headline_row("top3_coverage_any_true", report.get("top3_coverage_any", 0.0)),
         _headline_row("over_alert_rate_healthy", report.get("over_alert_rate", 0.0)),
     ]
 
@@ -82,10 +94,15 @@ def build_layer1_metrics_export(payload: dict[str, Any]) -> dict[str, Any]:
             "recommended_threshold": registry_meta.get("recommended_threshold"),
             "user_facing_threshold": registry_meta.get("user_facing_threshold", row.get("threshold")),
             "n_positive_target": row.get("n_positive_target"),
+            "n_positive_any": row.get("n_positive_any"),
             "n_flagged": row.get("n_flagged"),
             "n_true_positive": row.get("n_true_positive"),
+            "n_true_positive_any": row.get("n_true_positive_any"),
             "recall": row.get("recall"),
             "precision": row.get("precision"),
+            "any_label_prevalence": row.get("any_label_prevalence"),
+            "any_label_recall": row.get("any_label_recall"),
+            "any_label_precision": row.get("any_label_precision"),
             "flag_rate": row.get("flag_rate"),
             "healthy_flag_rate": healthy.get("healthy_flag_rate"),
             "n_healthy_flagged": healthy.get("n_healthy_flagged"),
@@ -100,4 +117,7 @@ def build_layer1_metrics_export(payload: dict[str, Any]) -> dict[str, Any]:
         "profiles_path": run_metadata.get("profiles_path"),
         "headline_metrics": headline_metrics,
         "per_condition_table": per_condition_rows,
+        "stratified": report.get("stratified"),
+        "comorbidity_pairs": report.get("comorbidity_pairs"),
+        "comorbidity_overall": report.get("comorbidity_overall"),
     }

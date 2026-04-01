@@ -904,22 +904,58 @@ def _eval_profile(profile: dict, scores: dict[str, float] | None) -> dict:
     ptype            = profile.get("profile_type", "")
     target_condition = profile.get("target_condition")
     quiz_path        = profile.get("quiz_path", "full")
+    demographics     = profile.get("demographics", {}) or {}
+    sex              = demographics.get("sex")
+    age              = demographics.get("age")
+
+    def _age_group(age_years: Any) -> str | None:
+        try:
+            age_val = int(age_years)
+        except (TypeError, ValueError):
+            return None
+        if age_val < 18:
+            return "0-17"
+        if age_val < 40:
+            return "18-39"
+        if age_val < 60:
+            return "40-59"
+        return "60+"
+
+    age_group = _age_group(age)
 
     ground_truth      = profile.get("ground_truth", {})
     expected          = ground_truth.get("expected_conditions", [])
     gt_primary        = expected[0]["condition_id"] if expected else None
+    gt_all_conditions = {
+        item["condition_id"]
+        for item in expected
+        if item.get("condition_id")
+    }
+    profile_meta      = profile.get("metadata") or {}
+    pair_conditions   = tuple(profile_meta.get("comorbidity_pair") or ())
+    pair_id           = profile_meta.get("comorbidity_pair_id")
 
     null_result = {
         "profile_id":       pid,
         "profile_type":     ptype,
         "target_condition": target_condition,
         "quiz_path":        quiz_path,
+        "sex":              sex,
+        "age":              age,
+        "age_group":        age_group,
         "scoring_success":  False,
         "model_top1":       None,
         "model_top1_score": None,
         "top1_correct":     None,
         "top3_hit":         None,
+        "top1_hit_any":     None,
+        "top3_hit_any":     None,
+        "comorbidity_pair_id": pair_id,
+        "comorbidity_pair": list(pair_conditions) if pair_conditions else None,
+        "both_in_top3":     None,
+        "both_surfaced":    None,
         "ground_truth_primary": gt_primary,
+        "ground_truth_all_conditions": sorted(gt_all_conditions),
         "scores":           {},
     }
 
@@ -944,18 +980,51 @@ def _eval_profile(profile: dict, scores: dict[str, float] | None) -> dict:
     if gt_primary is not None and target_model_key is not None:
         top3_hit = (target_model_key in top3_keys)
 
+    # any-label view: does top-1 / top-3 match any true condition?
+    top1_hit_any: bool | None = None
+    top3_hit_any: bool | None = None
+    if gt_all_conditions:
+        top1_hit_any = MODEL_KEY_TO_CONDITION.get(top1_key) in gt_all_conditions if top1_key else False
+        top3_hit_any = any(MODEL_KEY_TO_CONDITION.get(k) in gt_all_conditions for k in top3_keys)
+
+    surfaced_keys = {
+        model_key
+        for model_key, prob in scores.items()
+        if prob >= FILTER_CRITERIA.get(model_key, 0.35)
+    }
+    pair_model_keys = {
+        CONDITION_TO_MODEL_KEY.get(cond)
+        for cond in pair_conditions
+        if CONDITION_TO_MODEL_KEY.get(cond) is not None
+    }
+    both_in_top3: bool | None = None
+    both_surfaced: bool | None = None
+    if len(pair_model_keys) >= 2:
+        both_in_top3 = pair_model_keys.issubset(top3_keys)
+        both_surfaced = pair_model_keys.issubset(surfaced_keys)
+
     return {
         "profile_id":           pid,
         "profile_type":         ptype,
         "target_condition":     target_condition,
         "quiz_path":            quiz_path,
+        "sex":                  sex,
+        "age":                  age,
+        "age_group":            age_group,
         "scoring_success":      True,
         "model_top1":           MODEL_KEY_TO_CONDITION.get(top1_key) if top1_key else None,
         "model_top1_key":       top1_key,
         "model_top1_score":     ranked[0][1] if ranked else None,
         "top1_correct":         top1_correct,
         "top3_hit":             top3_hit,
+        "top1_hit_any":         top1_hit_any,
+        "top3_hit_any":         top3_hit_any,
+        "comorbidity_pair_id":  pair_id,
+        "comorbidity_pair":     list(pair_conditions) if pair_conditions else None,
+        "both_in_top3":         both_in_top3,
+        "both_surfaced":        both_surfaced,
         "ground_truth_primary": gt_primary,
+        "ground_truth_all_conditions": sorted(gt_all_conditions),
         "scores":               scores,
     }
 
@@ -983,6 +1052,15 @@ def _aggregate(results: list[dict]) -> dict:
     top3_hits     = sum(1 for r in top3_eligible if r["top3_hit"])
     top3_coverage = top3_hits / len(top3_eligible) if top3_eligible else 0.0
 
+    # ── any-label ranking view ─────────────────────────────────────────────
+    top1_eligible_any = [r for r in scored if r.get("top1_hit_any") is not None]
+    top1_hits_any = sum(1 for r in top1_eligible_any if r["top1_hit_any"])
+    top1_accuracy_any = top1_hits_any / len(top1_eligible_any) if top1_eligible_any else 0.0
+
+    top3_eligible_any = [r for r in scored if r.get("top3_hit_any") is not None]
+    top3_hits_any = sum(1 for r in top3_eligible_any if r["top3_hit_any"])
+    top3_coverage_any = top3_hits_any / len(top3_eligible_any) if top3_eligible_any else 0.0
+
     # ── over_alert_rate (healthy profiles only) ────────────────────────────
     healthy      = [r for r in scored if r.get("profile_type") == "healthy"]
     over_alerted = sum(
@@ -1009,6 +1087,53 @@ def _aggregate(results: list[dict]) -> dict:
             "n": len([r for r in scored if r.get("quiz_path") == path]),
         }
 
+    # ── stratified reporting ───────────────────────────────────────────────
+    def _stratified_stats(rows: list[dict]) -> dict[str, float | int]:
+        top1_rows = [r for r in rows if r.get("top1_correct") is not None]
+        top3_rows = [r for r in rows if r.get("top3_hit") is not None]
+        top1_any_rows = [r for r in rows if r.get("top1_hit_any") is not None]
+        top3_any_rows = [r for r in rows if r.get("top3_hit_any") is not None]
+        healthy_rows = [r for r in rows if r.get("profile_type") == "healthy"]
+        over_alerted_rows = sum(
+            1 for r in healthy_rows
+            if any(
+                prob >= FILTER_CRITERIA.get(mk, 0.35)
+                for mk, prob in r.get("scores", {}).items()
+            )
+        )
+        return {
+            "n_profiles": len(rows),
+            "top1_accuracy": round(
+                sum(1 for r in top1_rows if r["top1_correct"]) / len(top1_rows), 4
+            ) if top1_rows else 0.0,
+            "top3_coverage": round(
+                sum(1 for r in top3_rows if r["top3_hit"]) / len(top3_rows), 4
+            ) if top3_rows else 0.0,
+            "top1_accuracy_any": round(
+                sum(1 for r in top1_any_rows if r["top1_hit_any"]) / len(top1_any_rows), 4
+            ) if top1_any_rows else 0.0,
+            "top3_coverage_any": round(
+                sum(1 for r in top3_any_rows if r["top3_hit_any"]) / len(top3_any_rows), 4
+            ) if top3_any_rows else 0.0,
+            "over_alert_rate_healthy": round(
+                over_alerted_rows / len(healthy_rows), 4
+            ) if healthy_rows else 0.0,
+            "n_healthy_profiles": len(healthy_rows),
+        }
+
+    stratified: dict[str, dict[str, dict[str, float | int]]] = {
+        "sex": {},
+        "age_group": {},
+    }
+    for sex_value in sorted({r.get("sex") for r in scored if r.get("sex")}):
+        subset = [r for r in scored if r.get("sex") == sex_value]
+        stratified["sex"][str(sex_value)] = _stratified_stats(subset)
+    age_group_order = ("0-17", "18-39", "40-59", "60+")
+    for group in age_group_order:
+        subset = [r for r in scored if r.get("age_group") == group]
+        if subset:
+            stratified["age_group"][group] = _stratified_stats(subset)
+
     # ── per_condition metrics ──────────────────────────────────────────────
     per_condition: dict[str, dict] = {}
     healthy_per_condition: dict[str, dict] = {}
@@ -1034,9 +1159,22 @@ def _aggregate(results: list[dict]) -> dict:
         tp = [r for r in flagged if r.get("target_condition") == eval_cond
               and r.get("profile_type") == "positive"]
 
+        # Any-label positives: condition appears anywhere in expected_conditions[]
+        positive_any = [
+            r for r in scored
+            if eval_cond in set(r.get("ground_truth_all_conditions") or [])
+        ]
+        tp_any = [
+            r for r in flagged
+            if eval_cond in set(r.get("ground_truth_all_conditions") or [])
+        ]
+
         recall    = len(tp) / len(positive_target) if positive_target else None
         precision = len(tp) / len(flagged)         if flagged         else None
         flag_rate = len(flagged) / len(scored)     if scored          else 0.0
+        any_label_recall = len(tp_any) / len(positive_any) if positive_any else None
+        any_label_precision = len(tp_any) / len(flagged) if flagged else None
+        any_label_prevalence = len(positive_any) / len(scored) if scored else 0.0
 
         # Mean score for target-positive profiles
         target_scores = [
@@ -1053,10 +1191,15 @@ def _aggregate(results: list[dict]) -> dict:
             "threshold":          threshold,
             "n_target_profiles":  len(target_profiles),
             "n_positive_target":  len(positive_target),
+            "n_positive_any":     len(positive_any),
             "n_flagged":          len(flagged),
             "n_true_positive":    len(tp),
+            "n_true_positive_any": len(tp_any),
             "recall":             round(recall,    4) if recall    is not None else None,
             "precision":          round(precision, 4) if precision is not None else None,
+            "any_label_prevalence": round(any_label_prevalence, 4),
+            "any_label_recall":   round(any_label_recall, 4) if any_label_recall is not None else None,
+            "any_label_precision": round(any_label_precision, 4) if any_label_precision is not None else None,
             "flag_rate":          round(flag_rate, 4),
             "mean_target_score":  round(mean_target_score, 4) if mean_target_score is not None else None,
         }
@@ -1067,6 +1210,43 @@ def _aggregate(results: list[dict]) -> dict:
             "n_healthy_profiles": len(healthy),
             "n_healthy_flagged": len(healthy_flagged),
             "healthy_flag_rate": round(len(healthy_flagged) / len(healthy), 4) if healthy else 0.0,
+        }
+
+    # ── dedicated comorbidity-pair metrics ────────────────────────────────
+    comorbidity_pair_profiles = [r for r in scored if r.get("comorbidity_pair_id")]
+    comorbidity_pairs: dict[str, dict[str, Any]] = {}
+    if comorbidity_pair_profiles:
+        by_pair: dict[str, list[dict]] = defaultdict(list)
+        for row in comorbidity_pair_profiles:
+            by_pair[row["comorbidity_pair_id"]].append(row)
+
+        for pair_id, pair_rows in sorted(by_pair.items()):
+            pair_conditions = pair_rows[0].get("comorbidity_pair") or []
+            both_in_top3 = sum(1 for r in pair_rows if r.get("both_in_top3") is True)
+            both_surfaced = sum(1 for r in pair_rows if r.get("both_surfaced") is True)
+            at_least_one_in_top3 = sum(1 for r in pair_rows if r.get("top3_hit_any") is True)
+            comorbidity_pairs[pair_id] = {
+                "pair_conditions": pair_conditions,
+                "n_profiles": len(pair_rows),
+                "both_in_top3_rate": round(both_in_top3 / len(pair_rows), 4),
+                "both_surfaced_rate": round(both_surfaced / len(pair_rows), 4),
+                "at_least_one_in_top3_rate": round(at_least_one_in_top3 / len(pair_rows), 4),
+            }
+
+    comorbidity_overall = None
+    if comorbidity_pair_profiles:
+        n = len(comorbidity_pair_profiles)
+        comorbidity_overall = {
+            "n_profiles": n,
+            "both_in_top3_rate": round(
+                sum(1 for r in comorbidity_pair_profiles if r.get("both_in_top3") is True) / n, 4
+            ),
+            "both_surfaced_rate": round(
+                sum(1 for r in comorbidity_pair_profiles if r.get("both_surfaced") is True) / n, 4
+            ),
+            "at_least_one_in_top3_rate": round(
+                sum(1 for r in comorbidity_pair_profiles if r.get("top3_hit_any") is True) / n, 4
+            ),
         }
 
     # ── DoD checks ────────────────────────────────────────────────────────
@@ -1090,11 +1270,16 @@ def _aggregate(results: list[dict]) -> dict:
         "top1_accuracy":           round(top1_accuracy, 4),
         "positives_top1_accuracy": round(pos_top1_acc,  4),
         "top3_coverage":           round(top3_coverage,  4),
+        "top1_accuracy_any":       round(top1_accuracy_any, 4),
+        "top3_coverage_any":       round(top3_coverage_any, 4),
         "over_alert_rate":         round(over_alert_rate, 4),
         "medgemma_metrics":        "skipped — ML-only run",
         "by_quiz_path":            by_quiz_path,
+        "stratified":              stratified,
         "per_condition":           per_condition,
         "healthy_per_condition":   healthy_per_condition,
+        "comorbidity_overall":     comorbidity_overall,
+        "comorbidity_pairs":       comorbidity_pairs,
         "dod_checks":              dod_checks,
         "dod_pass":                dod_pass,
     }
@@ -1131,6 +1316,8 @@ def _to_markdown(report: dict, run_id: str) -> str:
     lines.append(f"| Top-1 Accuracy (all) | {report['top1_accuracy']:.1%} |")
     lines.append(f"| Top-1 Accuracy (positives only) | {report['positives_top1_accuracy']:.1%} |")
     lines.append(f"| Top-3 Coverage | {report['top3_coverage']:.1%} |")
+    lines.append(f"| Top-1 Accuracy (any true condition) | {report.get('top1_accuracy_any', 0.0):.1%} |")
+    lines.append(f"| Top-3 Coverage (any true condition) | {report.get('top3_coverage_any', 0.0):.1%} |")
     lines.append(f"| Over-Alert Rate (healthy) | {report['over_alert_rate']:.1%} |")
     lines.append(f"| Hallucination Rate | skipped |")
     lines.append(f"| Parse Success Rate | skipped |")
@@ -1159,6 +1346,46 @@ def _to_markdown(report: dict, run_id: str) -> str:
         )
     lines.append("")
 
+    lines.append("## Stratified Reporting")
+    lines.append("")
+    for axis in ("sex", "age_group"):
+        axis_stats = report.get("stratified", {}).get(axis, {})
+        if not axis_stats:
+            continue
+        lines.append(f"### By {axis.replace('_', ' ').title()}")
+        lines.append("")
+        lines.append("| Group | N | Top-1 | Top-3 | Top-1 Any | Top-3 Any | Healthy Over-Alert | Healthy N |")
+        lines.append("|-------|---|-------|-------|-----------|-----------|--------------------|-----------|")
+        for group, stats in axis_stats.items():
+            lines.append(
+                f"| {group} | {stats['n_profiles']} | {stats['top1_accuracy']:.1%} | "
+                f"{stats['top3_coverage']:.1%} | {stats['top1_accuracy_any']:.1%} | "
+                f"{stats['top3_coverage_any']:.1%} | {stats['over_alert_rate_healthy']:.1%} | "
+                f"{stats['n_healthy_profiles']} |"
+            )
+        lines.append("")
+
+    if report.get("comorbidity_overall"):
+        lines.append("## Comorbidity Pair Metrics")
+        lines.append("")
+        overall = report["comorbidity_overall"]
+        lines.append("| Metric | Value |")
+        lines.append("|--------|-------|")
+        lines.append(f"| Profiles in dedicated pair cohort | {overall['n_profiles']} |")
+        lines.append(f"| Both conditions in top-3 | {overall['both_in_top3_rate']:.1%} |")
+        lines.append(f"| Both conditions surfaced | {overall['both_surfaced_rate']:.1%} |")
+        lines.append(f"| At least one condition in top-3 | {overall['at_least_one_in_top3_rate']:.1%} |")
+        lines.append("")
+        lines.append("| Pair | N | Both in top-3 | Both surfaced | At least one in top-3 |")
+        lines.append("|------|---|----------------|---------------|-----------------------|")
+        for pair_id, stats in report.get("comorbidity_pairs", {}).items():
+            pair_label = " + ".join(stats.get("pair_conditions") or [pair_id])
+            lines.append(
+                f"| {pair_label} | {stats['n_profiles']} | {stats['both_in_top3_rate']:.1%} "
+                f"| {stats['both_surfaced_rate']:.1%} | {stats['at_least_one_in_top3_rate']:.1%} |"
+            )
+        lines.append("")
+
     lines.append("## Per-Condition Metrics")
     lines.append("")
     lines.append(
@@ -1176,6 +1403,25 @@ def _to_markdown(report: dict, run_id: str) -> str:
             f"| {cond} | {s['model_key']} | {s['threshold']} "
             f"| {s['n_positive_target']} | {recall_str} | {prec_str} "
             f"| {s['flag_rate']:.1%} | {score_str} |"
+        )
+    lines.append("")
+
+    lines.append("## Per-Condition Comorbidity-Aware Metrics")
+    lines.append("")
+    lines.append(
+        "| Condition | Any-Label Prev | Any-Label Recall | Any-Label Precision | N any+ | N flagged |"
+    )
+    lines.append(
+        "|-----------|----------------|------------------|---------------------|--------|-----------|"
+    )
+    for cond in sorted(report["per_condition"]):
+        s = report["per_condition"][cond]
+        any_prev_str = f"{s['any_label_prevalence']:.1%}" if s["any_label_prevalence"] is not None else "—"
+        any_rec_str = f"{s['any_label_recall']:.1%}" if s["any_label_recall"] is not None else "—"
+        any_prec_str = f"{s['any_label_precision']:.1%}" if s["any_label_precision"] is not None else "—"
+        lines.append(
+            f"| {cond} | {any_prev_str} | {any_rec_str} | {any_prec_str} "
+            f"| {s['n_positive_any']} | {s['n_flagged']} |"
         )
     lines.append("")
 

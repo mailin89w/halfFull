@@ -1,0 +1,1794 @@
+{
+  "run_id": "roadmap_knn_condition_rescue_20260331_232626",
+  "git_sha": "70acb82d813523d50895400728752baca18a8be5",
+  "profiles_path": "evals/cohort/nhanes_balanced_800.json",
+  "policy": {
+    "supported_conditions": [
+      "anemia",
+      "electrolyte_imbalance",
+      "hepatitis",
+      "hidden_inflammation",
+      "hypothyroidism",
+      "iron_deficiency",
+      "kidney_disease",
+      "liver",
+      "perimenopause",
+      "prediabetes",
+      "sleep_disorder"
+    ],
+    "rescue_rank_max": 6,
+    "rescue_min_knn_score": 0.06,
+    "rescue_max_gap_to_top3": 0.18,
+    "bonus_scale": 0.55,
+    "max_bonus": 0.12,
+    "top1_frozen": true
+  },
+  "arms": {
+    "default_ml_bayes": {
+      "n_profiles": 800,
+      "n_labeled": 671,
+      "n_healthy": 97,
+      "top1_primary_accuracy": 0.3455,
+      "top1_primary_accuracy_positive_only": 0.3009,
+      "top3_primary_coverage": 0.5636,
+      "top3_contains_any_true_condition": 0.6468,
+      "healthy_over_alert_rate": 0.134,
+      "per_condition": {
+        "perimenopause": {
+          "n_positive_profiles": 73,
+          "recall_at_3": 0.863,
+          "absent_false_positive_rate_at_3": 0.055,
+          "threshold_recall": 0.8904,
+          "threshold_precision": 0.6566,
+          "threshold_flag_rate": 0.1237,
+          "healthy_flag_rate": 0.0412,
+          "mean_score_positive": 0.7331
+        },
+        "hypothyroidism": {
+          "n_positive_profiles": 61,
+          "recall_at_3": 0.8689,
+          "absent_false_positive_rate_at_3": 0.3938,
+          "threshold_recall": 0.8197,
+          "threshold_precision": 0.2959,
+          "threshold_flag_rate": 0.2112,
+          "healthy_flag_rate": 0.0206,
+          "mean_score_positive": 0.7881
+        },
+        "kidney_disease": {
+          "n_positive_profiles": 65,
+          "recall_at_3": 0.6615,
+          "absent_false_positive_rate_at_3": 0.0816,
+          "threshold_recall": 0.6923,
+          "threshold_precision": 0.4167,
+          "threshold_flag_rate": 0.135,
+          "healthy_flag_rate": 0.0103,
+          "mean_score_positive": 0.6045
+        },
+        "sleep_disorder": {
+          "n_positive_profiles": 69,
+          "recall_at_3": 0.8406,
+          "absent_false_positive_rate_at_3": 0.5855,
+          "threshold_recall": 0.3768,
+          "threshold_precision": 0.3023,
+          "threshold_flag_rate": 0.1075,
+          "healthy_flag_rate": 0.0309,
+          "mean_score_positive": 0.5729
+        },
+        "anemia": {
+          "n_positive_profiles": 55,
+          "recall_at_3": 0.3455,
+          "absent_false_positive_rate_at_3": 0.2564,
+          "threshold_recall": 0.2364,
+          "threshold_precision": 0.1566,
+          "threshold_flag_rate": 0.1037,
+          "healthy_flag_rate": 0.0206,
+          "mean_score_positive": 0.3301
+        },
+        "iron_deficiency": {
+          "n_positive_profiles": 82,
+          "recall_at_3": 0.7683,
+          "absent_false_positive_rate_at_3": 0.0529,
+          "threshold_recall": 0.7561,
+          "threshold_precision": 0.5536,
+          "threshold_flag_rate": 0.14,
+          "healthy_flag_rate": 0.0206,
+          "mean_score_positive": 0.5423
+        },
+        "hepatitis": {
+          "n_positive_profiles": 59,
+          "recall_at_3": 0.3051,
+          "absent_false_positive_rate_at_3": 0.0229,
+          "threshold_recall": 0.3729,
+          "threshold_precision": 0.3333,
+          "threshold_flag_rate": 0.0825,
+          "healthy_flag_rate": 0.0,
+          "mean_score_positive": 0.2175
+        },
+        "liver": {
+          "n_positive_profiles": 85,
+          "recall_at_3": 0.0706,
+          "absent_false_positive_rate_at_3": 0.0294,
+          "threshold_recall": 0.3176,
+          "threshold_precision": 0.2647,
+          "threshold_flag_rate": 0.1275,
+          "healthy_flag_rate": 0.0206,
+          "mean_score_positive": 0.1016
+        },
+        "prediabetes": {
+          "n_positive_profiles": 61,
+          "recall_at_3": 0.5574,
+          "absent_false_positive_rate_at_3": 0.3532,
+          "threshold_recall": 0.2459,
+          "threshold_precision": 0.2174,
+          "threshold_flag_rate": 0.0862,
+          "healthy_flag_rate": 0.0103,
+          "mean_score_positive": 0.317
+        },
+        "inflammation": {
+          "n_positive_profiles": 96,
+          "recall_at_3": 0.3542,
+          "absent_false_positive_rate_at_3": 0.1761,
+          "threshold_recall": 0.2396,
+          "threshold_precision": 0.2706,
+          "threshold_flag_rate": 0.1062,
+          "healthy_flag_rate": 0.0412,
+          "mean_score_positive": 0.2583
+        },
+        "electrolyte_imbalance": {
+          "n_positive_profiles": 109,
+          "recall_at_3": 0.4495,
+          "absent_false_positive_rate_at_3": 0.3936,
+          "threshold_recall": 0.1193,
+          "threshold_precision": 0.2708,
+          "threshold_flag_rate": 0.06,
+          "healthy_flag_rate": 0.0206,
+          "mean_score_positive": 0.2873
+        },
+        "vitamin_d_deficiency": {
+          "n_positive_profiles": 119,
+          "recall_at_3": 0.5714,
+          "absent_false_positive_rate_at_3": 0.2188,
+          "threshold_recall": 0.1681,
+          "threshold_precision": 0.8,
+          "threshold_flag_rate": 0.0312,
+          "healthy_flag_rate": 0.0,
+          "mean_score_positive": 0.2417
+        }
+      }
+    },
+    "roadmap_knn_all_supported": {
+      "n_profiles": 800,
+      "n_labeled": 671,
+      "n_healthy": 97,
+      "top1_primary_accuracy": 0.3455,
+      "top1_primary_accuracy_positive_only": 0.3009,
+      "top3_primary_coverage": 0.5515,
+      "top3_contains_any_true_condition": 0.6349,
+      "healthy_over_alert_rate": 0.134,
+      "per_condition": {
+        "perimenopause": {
+          "n_positive_profiles": 73,
+          "recall_at_3": 0.8356,
+          "absent_false_positive_rate_at_3": 0.055,
+          "threshold_recall": 0.8904,
+          "threshold_precision": 0.6566,
+          "threshold_flag_rate": 0.1237,
+          "healthy_flag_rate": 0.0412,
+          "mean_score_positive": 0.7331
+        },
+        "hypothyroidism": {
+          "n_positive_profiles": 61,
+          "recall_at_3": 0.8361,
+          "absent_false_positive_rate_at_3": 0.3572,
+          "threshold_recall": 0.8197,
+          "threshold_precision": 0.2959,
+          "threshold_flag_rate": 0.2112,
+          "healthy_flag_rate": 0.0206,
+          "mean_score_positive": 0.7903
+        },
+        "kidney_disease": {
+          "n_positive_profiles": 65,
+          "recall_at_3": 0.6615,
+          "absent_false_positive_rate_at_3": 0.0735,
+          "threshold_recall": 0.6923,
+          "threshold_precision": 0.4167,
+          "threshold_flag_rate": 0.135,
+          "healthy_flag_rate": 0.0103,
+          "mean_score_positive": 0.6118
+        },
+        "sleep_disorder": {
+          "n_positive_profiles": 69,
+          "recall_at_3": 0.942,
+          "absent_false_positive_rate_at_3": 0.7456,
+          "threshold_recall": 0.3768,
+          "threshold_precision": 0.3023,
+          "threshold_flag_rate": 0.1075,
+          "healthy_flag_rate": 0.0309,
+          "mean_score_positive": 0.6083
+        },
+        "anemia": {
+          "n_positive_profiles": 55,
+          "recall_at_3": 0.3455,
+          "absent_false_positive_rate_at_3": 0.2121,
+          "threshold_recall": 0.2364,
+          "threshold_precision": 0.1566,
+          "threshold_flag_rate": 0.1037,
+          "healthy_flag_rate": 0.0206,
+          "mean_score_positive": 0.3398
+        },
+        "iron_deficiency": {
+          "n_positive_profiles": 82,
+          "recall_at_3": 0.8049,
+          "absent_false_positive_rate_at_3": 0.0877,
+          "threshold_recall": 0.7561,
+          "threshold_precision": 0.5536,
+          "threshold_flag_rate": 0.14,
+          "healthy_flag_rate": 0.0206,
+          "mean_score_positive": 0.5535
+        },
+        "hepatitis": {
+          "n_positive_profiles": 59,
+          "recall_at_3": 0.2881,
+          "absent_false_positive_rate_at_3": 0.0202,
+          "threshold_recall": 0.3729,
+          "threshold_precision": 0.3333,
+          "threshold_flag_rate": 0.0825,
+          "healthy_flag_rate": 0.0,
+          "mean_score_positive": 0.2182
+        },
+        "liver": {
+          "n_positive_profiles": 85,
+          "recall_at_3": 0.0471,
+          "absent_false_positive_rate_at_3": 0.0294,
+          "threshold_recall": 0.3176,
+          "threshold_precision": 0.2647,
+          "threshold_flag_rate": 0.1275,
+          "healthy_flag_rate": 0.0206,
+          "mean_score_positive": 0.1016
+        },
+        "prediabetes": {
+          "n_positive_profiles": 61,
+          "recall_at_3": 0.5902,
+          "absent_false_positive_rate_at_3": 0.3762,
+          "threshold_recall": 0.2459,
+          "threshold_precision": 0.2174,
+          "threshold_flag_rate": 0.0862,
+          "healthy_flag_rate": 0.0103,
+          "mean_score_positive": 0.3395
+        },
+        "inflammation": {
+          "n_positive_profiles": 96,
+          "recall_at_3": 0.3229,
+          "absent_false_positive_rate_at_3": 0.1321,
+          "threshold_recall": 0.2396,
+          "threshold_precision": 0.2706,
+          "threshold_flag_rate": 0.1062,
+          "healthy_flag_rate": 0.0412,
+          "mean_score_positive": 0.2583
+        },
+        "electrolyte_imbalance": {
+          "n_positive_profiles": 109,
+          "recall_at_3": 0.4495,
+          "absent_false_positive_rate_at_3": 0.3994,
+          "threshold_recall": 0.1193,
+          "threshold_precision": 0.2708,
+          "threshold_flag_rate": 0.06,
+          "healthy_flag_rate": 0.0206,
+          "mean_score_positive": 0.2979
+        },
+        "vitamin_d_deficiency": {
+          "n_positive_profiles": 119,
+          "recall_at_3": 0.4538,
+          "absent_false_positive_rate_at_3": 0.1424,
+          "threshold_recall": 0.1681,
+          "threshold_precision": 0.8,
+          "threshold_flag_rate": 0.0312,
+          "healthy_flag_rate": 0.0,
+          "mean_score_positive": 0.2417
+        }
+      }
+    },
+    "roadmap_knn_anemia": {
+      "n_profiles": 800,
+      "n_labeled": 671,
+      "n_healthy": 97,
+      "top1_primary_accuracy": 0.3455,
+      "top1_primary_accuracy_positive_only": 0.3009,
+      "top3_primary_coverage": 0.5636,
+      "top3_contains_any_true_condition": 0.6438,
+      "healthy_over_alert_rate": 0.134,
+      "per_condition": {
+        "perimenopause": {
+          "n_positive_profiles": 73,
+          "recall_at_3": 0.863,
+          "absent_false_positive_rate_at_3": 0.055,
+          "threshold_recall": 0.8904,
+          "threshold_precision": 0.6566,
+          "threshold_flag_rate": 0.1237,
+          "healthy_flag_rate": 0.0412,
+          "mean_score_positive": 0.7331
+        },
+        "hypothyroidism": {
+          "n_positive_profiles": 61,
+          "recall_at_3": 0.8689,
+          "absent_false_positive_rate_at_3": 0.3884,
+          "threshold_recall": 0.8197,
+          "threshold_precision": 0.2959,
+          "threshold_flag_rate": 0.2112,
+          "healthy_flag_rate": 0.0206,
+          "mean_score_positive": 0.7881
+        },
+        "kidney_disease": {
+          "n_positive_profiles": 65,
+          "recall_at_3": 0.6615,
+          "absent_false_positive_rate_at_3": 0.0789,
+          "threshold_recall": 0.6923,
+          "threshold_precision": 0.4167,
+          "threshold_flag_rate": 0.135,
+          "healthy_flag_rate": 0.0103,
+          "mean_score_positive": 0.6045
+        },
+        "sleep_disorder": {
+          "n_positive_profiles": 69,
+          "recall_at_3": 0.8261,
+          "absent_false_positive_rate_at_3": 0.58,
+          "threshold_recall": 0.3768,
+          "threshold_precision": 0.3023,
+          "threshold_flag_rate": 0.1075,
+          "healthy_flag_rate": 0.0309,
+          "mean_score_positive": 0.5729
+        },
+        "anemia": {
+          "n_positive_profiles": 55,
+          "recall_at_3": 0.3636,
+          "absent_false_positive_rate_at_3": 0.2805,
+          "threshold_recall": 0.2364,
+          "threshold_precision": 0.1566,
+          "threshold_flag_rate": 0.1037,
+          "healthy_flag_rate": 0.0206,
+          "mean_score_positive": 0.3398
+        },
+        "iron_deficiency": {
+          "n_positive_profiles": 82,
+          "recall_at_3": 0.7683,
+          "absent_false_positive_rate_at_3": 0.0529,
+          "threshold_recall": 0.7561,
+          "threshold_precision": 0.5536,
+          "threshold_flag_rate": 0.14,
+          "healthy_flag_rate": 0.0206,
+          "mean_score_positive": 0.5423
+        },
+        "hepatitis": {
+          "n_positive_profiles": 59,
+          "recall_at_3": 0.3051,
+          "absent_false_positive_rate_at_3": 0.0229,
+          "threshold_recall": 0.3729,
+          "threshold_precision": 0.3333,
+          "threshold_flag_rate": 0.0825,
+          "healthy_flag_rate": 0.0,
+          "mean_score_positive": 0.2175
+        },
+        "liver": {
+          "n_positive_profiles": 85,
+          "recall_at_3": 0.0706,
+          "absent_false_positive_rate_at_3": 0.028,
+          "threshold_recall": 0.3176,
+          "threshold_precision": 0.2647,
+          "threshold_flag_rate": 0.1275,
+          "healthy_flag_rate": 0.0206,
+          "mean_score_positive": 0.1016
+        },
+        "prediabetes": {
+          "n_positive_profiles": 61,
+          "recall_at_3": 0.541,
+          "absent_false_positive_rate_at_3": 0.3491,
+          "threshold_recall": 0.2459,
+          "threshold_precision": 0.2174,
+          "threshold_flag_rate": 0.0862,
+          "healthy_flag_rate": 0.0103,
+          "mean_score_positive": 0.317
+        },
+        "inflammation": {
+          "n_positive_profiles": 96,
+          "recall_at_3": 0.3542,
+          "absent_false_positive_rate_at_3": 0.1747,
+          "threshold_recall": 0.2396,
+          "threshold_precision": 0.2706,
+          "threshold_flag_rate": 0.1062,
+          "healthy_flag_rate": 0.0412,
+          "mean_score_positive": 0.2583
+        },
+        "electrolyte_imbalance": {
+          "n_positive_profiles": 109,
+          "recall_at_3": 0.4495,
+          "absent_false_positive_rate_at_3": 0.3936,
+          "threshold_recall": 0.1193,
+          "threshold_precision": 0.2708,
+          "threshold_flag_rate": 0.06,
+          "healthy_flag_rate": 0.0206,
+          "mean_score_positive": 0.2873
+        },
+        "vitamin_d_deficiency": {
+          "n_positive_profiles": 119,
+          "recall_at_3": 0.5714,
+          "absent_false_positive_rate_at_3": 0.2159,
+          "threshold_recall": 0.1681,
+          "threshold_precision": 0.8,
+          "threshold_flag_rate": 0.0312,
+          "healthy_flag_rate": 0.0,
+          "mean_score_positive": 0.2417
+        }
+      }
+    },
+    "roadmap_knn_electrolyte_imbalance": {
+      "n_profiles": 800,
+      "n_labeled": 671,
+      "n_healthy": 97,
+      "top1_primary_accuracy": 0.3455,
+      "top1_primary_accuracy_positive_only": 0.3009,
+      "top3_primary_coverage": 0.5606,
+      "top3_contains_any_true_condition": 0.6483,
+      "healthy_over_alert_rate": 0.134,
+      "per_condition": {
+        "perimenopause": {
+          "n_positive_profiles": 73,
+          "recall_at_3": 0.863,
+          "absent_false_positive_rate_at_3": 0.055,
+          "threshold_recall": 0.8904,
+          "threshold_precision": 0.6566,
+          "threshold_flag_rate": 0.1237,
+          "healthy_flag_rate": 0.0412,
+          "mean_score_positive": 0.7331
+        },
+        "hypothyroidism": {
+          "n_positive_profiles": 61,
+          "recall_at_3": 0.8525,
+          "absent_false_positive_rate_at_3": 0.3924,
+          "threshold_recall": 0.8197,
+          "threshold_precision": 0.2959,
+          "threshold_flag_rate": 0.2112,
+          "healthy_flag_rate": 0.0206,
+          "mean_score_positive": 0.7881
+        },
+        "kidney_disease": {
+          "n_positive_profiles": 65,
+          "recall_at_3": 0.6615,
+          "absent_false_positive_rate_at_3": 0.0803,
+          "threshold_recall": 0.6923,
+          "threshold_precision": 0.4167,
+          "threshold_flag_rate": 0.135,
+          "healthy_flag_rate": 0.0103,
+          "mean_score_positive": 0.6045
+        },
+        "sleep_disorder": {
+          "n_positive_profiles": 69,
+          "recall_at_3": 0.8406,
+          "absent_false_positive_rate_at_3": 0.5732,
+          "threshold_recall": 0.3768,
+          "threshold_precision": 0.3023,
+          "threshold_flag_rate": 0.1075,
+          "healthy_flag_rate": 0.0309,
+          "mean_score_positive": 0.5729
+        },
+        "anemia": {
+          "n_positive_profiles": 55,
+          "recall_at_3": 0.3273,
+          "absent_false_positive_rate_at_3": 0.2456,
+          "threshold_recall": 0.2364,
+          "threshold_precision": 0.1566,
+          "threshold_flag_rate": 0.1037,
+          "healthy_flag_rate": 0.0206,
+          "mean_score_positive": 0.3301
+        },
+        "iron_deficiency": {
+          "n_positive_profiles": 82,
+          "recall_at_3": 0.7683,
+          "absent_false_positive_rate_at_3": 0.0529,
+          "threshold_recall": 0.7561,
+          "threshold_precision": 0.5536,
+          "threshold_flag_rate": 0.14,
+          "healthy_flag_rate": 0.0206,
+          "mean_score_positive": 0.5423
+        },
+        "hepatitis": {
+          "n_positive_profiles": 59,
+          "recall_at_3": 0.3051,
+          "absent_false_positive_rate_at_3": 0.0229,
+          "threshold_recall": 0.3729,
+          "threshold_precision": 0.3333,
+          "threshold_flag_rate": 0.0825,
+          "healthy_flag_rate": 0.0,
+          "mean_score_positive": 0.2175
+        },
+        "liver": {
+          "n_positive_profiles": 85,
+          "recall_at_3": 0.0706,
+          "absent_false_positive_rate_at_3": 0.0294,
+          "threshold_recall": 0.3176,
+          "threshold_precision": 0.2647,
+          "threshold_flag_rate": 0.1275,
+          "healthy_flag_rate": 0.0206,
+          "mean_score_positive": 0.1016
+        },
+        "prediabetes": {
+          "n_positive_profiles": 61,
+          "recall_at_3": 0.5574,
+          "absent_false_positive_rate_at_3": 0.3491,
+          "threshold_recall": 0.2459,
+          "threshold_precision": 0.2174,
+          "threshold_flag_rate": 0.0862,
+          "healthy_flag_rate": 0.0103,
+          "mean_score_positive": 0.317
+        },
+        "inflammation": {
+          "n_positive_profiles": 96,
+          "recall_at_3": 0.3542,
+          "absent_false_positive_rate_at_3": 0.169,
+          "threshold_recall": 0.2396,
+          "threshold_precision": 0.2706,
+          "threshold_flag_rate": 0.1062,
+          "healthy_flag_rate": 0.0412,
+          "mean_score_positive": 0.2583
+        },
+        "electrolyte_imbalance": {
+          "n_positive_profiles": 109,
+          "recall_at_3": 0.4771,
+          "absent_false_positive_rate_at_3": 0.4342,
+          "threshold_recall": 0.1193,
+          "threshold_precision": 0.2708,
+          "threshold_flag_rate": 0.06,
+          "healthy_flag_rate": 0.0206,
+          "mean_score_positive": 0.2979
+        },
+        "vitamin_d_deficiency": {
+          "n_positive_profiles": 119,
+          "recall_at_3": 0.5714,
+          "absent_false_positive_rate_at_3": 0.2159,
+          "threshold_recall": 0.1681,
+          "threshold_precision": 0.8,
+          "threshold_flag_rate": 0.0312,
+          "healthy_flag_rate": 0.0,
+          "mean_score_positive": 0.2417
+        }
+      }
+    },
+    "roadmap_knn_hepatitis": {
+      "n_profiles": 800,
+      "n_labeled": 671,
+      "n_healthy": 97,
+      "top1_primary_accuracy": 0.3455,
+      "top1_primary_accuracy_positive_only": 0.3009,
+      "top3_primary_coverage": 0.5636,
+      "top3_contains_any_true_condition": 0.6468,
+      "healthy_over_alert_rate": 0.134,
+      "per_condition": {
+        "perimenopause": {
+          "n_positive_profiles": 73,
+          "recall_at_3": 0.863,
+          "absent_false_positive_rate_at_3": 0.055,
+          "threshold_recall": 0.8904,
+          "threshold_precision": 0.6566,
+          "threshold_flag_rate": 0.1237,
+          "healthy_flag_rate": 0.0412,
+          "mean_score_positive": 0.7331
+        },
+        "hypothyroidism": {
+          "n_positive_profiles": 61,
+          "recall_at_3": 0.8689,
+          "absent_false_positive_rate_at_3": 0.3938,
+          "threshold_recall": 0.8197,
+          "threshold_precision": 0.2959,
+          "threshold_flag_rate": 0.2112,
+          "healthy_flag_rate": 0.0206,
+          "mean_score_positive": 0.7881
+        },
+        "kidney_disease": {
+          "n_positive_profiles": 65,
+          "recall_at_3": 0.6615,
+          "absent_false_positive_rate_at_3": 0.0816,
+          "threshold_recall": 0.6923,
+          "threshold_precision": 0.4167,
+          "threshold_flag_rate": 0.135,
+          "healthy_flag_rate": 0.0103,
+          "mean_score_positive": 0.6045
+        },
+        "sleep_disorder": {
+          "n_positive_profiles": 69,
+          "recall_at_3": 0.8406,
+          "absent_false_positive_rate_at_3": 0.5855,
+          "threshold_recall": 0.3768,
+          "threshold_precision": 0.3023,
+          "threshold_flag_rate": 0.1075,
+          "healthy_flag_rate": 0.0309,
+          "mean_score_positive": 0.5729
+        },
+        "anemia": {
+          "n_positive_profiles": 55,
+          "recall_at_3": 0.3455,
+          "absent_false_positive_rate_at_3": 0.2564,
+          "threshold_recall": 0.2364,
+          "threshold_precision": 0.1566,
+          "threshold_flag_rate": 0.1037,
+          "healthy_flag_rate": 0.0206,
+          "mean_score_positive": 0.3301
+        },
+        "iron_deficiency": {
+          "n_positive_profiles": 82,
+          "recall_at_3": 0.7683,
+          "absent_false_positive_rate_at_3": 0.0529,
+          "threshold_recall": 0.7561,
+          "threshold_precision": 0.5536,
+          "threshold_flag_rate": 0.14,
+          "healthy_flag_rate": 0.0206,
+          "mean_score_positive": 0.5423
+        },
+        "hepatitis": {
+          "n_positive_profiles": 59,
+          "recall_at_3": 0.3051,
+          "absent_false_positive_rate_at_3": 0.0229,
+          "threshold_recall": 0.3729,
+          "threshold_precision": 0.3333,
+          "threshold_flag_rate": 0.0825,
+          "healthy_flag_rate": 0.0,
+          "mean_score_positive": 0.2182
+        },
+        "liver": {
+          "n_positive_profiles": 85,
+          "recall_at_3": 0.0706,
+          "absent_false_positive_rate_at_3": 0.0294,
+          "threshold_recall": 0.3176,
+          "threshold_precision": 0.2647,
+          "threshold_flag_rate": 0.1275,
+          "healthy_flag_rate": 0.0206,
+          "mean_score_positive": 0.1016
+        },
+        "prediabetes": {
+          "n_positive_profiles": 61,
+          "recall_at_3": 0.5574,
+          "absent_false_positive_rate_at_3": 0.3532,
+          "threshold_recall": 0.2459,
+          "threshold_precision": 0.2174,
+          "threshold_flag_rate": 0.0862,
+          "healthy_flag_rate": 0.0103,
+          "mean_score_positive": 0.317
+        },
+        "inflammation": {
+          "n_positive_profiles": 96,
+          "recall_at_3": 0.3542,
+          "absent_false_positive_rate_at_3": 0.1761,
+          "threshold_recall": 0.2396,
+          "threshold_precision": 0.2706,
+          "threshold_flag_rate": 0.1062,
+          "healthy_flag_rate": 0.0412,
+          "mean_score_positive": 0.2583
+        },
+        "electrolyte_imbalance": {
+          "n_positive_profiles": 109,
+          "recall_at_3": 0.4495,
+          "absent_false_positive_rate_at_3": 0.3936,
+          "threshold_recall": 0.1193,
+          "threshold_precision": 0.2708,
+          "threshold_flag_rate": 0.06,
+          "healthy_flag_rate": 0.0206,
+          "mean_score_positive": 0.2873
+        },
+        "vitamin_d_deficiency": {
+          "n_positive_profiles": 119,
+          "recall_at_3": 0.5714,
+          "absent_false_positive_rate_at_3": 0.2188,
+          "threshold_recall": 0.1681,
+          "threshold_precision": 0.8,
+          "threshold_flag_rate": 0.0312,
+          "healthy_flag_rate": 0.0,
+          "mean_score_positive": 0.2417
+        }
+      }
+    },
+    "roadmap_knn_hidden_inflammation": {
+      "n_profiles": 800,
+      "n_labeled": 671,
+      "n_healthy": 97,
+      "top1_primary_accuracy": 0.3455,
+      "top1_primary_accuracy_positive_only": 0.3009,
+      "top3_primary_coverage": 0.5636,
+      "top3_contains_any_true_condition": 0.6468,
+      "healthy_over_alert_rate": 0.134,
+      "per_condition": {
+        "perimenopause": {
+          "n_positive_profiles": 73,
+          "recall_at_3": 0.863,
+          "absent_false_positive_rate_at_3": 0.055,
+          "threshold_recall": 0.8904,
+          "threshold_precision": 0.6566,
+          "threshold_flag_rate": 0.1237,
+          "healthy_flag_rate": 0.0412,
+          "mean_score_positive": 0.7331
+        },
+        "hypothyroidism": {
+          "n_positive_profiles": 61,
+          "recall_at_3": 0.8689,
+          "absent_false_positive_rate_at_3": 0.3938,
+          "threshold_recall": 0.8197,
+          "threshold_precision": 0.2959,
+          "threshold_flag_rate": 0.2112,
+          "healthy_flag_rate": 0.0206,
+          "mean_score_positive": 0.7881
+        },
+        "kidney_disease": {
+          "n_positive_profiles": 65,
+          "recall_at_3": 0.6615,
+          "absent_false_positive_rate_at_3": 0.0816,
+          "threshold_recall": 0.6923,
+          "threshold_precision": 0.4167,
+          "threshold_flag_rate": 0.135,
+          "healthy_flag_rate": 0.0103,
+          "mean_score_positive": 0.6045
+        },
+        "sleep_disorder": {
+          "n_positive_profiles": 69,
+          "recall_at_3": 0.8406,
+          "absent_false_positive_rate_at_3": 0.5855,
+          "threshold_recall": 0.3768,
+          "threshold_precision": 0.3023,
+          "threshold_flag_rate": 0.1075,
+          "healthy_flag_rate": 0.0309,
+          "mean_score_positive": 0.5729
+        },
+        "anemia": {
+          "n_positive_profiles": 55,
+          "recall_at_3": 0.3455,
+          "absent_false_positive_rate_at_3": 0.2564,
+          "threshold_recall": 0.2364,
+          "threshold_precision": 0.1566,
+          "threshold_flag_rate": 0.1037,
+          "healthy_flag_rate": 0.0206,
+          "mean_score_positive": 0.3301
+        },
+        "iron_deficiency": {
+          "n_positive_profiles": 82,
+          "recall_at_3": 0.7683,
+          "absent_false_positive_rate_at_3": 0.0529,
+          "threshold_recall": 0.7561,
+          "threshold_precision": 0.5536,
+          "threshold_flag_rate": 0.14,
+          "healthy_flag_rate": 0.0206,
+          "mean_score_positive": 0.5423
+        },
+        "hepatitis": {
+          "n_positive_profiles": 59,
+          "recall_at_3": 0.3051,
+          "absent_false_positive_rate_at_3": 0.0229,
+          "threshold_recall": 0.3729,
+          "threshold_precision": 0.3333,
+          "threshold_flag_rate": 0.0825,
+          "healthy_flag_rate": 0.0,
+          "mean_score_positive": 0.2175
+        },
+        "liver": {
+          "n_positive_profiles": 85,
+          "recall_at_3": 0.0706,
+          "absent_false_positive_rate_at_3": 0.0294,
+          "threshold_recall": 0.3176,
+          "threshold_precision": 0.2647,
+          "threshold_flag_rate": 0.1275,
+          "healthy_flag_rate": 0.0206,
+          "mean_score_positive": 0.1016
+        },
+        "prediabetes": {
+          "n_positive_profiles": 61,
+          "recall_at_3": 0.5574,
+          "absent_false_positive_rate_at_3": 0.3532,
+          "threshold_recall": 0.2459,
+          "threshold_precision": 0.2174,
+          "threshold_flag_rate": 0.0862,
+          "healthy_flag_rate": 0.0103,
+          "mean_score_positive": 0.317
+        },
+        "inflammation": {
+          "n_positive_profiles": 96,
+          "recall_at_3": 0.3542,
+          "absent_false_positive_rate_at_3": 0.1761,
+          "threshold_recall": 0.2396,
+          "threshold_precision": 0.2706,
+          "threshold_flag_rate": 0.1062,
+          "healthy_flag_rate": 0.0412,
+          "mean_score_positive": 0.2583
+        },
+        "electrolyte_imbalance": {
+          "n_positive_profiles": 109,
+          "recall_at_3": 0.4495,
+          "absent_false_positive_rate_at_3": 0.3936,
+          "threshold_recall": 0.1193,
+          "threshold_precision": 0.2708,
+          "threshold_flag_rate": 0.06,
+          "healthy_flag_rate": 0.0206,
+          "mean_score_positive": 0.2873
+        },
+        "vitamin_d_deficiency": {
+          "n_positive_profiles": 119,
+          "recall_at_3": 0.5714,
+          "absent_false_positive_rate_at_3": 0.2188,
+          "threshold_recall": 0.1681,
+          "threshold_precision": 0.8,
+          "threshold_flag_rate": 0.0312,
+          "healthy_flag_rate": 0.0,
+          "mean_score_positive": 0.2417
+        }
+      }
+    },
+    "roadmap_knn_hypothyroidism": {
+      "n_profiles": 800,
+      "n_labeled": 671,
+      "n_healthy": 97,
+      "top1_primary_accuracy": 0.3455,
+      "top1_primary_accuracy_positive_only": 0.3009,
+      "top3_primary_coverage": 0.5621,
+      "top3_contains_any_true_condition": 0.6438,
+      "healthy_over_alert_rate": 0.134,
+      "per_condition": {
+        "perimenopause": {
+          "n_positive_profiles": 73,
+          "recall_at_3": 0.863,
+          "absent_false_positive_rate_at_3": 0.055,
+          "threshold_recall": 0.8904,
+          "threshold_precision": 0.6566,
+          "threshold_flag_rate": 0.1237,
+          "healthy_flag_rate": 0.0412,
+          "mean_score_positive": 0.7331
+        },
+        "hypothyroidism": {
+          "n_positive_profiles": 61,
+          "recall_at_3": 0.8689,
+          "absent_false_positive_rate_at_3": 0.4208,
+          "threshold_recall": 0.8197,
+          "threshold_precision": 0.2959,
+          "threshold_flag_rate": 0.2112,
+          "healthy_flag_rate": 0.0206,
+          "mean_score_positive": 0.7903
+        },
+        "kidney_disease": {
+          "n_positive_profiles": 65,
+          "recall_at_3": 0.6615,
+          "absent_false_positive_rate_at_3": 0.0803,
+          "threshold_recall": 0.6923,
+          "threshold_precision": 0.4167,
+          "threshold_flag_rate": 0.135,
+          "healthy_flag_rate": 0.0103,
+          "mean_score_positive": 0.6045
+        },
+        "sleep_disorder": {
+          "n_positive_profiles": 69,
+          "recall_at_3": 0.8406,
+          "absent_false_positive_rate_at_3": 0.5814,
+          "threshold_recall": 0.3768,
+          "threshold_precision": 0.3023,
+          "threshold_flag_rate": 0.1075,
+          "healthy_flag_rate": 0.0309,
+          "mean_score_positive": 0.5729
+        },
+        "anemia": {
+          "n_positive_profiles": 55,
+          "recall_at_3": 0.3455,
+          "absent_false_positive_rate_at_3": 0.2456,
+          "threshold_recall": 0.2364,
+          "threshold_precision": 0.1566,
+          "threshold_flag_rate": 0.1037,
+          "healthy_flag_rate": 0.0206,
+          "mean_score_positive": 0.3301
+        },
+        "iron_deficiency": {
+          "n_positive_profiles": 82,
+          "recall_at_3": 0.7683,
+          "absent_false_positive_rate_at_3": 0.0529,
+          "threshold_recall": 0.7561,
+          "threshold_precision": 0.5536,
+          "threshold_flag_rate": 0.14,
+          "healthy_flag_rate": 0.0206,
+          "mean_score_positive": 0.5423
+        },
+        "hepatitis": {
+          "n_positive_profiles": 59,
+          "recall_at_3": 0.2881,
+          "absent_false_positive_rate_at_3": 0.0216,
+          "threshold_recall": 0.3729,
+          "threshold_precision": 0.3333,
+          "threshold_flag_rate": 0.0825,
+          "healthy_flag_rate": 0.0,
+          "mean_score_positive": 0.2175
+        },
+        "liver": {
+          "n_positive_profiles": 85,
+          "recall_at_3": 0.0706,
+          "absent_false_positive_rate_at_3": 0.0294,
+          "threshold_recall": 0.3176,
+          "threshold_precision": 0.2647,
+          "threshold_flag_rate": 0.1275,
+          "healthy_flag_rate": 0.0206,
+          "mean_score_positive": 0.1016
+        },
+        "prediabetes": {
+          "n_positive_profiles": 61,
+          "recall_at_3": 0.5246,
+          "absent_false_positive_rate_at_3": 0.3532,
+          "threshold_recall": 0.2459,
+          "threshold_precision": 0.2174,
+          "threshold_flag_rate": 0.0862,
+          "healthy_flag_rate": 0.0103,
+          "mean_score_positive": 0.317
+        },
+        "inflammation": {
+          "n_positive_profiles": 96,
+          "recall_at_3": 0.3542,
+          "absent_false_positive_rate_at_3": 0.1733,
+          "threshold_recall": 0.2396,
+          "threshold_precision": 0.2706,
+          "threshold_flag_rate": 0.1062,
+          "healthy_flag_rate": 0.0412,
+          "mean_score_positive": 0.2583
+        },
+        "electrolyte_imbalance": {
+          "n_positive_profiles": 109,
+          "recall_at_3": 0.4495,
+          "absent_false_positive_rate_at_3": 0.3907,
+          "threshold_recall": 0.1193,
+          "threshold_precision": 0.2708,
+          "threshold_flag_rate": 0.06,
+          "healthy_flag_rate": 0.0206,
+          "mean_score_positive": 0.2873
+        },
+        "vitamin_d_deficiency": {
+          "n_positive_profiles": 119,
+          "recall_at_3": 0.5714,
+          "absent_false_positive_rate_at_3": 0.2188,
+          "threshold_recall": 0.1681,
+          "threshold_precision": 0.8,
+          "threshold_flag_rate": 0.0312,
+          "healthy_flag_rate": 0.0,
+          "mean_score_positive": 0.2417
+        }
+      }
+    },
+    "roadmap_knn_iron_deficiency": {
+      "n_profiles": 800,
+      "n_labeled": 671,
+      "n_healthy": 97,
+      "top1_primary_accuracy": 0.3455,
+      "top1_primary_accuracy_positive_only": 0.3009,
+      "top3_primary_coverage": 0.5621,
+      "top3_contains_any_true_condition": 0.6453,
+      "healthy_over_alert_rate": 0.134,
+      "per_condition": {
+        "perimenopause": {
+          "n_positive_profiles": 73,
+          "recall_at_3": 0.863,
+          "absent_false_positive_rate_at_3": 0.055,
+          "threshold_recall": 0.8904,
+          "threshold_precision": 0.6566,
+          "threshold_flag_rate": 0.1237,
+          "healthy_flag_rate": 0.0412,
+          "mean_score_positive": 0.7331
+        },
+        "hypothyroidism": {
+          "n_positive_profiles": 61,
+          "recall_at_3": 0.8689,
+          "absent_false_positive_rate_at_3": 0.3911,
+          "threshold_recall": 0.8197,
+          "threshold_precision": 0.2959,
+          "threshold_flag_rate": 0.2112,
+          "healthy_flag_rate": 0.0206,
+          "mean_score_positive": 0.7881
+        },
+        "kidney_disease": {
+          "n_positive_profiles": 65,
+          "recall_at_3": 0.6615,
+          "absent_false_positive_rate_at_3": 0.0816,
+          "threshold_recall": 0.6923,
+          "threshold_precision": 0.4167,
+          "threshold_flag_rate": 0.135,
+          "healthy_flag_rate": 0.0103,
+          "mean_score_positive": 0.6045
+        },
+        "sleep_disorder": {
+          "n_positive_profiles": 69,
+          "recall_at_3": 0.8406,
+          "absent_false_positive_rate_at_3": 0.58,
+          "threshold_recall": 0.3768,
+          "threshold_precision": 0.3023,
+          "threshold_flag_rate": 0.1075,
+          "healthy_flag_rate": 0.0309,
+          "mean_score_positive": 0.5729
+        },
+        "anemia": {
+          "n_positive_profiles": 55,
+          "recall_at_3": 0.3455,
+          "absent_false_positive_rate_at_3": 0.247,
+          "threshold_recall": 0.2364,
+          "threshold_precision": 0.1566,
+          "threshold_flag_rate": 0.1037,
+          "healthy_flag_rate": 0.0206,
+          "mean_score_positive": 0.3301
+        },
+        "iron_deficiency": {
+          "n_positive_profiles": 82,
+          "recall_at_3": 0.8049,
+          "absent_false_positive_rate_at_3": 0.0975,
+          "threshold_recall": 0.7561,
+          "threshold_precision": 0.5536,
+          "threshold_flag_rate": 0.14,
+          "healthy_flag_rate": 0.0206,
+          "mean_score_positive": 0.5535
+        },
+        "hepatitis": {
+          "n_positive_profiles": 59,
+          "recall_at_3": 0.3051,
+          "absent_false_positive_rate_at_3": 0.0229,
+          "threshold_recall": 0.3729,
+          "threshold_precision": 0.3333,
+          "threshold_flag_rate": 0.0825,
+          "healthy_flag_rate": 0.0,
+          "mean_score_positive": 0.2175
+        },
+        "liver": {
+          "n_positive_profiles": 85,
+          "recall_at_3": 0.0706,
+          "absent_false_positive_rate_at_3": 0.0294,
+          "threshold_recall": 0.3176,
+          "threshold_precision": 0.2647,
+          "threshold_flag_rate": 0.1275,
+          "healthy_flag_rate": 0.0206,
+          "mean_score_positive": 0.1016
+        },
+        "prediabetes": {
+          "n_positive_profiles": 61,
+          "recall_at_3": 0.5574,
+          "absent_false_positive_rate_at_3": 0.3491,
+          "threshold_recall": 0.2459,
+          "threshold_precision": 0.2174,
+          "threshold_flag_rate": 0.0862,
+          "healthy_flag_rate": 0.0103,
+          "mean_score_positive": 0.317
+        },
+        "inflammation": {
+          "n_positive_profiles": 96,
+          "recall_at_3": 0.3542,
+          "absent_false_positive_rate_at_3": 0.1705,
+          "threshold_recall": 0.2396,
+          "threshold_precision": 0.2706,
+          "threshold_flag_rate": 0.1062,
+          "healthy_flag_rate": 0.0412,
+          "mean_score_positive": 0.2583
+        },
+        "electrolyte_imbalance": {
+          "n_positive_profiles": 109,
+          "recall_at_3": 0.4495,
+          "absent_false_positive_rate_at_3": 0.3907,
+          "threshold_recall": 0.1193,
+          "threshold_precision": 0.2708,
+          "threshold_flag_rate": 0.06,
+          "healthy_flag_rate": 0.0206,
+          "mean_score_positive": 0.2873
+        },
+        "vitamin_d_deficiency": {
+          "n_positive_profiles": 119,
+          "recall_at_3": 0.5462,
+          "absent_false_positive_rate_at_3": 0.2041,
+          "threshold_recall": 0.1681,
+          "threshold_precision": 0.8,
+          "threshold_flag_rate": 0.0312,
+          "healthy_flag_rate": 0.0,
+          "mean_score_positive": 0.2417
+        }
+      }
+    },
+    "roadmap_knn_kidney_disease": {
+      "n_profiles": 800,
+      "n_labeled": 671,
+      "n_healthy": 97,
+      "top1_primary_accuracy": 0.3455,
+      "top1_primary_accuracy_positive_only": 0.3009,
+      "top3_primary_coverage": 0.5636,
+      "top3_contains_any_true_condition": 0.6468,
+      "healthy_over_alert_rate": 0.134,
+      "per_condition": {
+        "perimenopause": {
+          "n_positive_profiles": 73,
+          "recall_at_3": 0.863,
+          "absent_false_positive_rate_at_3": 0.055,
+          "threshold_recall": 0.8904,
+          "threshold_precision": 0.6566,
+          "threshold_flag_rate": 0.1237,
+          "healthy_flag_rate": 0.0412,
+          "mean_score_positive": 0.7331
+        },
+        "hypothyroidism": {
+          "n_positive_profiles": 61,
+          "recall_at_3": 0.8689,
+          "absent_false_positive_rate_at_3": 0.3924,
+          "threshold_recall": 0.8197,
+          "threshold_precision": 0.2959,
+          "threshold_flag_rate": 0.2112,
+          "healthy_flag_rate": 0.0206,
+          "mean_score_positive": 0.7881
+        },
+        "kidney_disease": {
+          "n_positive_profiles": 65,
+          "recall_at_3": 0.6615,
+          "absent_false_positive_rate_at_3": 0.0844,
+          "threshold_recall": 0.6923,
+          "threshold_precision": 0.4167,
+          "threshold_flag_rate": 0.135,
+          "healthy_flag_rate": 0.0103,
+          "mean_score_positive": 0.6118
+        },
+        "sleep_disorder": {
+          "n_positive_profiles": 69,
+          "recall_at_3": 0.8406,
+          "absent_false_positive_rate_at_3": 0.5855,
+          "threshold_recall": 0.3768,
+          "threshold_precision": 0.3023,
+          "threshold_flag_rate": 0.1075,
+          "healthy_flag_rate": 0.0309,
+          "mean_score_positive": 0.5729
+        },
+        "anemia": {
+          "n_positive_profiles": 55,
+          "recall_at_3": 0.3455,
+          "absent_false_positive_rate_at_3": 0.2564,
+          "threshold_recall": 0.2364,
+          "threshold_precision": 0.1566,
+          "threshold_flag_rate": 0.1037,
+          "healthy_flag_rate": 0.0206,
+          "mean_score_positive": 0.3301
+        },
+        "iron_deficiency": {
+          "n_positive_profiles": 82,
+          "recall_at_3": 0.7683,
+          "absent_false_positive_rate_at_3": 0.0529,
+          "threshold_recall": 0.7561,
+          "threshold_precision": 0.5536,
+          "threshold_flag_rate": 0.14,
+          "healthy_flag_rate": 0.0206,
+          "mean_score_positive": 0.5423
+        },
+        "hepatitis": {
+          "n_positive_profiles": 59,
+          "recall_at_3": 0.3051,
+          "absent_false_positive_rate_at_3": 0.0229,
+          "threshold_recall": 0.3729,
+          "threshold_precision": 0.3333,
+          "threshold_flag_rate": 0.0825,
+          "healthy_flag_rate": 0.0,
+          "mean_score_positive": 0.2175
+        },
+        "liver": {
+          "n_positive_profiles": 85,
+          "recall_at_3": 0.0706,
+          "absent_false_positive_rate_at_3": 0.0294,
+          "threshold_recall": 0.3176,
+          "threshold_precision": 0.2647,
+          "threshold_flag_rate": 0.1275,
+          "healthy_flag_rate": 0.0206,
+          "mean_score_positive": 0.1016
+        },
+        "prediabetes": {
+          "n_positive_profiles": 61,
+          "recall_at_3": 0.5574,
+          "absent_false_positive_rate_at_3": 0.3518,
+          "threshold_recall": 0.2459,
+          "threshold_precision": 0.2174,
+          "threshold_flag_rate": 0.0862,
+          "healthy_flag_rate": 0.0103,
+          "mean_score_positive": 0.317
+        },
+        "inflammation": {
+          "n_positive_profiles": 96,
+          "recall_at_3": 0.3542,
+          "absent_false_positive_rate_at_3": 0.1761,
+          "threshold_recall": 0.2396,
+          "threshold_precision": 0.2706,
+          "threshold_flag_rate": 0.1062,
+          "healthy_flag_rate": 0.0412,
+          "mean_score_positive": 0.2583
+        },
+        "electrolyte_imbalance": {
+          "n_positive_profiles": 109,
+          "recall_at_3": 0.4495,
+          "absent_false_positive_rate_at_3": 0.3936,
+          "threshold_recall": 0.1193,
+          "threshold_precision": 0.2708,
+          "threshold_flag_rate": 0.06,
+          "healthy_flag_rate": 0.0206,
+          "mean_score_positive": 0.2873
+        },
+        "vitamin_d_deficiency": {
+          "n_positive_profiles": 119,
+          "recall_at_3": 0.5714,
+          "absent_false_positive_rate_at_3": 0.2188,
+          "threshold_recall": 0.1681,
+          "threshold_precision": 0.8,
+          "threshold_flag_rate": 0.0312,
+          "healthy_flag_rate": 0.0,
+          "mean_score_positive": 0.2417
+        }
+      }
+    },
+    "roadmap_knn_liver": {
+      "n_profiles": 800,
+      "n_labeled": 671,
+      "n_healthy": 97,
+      "top1_primary_accuracy": 0.3455,
+      "top1_primary_accuracy_positive_only": 0.3009,
+      "top3_primary_coverage": 0.5636,
+      "top3_contains_any_true_condition": 0.6468,
+      "healthy_over_alert_rate": 0.134,
+      "per_condition": {
+        "perimenopause": {
+          "n_positive_profiles": 73,
+          "recall_at_3": 0.863,
+          "absent_false_positive_rate_at_3": 0.055,
+          "threshold_recall": 0.8904,
+          "threshold_precision": 0.6566,
+          "threshold_flag_rate": 0.1237,
+          "healthy_flag_rate": 0.0412,
+          "mean_score_positive": 0.7331
+        },
+        "hypothyroidism": {
+          "n_positive_profiles": 61,
+          "recall_at_3": 0.8689,
+          "absent_false_positive_rate_at_3": 0.3924,
+          "threshold_recall": 0.8197,
+          "threshold_precision": 0.2959,
+          "threshold_flag_rate": 0.2112,
+          "healthy_flag_rate": 0.0206,
+          "mean_score_positive": 0.7881
+        },
+        "kidney_disease": {
+          "n_positive_profiles": 65,
+          "recall_at_3": 0.6615,
+          "absent_false_positive_rate_at_3": 0.0816,
+          "threshold_recall": 0.6923,
+          "threshold_precision": 0.4167,
+          "threshold_flag_rate": 0.135,
+          "healthy_flag_rate": 0.0103,
+          "mean_score_positive": 0.6045
+        },
+        "sleep_disorder": {
+          "n_positive_profiles": 69,
+          "recall_at_3": 0.8406,
+          "absent_false_positive_rate_at_3": 0.5855,
+          "threshold_recall": 0.3768,
+          "threshold_precision": 0.3023,
+          "threshold_flag_rate": 0.1075,
+          "healthy_flag_rate": 0.0309,
+          "mean_score_positive": 0.5729
+        },
+        "anemia": {
+          "n_positive_profiles": 55,
+          "recall_at_3": 0.3455,
+          "absent_false_positive_rate_at_3": 0.2564,
+          "threshold_recall": 0.2364,
+          "threshold_precision": 0.1566,
+          "threshold_flag_rate": 0.1037,
+          "healthy_flag_rate": 0.0206,
+          "mean_score_positive": 0.3301
+        },
+        "iron_deficiency": {
+          "n_positive_profiles": 82,
+          "recall_at_3": 0.7683,
+          "absent_false_positive_rate_at_3": 0.0529,
+          "threshold_recall": 0.7561,
+          "threshold_precision": 0.5536,
+          "threshold_flag_rate": 0.14,
+          "healthy_flag_rate": 0.0206,
+          "mean_score_positive": 0.5423
+        },
+        "hepatitis": {
+          "n_positive_profiles": 59,
+          "recall_at_3": 0.3051,
+          "absent_false_positive_rate_at_3": 0.0229,
+          "threshold_recall": 0.3729,
+          "threshold_precision": 0.3333,
+          "threshold_flag_rate": 0.0825,
+          "healthy_flag_rate": 0.0,
+          "mean_score_positive": 0.2175
+        },
+        "liver": {
+          "n_positive_profiles": 85,
+          "recall_at_3": 0.0706,
+          "absent_false_positive_rate_at_3": 0.0322,
+          "threshold_recall": 0.3176,
+          "threshold_precision": 0.2647,
+          "threshold_flag_rate": 0.1275,
+          "healthy_flag_rate": 0.0206,
+          "mean_score_positive": 0.1016
+        },
+        "prediabetes": {
+          "n_positive_profiles": 61,
+          "recall_at_3": 0.5574,
+          "absent_false_positive_rate_at_3": 0.3532,
+          "threshold_recall": 0.2459,
+          "threshold_precision": 0.2174,
+          "threshold_flag_rate": 0.0862,
+          "healthy_flag_rate": 0.0103,
+          "mean_score_positive": 0.317
+        },
+        "inflammation": {
+          "n_positive_profiles": 96,
+          "recall_at_3": 0.3438,
+          "absent_false_positive_rate_at_3": 0.1761,
+          "threshold_recall": 0.2396,
+          "threshold_precision": 0.2706,
+          "threshold_flag_rate": 0.1062,
+          "healthy_flag_rate": 0.0412,
+          "mean_score_positive": 0.2583
+        },
+        "electrolyte_imbalance": {
+          "n_positive_profiles": 109,
+          "recall_at_3": 0.4495,
+          "absent_false_positive_rate_at_3": 0.3936,
+          "threshold_recall": 0.1193,
+          "threshold_precision": 0.2708,
+          "threshold_flag_rate": 0.06,
+          "healthy_flag_rate": 0.0206,
+          "mean_score_positive": 0.2873
+        },
+        "vitamin_d_deficiency": {
+          "n_positive_profiles": 119,
+          "recall_at_3": 0.5714,
+          "absent_false_positive_rate_at_3": 0.2188,
+          "threshold_recall": 0.1681,
+          "threshold_precision": 0.8,
+          "threshold_flag_rate": 0.0312,
+          "healthy_flag_rate": 0.0,
+          "mean_score_positive": 0.2417
+        }
+      }
+    },
+    "roadmap_knn_perimenopause": {
+      "n_profiles": 800,
+      "n_labeled": 671,
+      "n_healthy": 97,
+      "top1_primary_accuracy": 0.3455,
+      "top1_primary_accuracy_positive_only": 0.3009,
+      "top3_primary_coverage": 0.5636,
+      "top3_contains_any_true_condition": 0.6468,
+      "healthy_over_alert_rate": 0.134,
+      "per_condition": {
+        "perimenopause": {
+          "n_positive_profiles": 73,
+          "recall_at_3": 0.863,
+          "absent_false_positive_rate_at_3": 0.0564,
+          "threshold_recall": 0.8904,
+          "threshold_precision": 0.6566,
+          "threshold_flag_rate": 0.1237,
+          "healthy_flag_rate": 0.0412,
+          "mean_score_positive": 0.7331
+        },
+        "hypothyroidism": {
+          "n_positive_profiles": 61,
+          "recall_at_3": 0.8689,
+          "absent_false_positive_rate_at_3": 0.3938,
+          "threshold_recall": 0.8197,
+          "threshold_precision": 0.2959,
+          "threshold_flag_rate": 0.2112,
+          "healthy_flag_rate": 0.0206,
+          "mean_score_positive": 0.7881
+        },
+        "kidney_disease": {
+          "n_positive_profiles": 65,
+          "recall_at_3": 0.6615,
+          "absent_false_positive_rate_at_3": 0.0816,
+          "threshold_recall": 0.6923,
+          "threshold_precision": 0.4167,
+          "threshold_flag_rate": 0.135,
+          "healthy_flag_rate": 0.0103,
+          "mean_score_positive": 0.6045
+        },
+        "sleep_disorder": {
+          "n_positive_profiles": 69,
+          "recall_at_3": 0.8406,
+          "absent_false_positive_rate_at_3": 0.5841,
+          "threshold_recall": 0.3768,
+          "threshold_precision": 0.3023,
+          "threshold_flag_rate": 0.1075,
+          "healthy_flag_rate": 0.0309,
+          "mean_score_positive": 0.5729
+        },
+        "anemia": {
+          "n_positive_profiles": 55,
+          "recall_at_3": 0.3455,
+          "absent_false_positive_rate_at_3": 0.2564,
+          "threshold_recall": 0.2364,
+          "threshold_precision": 0.1566,
+          "threshold_flag_rate": 0.1037,
+          "healthy_flag_rate": 0.0206,
+          "mean_score_positive": 0.3301
+        },
+        "iron_deficiency": {
+          "n_positive_profiles": 82,
+          "recall_at_3": 0.7683,
+          "absent_false_positive_rate_at_3": 0.0529,
+          "threshold_recall": 0.7561,
+          "threshold_precision": 0.5536,
+          "threshold_flag_rate": 0.14,
+          "healthy_flag_rate": 0.0206,
+          "mean_score_positive": 0.5423
+        },
+        "hepatitis": {
+          "n_positive_profiles": 59,
+          "recall_at_3": 0.3051,
+          "absent_false_positive_rate_at_3": 0.0229,
+          "threshold_recall": 0.3729,
+          "threshold_precision": 0.3333,
+          "threshold_flag_rate": 0.0825,
+          "healthy_flag_rate": 0.0,
+          "mean_score_positive": 0.2175
+        },
+        "liver": {
+          "n_positive_profiles": 85,
+          "recall_at_3": 0.0706,
+          "absent_false_positive_rate_at_3": 0.0294,
+          "threshold_recall": 0.3176,
+          "threshold_precision": 0.2647,
+          "threshold_flag_rate": 0.1275,
+          "healthy_flag_rate": 0.0206,
+          "mean_score_positive": 0.1016
+        },
+        "prediabetes": {
+          "n_positive_profiles": 61,
+          "recall_at_3": 0.5574,
+          "absent_false_positive_rate_at_3": 0.3532,
+          "threshold_recall": 0.2459,
+          "threshold_precision": 0.2174,
+          "threshold_flag_rate": 0.0862,
+          "healthy_flag_rate": 0.0103,
+          "mean_score_positive": 0.317
+        },
+        "inflammation": {
+          "n_positive_profiles": 96,
+          "recall_at_3": 0.3542,
+          "absent_false_positive_rate_at_3": 0.1761,
+          "threshold_recall": 0.2396,
+          "threshold_precision": 0.2706,
+          "threshold_flag_rate": 0.1062,
+          "healthy_flag_rate": 0.0412,
+          "mean_score_positive": 0.2583
+        },
+        "electrolyte_imbalance": {
+          "n_positive_profiles": 109,
+          "recall_at_3": 0.4495,
+          "absent_false_positive_rate_at_3": 0.3936,
+          "threshold_recall": 0.1193,
+          "threshold_precision": 0.2708,
+          "threshold_flag_rate": 0.06,
+          "healthy_flag_rate": 0.0206,
+          "mean_score_positive": 0.2873
+        },
+        "vitamin_d_deficiency": {
+          "n_positive_profiles": 119,
+          "recall_at_3": 0.5714,
+          "absent_false_positive_rate_at_3": 0.2188,
+          "threshold_recall": 0.1681,
+          "threshold_precision": 0.8,
+          "threshold_flag_rate": 0.0312,
+          "healthy_flag_rate": 0.0,
+          "mean_score_positive": 0.2417
+        }
+      }
+    },
+    "roadmap_knn_prediabetes": {
+      "n_profiles": 800,
+      "n_labeled": 671,
+      "n_healthy": 97,
+      "top1_primary_accuracy": 0.3455,
+      "top1_primary_accuracy_positive_only": 0.3009,
+      "top3_primary_coverage": 0.5636,
+      "top3_contains_any_true_condition": 0.6453,
+      "healthy_over_alert_rate": 0.134,
+      "per_condition": {
+        "perimenopause": {
+          "n_positive_profiles": 73,
+          "recall_at_3": 0.8493,
+          "absent_false_positive_rate_at_3": 0.055,
+          "threshold_recall": 0.8904,
+          "threshold_precision": 0.6566,
+          "threshold_flag_rate": 0.1237,
+          "healthy_flag_rate": 0.0412,
+          "mean_score_positive": 0.7331
+        },
+        "hypothyroidism": {
+          "n_positive_profiles": 61,
+          "recall_at_3": 0.8689,
+          "absent_false_positive_rate_at_3": 0.3491,
+          "threshold_recall": 0.8197,
+          "threshold_precision": 0.2959,
+          "threshold_flag_rate": 0.2112,
+          "healthy_flag_rate": 0.0206,
+          "mean_score_positive": 0.7881
+        },
+        "kidney_disease": {
+          "n_positive_profiles": 65,
+          "recall_at_3": 0.6615,
+          "absent_false_positive_rate_at_3": 0.0776,
+          "threshold_recall": 0.6923,
+          "threshold_precision": 0.4167,
+          "threshold_flag_rate": 0.135,
+          "healthy_flag_rate": 0.0103,
+          "mean_score_positive": 0.6045
+        },
+        "sleep_disorder": {
+          "n_positive_profiles": 69,
+          "recall_at_3": 0.8261,
+          "absent_false_positive_rate_at_3": 0.5814,
+          "threshold_recall": 0.3768,
+          "threshold_precision": 0.3023,
+          "threshold_flag_rate": 0.1075,
+          "healthy_flag_rate": 0.0309,
+          "mean_score_positive": 0.5729
+        },
+        "anemia": {
+          "n_positive_profiles": 55,
+          "recall_at_3": 0.3455,
+          "absent_false_positive_rate_at_3": 0.2443,
+          "threshold_recall": 0.2364,
+          "threshold_precision": 0.1566,
+          "threshold_flag_rate": 0.1037,
+          "healthy_flag_rate": 0.0206,
+          "mean_score_positive": 0.3301
+        },
+        "iron_deficiency": {
+          "n_positive_profiles": 82,
+          "recall_at_3": 0.7683,
+          "absent_false_positive_rate_at_3": 0.0529,
+          "threshold_recall": 0.7561,
+          "threshold_precision": 0.5536,
+          "threshold_flag_rate": 0.14,
+          "healthy_flag_rate": 0.0206,
+          "mean_score_positive": 0.5423
+        },
+        "hepatitis": {
+          "n_positive_profiles": 59,
+          "recall_at_3": 0.3051,
+          "absent_false_positive_rate_at_3": 0.0202,
+          "threshold_recall": 0.3729,
+          "threshold_precision": 0.3333,
+          "threshold_flag_rate": 0.0825,
+          "healthy_flag_rate": 0.0,
+          "mean_score_positive": 0.2175
+        },
+        "liver": {
+          "n_positive_profiles": 85,
+          "recall_at_3": 0.0588,
+          "absent_false_positive_rate_at_3": 0.0294,
+          "threshold_recall": 0.3176,
+          "threshold_precision": 0.2647,
+          "threshold_flag_rate": 0.1275,
+          "healthy_flag_rate": 0.0206,
+          "mean_score_positive": 0.1016
+        },
+        "prediabetes": {
+          "n_positive_profiles": 61,
+          "recall_at_3": 0.6393,
+          "absent_false_positive_rate_at_3": 0.4344,
+          "threshold_recall": 0.2459,
+          "threshold_precision": 0.2174,
+          "threshold_flag_rate": 0.0862,
+          "healthy_flag_rate": 0.0103,
+          "mean_score_positive": 0.3395
+        },
+        "inflammation": {
+          "n_positive_profiles": 96,
+          "recall_at_3": 0.3438,
+          "absent_false_positive_rate_at_3": 0.1705,
+          "threshold_recall": 0.2396,
+          "threshold_precision": 0.2706,
+          "threshold_flag_rate": 0.1062,
+          "healthy_flag_rate": 0.0412,
+          "mean_score_positive": 0.2583
+        },
+        "electrolyte_imbalance": {
+          "n_positive_profiles": 109,
+          "recall_at_3": 0.4495,
+          "absent_false_positive_rate_at_3": 0.3936,
+          "threshold_recall": 0.1193,
+          "threshold_precision": 0.2708,
+          "threshold_flag_rate": 0.06,
+          "healthy_flag_rate": 0.0206,
+          "mean_score_positive": 0.2873
+        },
+        "vitamin_d_deficiency": {
+          "n_positive_profiles": 119,
+          "recall_at_3": 0.5462,
+          "absent_false_positive_rate_at_3": 0.2129,
+          "threshold_recall": 0.1681,
+          "threshold_precision": 0.8,
+          "threshold_flag_rate": 0.0312,
+          "healthy_flag_rate": 0.0,
+          "mean_score_positive": 0.2417
+        }
+      }
+    },
+    "roadmap_knn_sleep_disorder": {
+      "n_profiles": 800,
+      "n_labeled": 671,
+      "n_healthy": 97,
+      "top1_primary_accuracy": 0.3455,
+      "top1_primary_accuracy_positive_only": 0.3009,
+      "top3_primary_coverage": 0.553,
+      "top3_contains_any_true_condition": 0.6364,
+      "healthy_over_alert_rate": 0.134,
+      "per_condition": {
+        "perimenopause": {
+          "n_positive_profiles": 73,
+          "recall_at_3": 0.863,
+          "absent_false_positive_rate_at_3": 0.055,
+          "threshold_recall": 0.8904,
+          "threshold_precision": 0.6566,
+          "threshold_flag_rate": 0.1237,
+          "healthy_flag_rate": 0.0412,
+          "mean_score_positive": 0.7331
+        },
+        "hypothyroidism": {
+          "n_positive_profiles": 61,
+          "recall_at_3": 0.8361,
+          "absent_false_positive_rate_at_3": 0.3748,
+          "threshold_recall": 0.8197,
+          "threshold_precision": 0.2959,
+          "threshold_flag_rate": 0.2112,
+          "healthy_flag_rate": 0.0206,
+          "mean_score_positive": 0.7881
+        },
+        "kidney_disease": {
+          "n_positive_profiles": 65,
+          "recall_at_3": 0.6462,
+          "absent_false_positive_rate_at_3": 0.0803,
+          "threshold_recall": 0.6923,
+          "threshold_precision": 0.4167,
+          "threshold_flag_rate": 0.135,
+          "healthy_flag_rate": 0.0103,
+          "mean_score_positive": 0.6045
+        },
+        "sleep_disorder": {
+          "n_positive_profiles": 69,
+          "recall_at_3": 0.9565,
+          "absent_false_positive_rate_at_3": 0.7729,
+          "threshold_recall": 0.3768,
+          "threshold_precision": 0.3023,
+          "threshold_flag_rate": 0.1075,
+          "healthy_flag_rate": 0.0309,
+          "mean_score_positive": 0.6083
+        },
+        "anemia": {
+          "n_positive_profiles": 55,
+          "recall_at_3": 0.3455,
+          "absent_false_positive_rate_at_3": 0.2242,
+          "threshold_recall": 0.2364,
+          "threshold_precision": 0.1566,
+          "threshold_flag_rate": 0.1037,
+          "healthy_flag_rate": 0.0206,
+          "mean_score_positive": 0.3301
+        },
+        "iron_deficiency": {
+          "n_positive_profiles": 82,
+          "recall_at_3": 0.7683,
+          "absent_false_positive_rate_at_3": 0.0529,
+          "threshold_recall": 0.7561,
+          "threshold_precision": 0.5536,
+          "threshold_flag_rate": 0.14,
+          "healthy_flag_rate": 0.0206,
+          "mean_score_positive": 0.5423
+        },
+        "hepatitis": {
+          "n_positive_profiles": 59,
+          "recall_at_3": 0.3051,
+          "absent_false_positive_rate_at_3": 0.0229,
+          "threshold_recall": 0.3729,
+          "threshold_precision": 0.3333,
+          "threshold_flag_rate": 0.0825,
+          "healthy_flag_rate": 0.0,
+          "mean_score_positive": 0.2175
+        },
+        "liver": {
+          "n_positive_profiles": 85,
+          "recall_at_3": 0.0588,
+          "absent_false_positive_rate_at_3": 0.0294,
+          "threshold_recall": 0.3176,
+          "threshold_precision": 0.2647,
+          "threshold_flag_rate": 0.1275,
+          "healthy_flag_rate": 0.0206,
+          "mean_score_positive": 0.1016
+        },
+        "prediabetes": {
+          "n_positive_profiles": 61,
+          "recall_at_3": 0.5082,
+          "absent_false_positive_rate_at_3": 0.318,
+          "threshold_recall": 0.2459,
+          "threshold_precision": 0.2174,
+          "threshold_flag_rate": 0.0862,
+          "healthy_flag_rate": 0.0103,
+          "mean_score_positive": 0.317
+        },
+        "inflammation": {
+          "n_positive_profiles": 96,
+          "recall_at_3": 0.3438,
+          "absent_false_positive_rate_at_3": 0.1491,
+          "threshold_recall": 0.2396,
+          "threshold_precision": 0.2706,
+          "threshold_flag_rate": 0.1062,
+          "healthy_flag_rate": 0.0412,
+          "mean_score_positive": 0.2583
+        },
+        "electrolyte_imbalance": {
+          "n_positive_profiles": 109,
+          "recall_at_3": 0.4404,
+          "absent_false_positive_rate_at_3": 0.3734,
+          "threshold_recall": 0.1193,
+          "threshold_precision": 0.2708,
+          "threshold_flag_rate": 0.06,
+          "healthy_flag_rate": 0.0206,
+          "mean_score_positive": 0.2873
+        },
+        "vitamin_d_deficiency": {
+          "n_positive_profiles": 119,
+          "recall_at_3": 0.5126,
+          "absent_false_positive_rate_at_3": 0.1733,
+          "threshold_recall": 0.1681,
+          "threshold_precision": 0.8,
+          "threshold_flag_rate": 0.0312,
+          "healthy_flag_rate": 0.0,
+          "mean_score_positive": 0.2417
+        }
+      }
+    }
+  },
+  "debug": {
+    "roadmap_knn_all_supported": {
+      "profiles_with_top3_change": 233,
+      "primary_rescues": 12
+    },
+    "roadmap_knn_anemia": {
+      "profiles_with_top3_change": 19,
+      "primary_rescues": 1
+    },
+    "roadmap_knn_electrolyte_imbalance": {
+      "profiles_with_top3_change": 31,
+      "primary_rescues": 0
+    },
+    "roadmap_knn_hepatitis": {
+      "profiles_with_top3_change": 0,
+      "primary_rescues": 0
+    },
+    "roadmap_knn_hidden_inflammation": {
+      "profiles_with_top3_change": 0,
+      "primary_rescues": 0
+    },
+    "roadmap_knn_hypothyroidism": {
+      "profiles_with_top3_change": 20,
+      "primary_rescues": 0
+    },
+    "roadmap_knn_iron_deficiency": {
+      "profiles_with_top3_change": 35,
+      "primary_rescues": 2
+    },
+    "roadmap_knn_kidney_disease": {
+      "profiles_with_top3_change": 2,
+      "primary_rescues": 0
+    },
+    "roadmap_knn_liver": {
+      "profiles_with_top3_change": 2,
+      "primary_rescues": 0
+    },
+    "roadmap_knn_perimenopause": {
+      "profiles_with_top3_change": 1,
+      "primary_rescues": 0
+    },
+    "roadmap_knn_prediabetes": {
+      "profiles_with_top3_change": 65,
+      "primary_rescues": 5
+    },
+    "roadmap_knn_sleep_disorder": {
+      "profiles_with_top3_change": 145,
+      "primary_rescues": 4
+    }
+  }
+}

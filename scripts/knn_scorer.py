@@ -51,6 +51,9 @@ import numpy as np
 import pandas as pd
 from sklearn.metrics.pairwise import cosine_distances
 
+from scripts.roadmap_knn import DEFAULT_ARTIFACT as ROADMAP_ARTIFACT
+from scripts.roadmap_knn_scorer import RoadmapKNNScorer
+
 warnings.filterwarnings("ignore")
 
 ROOT         = Path(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -158,6 +161,12 @@ FERRITIN_CD_COLS = {
 
 class KNNScorer:
     def __init__(self) -> None:
+        self._roadmap_delegate: RoadmapKNNScorer | None = None
+        if ROADMAP_ARTIFACT.exists():
+            self._roadmap_delegate = RoadmapKNNScorer(ROADMAP_ARTIFACT)
+            self._lab_cols = []
+            return
+
         pkg_path = ARTIFACT_DIR / "knn_inference_pkg.pkl"
         pop_path = ARTIFACT_DIR / "lab_population_rates.json"
 
@@ -210,6 +219,9 @@ class KNNScorer:
           - age_years  (numeric)
           - gender     (1/2 or "Male"/"Female" or "1"/"2")
         """
+        if self._roadmap_delegate is not None:
+            return self._roadmap_delegate.score(answers)
+
         sex, age = self._extract_sex_age(answers)
         user_vec = self._build_user_vector(answers)
 

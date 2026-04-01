@@ -1,5 +1,6 @@
 import { buildMockDeepResult, buildOfflineDeepResult } from '@/src/lib/mockResults';
 import { BAYESIAN_ANSWERS_KEY, BAYESIAN_DETAILS_KEY, BAYESIAN_SCORES_KEY, CONFIRMED_CONDITIONS_KEY, DEEP_STORAGE_KEY, MEDGEMMA_STORAGE_KEY, ML_SCORES_KEY, getPrivacyContext } from '@/src/lib/privacy';
+import { ENABLE_KNN_LAYER } from '@/src/lib/featureFlags';
 // ─── Storage keys ─────────────────────────────────────────────────────────────
 
 export type AiMode = 'live' | 'mock' | 'offline';
@@ -122,9 +123,16 @@ export interface BayesianQuestion {
   answer_options: BayesianAnswerOption[];
 }
 
+export interface BayesianStagedFollowUp {
+  entry_question_id: string;
+  continue_on_values: string[];
+  hidden_question_ids: string[];
+}
+
 export interface ConditionQuestion {
   condition: string;
   probability: number;
+  staged_follow_up?: BayesianStagedFollowUp | null;
   questions: BayesianQuestion[];
 }
 
@@ -381,7 +389,15 @@ export async function fetchDeepAnalysis(
     fetch('/api/deep-analyze', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ answers, mlScores, rawMlScores, clarificationQA, confirmedConditions, useKNN: true, privacy: includePrivacy ? privacy : null }),
+      body: JSON.stringify({
+        answers,
+        mlScores,
+        rawMlScores,
+        clarificationQA,
+        confirmedConditions,
+        useKNN: ENABLE_KNN_LAYER,
+        privacy: includePrivacy ? privacy : null,
+      }),
     });
 
   let response = await makeRequest(true);

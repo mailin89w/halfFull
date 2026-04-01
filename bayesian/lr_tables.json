@@ -29,7 +29,6 @@
       "electrolytes",
       "hepatitis",
       "perimenopause",
-      "vitamin_b12_deficiency",
       "vitamin_d_deficiency"
     ],
     "confounders_covered": [
@@ -318,32 +317,20 @@
           "id": "anemia_q5",
           "fdda_section": "A",
           "fdda_question": true,
-          "text": "For how long have you been experiencing this tiredness every day?",
-          "answer_type": "categorical",
+          "text": "Do you get short of breath, lightheaded, or feel your heart racing with mild exertion that used to feel easy?",
+          "answer_type": "binary",
           "answer_options": [
             {
-              "value": "lt_4w",
-              "label": "Less than 4 weeks",
-              "lr": 0.75,
-              "lr_note": "Acute onset less typical for anemia (which is often gradual).",
-              "lr_confidence": "low"
+              "value": "yes",
+              "label": "Yes",
+              "lr": 2.2,
+              "lr_source": "Clinical heuristic from classic symptomatic anemia presentation (exertional dyspnea, tachycardia, presyncope). More discriminative than fatigue duration alone.",
+              "lr_confidence": "medium"
             },
             {
-              "value": "4_12w",
-              "label": "4\u201312 weeks",
-              "lr": 1.1,
-              "lr_confidence": "low"
-            },
-            {
-              "value": "12w_6m",
-              "label": "More than 12 weeks up to 6 months",
-              "lr": 1.3,
-              "lr_confidence": "low"
-            },
-            {
-              "value": "gt_6m",
-              "label": "More than 6 months",
-              "lr": 1.2,
+              "value": "no",
+              "label": "No",
+              "lr": 0.82,
               "lr_confidence": "low"
             }
           ]
@@ -932,20 +919,20 @@
           "id": "liver_q5",
           "fdda_section": "C",
           "fdda_question": true,
-          "text": "Have you lost weight unintentionally \u2014 more than 5% of your body weight in the last 3 months?",
+          "text": "Have your ankles or legs become swollen, or do you bruise more easily than before?",
           "answer_type": "binary",
           "answer_options": [
             {
               "value": "yes",
               "label": "Yes",
-              "lr": 2.5,
-              "lr_source": "Clinical estimate. Unintentional weight loss is a feature of decompensated liver disease.",
-              "lr_confidence": "low"
+              "lr": 3.2,
+              "lr_source": "Clinical heuristic from chronic liver disease / portal hypertension patterns. Peripheral edema and easy bruising are more discriminative than nonspecific weight loss.",
+              "lr_confidence": "medium"
             },
             {
               "value": "no",
               "label": "No",
-              "lr": 0.82,
+              "lr": 0.78,
               "lr_confidence": "low"
             }
           ]
@@ -1060,20 +1047,20 @@
           "id": "inflam_q1",
           "fdda_section": "C",
           "fdda_question": true,
-          "text": "Have you lost more than 5% of your body weight in the last 3 months without trying?",
+          "text": "Have you had fevers, night sweats, or felt feverish without a clear explanation in the last 6 weeks?",
           "answer_type": "binary",
           "answer_options": [
             {
               "value": "yes",
               "label": "Yes",
-              "lr": 3.5,
-              "lr_source": "Unexplained weight loss as marker of systemic inflammation \u2014 clinical consensus, no primary diagnostic-accuracy study LR confirmed from accessible evidence.",
-              "lr_confidence": "low"
+              "lr": 2.8,
+              "lr_source": "Clinical heuristic for active systemic inflammatory or infectious states. More discriminative for active inflammation than weight loss alone.",
+              "lr_confidence": "medium"
             },
             {
               "value": "no",
               "label": "No",
-              "lr": 0.7,
+              "lr": 0.8,
               "lr_confidence": "medium"
             }
           ]
@@ -1082,23 +1069,23 @@
           "id": "inflam_q2",
           "fdda_section": null,
           "fdda_question": false,
-          "text": "Have you had a fever, persistent sore throat, or an infection in the last 6 weeks?",
-          "supplementary_note": "Recent infection \u2014 important acute inflammation trigger. Not in FDDA.",
+          "text": "Have you had a recent infection or a lingering inflammatory illness in the last 6 weeks?",
+          "supplementary_note": "Recent infection or unresolved inflammatory illness \u2014 important inflammation trigger. Not in FDDA.",
           "answer_type": "binary",
           "answer_options": [
             {
               "value": "yes",
               "label": "Yes",
-              "lr": 3.0,
-              "lr_note": "Post-infectious fatigue and active infection are the most common causes of elevated CRP. Clinical estimate.",
-              "lr_confidence": "low",
-              "lr_source": "Clinical estimate. No primary diagnostic-accuracy LR source identified for 'recent infection/fever \u2192 CRP elevation' as symptom question."
+              "lr": 2.6,
+              "lr_note": "Recent infection or inflammatory illness often drives acute CRP/ESR elevation and inflammatory fatigue.",
+              "lr_confidence": "medium",
+              "lr_source": "Clinical heuristic. Broader but more faithful to real inflammation presentations than fever-alone wording."
             },
             {
               "value": "no",
               "label": "No",
-              "lr": 0.55,
-              "lr_confidence": "low"
+              "lr": 0.72,
+              "lr_confidence": "medium"
             }
           ]
         },
@@ -1106,21 +1093,21 @@
           "id": "inflam_q3",
           "fdda_section": null,
           "fdda_question": false,
-          "text": "Do you have pain, swelling, or stiffness in your joints, especially in the morning?",
-          "supplementary_note": "Joint symptoms \u2014 key differentiator for autoimmune/rheumatic inflammation.",
+          "text": "Do you have swollen joints or morning stiffness lasting more than 30 minutes?",
+          "supplementary_note": "Persistent morning stiffness or swollen joints \u2014 more specific for autoimmune-rheumatic inflammation than generic aches.",
           "answer_type": "binary",
           "answer_options": [
             {
               "value": "yes",
               "label": "Yes",
-              "lr": 2.5,
+              "lr": 3.0,
               "lr_source": "Aletaha D et al., Arthritis Rheum. 2010. Morning stiffness + joint swelling is a core ACR criterion for rheumatoid arthritis and other systemic inflammatory conditions.",
               "lr_confidence": "medium"
             },
             {
               "value": "no",
               "label": "No",
-              "lr": 0.75,
+              "lr": 0.72,
               "lr_confidence": "medium"
             }
           ]
@@ -1129,33 +1116,20 @@
           "id": "inflam_q4",
           "fdda_section": "A",
           "fdda_question": true,
-          "text": "For how long have you been experiencing this tiredness every day?",
-          "answer_type": "categorical",
+          "text": "Have you had swollen glands, mouth ulcers, rashes, or red/painful eyes along with the fatigue?",
+          "answer_type": "binary",
           "answer_options": [
             {
-              "value": "lt_4w",
-              "label": "Less than 4 weeks",
-              "lr": 2.0,
-              "lr_note": "Acute-onset fatigue is more consistent with active infection or acute inflammatory episode.",
-              "lr_confidence": "low"
+              "value": "yes",
+              "label": "Yes",
+              "lr": 2.4,
+              "lr_note": "Extra-articular inflammatory features increase confidence that fatigue is part of an inflammatory syndrome rather than a nonspecific fatigue complaint.",
+              "lr_confidence": "medium"
             },
             {
-              "value": "4_12w",
-              "label": "4\u201312 weeks",
-              "lr": 1.5,
-              "lr_confidence": "low"
-            },
-            {
-              "value": "12w_6m",
-              "label": "More than 12 weeks up to 6 months",
-              "lr": 1.0,
-              "lr_confidence": "low"
-            },
-            {
-              "value": "gt_6m",
-              "label": "More than 6 months",
-              "lr": 0.8,
-              "lr_note": "Chronic fatigue >6 months is less typical for simple acute inflammation.",
+              "value": "no",
+              "label": "No",
+              "lr": 0.84,
               "lr_confidence": "low"
             }
           ]
@@ -1197,22 +1171,22 @@
           "id": "elec_q2",
           "fdda_section": null,
           "fdda_question": false,
-          "text": "Have you had prolonged vomiting or diarrhoea (more than 2 days) in the past 2 weeks?",
+          "text": "Have you had prolonged vomiting or diarrhoea for more than 2 days, or obvious dehydration, in the past 2 weeks?",
           "supplementary_note": "GI fluid loss \u2014 primary cause of acute electrolyte disturbance. Not in FDDA.",
           "answer_type": "binary",
           "answer_options": [
             {
               "value": "yes",
               "label": "Yes",
-              "lr": 3.5,
-              "lr_note": "Acute GI losses are the leading cause of clinically significant hyponatraemia/hypokalaemia. Clinical estimate.",
+              "lr": 4.0,
+              "lr_note": "Acute GI fluid losses and dehydration are major drivers of clinically significant electrolyte disturbance.",
               "lr_confidence": "low",
               "lr_source": "Clinical estimate. GI fluid loss as electrolyte risk \u2014 physiologically supported but LR+ 3.5 not sourced from a formal diagnostic-accuracy study in accessible evidence."
             },
             {
               "value": "no",
               "label": "No",
-              "lr": 0.75,
+              "lr": 0.72,
               "lr_confidence": "low"
             }
           ]
@@ -1221,21 +1195,21 @@
           "id": "elec_q3",
           "fdda_section": null,
           "fdda_question": false,
-          "text": "Do you regularly experience muscle cramps, muscle weakness, or muscle twitching?",
-          "supplementary_note": "Muscle symptoms of electrolyte imbalance \u2014 not in FDDA.",
+          "text": "Do you get muscle cramps or twitching together with weakness, tingling, palpitations, or feeling faint?",
+          "supplementary_note": "Clustered neuromuscular or rhythm-related symptoms are more specific for electrolyte disturbance than cramps alone.",
           "answer_type": "binary",
           "answer_options": [
             {
               "value": "yes",
               "label": "Yes",
-              "lr": 2.0,
-              "lr_source": "Gennari FJ, N Engl J Med. 1998. Muscle cramps/weakness is a clinical marker of hypokalaemia and hypomagnesaemia. LR is modest given non-specificity.",
-              "lr_confidence": "low"
+              "lr": 2.6,
+              "lr_source": "Clinical heuristic from symptomatic hypokalaemia/hypomagnesaemia presentations. Symptom clusters are more discriminative than isolated cramps.",
+              "lr_confidence": "medium"
             },
             {
               "value": "no",
               "label": "No",
-              "lr": 0.8,
+              "lr": 0.78,
               "lr_confidence": "low"
             }
           ]
@@ -1244,20 +1218,20 @@
           "id": "elec_q4",
           "fdda_section": "C",
           "fdda_question": true,
-          "text": "Do you take any medications regularly? If yes, do they include diuretics (water pills), laxatives, or antacids?",
+          "text": "Do you take diuretics (water pills), laxatives, antacids, or other medicines that have caused dehydration or low potassium before?",
           "answer_type": "binary",
           "answer_options": [
             {
               "value": "yes",
               "label": "Yes \u2014 taking diuretics, laxatives, or antacids",
-              "lr": 3.0,
+              "lr": 3.4,
               "lr_source": "Rastegar A et al., NEJM. 2001. Diuretics are the most common cause of electrolyte imbalance \u2014 this is a review, not a diagnostic-accuracy study. LR+ is a clinical estimate.",
               "lr_confidence": "low"
             },
             {
               "value": "no",
               "label": "No",
-              "lr": 0.78,
+              "lr": 0.76,
               "lr_confidence": "low"
             }
           ]
@@ -1331,8 +1305,8 @@
             {
               "value": "yes",
               "label": "Yes to any of the above",
-              "lr": 4.5,
-              "lr_source": "Alter MJ, NEJM. 1999. HCV risk factors paper \u2014 describes exposure prevalence, not a formal symptom LR diagnostic-accuracy study. LR+ 4.5 is a clinical estimate.",
+              "lr": 5.0,
+              "lr_source": "Alter MJ, NEJM. 1999. HCV risk factors paper \u2014 describes exposure prevalence, not a formal symptom LR diagnostic-accuracy study. LR+ is a clinical estimate.",
               "lr_confidence": "low"
             },
             {
@@ -1347,20 +1321,20 @@
           "id": "hep_q4",
           "fdda_section": "C",
           "fdda_question": true,
-          "text": "Have you lost weight unintentionally in the last 3 months?",
+          "text": "Have you had dark urine, pale stools, or pain/discomfort under the right ribs along with the fatigue?",
           "answer_type": "binary",
           "answer_options": [
             {
               "value": "yes",
               "label": "Yes",
-              "lr": 2.5,
-              "lr_note": "Unintentional weight loss is a feature of advanced hepatic disease or active viral hepatitis.",
-              "lr_confidence": "low"
+              "lr": 3.2,
+              "lr_note": "Cholestatic symptoms or right-upper-quadrant discomfort are more discriminative for hepatitis/hepatobiliary disease than generic weight loss.",
+              "lr_confidence": "medium"
             },
             {
               "value": "no",
               "label": "No",
-              "lr": 0.83,
+              "lr": 0.78,
               "lr_confidence": "low"
             }
           ]
@@ -1542,141 +1516,25 @@
     },
     "vitamin_b12_deficiency": {
       "trigger_threshold": 0.6,
-      "questions": [
-        {
-          "id": "b12_q1",
-          "fdda_section": null,
-          "fdda_question": false,
-          "text": "Do you take metformin most days, or have you taken it regularly for at least 6 months?",
-          "supplementary_note": "Long-term metformin use is a recognized B12 deficiency risk factor.",
-          "answer_type": "binary",
-          "answer_options": [
-            {
-              "value": "yes",
-              "label": "Yes",
-              "lr": 2.2,
-              "lr_source": "NICE vitamin B12 deficiency evidence review (2024) and contemporary consensus reviews list metformin as a common risk factor for low B12.",
-              "lr_confidence": "medium"
-            },
-            {
-              "value": "no",
-              "label": "No",
-              "lr": 0.85,
-              "lr_confidence": "low"
-            }
-          ]
-        },
-        {
-          "id": "b12_q2",
-          "fdda_section": null,
-          "fdda_question": false,
-          "text": "Do you take acid-suppressing medication like omeprazole, pantoprazole, or famotidine most days for more than 3 months?",
-          "supplementary_note": "Chronic acid suppression can impair dietary B12 absorption.",
-          "answer_type": "binary",
-          "answer_options": [
-            {
-              "value": "yes",
-              "label": "Yes",
-              "lr": 1.8,
-              "lr_source": "Risk-factor estimate based on guideline and review evidence linking chronic PPI or H2 blocker use with lower B12 status.",
-              "lr_confidence": "medium"
-            },
-            {
-              "value": "no",
-              "label": "No",
-              "lr": 0.9,
-              "lr_confidence": "low"
-            }
-          ]
-        },
-        {
-          "id": "b12_q3",
-          "fdda_section": "C",
-          "fdda_question": true,
-          "text": "Do you avoid most animal products, or follow a vegan diet?",
-          "supplementary_note": "Low animal-product intake lowers B12 intake unless supplementation is consistent.",
-          "answer_type": "binary",
-          "answer_options": [
-            {
-              "value": "yes",
-              "label": "Yes",
-              "lr": 2.0,
-              "lr_source": "Dietary-risk estimate supported by clinical reviews and guidelines on B12 deficiency in low-animal-product diets.",
-              "lr_confidence": "medium"
-            },
-            {
-              "value": "no",
-              "label": "No",
-              "lr": 0.85,
-              "lr_confidence": "low"
-            }
-          ]
-        },
-        {
-          "id": "b12_q4",
-          "fdda_section": null,
-          "fdda_question": false,
-          "text": "Have you ever been told you have pernicious anemia, autoimmune gastritis, Crohn's disease, celiac disease, or had bowel surgery affecting absorption?",
-          "supplementary_note": "Autoimmune or malabsorptive causes are among the strongest clinical risk factors for true B12 deficiency.",
-          "answer_type": "binary",
-          "answer_options": [
-            {
-              "value": "yes",
-              "label": "Yes",
-              "lr": 3.2,
-              "lr_source": "NICE vitamin B12 deficiency evidence review (2024). Pernicious anemia and malabsorption syndromes are major etiologic risk factors.",
-              "lr_confidence": "medium"
-            },
-            {
-              "value": "no",
-              "label": "No",
-              "lr": 0.8,
-              "lr_confidence": "low"
-            }
-          ]
-        },
-        {
-          "id": "b12_q5",
-          "fdda_section": null,
-          "fdda_question": false,
-          "text": "Have you had new tingling or numbness in your hands or feet, trouble with balance, or unexplained memory changes?",
-          "supplementary_note": "Neurologic symptoms are clinically important for B12 deficiency but are not highly specific.",
-          "answer_type": "binary",
-          "answer_options": [
-            {
-              "value": "yes",
-              "label": "Yes",
-              "lr": 1.6,
-              "lr_source": "Clinical heuristic based on B12 deficiency neurology reviews; symptom LR is kept modest because formal diagnostic-accuracy evidence is limited.",
-              "lr_confidence": "low"
-            },
-            {
-              "value": "no",
-              "label": "No",
-              "lr": 0.9,
-              "lr_confidence": "low"
-            }
-          ]
-        }
-      ]
+      "questions": []
     },
     "vitamin_d_deficiency": {
       "trigger_threshold": 0.35,
       "questions": [
         {
           "id": "vitd_q1",
-          "fdda_section": "C",
-          "fdda_question": true,
-          "text": "Do you spend very little time in direct sunlight most weeks, or are you mostly indoors or fully covered when outside?",
-          "supplementary_note": "Low UV exposure is a major driver of low vitamin D status.",
+          "fdda_section": null,
+          "fdda_question": false,
+          "text": "Do your thighs or hips feel weak when rising from a chair, climbing stairs, or getting up from the floor?",
+          "supplementary_note": "Conservative osteomalacia rescue question. Proximal lower-limb weakness is one of the more characteristic adult presentations of severe vitamin D deficiency, but symptom-level LRs are not well established.",
           "answer_type": "binary",
           "answer_options": [
             {
               "value": "yes",
               "label": "Yes",
               "lr": 2.0,
-              "lr_source": "NIH Office of Dietary Supplements vitamin D professional fact sheet. Limited sunlight exposure is a recognized risk factor for low 25(OH)D.",
-              "lr_confidence": "medium"
+              "lr_source": "Expert-derived low-confidence estimate based on adult osteomalacia reviews describing proximal muscle weakness as a characteristic clinical feature. No direct adult diagnostic-accuracy LR study identified.",
+              "lr_confidence": "low"
             },
             {
               "value": "no",
@@ -1690,39 +1548,16 @@
           "id": "vitd_q2",
           "fdda_section": null,
           "fdda_question": false,
-          "text": "Have you been told you have obesity, or is your BMI 30 or above?",
-          "supplementary_note": "Obesity is consistently associated with lower measured 25(OH)D levels.",
+          "text": "Do you have deep aching bone pain in your low back, pelvis, hips, ribs, or legs, especially with standing or walking?",
+          "supplementary_note": "Conservative osteomalacia rescue question. Diffuse weight-bearing bone pain is repeatedly described in adult osteomalacia, but remains nonspecific.",
           "answer_type": "binary",
           "answer_options": [
             {
               "value": "yes",
               "label": "Yes",
-              "lr": 1.6,
-              "lr_source": "Risk-factor estimate based on review evidence and NIH guidance identifying obesity as a common vitamin D deficiency risk factor.",
-              "lr_confidence": "medium"
-            },
-            {
-              "value": "no",
-              "label": "No",
-              "lr": 0.9,
+              "lr": 1.8,
+              "lr_source": "Expert-derived low-confidence estimate based on adult osteomalacia reviews and case series describing diffuse bone pain in the low back, pelvis, hips, ribs, and legs. No direct adult symptom LR study identified.",
               "lr_confidence": "low"
-            }
-          ]
-        },
-        {
-          "id": "vitd_q3",
-          "fdda_section": null,
-          "fdda_question": false,
-          "text": "Have you ever been told you have celiac disease, Crohn's disease, pancreatic disease, or had bowel surgery that affects absorption?",
-          "supplementary_note": "Fat malabsorption is a common clinical cause of vitamin D deficiency.",
-          "answer_type": "binary",
-          "answer_options": [
-            {
-              "value": "yes",
-              "label": "Yes",
-              "lr": 2.3,
-              "lr_source": "Vitamin D deficiency and osteomalacia reviews consistently identify malabsorption syndromes as major causes of deficiency.",
-              "lr_confidence": "medium"
             },
             {
               "value": "no",
@@ -1733,24 +1568,47 @@
           ]
         },
         {
-          "id": "vitd_q4",
+          "id": "vitd_q3",
           "fdda_section": null,
           "fdda_question": false,
-          "text": "Have you been told you have chronic kidney disease or chronic liver disease?",
-          "supplementary_note": "Kidney and liver disease can reduce vitamin D activation or handling.",
+          "text": "Have you been falling more often, or has your walking become noticeably slower, more unsteady, or waddling because your legs feel weak?",
+          "supplementary_note": "Conservative osteomalacia rescue question. Falls and gait difficulty can reflect proximal myopathy, but are not specific for vitamin D deficiency.",
           "answer_type": "binary",
           "answer_options": [
             {
               "value": "yes",
               "label": "Yes",
-              "lr": 2.0,
-              "lr_source": "Clinical review evidence identifies CKD and chronic liver disease as important risk factors for low active vitamin D states.",
-              "lr_confidence": "medium"
+              "lr": 1.7,
+              "lr_source": "Expert-derived low-confidence estimate based on osteomalacia case reports and series describing gait difficulty, waddling gait, and falls with proximal weakness. No direct adult diagnostic LR study identified.",
+              "lr_confidence": "low"
             },
             {
               "value": "no",
               "label": "No",
-              "lr": 0.88,
+              "lr": 0.9,
+              "lr_confidence": "low"
+            }
+          ]
+        },
+        {
+          "id": "vitd_q4",
+          "fdda_section": null,
+          "fdda_question": false,
+          "text": "Have you ever had a low-trauma fracture, stress fracture, or been told you might have a pseudofracture?",
+          "supplementary_note": "Conservative osteomalacia rescue question. Fragility-type fractures are more specific than pain alone, but uncommon and usually indicate more advanced disease.",
+          "answer_type": "binary",
+          "answer_options": [
+            {
+              "value": "yes",
+              "label": "Yes",
+              "lr": 3.0,
+              "lr_source": "Expert-derived low-confidence estimate based on osteomalacia reviews describing Looser zones, pseudofractures, and fragility-type fractures as important clues to severe disease. No direct adult diagnostic LR study identified.",
+              "lr_confidence": "low"
+            },
+            {
+              "value": "no",
+              "label": "No",
+              "lr": 0.95,
               "lr_confidence": "low"
             }
           ]
@@ -1759,15 +1617,15 @@
           "id": "vitd_q5",
           "fdda_section": null,
           "fdda_question": false,
-          "text": "Do you have diffuse bone pain, marked muscle weakness when climbing stairs or rising from a chair, or frequent falls?",
-          "supplementary_note": "These symptoms fit osteomalacia-type presentations but are nonspecific.",
+          "text": "When someone presses on your shins, ribs, hips, or breastbone, do they feel unusually tender or painful?",
+          "supplementary_note": "Conservative osteomalacia rescue question. Bone tenderness is described in adult osteomalacia but is difficult to capture reliably in self-report, so the LR is kept low.",
           "answer_type": "binary",
           "answer_options": [
             {
               "value": "yes",
               "label": "Yes",
-              "lr": 1.7,
-              "lr_source": "Osteomalacia and vitamin D deficiency reviews describe proximal muscle weakness and bone pain as common manifestations; LR kept low because specificity is limited.",
+              "lr": 1.5,
+              "lr_source": "Expert-derived low-confidence estimate based on osteomalacia reviews describing bone tenderness in symptomatic disease. No direct adult symptom LR study identified.",
               "lr_confidence": "low"
             },
             {

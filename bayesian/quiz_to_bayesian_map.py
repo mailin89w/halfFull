@@ -12,14 +12,12 @@ with lr_tables.json (see exploration report in project context):
 
   rhq031  (regular periods flag)     ↔  peri_q3       (menstrual irregularity — logically flipped)
   slq030  (snoring frequency scale)  ↔  sleep_q2      (snores loudly — binary)
-  slq050  (doctor-told sleep trouble) ↔ sleep_q5      (difficulty sleeping ≥3 nights/week)
   kiq480  (nocturia count per night)  ↔ kidney_q3     (wakes to urinate)
   kiq480  (nocturia count per night)  ↔ prediabetes_q3 (urinary frequency inc. nocturia)
 
 NHANES answer codes used here:
   rhq031:  1 = regular periods, 2 = irregular / no periods in past 12 months
   slq030:  1 = never, 2 = rarely, 3 = occasionally, 4 = frequently, 5 = always
-  slq050:  1 = yes (ever told by doctor), 2 = no
   kiq480:  ordinal count: 0 = zero, 1 = once, 2 = twice, 3 = three or more times
 """
 
@@ -77,14 +75,6 @@ QUIZ_TO_BAYESIAN: dict[str, dict[str, Union[str, list[str], Callable[[object], s
         "bayesian_id": "sleep_q2",
         "convert": lambda v: "yes" if int(v) >= 2 else "no",
     },
-    "slq050___ever_told_doctor_had_trouble_sleeping?": {
-        # Quiz:     "Has a doctor ever told you that you have trouble sleeping?"
-        #           1 = yes, 2 = no
-        # Bayesian: "Do you have difficulty falling or staying asleep ≥3 nights/week?"  (sleep_q5)
-        #           A doctor diagnosis is a conservative proxy for the symptom being present
-        "bayesian_id": "sleep_q5",
-        "convert": lambda v: "yes" if str(v) == "1" else "no",
-    },
     "kiq480___how_many_times_urinate_in_night?": {
         # Quiz:     "On a typical night, how many times do you wake up to urinate?"
         #           ordinal count (0, 1, 2, 3+)
@@ -114,7 +104,6 @@ QUIZ_TO_BAYESIAN: dict[str, dict[str, Union[str, list[str], Callable[[object], s
 _ALIASES: dict[str, str] = {
     "rhq031":  "rhq031___had_regular_periods_in_past_12_months",
     "slq030":  "slq030___how_often_do_you_snore?",
-    "slq050":  "slq050___ever_told_doctor_had_trouble_sleeping?",
     "kiq480":  "kiq480___how_many_times_urinate_in_night?",
     "alq111":  "alq111___ever_had_a_drink_of_any_kind_of_alcohol",
     "alq130":  "alq130___avg_#_alcoholic_drinks/day___past_12_mos",

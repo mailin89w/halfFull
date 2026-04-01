@@ -26,6 +26,7 @@ import {
   readStoredDeepResult,
   readStoredMLScores,
 } from '@/src/lib/medgemma';
+import { ENABLE_KNN_LAYER } from '@/src/lib/featureFlags';
 
 import type { DeepMedGemmaResult, DoctorKit } from '@/src/lib/medgemma';
 import { DiagnosisCard } from '@/src/components/results/DiagnosisCard';
@@ -132,7 +133,7 @@ const effectiveSummaryLine = mlRanButEmpty
 
   const aiLabel = deep?.meta?.label ?? 'Structured local report';
   const isFallbackContent = deep?.meta?.fallback ?? true;
-  const knnLabSignals = deep?.knnSignals?.lab_signals ?? [];
+  const knnLabSignals = ENABLE_KNN_LAYER ? (deep?.knnSignals?.lab_signals ?? []) : [];
 
   const diagnosisMeta = Object.fromEntries(
     diagnoses.map((diagnosis) => {
@@ -156,15 +157,6 @@ const effectiveSummaryLine = mlRanButEmpty
 
   const diagnosisReasoning = Object.fromEntries(
     diagnoses.map((diagnosis) => {
-      const clusterMatch = knnLabSignals.find((signal) =>
-        signal.lab.toLowerCase().includes(diagnosis.id.replace('_', ' ')) ||
-        diagnosis.tests.some((test) => signal.lab.toLowerCase().includes(test.name.toLowerCase().split(' ')[0]))
-      );
-
-      const clusterSummary = clusterMatch
-        ? `Cluster: ${Math.round(clusterMatch.neighbour_pct)}% of neighbours flagged ${clusterMatch.lab.toLowerCase()}`
-        : 'Cluster: no strong neighbour lab support available';
-
       const synthesisSummary = getInsightForDiagnosis(deep, diagnosis.id)
         ? `Synthesis: ${getInsightForDiagnosis(deep, diagnosis.id)}`
         : deep?.personalizedSummary
@@ -177,7 +169,6 @@ const effectiveSummaryLine = mlRanButEmpty
           mlScore: mlScores?.[diagnosis.id],
           threshold: ML_THRESHOLD,
           bayesian: bayesianDetails?.[diagnosis.id] ?? null,
-          clusterSummary,
           synthesisSummary,
         },
       ] as const;
@@ -681,7 +672,7 @@ const effectiveSummaryLine = mlRanButEmpty
           )}
 
           {/* ── KNN similar-profile lab signals ───────────────────────────── */}
-          {knnLabSignals.length > 0 && (
+          {ENABLE_KNN_LAYER && knnLabSignals.length > 0 && (
             <div className="section-card px-5 py-4">
               <div className="mb-3">
                 <h3 className="text-xs font-semibold uppercase tracking-[0.16em] text-[var(--color-ink)]">

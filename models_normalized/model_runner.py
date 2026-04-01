@@ -240,7 +240,7 @@ USER_FACING_THRESHOLDS = {
     "hidden_inflammation":   0.40,   # raised 0.30→0.40 on 2026-03-26 quick-win sweep: precision 6.3%→8.2%, flag 55.3%→36.5%, recall 46.7%→40.0%
     "prediabetes":           0.45,   # corrected v2 runtime threshold after fixing NHANES prediabetes feature mapping
     "thyroid":               0.75,   # retained legacy strict cleanup after ML-THYROID-02 v3 validation failed to beat v2 cleanly on the 760 cohort
-    "electrolyte_imbalance": 0.46,   # raised 0.40→0.46: flag 54%→34%, recall 40%→15%
+    "electrolyte_imbalance": 0.55,   # P4 de-emphasis for comorbidity-first ranking: move closer to model's 0.60 recommended threshold because current surfacing is very noisy (low-value flags, minimal target recall)
     "perimenopause":         0.40,
     "sleep_disorder":        0.70,   # ML-SLEEP-02 v3 rebuild: materially better recall than v2 at 0.75, while keeping healthy FP close to baseline
     "vitamin_d_deficiency":   0.48,
@@ -253,11 +253,16 @@ BAYESIAN_TRIGGER_THRESHOLDS = {
     "hepatitis_bc":          0.10,
     "liver":                 0.10,
     "iron_deficiency":       0.15,
-    "kidney":                0.25,
-    "anemia":                0.35,
-    "hidden_inflammation":   0.30,
+    # Lowered 2026-03-31 after default-vs-full Bayesian comparison on the
+    # 760 balanced cohort showed the biggest missed lift on kidney, anemia,
+    # hidden_inflammation, thyroid, and hepatitis. These values are still
+    # conservative enough to avoid routing very low-signal profiles into Bayes,
+    # but broaden follow-up coverage for borderline near-miss cases.
+    "kidney":                0.18,
+    "anemia":                0.25,
+    "hidden_inflammation":   0.22,
     "prediabetes":           0.40,
-    "thyroid":               0.50,
+    "thyroid":               0.42,
     "electrolyte_imbalance": 0.46,
     "perimenopause":         0.40,
     "sleep_disorder":        0.60,
@@ -953,6 +958,13 @@ class ModelRunner:
         rarer, so low-confidence male scores should not surface without stronger
         evidence.  Gate: if male AND score < 0.30, downweight ×0.25.
 
+        A final pediatric cleanup gate targets the remaining healthy false
+        positives seen in the 760-cohort audit: low-confidence iron alerts in
+        girls younger than 10. The artifact was trained on an adult NHANES table
+        and still assigns these profiles borderline iron scores despite the
+        absence of useful adult menstrual-loss pathways. Gate: if female AND
+        age < 10 AND score < 0.30, downweight ×0.3.
+
         Prediabetes gate
         ----------------
         Prediabetes is driven by insulin resistance, which correlates strongly
@@ -1057,6 +1069,16 @@ class ModelRunner:
                         original, scores["iron_deficiency"],
                     )
 
+            if female and age < 10:
+                original = scores["iron_deficiency"]
+                if original < 0.30:
+                    scores["iron_deficiency"] = round(original * 0.3, 4)
+                    log.debug(
+                        "iron_deficiency pediatric female cleanup gate applied (age < 10, score < 0.30): "
+                        "%.4f → %.4f",
+                        original, scores["iron_deficiency"],
+                    )
+
         # ── Prediabetes gate ────────────────────────────────────────────────────
         # Only suppress for users who are both very lean (BMI < 21) AND have
         # clearly normal fasting glucose (< 85 mg/dL) — a small, low-risk subset
@@ -1144,6 +1166,51 @@ class ModelRunner:
                 log.debug(
                     "thyroid older-male polypharmacy gate applied (age=%.0f, health=%.1f, meds=%.1f): %.4f → %.4f",
                     age, general_health, med_count, original, scores["thyroid"],
+                )
+
+        # ── Sleep-disorder gate ────────────────────────────────────────────────
+        # The remaining healthy sleep false positives on the 760 cohort are a
+        # narrow cluster: male users with no explicit sleep-trouble history,
+        # low fatigue, no nocturia, and high chronic-illness / polypharmacy
+        # burden. Downweight only these borderline scores so plausible sleep
+        # comorbidity hits still survive into the top-3.
+        if "sleep_disorder" in scores:
+            original = scores["sleep_disorder"]
+            gender = str(_gender_from_context(ctx) or "")
+            dpq040 = _fv("dpq040___feeling_tired_or_having_little_energy")
+            nocturia = _fv("kiq480___how_many_times_urinate_night")
+            try:
+                general_health = float(ctx.get("raw_general_health")) if ctx.get("raw_general_health") is not None else None
+            except (TypeError, ValueError):
+                general_health = None
+            try:
+                med_count = float(ctx.get("raw_med_count")) if ctx.get("raw_med_count") is not None else None
+            except (TypeError, ValueError):
+                med_count = None
+            try:
+                raw_sleep_trouble = float(ctx.get("raw_sleep_trouble")) if ctx.get("raw_sleep_trouble") is not None else None
+            except (TypeError, ValueError):
+                raw_sleep_trouble = None
+
+            if (
+                gender == "Male"
+                and original < 0.95
+                and raw_sleep_trouble is not None
+                and raw_sleep_trouble == 2.0
+                and general_health is not None
+                and general_health >= 3.0
+                and med_count is not None
+                and med_count >= 5.0
+                and dpq040 is not None
+                and dpq040 < 1.0
+                and (nocturia is None or nocturia == 0.0)
+            ):
+                scores["sleep_disorder"] = round(original * 0.55, 4)
+                log.debug(
+                    "sleep_disorder older-male polypharmacy cleanup gate applied (health=%.1f, meds=%.1f, fatigue=%.1f, nocturia=%s): %.4f → %.4f",
+                    general_health, med_count, dpq040,
+                    "missing" if nocturia is None else f"{nocturia:.1f}",
+                    original, scores["sleep_disorder"],
                 )
 
         # ── Electrolyte gate ────────────────────────────────────────────────────

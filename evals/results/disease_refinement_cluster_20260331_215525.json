@@ -1,0 +1,124 @@
+{
+  "run_id": "disease_refinement_cluster_20260331_215525",
+  "git_sha": "70acb82d813523d50895400728752baca18a8be5",
+  "profiles_path": "evals/cohort/nhanes_balanced_760.json",
+  "k": 50,
+  "index_rows": 7437,
+  "refinement_features": [
+    "dpq040___feeling_tired_or_having_little_energy",
+    "slq050___ever_told_doctor_had_trouble_sleeping?",
+    "age_years",
+    "huq051___#times_receive_healthcare_over_past_year",
+    "huq010___general_health_condition",
+    "cdq010___shortness_of_breath_on_stairs/inclines",
+    "bmi",
+    "weight_kg",
+    "sld012___sleep_hours___weekdays_or_workdays",
+    "pad680___minutes_sedentary_activity",
+    "mcq160a___ever_told_you_had_arthritis",
+    "ocq180___hours_worked_last_week_in_total_all_jobs",
+    "sld013___sleep_hours___weekends",
+    "rhq031___had_regular_periods_in_past_12_months",
+    "slq030___how_often_do_you_snore?",
+    "mcq520___abdominal_pain_during_past_12_months?",
+    "alq130___avg_#_alcoholic_drinks/day___past_12_mos",
+    "kiq005___how_often_have_urinary_leakage?",
+    "smq020___smoked_at_least_100_cigarettes_in_life",
+    "rhq060___age_at_last_menstrual_period",
+    "kiq480___how_many_times_urinate_in_night?",
+    "smd650___avg_#_cigarettes/day_during_past_30_days",
+    "rhq160___how_many_times_have_been_pregnant?",
+    "ocq670___overall_work_schedule_past_3_months",
+    "smq040___do_you_now_smoke_cigarettes?"
+  ],
+  "population_prevalence": {
+    "anemia": 0.048137689928734705,
+    "diabetes": 0.22119134059432566,
+    "thyroid": 0.06212182331585317,
+    "sleep_disorder": 0.32055936533548474,
+    "kidney": 0.02501008471157725,
+    "hepatitis_bc": 0.02581686163775716,
+    "liver": 0.040607771951055534,
+    "menopause": 0.1709022455291112
+  },
+  "summary": {
+    "top3_contains_any_true_condition": 0.1961,
+    "top1_primary_accuracy": 0.088,
+    "top3_primary_coverage": 0.192,
+    "healthy_over_alert_rate": 1.0,
+    "per_condition": {
+      "anemia": {
+        "n_any_positive": 55,
+        "recall_at_3": 0.0,
+        "healthy_flag_rate": 0.0,
+        "threshold": 0.1
+      },
+      "electrolyte_imbalance": {
+        "n_any_positive": 105,
+        "recall_at_3": 0.0,
+        "healthy_flag_rate": 0.0,
+        "threshold": 1.0
+      },
+      "hepatitis": {
+        "n_any_positive": 59,
+        "recall_at_3": 0.0,
+        "healthy_flag_rate": 0.9704,
+        "threshold": 0.06
+      },
+      "hypothyroidism": {
+        "n_any_positive": 61,
+        "recall_at_3": 0.0,
+        "healthy_flag_rate": 0.0,
+        "threshold": 0.14
+      },
+      "inflammation": {
+        "n_any_positive": 95,
+        "recall_at_3": 0.0,
+        "healthy_flag_rate": 0.0,
+        "threshold": 1.0
+      },
+      "iron_deficiency": {
+        "n_any_positive": 81,
+        "recall_at_3": 0.0,
+        "healthy_flag_rate": 0.0,
+        "threshold": 0.1
+      },
+      "kidney_disease": {
+        "n_any_positive": 65,
+        "recall_at_3": 0.0,
+        "healthy_flag_rate": 1.0,
+        "threshold": 0.06
+      },
+      "liver": {
+        "n_any_positive": 85,
+        "recall_at_3": 0.0,
+        "healthy_flag_rate": 0.0,
+        "threshold": 0.1
+      },
+      "perimenopause": {
+        "n_any_positive": 27,
+        "recall_at_3": 1.0,
+        "healthy_flag_rate": 0.0296,
+        "threshold": 0.36
+      },
+      "prediabetes": {
+        "n_any_positive": 61,
+        "recall_at_3": 1.0,
+        "healthy_flag_rate": 0.0,
+        "threshold": 0.46
+      },
+      "sleep_disorder": {
+        "n_any_positive": 69,
+        "recall_at_3": 1.0,
+        "healthy_flag_rate": 0.0,
+        "threshold": 0.66
+      },
+      "vitamin_d_deficiency": {
+        "n_any_positive": 117,
+        "recall_at_3": 0.0,
+        "healthy_flag_rate": 0.0,
+        "threshold": 1.0
+      }
+    }
+  }
+}

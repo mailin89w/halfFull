@@ -34,6 +34,7 @@ import {
   readOptionalPrivacyContext,
   type ServerPrivacyContext,
 } from '@/src/lib/server/privacy';
+import { ENABLE_KNN_LAYER } from '@/src/lib/featureFlags';
 
 export const maxDuration = 300; // Vercel max on Pro plan; covers Modal cold-start + inference
 
@@ -313,7 +314,7 @@ export async function POST(req: NextRequest) {
   const confirmedConditions: string[] = Array.isArray(body.confirmedConditions)
     ? body.confirmedConditions.map((value: unknown) => String(value))
     : [];
-  const useKNN: boolean = body.useKNN === true;
+  const useKNN: boolean = ENABLE_KNN_LAYER && body.useKNN === true;
 
   const symptomsText = formatAnswersV2(answers);
   const answeredQuestionsText = buildAnsweredQuestionsText(answers);

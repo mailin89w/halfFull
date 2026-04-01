@@ -1,0 +1,1528 @@
+{
+  "run_metadata": {
+    "run_id": "layer1_20260331_170855",
+    "generated_at_utc": "2026-03-31T17:09:01.252089Z",
+    "git_sha": "70acb82d813523d50895400728752baca18a8be5",
+    "profiles_path": "evals/cohort/nhanes_comorbidity_pairs_v1.json",
+    "filters": {
+      "condition": null,
+      "profile_type": null,
+      "exclude": null,
+      "sample_n": null,
+      "seed": 42
+    },
+    "model_registry": {
+      "anemia": {
+        "artifact": "anemia_lr_symptom_bundle_v6.joblib",
+        "metadata_file": "anemia_lr_symptom_bundle_v6_metadata.json",
+        "metadata_version": "v6",
+        "metadata_created_at": "2026-03-30T23:52:48.767969+00:00",
+        "recommended_threshold": 0.4,
+        "user_facing_threshold": 0.4
+      },
+      "electrolyte_imbalance": {
+        "artifact": "electrolyte_imbalance_lr_deduped28_L2_v2.joblib",
+        "metadata_file": "electrolyte_imbalance_lr_deduped28_L2_v2_metadata.json",
+        "metadata_version": "v2",
+        "metadata_created_at": null,
+        "recommended_threshold": 0.6,
+        "user_facing_threshold": 0.55
+      },
+      "hepatitis_bc": {
+        "artifact": "hepatitis_bc_rf_cal_deduped20_v2.joblib",
+        "metadata_file": "hepatitis_bc_rf_cal_deduped20_v2_metadata.json",
+        "metadata_version": "v2",
+        "metadata_created_at": "2026-03-24T10:41:57.944288+00:00",
+        "recommended_threshold": 0.15,
+        "user_facing_threshold": 0.1
+      },
+      "hidden_inflammation": {
+        "artifact": "hidden_inflammation_lr_deduped26_L2_v3.joblib",
+        "metadata_file": "hidden_inflammation_lr_deduped26_L2_v3_metadata.json",
+        "metadata_version": "v3",
+        "metadata_created_at": "2026-03-25T22:26:33.837406+00:00",
+        "recommended_threshold": 0.41,
+        "user_facing_threshold": 0.4
+      },
+      "iron_deficiency": {
+        "artifact": "iron_deficiency_rf_cal_deduped35_v4.joblib",
+        "metadata_file": "iron_deficiency_rf_cal_deduped35_v4_metadata.json",
+        "metadata_version": "v4",
+        "metadata_created_at": "2026-03-26T07:28:03.384088+00:00",
+        "recommended_threshold": 0.15,
+        "user_facing_threshold": 0.2
+      },
+      "kidney": {
+        "artifact": "kidney_lr_deduped17_L2_v2.joblib",
+        "metadata_file": "kidney_lr_deduped17_L2_v2_metadata.json",
+        "metadata_version": "v2",
+        "metadata_created_at": "2026-03-24T15:54:56.817791+00:00",
+        "recommended_threshold": 0.66,
+        "user_facing_threshold": 0.35
+      },
+      "liver": {
+        "artifact": "liver_rf_cal_deduped19_v2.joblib",
+        "metadata_file": "liver_rf_cal_deduped19_v2_metadata.json",
+        "metadata_version": "v2",
+        "metadata_created_at": "2026-03-24T11:05:36.159225+00:00",
+        "recommended_threshold": 0.1,
+        "user_facing_threshold": 0.07
+      },
+      "perimenopause": {
+        "artifact": "perimenopause_lr_deduped21_L2_v2.joblib",
+        "metadata_file": "perimenopause_lr_deduped21_L2_v2_metadata.json",
+        "metadata_version": "v2",
+        "metadata_created_at": "2026-03-24T10:27:05.153048+00:00",
+        "recommended_threshold": 0.55,
+        "user_facing_threshold": 0.4
+      },
+      "prediabetes": {
+        "artifact": "prediabetes_lr_deduped34_L2_C001_v2.joblib",
+        "metadata_file": "prediabetes_lr_deduped34_L2_C001_v2_metadata.json",
+        "metadata_version": "v2",
+        "metadata_created_at": "2026-03-23T21:21:08.942596Z",
+        "recommended_threshold": 0.53,
+        "user_facing_threshold": 0.45
+      },
+      "sleep_disorder": {
+        "artifact": "sleep_disorder_lr_v3_hard_neg.joblib",
+        "metadata_file": "sleep_disorder_lr_v3_hard_neg_metadata.json",
+        "metadata_version": "v3",
+        "metadata_created_at": "2026-03-31T09:01:01.680473+00:00",
+        "recommended_threshold": 0.7,
+        "user_facing_threshold": 0.7
+      },
+      "thyroid": {
+        "artifact": "thyroid_lr_hardneg_v5.joblib",
+        "metadata_file": "thyroid_lr_hardneg_v5_metadata.json",
+        "metadata_version": "v5",
+        "metadata_created_at": "2026-03-31T07:53:03.137914+00:00",
+        "recommended_threshold": 0.6,
+        "user_facing_threshold": 0.75
+      },
+      "vitamin_d_deficiency": {
+        "artifact": "vitamin_d_deficiency_2017_2018_rf_cal_aligned.joblib",
+        "metadata_file": "vitamin_d_deficiency_2017_2018_rf_cal_aligned_metadata.json",
+        "metadata_version": "2017_2018_aligned_v1",
+        "metadata_created_at": "2026-03-27T14:45:43.221189+00:00",
+        "recommended_threshold": 0.4,
+        "user_facing_threshold": 0.48
+      }
+    }
+  },
+  "report": {
+    "n_profiles": 26,
+    "n_scored": 26,
+    "n_scoring_errors": 0,
+    "top1_accuracy": 0.1923,
+    "positives_top1_accuracy": 0.0,
+    "top3_coverage": 0.2692,
+    "top1_accuracy_any": 0.4615,
+    "top3_coverage_any": 0.6538,
+    "over_alert_rate": 0.0,
+    "medgemma_metrics": "skipped \u2014 ML-only run",
+    "by_quiz_path": {
+      "full": {
+        "top1_accuracy": 0.0,
+        "top3_coverage": 0.0,
+        "n": 0
+      },
+      "hybrid": {
+        "top1_accuracy": 0.19230769230769232,
+        "top3_coverage": 0.2692307692307692,
+        "n": 26
+      }
+    },
+    "per_condition": {
+      "anemia": {
+        "model_key": "anemia",
+        "artifact": "anemia_lr_symptom_bundle_v6.joblib",
+        "metadata_version": "v6",
+        "threshold": 0.4,
+        "n_target_profiles": 10,
+        "n_positive_target": 0,
+        "n_flagged": 13,
+        "n_true_positive": 0,
+        "recall": null,
+        "precision": 0.0,
+        "flag_rate": 0.5,
+        "mean_target_score": null
+      },
+      "electrolyte_imbalance": {
+        "model_key": "electrolyte_imbalance",
+        "artifact": "electrolyte_imbalance_lr_deduped28_L2_v2.joblib",
+        "metadata_version": "v2",
+        "threshold": 0.55,
+        "n_target_profiles": 0,
+        "n_positive_target": 0,
+        "n_flagged": 3,
+        "n_true_positive": 0,
+        "recall": null,
+        "precision": 0.0,
+        "flag_rate": 0.1154,
+        "mean_target_score": null
+      },
+      "hepatitis": {
+        "model_key": "hepatitis_bc",
+        "artifact": "hepatitis_bc_rf_cal_deduped20_v2.joblib",
+        "metadata_version": "v2",
+        "threshold": 0.1,
+        "n_target_profiles": 3,
+        "n_positive_target": 0,
+        "n_flagged": 5,
+        "n_true_positive": 0,
+        "recall": null,
+        "precision": 0.0,
+        "flag_rate": 0.1923,
+        "mean_target_score": null
+      },
+      "hypothyroidism": {
+        "model_key": "thyroid",
+        "artifact": "thyroid_lr_hardneg_v5.joblib",
+        "metadata_version": "v5",
+        "threshold": 0.75,
+        "n_target_profiles": 9,
+        "n_positive_target": 0,
+        "n_flagged": 14,
+        "n_true_positive": 0,
+        "recall": null,
+        "precision": 0.0,
+        "flag_rate": 0.5385,
+        "mean_target_score": null
+      },
+      "inflammation": {
+        "model_key": "hidden_inflammation",
+        "artifact": "hidden_inflammation_lr_deduped26_L2_v3.joblib",
+        "metadata_version": "v3",
+        "threshold": 0.4,
+        "n_target_profiles": 0,
+        "n_positive_target": 0,
+        "n_flagged": 4,
+        "n_true_positive": 0,
+        "recall": null,
+        "precision": 0.0,
+        "flag_rate": 0.1538,
+        "mean_target_score": null
+      },
+      "iron_deficiency": {
+        "model_key": "iron_deficiency",
+        "artifact": "iron_deficiency_rf_cal_deduped35_v4.joblib",
+        "metadata_version": "v4",
+        "threshold": 0.2,
+        "n_target_profiles": 0,
+        "n_positive_target": 0,
+        "n_flagged": 2,
+        "n_true_positive": 0,
+        "recall": null,
+        "precision": 0.0,
+        "flag_rate": 0.0769,
+        "mean_target_score": null
+      },
+      "kidney_disease": {
+        "model_key": "kidney",
+        "artifact": "kidney_lr_deduped17_L2_v2.joblib",
+        "metadata_version": "v2",
+        "threshold": 0.35,
+        "n_target_profiles": 2,
+        "n_positive_target": 0,
+        "n_flagged": 12,
+        "n_true_positive": 0,
+        "recall": null,
+        "precision": 0.0,
+        "flag_rate": 0.4615,
+        "mean_target_score": null
+      },
+      "liver": {
+        "model_key": "liver",
+        "artifact": "liver_rf_cal_deduped19_v2.joblib",
+        "metadata_version": "v2",
+        "threshold": 0.07,
+        "n_target_profiles": 0,
+        "n_positive_target": 0,
+        "n_flagged": 8,
+        "n_true_positive": 0,
+        "recall": null,
+        "precision": 0.0,
+        "flag_rate": 0.3077,
+        "mean_target_score": null
+      },
+      "perimenopause": {
+        "model_key": "perimenopause",
+        "artifact": "perimenopause_lr_deduped21_L2_v2.joblib",
+        "metadata_version": "v2",
+        "threshold": 0.4,
+        "n_target_profiles": 0,
+        "n_positive_target": 0,
+        "n_flagged": 4,
+        "n_true_positive": 0,
+        "recall": null,
+        "precision": 0.0,
+        "flag_rate": 0.1538,
+        "mean_target_score": null
+      },
+      "prediabetes": {
+        "model_key": "prediabetes",
+        "artifact": "prediabetes_lr_deduped34_L2_C001_v2.joblib",
+        "metadata_version": "v2",
+        "threshold": 0.45,
+        "n_target_profiles": 2,
+        "n_positive_target": 0,
+        "n_flagged": 14,
+        "n_true_positive": 0,
+        "recall": null,
+        "precision": 0.0,
+        "flag_rate": 0.5385,
+        "mean_target_score": null
+      },
+      "sleep_disorder": {
+        "model_key": "sleep_disorder",
+        "artifact": "sleep_disorder_lr_v3_hard_neg.joblib",
+        "metadata_version": "v3",
+        "threshold": 0.7,
+        "n_target_profiles": 0,
+        "n_positive_target": 0,
+        "n_flagged": 16,
+        "n_true_positive": 0,
+        "recall": null,
+        "precision": 0.0,
+        "flag_rate": 0.6154,
+        "mean_target_score": null
+      },
+      "vitamin_d_deficiency": {
+        "model_key": "vitamin_d_deficiency",
+        "artifact": "vitamin_d_deficiency_2017_2018_rf_cal_aligned.joblib",
+        "metadata_version": "2017_2018_aligned_v1",
+        "threshold": 0.48,
+        "n_target_profiles": 0,
+        "n_positive_target": 0,
+        "n_flagged": 0,
+        "n_true_positive": 0,
+        "recall": null,
+        "precision": null,
+        "flag_rate": 0.0,
+        "mean_target_score": null
+      }
+    },
+    "healthy_per_condition": {
+      "anemia": {
+        "model_key": "anemia",
+        "artifact": "anemia_lr_symptom_bundle_v6.joblib",
+        "threshold": 0.4,
+        "n_healthy_profiles": 0,
+        "n_healthy_flagged": 0,
+        "healthy_flag_rate": 0.0
+      },
+      "electrolyte_imbalance": {
+        "model_key": "electrolyte_imbalance",
+        "artifact": "electrolyte_imbalance_lr_deduped28_L2_v2.joblib",
+        "threshold": 0.55,
+        "n_healthy_profiles": 0,
+        "n_healthy_flagged": 0,
+        "healthy_flag_rate": 0.0
+      },
+      "hepatitis": {
+        "model_key": "hepatitis_bc",
+        "artifact": "hepatitis_bc_rf_cal_deduped20_v2.joblib",
+        "threshold": 0.1,
+        "n_healthy_profiles": 0,
+        "n_healthy_flagged": 0,
+        "healthy_flag_rate": 0.0
+      },
+      "hypothyroidism": {
+        "model_key": "thyroid",
+        "artifact": "thyroid_lr_hardneg_v5.joblib",
+        "threshold": 0.75,
+        "n_healthy_profiles": 0,
+        "n_healthy_flagged": 0,
+        "healthy_flag_rate": 0.0
+      },
+      "inflammation": {
+        "model_key": "hidden_inflammation",
+        "artifact": "hidden_inflammation_lr_deduped26_L2_v3.joblib",
+        "threshold": 0.4,
+        "n_healthy_profiles": 0,
+        "n_healthy_flagged": 0,
+        "healthy_flag_rate": 0.0
+      },
+      "iron_deficiency": {
+        "model_key": "iron_deficiency",
+        "artifact": "iron_deficiency_rf_cal_deduped35_v4.joblib",
+        "threshold": 0.2,
+        "n_healthy_profiles": 0,
+        "n_healthy_flagged": 0,
+        "healthy_flag_rate": 0.0
+      },
+      "kidney_disease": {
+        "model_key": "kidney",
+        "artifact": "kidney_lr_deduped17_L2_v2.joblib",
+        "threshold": 0.35,
+        "n_healthy_profiles": 0,
+        "n_healthy_flagged": 0,
+        "healthy_flag_rate": 0.0
+      },
+      "liver": {
+        "model_key": "liver",
+        "artifact": "liver_rf_cal_deduped19_v2.joblib",
+        "threshold": 0.07,
+        "n_healthy_profiles": 0,
+        "n_healthy_flagged": 0,
+        "healthy_flag_rate": 0.0
+      },
+      "perimenopause": {
+        "model_key": "perimenopause",
+        "artifact": "perimenopause_lr_deduped21_L2_v2.joblib",
+        "threshold": 0.4,
+        "n_healthy_profiles": 0,
+        "n_healthy_flagged": 0,
+        "healthy_flag_rate": 0.0
+      },
+      "prediabetes": {
+        "model_key": "prediabetes",
+        "artifact": "prediabetes_lr_deduped34_L2_C001_v2.joblib",
+        "threshold": 0.45,
+        "n_healthy_profiles": 0,
+        "n_healthy_flagged": 0,
+        "healthy_flag_rate": 0.0
+      },
+      "sleep_disorder": {
+        "model_key": "sleep_disorder",
+        "artifact": "sleep_disorder_lr_v3_hard_neg.joblib",
+        "threshold": 0.7,
+        "n_healthy_profiles": 0,
+        "n_healthy_flagged": 0,
+        "healthy_flag_rate": 0.0
+      },
+      "vitamin_d_deficiency": {
+        "model_key": "vitamin_d_deficiency",
+        "artifact": "vitamin_d_deficiency_2017_2018_rf_cal_aligned.joblib",
+        "threshold": 0.48,
+        "n_healthy_profiles": 0,
+        "n_healthy_flagged": 0,
+        "healthy_flag_rate": 0.0
+      }
+    },
+    "comorbidity_overall": {
+      "n_profiles": 26,
+      "both_in_top3_rate": 0.2308,
+      "both_surfaced_rate": 0.2308,
+      "at_least_one_in_top3_rate": 0.6538
+    },
+    "comorbidity_pairs": {
+      "anemia+perimenopause": {
+        "pair_conditions": [
+          "anemia",
+          "perimenopause"
+        ],
+        "n_profiles": 10,
+        "both_in_top3_rate": 0.0,
+        "both_surfaced_rate": 0.1,
+        "at_least_one_in_top3_rate": 0.6
+      },
+      "hepatitis+inflammation": {
+        "pair_conditions": [
+          "hepatitis",
+          "inflammation"
+        ],
+        "n_profiles": 3,
+        "both_in_top3_rate": 0.0,
+        "both_surfaced_rate": 0.3333,
+        "at_least_one_in_top3_rate": 0.3333
+      },
+      "hypothyroidism+sleep_disorder": {
+        "pair_conditions": [
+          "hypothyroidism",
+          "sleep_disorder"
+        ],
+        "n_profiles": 9,
+        "both_in_top3_rate": 0.6667,
+        "both_surfaced_rate": 0.4444,
+        "at_least_one_in_top3_rate": 0.8889
+      },
+      "kidney_disease+prediabetes": {
+        "pair_conditions": [
+          "kidney_disease",
+          "prediabetes"
+        ],
+        "n_profiles": 2,
+        "both_in_top3_rate": 0.0,
+        "both_surfaced_rate": 0.0,
+        "at_least_one_in_top3_rate": 1.0
+      },
+      "prediabetes+inflammation": {
+        "pair_conditions": [
+          "prediabetes",
+          "inflammation"
+        ],
+        "n_profiles": 2,
+        "both_in_top3_rate": 0.0,
+        "both_surfaced_rate": 0.0,
+        "at_least_one_in_top3_rate": 0.0
+      }
+    },
+    "dod_checks": {
+      "top1_accuracy": {
+        "target": 0.7,
+        "direction": ">=",
+        "actual": 0.1923,
+        "pass": false
+      },
+      "over_alert_rate": {
+        "target": 0.1,
+        "direction": "<",
+        "actual": 0.0,
+        "pass": true
+      }
+    },
+    "dod_pass": false,
+    "run_id": "layer1_20260331_170855",
+    "run_metadata": {
+      "run_id": "layer1_20260331_170855",
+      "generated_at_utc": "2026-03-31T17:09:01.252089Z",
+      "git_sha": "70acb82d813523d50895400728752baca18a8be5",
+      "profiles_path": "evals/cohort/nhanes_comorbidity_pairs_v1.json",
+      "filters": {
+        "condition": null,
+        "profile_type": null,
+        "exclude": null,
+        "sample_n": null,
+        "seed": 42
+      },
+      "model_registry": {
+        "anemia": {
+          "artifact": "anemia_lr_symptom_bundle_v6.joblib",
+          "metadata_file": "anemia_lr_symptom_bundle_v6_metadata.json",
+          "metadata_version": "v6",
+          "metadata_created_at": "2026-03-30T23:52:48.767969+00:00",
+          "recommended_threshold": 0.4,
+          "user_facing_threshold": 0.4
+        },
+        "electrolyte_imbalance": {
+          "artifact": "electrolyte_imbalance_lr_deduped28_L2_v2.joblib",
+          "metadata_file": "electrolyte_imbalance_lr_deduped28_L2_v2_metadata.json",
+          "metadata_version": "v2",
+          "metadata_created_at": null,
+          "recommended_threshold": 0.6,
+          "user_facing_threshold": 0.55
+        },
+        "hepatitis_bc": {
+          "artifact": "hepatitis_bc_rf_cal_deduped20_v2.joblib",
+          "metadata_file": "hepatitis_bc_rf_cal_deduped20_v2_metadata.json",
+          "metadata_version": "v2",
+          "metadata_created_at": "2026-03-24T10:41:57.944288+00:00",
+          "recommended_threshold": 0.15,
+          "user_facing_threshold": 0.1
+        },
+        "hidden_inflammation": {
+          "artifact": "hidden_inflammation_lr_deduped26_L2_v3.joblib",
+          "metadata_file": "hidden_inflammation_lr_deduped26_L2_v3_metadata.json",
+          "metadata_version": "v3",
+          "metadata_created_at": "2026-03-25T22:26:33.837406+00:00",
+          "recommended_threshold": 0.41,
+          "user_facing_threshold": 0.4
+        },
+        "iron_deficiency": {
+          "artifact": "iron_deficiency_rf_cal_deduped35_v4.joblib",
+          "metadata_file": "iron_deficiency_rf_cal_deduped35_v4_metadata.json",
+          "metadata_version": "v4",
+          "metadata_created_at": "2026-03-26T07:28:03.384088+00:00",
+          "recommended_threshold": 0.15,
+          "user_facing_threshold": 0.2
+        },
+        "kidney": {
+          "artifact": "kidney_lr_deduped17_L2_v2.joblib",
+          "metadata_file": "kidney_lr_deduped17_L2_v2_metadata.json",
+          "metadata_version": "v2",
+          "metadata_created_at": "2026-03-24T15:54:56.817791+00:00",
+          "recommended_threshold": 0.66,
+          "user_facing_threshold": 0.35
+        },
+        "liver": {
+          "artifact": "liver_rf_cal_deduped19_v2.joblib",
+          "metadata_file": "liver_rf_cal_deduped19_v2_metadata.json",
+          "metadata_version": "v2",
+          "metadata_created_at": "2026-03-24T11:05:36.159225+00:00",
+          "recommended_threshold": 0.1,
+          "user_facing_threshold": 0.07
+        },
+        "perimenopause": {
+          "artifact": "perimenopause_lr_deduped21_L2_v2.joblib",
+          "metadata_file": "perimenopause_lr_deduped21_L2_v2_metadata.json",
+          "metadata_version": "v2",
+          "metadata_created_at": "2026-03-24T10:27:05.153048+00:00",
+          "recommended_threshold": 0.55,
+          "user_facing_threshold": 0.4
+        },
+        "prediabetes": {
+          "artifact": "prediabetes_lr_deduped34_L2_C001_v2.joblib",
+          "metadata_file": "prediabetes_lr_deduped34_L2_C001_v2_metadata.json",
+          "metadata_version": "v2",
+          "metadata_created_at": "2026-03-23T21:21:08.942596Z",
+          "recommended_threshold": 0.53,
+          "user_facing_threshold": 0.45
+        },
+        "sleep_disorder": {
+          "artifact": "sleep_disorder_lr_v3_hard_neg.joblib",
+          "metadata_file": "sleep_disorder_lr_v3_hard_neg_metadata.json",
+          "metadata_version": "v3",
+          "metadata_created_at": "2026-03-31T09:01:01.680473+00:00",
+          "recommended_threshold": 0.7,
+          "user_facing_threshold": 0.7
+        },
+        "thyroid": {
+          "artifact": "thyroid_lr_hardneg_v5.joblib",
+          "metadata_file": "thyroid_lr_hardneg_v5_metadata.json",
+          "metadata_version": "v5",
+          "metadata_created_at": "2026-03-31T07:53:03.137914+00:00",
+          "recommended_threshold": 0.6,
+          "user_facing_threshold": 0.75
+        },
+        "vitamin_d_deficiency": {
+          "artifact": "vitamin_d_deficiency_2017_2018_rf_cal_aligned.joblib",
+          "metadata_file": "vitamin_d_deficiency_2017_2018_rf_cal_aligned_metadata.json",
+          "metadata_version": "2017_2018_aligned_v1",
+          "metadata_created_at": "2026-03-27T14:45:43.221189+00:00",
+          "recommended_threshold": 0.4,
+          "user_facing_threshold": 0.48
+        }
+      }
+    }
+  },
+  "results": [
+    {
+      "profile_id": "NHANES-D-32272__anemia+perimenopause__01",
+      "profile_type": "multi",
+      "target_condition": "anemia",
+      "quiz_path": "hybrid",
+      "scoring_success": true,
+      "model_top1": "sleep_disorder",
+      "model_top1_key": "sleep_disorder",
+      "model_top1_score": 0.9609,
+      "top1_correct": false,
+      "top3_hit": false,
+      "top1_hit_any": false,
+      "top3_hit_any": true,
+      "comorbidity_pair_id": "anemia+perimenopause",
+      "comorbidity_pair": [
+        "anemia",
+        "perimenopause"
+      ],
+      "both_in_top3": false,
+      "both_surfaced": false,
+      "ground_truth_primary": "anemia",
+      "scores": {
+        "anemia": 0.4081,
+        "electrolyte_imbalance": 0.4089,
+        "kidney": 0.5714,
+        "liver": 0.0215,
+        "prediabetes": 0.4841,
+        "sleep_disorder": 0.9609,
+        "thyroid": 0.9103,
+        "hidden_inflammation": 0.2125,
+        "perimenopause": 0.0,
+        "hepatitis_bc": 0.0195,
+        "iron_deficiency": 0.0985,
+        "vitamin_d_deficiency": 0.1423
+      }
+    },
+    {
+      "profile_id": "NHANES-C-28430__anemia+perimenopause__02",
+      "profile_type": "multi",
+      "target_condition": "anemia",
+      "quiz_path": "hybrid",
+      "scoring_success": true,
+      "model_top1": "hypothyroidism",
+      "model_top1_key": "thyroid",
+      "model_top1_score": 0.9169,
+      "top1_correct": false,
+      "top3_hit": false,
+      "top1_hit_any": false,
+      "top3_hit_any": false,
+      "comorbidity_pair_id": "anemia+perimenopause",
+      "comorbidity_pair": [
+        "anemia",
+        "perimenopause"
+      ],
+      "both_in_top3": false,
+      "both_surfaced": false,
+      "ground_truth_primary": "anemia",
+      "scores": {
+        "anemia": 0.2593,
+        "electrolyte_imbalance": 0.4125,
+        "kidney": 0.5312,
+        "liver": 0.0626,
+        "prediabetes": 0.5625,
+        "sleep_disorder": 0.9072,
+        "thyroid": 0.9169,
+        "hidden_inflammation": 0.335,
+        "perimenopause": 0.0,
+        "hepatitis_bc": 0.0271,
+        "iron_deficiency": 0.098,
+        "vitamin_d_deficiency": 0.2278
+      }
+    },
+    {
+      "profile_id": "NHANES-C-26400__anemia+perimenopause__03",
+      "profile_type": "multi",
+      "target_condition": "anemia",
+      "quiz_path": "hybrid",
+      "scoring_success": true,
+      "model_top1": "anemia",
+      "model_top1_key": "anemia",
+      "model_top1_score": 0.9307,
+      "top1_correct": true,
+      "top3_hit": true,
+      "top1_hit_any": true,
+      "top3_hit_any": true,
+      "comorbidity_pair_id": "anemia+perimenopause",
+      "comorbidity_pair": [
+        "anemia",
+        "perimenopause"
+      ],
+      "both_in_top3": false,
+      "both_surfaced": false,
+      "ground_truth_primary": "anemia",
+      "scores": {
+        "anemia": 0.9307,
+        "electrolyte_imbalance": 0.4392,
+        "kidney": 0.2589,
+        "liver": 0.0382,
+        "prediabetes": 0.3453,
+        "sleep_disorder": 0.8162,
+        "thyroid": 0.575,
+        "hidden_inflammation": 0.3536,
+        "perimenopause": 0.3469,
+        "hepatitis_bc": 0.0407,
+        "iron_deficiency": 0.4199,
+        "vitamin_d_deficiency": 0.1638
+      }
+    },
+    {
+      "profile_id": "NHANES-D-33998__anemia+perimenopause__04",
+      "profile_type": "multi",
+      "target_condition": "anemia",
+      "quiz_path": "hybrid",
+      "scoring_success": true,
+      "model_top1": "kidney_disease",
+      "model_top1_key": "kidney",
+      "model_top1_score": 0.9991,
+      "top1_correct": false,
+      "top3_hit": false,
+      "top1_hit_any": true,
+      "top3_hit_any": true,
+      "comorbidity_pair_id": "anemia+perimenopause",
+      "comorbidity_pair": [
+        "anemia",
+        "perimenopause"
+      ],
+      "both_in_top3": false,
+      "both_surfaced": true,
+      "ground_truth_primary": "anemia",
+      "scores": {
+        "anemia": 0.9367,
+        "electrolyte_imbalance": 0.8931,
+        "kidney": 0.9991,
+        "liver": 0.0675,
+        "prediabetes": 0.7066,
+        "sleep_disorder": 0.981,
+        "thyroid": 0.9553,
+        "hidden_inflammation": 0.3377,
+        "perimenopause": 0.615,
+        "hepatitis_bc": 0.0139,
+        "iron_deficiency": 0.1404,
+        "vitamin_d_deficiency": 0.3105
+      }
+    },
+    {
+      "profile_id": "NHANES-C-26726__anemia+perimenopause__05",
+      "profile_type": "multi",
+      "target_condition": "anemia",
+      "quiz_path": "hybrid",
+      "scoring_success": true,
+      "model_top1": "electrolyte_imbalance",
+      "model_top1_key": "electrolyte_imbalance",
+      "model_top1_score": 0.7293,
+      "top1_correct": false,
+      "top3_hit": false,
+      "top1_hit_any": false,
+      "top3_hit_any": false,
+      "comorbidity_pair_id": "anemia+perimenopause",
+      "comorbidity_pair": [
+        "anemia",
+        "perimenopause"
+      ],
+      "both_in_top3": false,
+      "both_surfaced": false,
+      "ground_truth_primary": "anemia",
+      "scores": {
+        "anemia": 0.1164,
+        "electrolyte_imbalance": 0.7293,
+        "kidney": 0.3115,
+        "liver": 0.0187,
+        "prediabetes": 0.4684,
+        "sleep_disorder": 0.6895,
+        "thyroid": 0.5024,
+        "hidden_inflammation": 0.0733,
+        "perimenopause": 0.0,
+        "hepatitis_bc": 0.0195,
+        "iron_deficiency": 0.0889,
+        "vitamin_d_deficiency": 0.2664
+      }
+    },
+    {
+      "profile_id": "NHANES-D-37134__anemia+perimenopause__06",
+      "profile_type": "multi",
+      "target_condition": "anemia",
+      "quiz_path": "hybrid",
+      "scoring_success": true,
+      "model_top1": "hypothyroidism",
+      "model_top1_key": "thyroid",
+      "model_top1_score": 0.9186,
+      "top1_correct": false,
+      "top3_hit": false,
+      "top1_hit_any": false,
+      "top3_hit_any": true,
+      "comorbidity_pair_id": "anemia+perimenopause",
+      "comorbidity_pair": [
+        "anemia",
+        "perimenopause"
+      ],
+      "both_in_top3": false,
+      "both_surfaced": false,
+      "ground_truth_primary": "anemia",
+      "scores": {
+        "anemia": 0.2425,
+        "electrolyte_imbalance": 0.6001,
+        "kidney": 0.6807,
+        "liver": 0.0769,
+        "prediabetes": 0.5826,
+        "sleep_disorder": 0.8786,
+        "thyroid": 0.9186,
+        "hidden_inflammation": 0.494,
+        "perimenopause": 0.0,
+        "hepatitis_bc": 0.0195,
+        "iron_deficiency": 0.0985,
+        "vitamin_d_deficiency": 0.2313
+      }
+    },
+    {
+      "profile_id": "NHANES-C-29052__anemia+perimenopause__07",
+      "profile_type": "multi",
+      "target_condition": "anemia",
+      "quiz_path": "hybrid",
+      "scoring_success": true,
+      "model_top1": "hypothyroidism",
+      "model_top1_key": "thyroid",
+      "model_top1_score": 0.9411,
+      "top1_correct": false,
+      "top3_hit": false,
+      "top1_hit_any": false,
+      "top3_hit_any": false,
+      "comorbidity_pair_id": "anemia+perimenopause",
+      "comorbidity_pair": [
+        "anemia",
+        "perimenopause"
+      ],
+      "both_in_top3": false,
+      "both_surfaced": false,
+      "ground_truth_primary": "anemia",
+      "scores": {
+        "anemia": 0.45,
+        "electrolyte_imbalance": 0.5291,
+        "kidney": 0.3436,
+        "liver": 0.0738,
+        "prediabetes": 0.5281,
+        "sleep_disorder": 0.9268,
+        "thyroid": 0.9411,
+        "hidden_inflammation": 0.341,
+        "perimenopause": 0.0,
+        "hepatitis_bc": 0.033,
+        "iron_deficiency": 0.0688,
+        "vitamin_d_deficiency": 0.2558
+      }
+    },
+    {
+      "profile_id": "NHANES-C-23796__anemia+perimenopause__08",
+      "profile_type": "multi",
+      "target_condition": "anemia",
+      "quiz_path": "hybrid",
+      "scoring_success": true,
+      "model_top1": "sleep_disorder",
+      "model_top1_key": "sleep_disorder",
+      "model_top1_score": 0.9475,
+      "top1_correct": false,
+      "top3_hit": false,
+      "top1_hit_any": false,
+      "top3_hit_any": false,
+      "comorbidity_pair_id": "anemia+perimenopause",
+      "comorbidity_pair": [
+        "anemia",
+        "perimenopause"
+      ],
+      "both_in_top3": false,
+      "both_surfaced": false,
+      "ground_truth_primary": "anemia",
+      "scores": {
+        "anemia": 0.4864,
+        "electrolyte_imbalance": 0.4051,
+        "kidney": 0.5647,
+        "liver": 0.0584,
+        "prediabetes": 0.5106,
+        "sleep_disorder": 0.9475,
+        "thyroid": 0.9433,
+        "hidden_inflammation": 0.3713,
+        "perimenopause": 0.0,
+        "hepatitis_bc": 0.0372,
+        "iron_deficiency": 0.1078,
+        "vitamin_d_deficiency": 0.2343
+      }
+    },
+    {
+      "profile_id": "NHANES-D-35439__anemia+perimenopause__09",
+      "profile_type": "multi",
+      "target_condition": "anemia",
+      "quiz_path": "hybrid",
+      "scoring_success": true,
+      "model_top1": "hypothyroidism",
+      "model_top1_key": "thyroid",
+      "model_top1_score": 0.9158,
+      "top1_correct": false,
+      "top3_hit": false,
+      "top1_hit_any": false,
+      "top3_hit_any": true,
+      "comorbidity_pair_id": "anemia+perimenopause",
+      "comorbidity_pair": [
+        "anemia",
+        "perimenopause"
+      ],
+      "both_in_top3": false,
+      "both_surfaced": false,
+      "ground_truth_primary": "anemia",
+      "scores": {
+        "anemia": 0.4845,
+        "electrolyte_imbalance": 0.4474,
+        "kidney": 0.6748,
+        "liver": 0.0369,
+        "prediabetes": 0.4135,
+        "sleep_disorder": 0.8424,
+        "thyroid": 0.9158,
+        "hidden_inflammation": 0.1004,
+        "perimenopause": 0.0,
+        "hepatitis_bc": 0.0304,
+        "iron_deficiency": 0.098,
+        "vitamin_d_deficiency": 0.1457
+      }
+    },
+    {
+      "profile_id": "NHANES-D-33005__anemia+perimenopause__10",
+      "profile_type": "multi",
+      "target_condition": "anemia",
+      "quiz_path": "hybrid",
+      "scoring_success": true,
+      "model_top1": "anemia",
+      "model_top1_key": "anemia",
+      "model_top1_score": 0.7657,
+      "top1_correct": true,
+      "top3_hit": true,
+      "top1_hit_any": true,
+      "top3_hit_any": true,
+      "comorbidity_pair_id": "anemia+perimenopause",
+      "comorbidity_pair": [
+        "anemia",
+        "perimenopause"
+      ],
+      "both_in_top3": false,
+      "both_surfaced": false,
+      "ground_truth_primary": "anemia",
+      "scores": {
+        "anemia": 0.7657,
+        "electrolyte_imbalance": 0.3666,
+        "kidney": 0.1327,
+        "liver": 0.0318,
+        "prediabetes": 0.6522,
+        "sleep_disorder": 0.5383,
+        "thyroid": 0.3837,
+        "hidden_inflammation": 0.2373,
+        "perimenopause": 0.0,
+        "hepatitis_bc": 0.0089,
+        "iron_deficiency": 0.0893,
+        "vitamin_d_deficiency": 0.3372
+      }
+    },
+    {
+      "profile_id": "NHANES-D-37606__prediabetes+inflammation__01",
+      "profile_type": "multi",
+      "target_condition": "prediabetes",
+      "quiz_path": "hybrid",
+      "scoring_success": true,
+      "model_top1": "sleep_disorder",
+      "model_top1_key": "sleep_disorder",
+      "model_top1_score": 0.4928,
+      "top1_correct": false,
+      "top3_hit": false,
+      "top1_hit_any": false,
+      "top3_hit_any": false,
+      "comorbidity_pair_id": "prediabetes+inflammation",
+      "comorbidity_pair": [
+        "prediabetes",
+        "inflammation"
+      ],
+      "both_in_top3": false,
+      "both_surfaced": false,
+      "ground_truth_primary": "hepatitis",
+      "scores": {
+        "anemia": 0.1,
+        "electrolyte_imbalance": 0.0989,
+        "kidney": 0.1361,
+        "liver": 0.1101,
+        "prediabetes": 0.2044,
+        "sleep_disorder": 0.4928,
+        "thyroid": 0.4825,
+        "hidden_inflammation": 0.1635,
+        "perimenopause": 0.0,
+        "hepatitis_bc": 0.12,
+        "iron_deficiency": 0.013,
+        "vitamin_d_deficiency": 0.3333
+      }
+    },
+    {
+      "profile_id": "NHANES-D-32804__prediabetes+inflammation__02",
+      "profile_type": "multi",
+      "target_condition": "prediabetes",
+      "quiz_path": "hybrid",
+      "scoring_success": true,
+      "model_top1": "hypothyroidism",
+      "model_top1_key": "thyroid",
+      "model_top1_score": 0.7527,
+      "top1_correct": false,
+      "top3_hit": false,
+      "top1_hit_any": false,
+      "top3_hit_any": false,
+      "comorbidity_pair_id": "prediabetes+inflammation",
+      "comorbidity_pair": [
+        "prediabetes",
+        "inflammation"
+      ],
+      "both_in_top3": false,
+      "both_surfaced": false,
+      "ground_truth_primary": "inflammation",
+      "scores": {
+        "anemia": 0.2846,
+        "electrolyte_imbalance": 0.0988,
+        "kidney": 0.4598,
+        "liver": 0.0369,
+        "prediabetes": 0.2901,
+        "sleep_disorder": 0.7523,
+        "thyroid": 0.7527,
+        "hidden_inflammation": 0.0608,
+        "perimenopause": 0.0,
+        "hepatitis_bc": 0.0295,
+        "iron_deficiency": 0.0242,
+        "vitamin_d_deficiency": 0.1586
+      }
+    },
+    {
+      "profile_id": "NHANES-D-39295__hypothyroidism+sleep_disorder__01",
+      "profile_type": "multi",
+      "target_condition": "hypothyroidism",
+      "quiz_path": "hybrid",
+      "scoring_success": true,
+      "model_top1": "sleep_disorder",
+      "model_top1_key": "sleep_disorder",
+      "model_top1_score": 0.971,
+      "top1_correct": false,
+      "top3_hit": true,
+      "top1_hit_any": true,
+      "top3_hit_any": true,
+      "comorbidity_pair_id": "hypothyroidism+sleep_disorder",
+      "comorbidity_pair": [
+        "hypothyroidism",
+        "sleep_disorder"
+      ],
+      "both_in_top3": true,
+      "both_surfaced": true,
+      "ground_truth_primary": "hypothyroidism",
+      "scores": {
+        "anemia": 0.586,
+        "electrolyte_imbalance": 0.4012,
+        "kidney": 0.7421,
+        "liver": 0.05,
+        "prediabetes": 0.4024,
+        "sleep_disorder": 0.971,
+        "thyroid": 0.9614,
+        "hidden_inflammation": 0.0656,
+        "perimenopause": 0.0,
+        "hepatitis_bc": 0.0195,
+        "iron_deficiency": 0.0185,
+        "vitamin_d_deficiency": 0.1423
+      }
+    },
+    {
+      "profile_id": "NHANES-D-32624__hypothyroidism+sleep_disorder__02",
+      "profile_type": "multi",
+      "target_condition": "hypothyroidism",
+      "quiz_path": "hybrid",
+      "scoring_success": true,
+      "model_top1": "sleep_disorder",
+      "model_top1_key": "sleep_disorder",
+      "model_top1_score": 0.7132,
+      "top1_correct": false,
+      "top3_hit": false,
+      "top1_hit_any": true,
+      "top3_hit_any": true,
+      "comorbidity_pair_id": "hypothyroidism+sleep_disorder",
+      "comorbidity_pair": [
+        "hypothyroidism",
+        "sleep_disorder"
+      ],
+      "both_in_top3": false,
+      "both_surfaced": false,
+      "ground_truth_primary": "hypothyroidism",
+      "scores": {
+        "anemia": 0.6822,
+        "electrolyte_imbalance": 0.4066,
+        "kidney": 0.2661,
+        "liver": 0.0254,
+        "prediabetes": 0.4947,
+        "sleep_disorder": 0.7132,
+        "thyroid": 0.4482,
+        "hidden_inflammation": 0.1114,
+        "perimenopause": 0.0,
+        "hepatitis_bc": 0.131,
+        "iron_deficiency": 0.0181,
+        "vitamin_d_deficiency": 0.1535
+      }
+    },
+    {
+      "profile_id": "NHANES-D-35077__hypothyroidism+sleep_disorder__03",
+      "profile_type": "multi",
+      "target_condition": "hypothyroidism",
+      "quiz_path": "hybrid",
+      "scoring_success": true,
+      "model_top1": "sleep_disorder",
+      "model_top1_key": "sleep_disorder",
+      "model_top1_score": 0.9646,
+      "top1_correct": false,
+      "top3_hit": true,
+      "top1_hit_any": true,
+      "top3_hit_any": true,
+      "comorbidity_pair_id": "hypothyroidism+sleep_disorder",
+      "comorbidity_pair": [
+        "hypothyroidism",
+        "sleep_disorder"
+      ],
+      "both_in_top3": true,
+      "both_surfaced": true,
+      "ground_truth_primary": "hypothyroidism",
+      "scores": {
+        "anemia": 0.7989,
+        "electrolyte_imbalance": 0.5049,
+        "kidney": 0.4834,
+        "liver": 0.0564,
+        "prediabetes": 0.6649,
+        "sleep_disorder": 0.9646,
+        "thyroid": 0.906,
+        "hidden_inflammation": 0.2155,
+        "perimenopause": 0.8413,
+        "hepatitis_bc": 0.0152,
+        "iron_deficiency": 0.0688,
+        "vitamin_d_deficiency": 0.3284
+      }
+    },
+    {
+      "profile_id": "NHANES-D-37114__hypothyroidism+sleep_disorder__04",
+      "profile_type": "multi",
+      "target_condition": "hypothyroidism",
+      "quiz_path": "hybrid",
+      "scoring_success": true,
+      "model_top1": "sleep_disorder",
+      "model_top1_key": "sleep_disorder",
+      "model_top1_score": 0.9876,
+      "top1_correct": false,
+      "top3_hit": false,
+      "top1_hit_any": true,
+      "top3_hit_any": true,
+      "comorbidity_pair_id": "hypothyroidism+sleep_disorder",
+      "comorbidity_pair": [
+        "hypothyroidism",
+        "sleep_disorder"
+      ],
+      "both_in_top3": true,
+      "both_surfaced": true,
+      "ground_truth_primary": "anemia",
+      "scores": {
+        "anemia": 0.5894,
+        "electrolyte_imbalance": 0.4568,
+        "kidney": 0.5678,
+        "liver": 0.0369,
+        "prediabetes": 0.4134,
+        "sleep_disorder": 0.9876,
+        "thyroid": 0.8591,
+        "hidden_inflammation": 0.6265,
+        "perimenopause": 0.0,
+        "hepatitis_bc": 0.012,
+        "iron_deficiency": 0.48,
+        "vitamin_d_deficiency": 0.3105
+      }
+    },
+    {
+      "profile_id": "NHANES-D-34288__hypothyroidism+sleep_disorder__05",
+      "profile_type": "multi",
+      "target_condition": "hypothyroidism",
+      "quiz_path": "hybrid",
+      "scoring_success": true,
+      "model_top1": "hypothyroidism",
+      "model_top1_key": "thyroid",
+      "model_top1_score": 0.9395,
+      "top1_correct": true,
+      "top3_hit": true,
+      "top1_hit_any": true,
+      "top3_hit_any": true,
+      "comorbidity_pair_id": "hypothyroidism+sleep_disorder",
+      "comorbidity_pair": [
+        "hypothyroidism",
+        "sleep_disorder"
+      ],
+      "both_in_top3": true,
+      "both_surfaced": true,
+      "ground_truth_primary": "hypothyroidism",
+      "scores": {
+        "anemia": 0.1249,
+        "electrolyte_imbalance": 0.3922,
+        "kidney": 0.4826,
+        "liver": 0.0808,
+        "prediabetes": 0.5782,
+        "sleep_disorder": 0.8052,
+        "thyroid": 0.9395,
+        "hidden_inflammation": 0.0951,
+        "perimenopause": 0.0,
+        "hepatitis_bc": 0.0152,
+        "iron_deficiency": 0.0425,
+        "vitamin_d_deficiency": 0.1802
+      }
+    },
+    {
+      "profile_id": "NHANES-D-38042__hypothyroidism+sleep_disorder__06",
+      "profile_type": "multi",
+      "target_condition": "hypothyroidism",
+      "quiz_path": "hybrid",
+      "scoring_success": true,
+      "model_top1": "hypothyroidism",
+      "model_top1_key": "thyroid",
+      "model_top1_score": 0.76,
+      "top1_correct": true,
+      "top3_hit": true,
+      "top1_hit_any": true,
+      "top3_hit_any": true,
+      "comorbidity_pair_id": "hypothyroidism+sleep_disorder",
+      "comorbidity_pair": [
+        "hypothyroidism",
+        "sleep_disorder"
+      ],
+      "both_in_top3": true,
+      "both_surfaced": false,
+      "ground_truth_primary": "hypothyroidism",
+      "scores": {
+        "anemia": 0.3264,
+        "electrolyte_imbalance": 0.1027,
+        "kidney": 0.1178,
+        "liver": 0.0215,
+        "prediabetes": 0.3314,
+        "sleep_disorder": 0.458,
+        "thyroid": 0.76,
+        "hidden_inflammation": 0.0702,
+        "perimenopause": 0.0,
+        "hepatitis_bc": 0.0152,
+        "iron_deficiency": 0.017,
+        "vitamin_d_deficiency": 0.3418
+      }
+    },
+    {
+      "profile_id": "NHANES-D-40391__hypothyroidism+sleep_disorder__07",
+      "profile_type": "multi",
+      "target_condition": "hypothyroidism",
+      "quiz_path": "hybrid",
+      "scoring_success": true,
+      "model_top1": "hypothyroidism",
+      "model_top1_key": "thyroid",
+      "model_top1_score": 0.518,
+      "top1_correct": true,
+      "top3_hit": true,
+      "top1_hit_any": true,
+      "top3_hit_any": true,
+      "comorbidity_pair_id": "hypothyroidism+sleep_disorder",
+      "comorbidity_pair": [
+        "hypothyroidism",
+        "sleep_disorder"
+      ],
+      "both_in_top3": true,
+      "both_surfaced": false,
+      "ground_truth_primary": "hypothyroidism",
+      "scores": {
+        "anemia": 0.3795,
+        "electrolyte_imbalance": 0.3603,
+        "kidney": 0.3315,
+        "liver": 0.05,
+        "prediabetes": 0.3323,
+        "sleep_disorder": 0.3987,
+        "thyroid": 0.518,
+        "hidden_inflammation": 0.137,
+        "perimenopause": 0.0,
+        "hepatitis_bc": 0.0295,
+        "iron_deficiency": 0.0218,
+        "vitamin_d_deficiency": 0.1853
+      }
+    },
+    {
+      "profile_id": "NHANES-D-36986__hypothyroidism+sleep_disorder__08",
+      "profile_type": "multi",
+      "target_condition": "hypothyroidism",
+      "quiz_path": "hybrid",
+      "scoring_success": true,
+      "model_top1": "perimenopause",
+      "model_top1_key": "perimenopause",
+      "model_top1_score": 0.9541,
+      "top1_correct": false,
+      "top3_hit": false,
+      "top1_hit_any": false,
+      "top3_hit_any": false,
+      "comorbidity_pair_id": "hypothyroidism+sleep_disorder",
+      "comorbidity_pair": [
+        "hypothyroidism",
+        "sleep_disorder"
+      ],
+      "both_in_top3": false,
+      "both_surfaced": false,
+      "ground_truth_primary": "hypothyroidism",
+      "scores": {
+        "anemia": 0.0786,
+        "electrolyte_imbalance": 0.4012,
+        "kidney": 0.0836,
+        "liver": 0.0346,
+        "prediabetes": 0.5201,
+        "sleep_disorder": 0.4271,
+        "thyroid": 0.3122,
+        "hidden_inflammation": 0.7511,
+        "perimenopause": 0.9541,
+        "hepatitis_bc": 0.0303,
+        "iron_deficiency": 0.1353,
+        "vitamin_d_deficiency": 0.333
+      }
+    },
+    {
+      "profile_id": "NHANES-D-31153__hypothyroidism+sleep_disorder__09",
+      "profile_type": "multi",
+      "target_condition": "hypothyroidism",
+      "quiz_path": "hybrid",
+      "scoring_success": true,
+      "model_top1": "sleep_disorder",
+      "model_top1_key": "sleep_disorder",
+      "model_top1_score": 0.6975,
+      "top1_correct": false,
+      "top3_hit": false,
+      "top1_hit_any": true,
+      "top3_hit_any": true,
+      "comorbidity_pair_id": "hypothyroidism+sleep_disorder",
+      "comorbidity_pair": [
+        "hypothyroidism",
+        "sleep_disorder"
+      ],
+      "both_in_top3": false,
+      "both_surfaced": false,
+      "ground_truth_primary": "hypothyroidism",
+      "scores": {
+        "anemia": 0.0774,
+        "electrolyte_imbalance": 0.3893,
+        "kidney": 0.1328,
+        "liver": 0.0318,
+        "prediabetes": 0.6078,
+        "sleep_disorder": 0.6975,
+        "thyroid": 0.3836,
+        "hidden_inflammation": 0.3106,
+        "perimenopause": 0.5507,
+        "hepatitis_bc": 0.0049,
+        "iron_deficiency": 0.195,
+        "vitamin_d_deficiency": 0.3284
+      }
+    },
+    {
+      "profile_id": "NHANES-D-35439__kidney_disease+prediabetes__01",
+      "profile_type": "multi",
+      "target_condition": "kidney_disease",
+      "quiz_path": "hybrid",
+      "scoring_success": true,
+      "model_top1": "hypothyroidism",
+      "model_top1_key": "thyroid",
+      "model_top1_score": 0.9158,
+      "top1_correct": false,
+      "top3_hit": false,
+      "top1_hit_any": false,
+      "top3_hit_any": true,
+      "comorbidity_pair_id": "kidney_disease+prediabetes",
+      "comorbidity_pair": [
+        "kidney_disease",
+        "prediabetes"
+      ],
+      "both_in_top3": false,
+      "both_surfaced": false,
+      "ground_truth_primary": "anemia",
+      "scores": {
+        "anemia": 0.4845,
+        "electrolyte_imbalance": 0.4474,
+        "kidney": 0.6748,
+        "liver": 0.0369,
+        "prediabetes": 0.4135,
+        "sleep_disorder": 0.8424,
+        "thyroid": 0.9158,
+        "hidden_inflammation": 0.1004,
+        "perimenopause": 0.0,
+        "hepatitis_bc": 0.0304,
+        "iron_deficiency": 0.098,
+        "vitamin_d_deficiency": 0.1457
+      }
+    },
+    {
+      "profile_id": "NHANES-D-37977__kidney_disease+prediabetes__02",
+      "profile_type": "multi",
+      "target_condition": "kidney_disease",
+      "quiz_path": "hybrid",
+      "scoring_success": true,
+      "model_top1": "sleep_disorder",
+      "model_top1_key": "sleep_disorder",
+      "model_top1_score": 0.6938,
+      "top1_correct": false,
+      "top3_hit": false,
+      "top1_hit_any": false,
+      "top3_hit_any": true,
+      "comorbidity_pair_id": "kidney_disease+prediabetes",
+      "comorbidity_pair": [
+        "kidney_disease",
+        "prediabetes"
+      ],
+      "both_in_top3": false,
+      "both_surfaced": false,
+      "ground_truth_primary": "kidney_disease",
+      "scores": {
+        "anemia": 0.0317,
+        "electrolyte_imbalance": 0.0669,
+        "kidney": 0.3491,
+        "liver": 0.0738,
+        "prediabetes": 0.481,
+        "sleep_disorder": 0.6938,
+        "thyroid": 0.5128,
+        "hidden_inflammation": 0.0971,
+        "perimenopause": 0.0,
+        "hepatitis_bc": 0.0295,
+        "iron_deficiency": 0.0106,
+        "vitamin_d_deficiency": 0.1853
+      }
+    },
+    {
+      "profile_id": "NHANES-D-37606__hepatitis+inflammation__01",
+      "profile_type": "multi",
+      "target_condition": "hepatitis",
+      "quiz_path": "hybrid",
+      "scoring_success": true,
+      "model_top1": "sleep_disorder",
+      "model_top1_key": "sleep_disorder",
+      "model_top1_score": 0.4928,
+      "top1_correct": false,
+      "top3_hit": false,
+      "top1_hit_any": false,
+      "top3_hit_any": false,
+      "comorbidity_pair_id": "hepatitis+inflammation",
+      "comorbidity_pair": [
+        "hepatitis",
+        "inflammation"
+      ],
+      "both_in_top3": false,
+      "both_surfaced": false,
+      "ground_truth_primary": "hepatitis",
+      "scores": {
+        "anemia": 0.1,
+        "electrolyte_imbalance": 0.0989,
+        "kidney": 0.1361,
+        "liver": 0.1101,
+        "prediabetes": 0.2044,
+        "sleep_disorder": 0.4928,
+        "thyroid": 0.4825,
+        "hidden_inflammation": 0.1635,
+        "perimenopause": 0.0,
+        "hepatitis_bc": 0.12,
+        "iron_deficiency": 0.013,
+        "vitamin_d_deficiency": 0.3333
+      }
+    },
+    {
+      "profile_id": "NHANES-D-34641__hepatitis+inflammation__02",
+      "profile_type": "multi",
+      "target_condition": "hepatitis",
+      "quiz_path": "hybrid",
+      "scoring_success": true,
+      "model_top1": "sleep_disorder",
+      "model_top1_key": "sleep_disorder",
+      "model_top1_score": 0.7239,
+      "top1_correct": false,
+      "top3_hit": false,
+      "top1_hit_any": false,
+      "top3_hit_any": false,
+      "comorbidity_pair_id": "hepatitis+inflammation",
+      "comorbidity_pair": [
+        "hepatitis",
+        "inflammation"
+      ],
+      "both_in_top3": false,
+      "both_surfaced": false,
+      "ground_truth_primary": "hepatitis",
+      "scores": {
+        "anemia": 0.5802,
+        "electrolyte_imbalance": 0.4655,
+        "kidney": 0.2416,
+        "liver": 0.1244,
+        "prediabetes": 0.0641,
+        "sleep_disorder": 0.7239,
+        "thyroid": 0.1108,
+        "hidden_inflammation": 0.3381,
+        "perimenopause": 0.1036,
+        "hepatitis_bc": 0.4149,
+        "iron_deficiency": 0.17,
+        "vitamin_d_deficiency": 0.2948
+      }
+    },
+    {
+      "profile_id": "NHANES-D-32868__hepatitis+inflammation__03",
+      "profile_type": "multi",
+      "target_condition": "hepatitis",
+      "quiz_path": "hybrid",
+      "scoring_success": true,
+      "model_top1": "inflammation",
+      "model_top1_key": "hidden_inflammation",
+      "model_top1_score": 0.7962,
+      "top1_correct": false,
+      "top3_hit": false,
+      "top1_hit_any": true,
+      "top3_hit_any": true,
+      "comorbidity_pair_id": "hepatitis+inflammation",
+      "comorbidity_pair": [
+        "hepatitis",
+        "inflammation"
+      ],
+      "both_in_top3": false,
+      "both_surfaced": true,
+      "ground_truth_primary": "hepatitis",
+      "scores": {
+        "anemia": 0.1611,
+        "electrolyte_imbalance": 0.4376,
+        "kidney": 0.0376,
+        "liver": 0.1124,
+        "prediabetes": 0.3011,
+        "sleep_disorder": 0.4453,
+        "thyroid": 0.5235,
+        "hidden_inflammation": 0.7962,
+        "perimenopause": 0.314,
+        "hepatitis_bc": 0.12,
+        "iron_deficiency": 0.1721,
+        "vitamin_d_deficiency": 0.4283
+      }
+    }
+  ]
+}

@@ -18,6 +18,7 @@ import type {
   BayesianConditionTrace,
   BayesianQuestion,
   BayesianQuestionsResult,
+  BayesianStagedFollowUp,
   ClarificationQAPair,
   ConditionQuestion,
 } from '@/src/lib/medgemma';
@@ -108,6 +109,33 @@ function QuestionBlock({
   );
 }
 
+function visibleQuestionsForCondition(
+  conditionGroup: ConditionQuestion,
+  selectedAnswers: Record<string, string>,
+): BayesianQuestion[] {
+  const staged = conditionGroup.staged_follow_up;
+  if (!staged) return conditionGroup.questions;
+
+  const hiddenIds = new Set(staged.hidden_question_ids);
+  const baseQuestions = conditionGroup.questions.filter((question) => !hiddenIds.has(question.id));
+  const entryAnswer = selectedAnswers[staged.entry_question_id];
+  const shouldExpand = entryAnswer ? staged.continue_on_values.includes(entryAnswer) : false;
+  return shouldExpand ? conditionGroup.questions : baseQuestions;
+}
+
+function questionCountLabel(
+  conditionGroup: ConditionQuestion,
+  staged: BayesianStagedFollowUp | null | undefined,
+): string {
+  if (!staged) return `${conditionGroup.questions.length} questions`;
+  const hiddenCount = staged.hidden_question_ids.filter((id) =>
+    conditionGroup.questions.some((question) => question.id === id)
+  ).length;
+  const baseCount = Math.max(conditionGroup.questions.length - hiddenCount, 1);
+  const extraCount = conditionGroup.questions.length - baseCount;
+  return extraCount > 0 ? `${baseCount} starter + ${extraCount} follow-up` : `${baseCount} questions`;
+}
+
 export default function ClarifyPage() {
   const router = useRouter();
   const { answers, hydrated } = useAssessment();
@@ -170,11 +198,13 @@ export default function ClarifyPage() {
 
   const conditionQs: ConditionQuestion[] = bayesianData?.condition_questions ?? [];
   const currentCondition = conditionQs[currentScreenIndex];
-  const currentQuestions = currentCondition?.questions ?? [];
+  const currentQuestions = currentCondition ? visibleQuestionsForCondition(currentCondition, selectedAnswers) : [];
   const isLastScreen = currentScreenIndex === conditionQs.length - 1;
   const currentScreenAnswered = currentQuestions.length > 0
     && currentQuestions.every((q) => q.id in selectedAnswers);
-  const allQuestionIds = conditionQs.flatMap((cq) => cq.questions.map((q) => q.id));
+  const allQuestionIds = conditionQs.flatMap((cq) =>
+    visibleQuestionsForCondition(cq, selectedAnswers).map((q) => q.id)
+  );
   const allAnswered = allQuestionIds.length > 0
     && allQuestionIds.every((id) => id in selectedAnswers);
 
@@ -212,7 +242,7 @@ export default function ClarifyPage() {
       const answersByCondition: Record<string, Record<string, string>> = {};
 
       for (const conditionGroup of conditionQs) {
-        for (const question of conditionGroup.questions) {
+        for (const question of visibleQuestionsForCondition(conditionGroup, selectedAnswers)) {
           const value = selectedAnswers[question.id];
           if (!value) continue;
           answersByCondition[conditionGroup.condition] ??= {};
@@ -229,14 +259,15 @@ export default function ClarifyPage() {
       );
 
       const qaRecord: ClarificationQAPair[] = conditionQs.flatMap((conditionGroup) =>
-        conditionGroup.questions.map((question) => {
+        visibleQuestionsForCondition(conditionGroup, selectedAnswers).flatMap((question) => {
           const value = selectedAnswers[question.id];
+          if (!value) return [];
           const label = question.answer_options.find((opt) => opt.value === value)?.label ?? value;
-          return {
+          return [{
             group: `${conditionLabel(conditionGroup.condition)} · ${Math.round(conditionGroup.probability * 100)}%`,
             question: question.text,
             answer: label,
-          };
+          }];
         })
       );
 
@@ -368,7 +399,7 @@ export default function ClarifyPage() {
                 {Math.round(currentCondition.probability * 100)}% model score
               </span>
               <span className="text-xs font-medium text-[var(--color-ink-soft)]">
-                {currentQuestions.length} questions
+                {questionCountLabel(currentCondition, currentCondition.staged_follow_up)}
               </span>
             </div>
 
