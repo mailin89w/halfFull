@@ -1,7 +1,7 @@
 'use client';
 
 import type { Question } from '@/src/lib/questions';
-import { MODULE_COLORS, MODULE_LABELS } from '@/src/lib/questions';
+import { MODULE_COLORS, MODULE_LABELS, getQuestionDisplayText } from '@/src/lib/questions';
 import type { LabUploadAnswer } from '@/src/lib/types';
 import { AnswerSingle } from './AnswerSingle';
 import { AnswerMultiple } from './AnswerMultiple';
@@ -16,6 +16,7 @@ interface Props {
   value: unknown;
   onChange: (val: unknown) => void;
   error?: string | Record<string, string> | null;
+  answers?: Record<string, unknown>;
 }
 
 // Derive a short display label from the question id.
@@ -25,9 +26,22 @@ function idToLabel(id: string): string {
   return '';
 }
 
-export function QuestionCard({ question, value, onChange, error }: Props) {
+export function QuestionCard({ question, value, onChange, error, answers }: Props) {
   const accentColor = MODULE_COLORS[question.module] ?? '#A2B6CB';
   const moduleLabel = MODULE_LABELS[question.module] ?? question.moduleTitle;
+  const displayText = getQuestionDisplayText(question, answers);
+  const isFreeTimeActivity = question.id === 'free_time_activity';
+  const isSymptomsPhysical = question.id === 'symptoms_physical';
+  const dualNumericLabelClassName =
+    isFreeTimeActivity || isSymptomsPhysical
+      ? 'text-[1.15rem] font-semibold leading-snug tracking-[-0.03em] text-[var(--color-ink)]'
+      : 'text-sm font-medium text-[var(--color-ink)]';
+  const dualNumericHelpClassName =
+    isFreeTimeActivity || isSymptomsPhysical
+      ? isFreeTimeActivity
+        ? 'mt-1 text-sm leading-6 text-[var(--color-ink-soft)]'
+        : 'ml-1.5 text-sm leading-6 text-[var(--color-ink-soft)]'
+      : 'ml-1.5 text-xs text-[var(--color-ink-soft)]';
 
   const renderInput = () => {
     switch (question.type) {
@@ -63,6 +77,7 @@ export function QuestionCard({ question, value, onChange, error }: Props) {
             min={question.validation?.min}
             max={question.validation?.max}
             error={typeof error === 'string' ? error : undefined}
+            unit={question.options[0]?.unit}
           />
         );
 
@@ -75,6 +90,9 @@ export function QuestionCard({ question, value, onChange, error }: Props) {
             min={question.validation?.min}
             max={question.validation?.max}
             errors={typeof error === 'object' && error ? error : undefined}
+            labelClassName={dualNumericLabelClassName}
+            helpTextClassName={dualNumericHelpClassName}
+            stackHelpText={isFreeTimeActivity}
           />
         );
 
@@ -130,8 +148,8 @@ export function QuestionCard({ question, value, onChange, error }: Props) {
         )}
       </div>
 
-      <h2 className="text-[1.9rem] font-bold leading-[1] tracking-[-0.05em] text-[var(--color-ink)] sm:text-[2.2rem]">
-        {question.text}
+      <h2 className="text-[1.75rem] font-bold leading-[1] tracking-[-0.05em] text-[var(--color-ink)] sm:text-[2rem]">
+        {displayText}
       </h2>
 
       {question.help_text && (

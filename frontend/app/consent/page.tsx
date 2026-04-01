@@ -15,6 +15,7 @@ export default function ConsentPage() {
   const [consentChecked, setConsentChecked] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const checkboxId = 'privacy-consent';
 
   useEffect(() => {
     if (hasActivePrivacyConsent()) {
@@ -86,22 +87,76 @@ export default function ConsentPage() {
             <p className="text-sm font-semibold text-[var(--color-ink)]">We care about your privacy</p>
 
             <ul className="space-y-2.5 text-sm leading-6 text-[var(--color-ink-soft)]">
-              <li>✔ Your data is linked to a random anonymous ID, not your name.</li>
-              <li>✔ It&apos;s stored only temporarily, for up to 24 hours.</li>
-              <li>✔ You can leave anytime and clear this session data.</li>
+              <li className="flex items-start gap-2.5">
+                <span
+                  aria-hidden="true"
+                  className="mt-1 inline-flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-[rgba(215,240,104,0.45)] text-[var(--color-ink)]"
+                >
+                  <svg viewBox="0 0 16 16" className="h-3 w-3" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="m3.5 8 3 3 6-6" />
+                  </svg>
+                </span>
+                <span>Your data is linked to a random anonymous ID, not your name.</span>
+              </li>
+              <li className="flex items-start gap-2.5">
+                <span
+                  aria-hidden="true"
+                  className="mt-1 inline-flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-[rgba(215,240,104,0.45)] text-[var(--color-ink)]"
+                >
+                  <svg viewBox="0 0 16 16" className="h-3 w-3" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="m3.5 8 3 3 6-6" />
+                  </svg>
+                </span>
+                <span>It&apos;s stored only temporarily, for up to 24 hours.</span>
+              </li>
+              <li className="flex items-start gap-2.5">
+                <span
+                  aria-hidden="true"
+                  className="mt-1 inline-flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-[rgba(215,240,104,0.45)] text-[var(--color-ink)]"
+                >
+                  <svg viewBox="0 0 16 16" className="h-3 w-3" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="m3.5 8 3 3 6-6" />
+                  </svg>
+                </span>
+                <span>You can leave anytime and clear this session data.</span>
+              </li>
+              <li className="flex items-start gap-2.5">
+                <span
+                  aria-hidden="true"
+                  className="mt-1 inline-flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-[rgba(215,240,104,0.45)] text-[var(--color-ink)]"
+                >
+                  <svg viewBox="0 0 16 16" className="h-3 w-3" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="m3.5 8 3 3 6-6" />
+                  </svg>
+                </span>
+                <span>
+                  Your data is processed and stored in line with our{' '}
+                  <span className="font-bold text-[var(--color-accent)]">Privacy Policy</span>.
+                </span>
+              </li>
             </ul>
 
-            <label className="mt-1 flex items-start gap-3 border-t border-[rgba(140,170,101,0.18)] pt-4">
-              <input
-                type="checkbox"
-                checked={consentChecked}
-                onChange={(event) => setConsentChecked(event.target.checked)}
-                className="mt-1 h-4 w-4 accent-[#77b255]"
-              />
-              <span className="text-sm leading-6 text-[var(--color-ink)]">
-                I agree to HalfFull processing my health-related answers to generate my assessment and report.
-              </span>
-            </label>
+            <div className="mt-1 rounded-[1.4rem] bg-[rgba(248,248,251,0.7)] p-4">
+              <p className="text-[11px] font-bold uppercase tracking-[0.16em] text-[var(--color-ink-soft)]">
+                Your agreement
+              </p>
+              <label
+                htmlFor={checkboxId}
+                className="mt-3 flex cursor-pointer items-start gap-3 rounded-[1rem] border border-[rgba(151,166,210,0.22)] bg-white/65 px-3 py-3 transition-colors hover:bg-white/78"
+              >
+                <input
+                  id={checkboxId}
+                  type="checkbox"
+                  checked={consentChecked}
+                  onChange={(event) => setConsentChecked(event.target.checked)}
+                  className="mt-1 h-4 w-4 shrink-0"
+                  style={{ accentColor: 'var(--color-lime)' }}
+                />
+                <span className="text-sm leading-6 text-[var(--color-ink)]">
+                  I agree to HalfFull processing my health-related answers to generate my assessment and report.
+                </span>
+              </label>
+            </div>
           </section>
 
           <div className="flex flex-col gap-4 px-1">
@@ -117,15 +172,14 @@ export default function ConsentPage() {
               disabled={!canContinue}
               className="w-full rounded-full bg-[#09090f] px-5 py-4 text-base font-bold text-white transition-transform duration-150 hover:translate-y-[-1px] disabled:cursor-not-allowed disabled:opacity-45"
             >
-              {submitting ? 'Saving consent...' : 'Continue'}
+              {submitting ? 'Saving consent...' : 'Agree and continue'}
             </button>
 
-            <Link
-              href="/start"
-              className="text-center text-sm font-semibold text-[var(--color-ink-soft)] underline decoration-[rgba(95,103,131,0.35)] underline-offset-4 transition-colors hover:text-[var(--color-ink)]"
-            >
-              Back
-            </Link>
+            {!consentChecked && !submitting && (
+              <p className="text-center text-sm text-[var(--color-ink-soft)]">
+                Please confirm consent to continue.
+              </p>
+            )}
           </div>
         </div>
       </main>

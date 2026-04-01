@@ -82,15 +82,12 @@ export default function ChaptersPage() {
           </div>
 
           {/* Hero card */}
-          <section className="rounded-[2rem] bg-[var(--color-card)] px-5 py-5 shadow-[0_14px_30px_rgba(86,98,145,0.14)]">
-            <p className="mb-1 text-[11px] font-bold uppercase tracking-[0.18em] text-[var(--color-ink-soft)]">
-              10-minute assessment
-            </p>
+          <section className="rounded-[2rem] bg-[var(--color-card)] px-5 py-8 shadow-[0_14px_30px_rgba(86,98,145,0.14)]">
             <h1 className="text-[1.75rem] font-bold leading-[1.05] tracking-[-0.05em] text-[var(--color-ink)]">
-              Here&apos;s what<br />we&apos;ll cover
+              Here&apos;s what we&apos;ll cover
             </h1>
             <p className="mt-2 text-sm leading-[1.6] text-[var(--color-ink-soft)]">
-              {CHAPTERS.length} short chapters, one area at a time. No wrong answers.
+              In about 10 minutes, you&apos;ll go through {CHAPTERS.length} short chapters — one area at a time. No wrong answers.
             </p>
 
             {/* Coloured segment preview */}

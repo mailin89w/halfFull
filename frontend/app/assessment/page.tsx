@@ -3,7 +3,6 @@
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useAssessment } from '@/src/hooks/useAssessment';
-import { ExitAssessmentButton } from '@/src/components/ExitAssessmentButton';
 import { QuestionCard } from '@/src/components/QuestionCard';
 import { QuestionGroupCard } from '@/src/components/QuestionGroupCard';
 import { ProgressBar } from '@/src/components/ProgressBar';
@@ -30,6 +29,7 @@ export default function AssessmentPage() {
     setAnswer,
     goNext,
     goBack,
+    reset,
   } = useAssessment();
 
   if (!hydrated) {
@@ -70,21 +70,26 @@ export default function AssessmentPage() {
     }
   };
 
+  const handleRestart = () => {
+    reset();
+    router.replace('/assessment');
+  };
+
   return (
     <div className="phone-frame flex flex-col">
       <header className="px-5 pt-6 pb-5">
         <div className="mx-auto max-w-lg">
           <div className="mb-5 flex items-center justify-between text-[11px] font-bold uppercase tracking-[0.18em] text-[var(--color-ink)]">
-            <span style={{ fontFamily: 'Archivo, sans-serif', letterSpacing: '-0.02em', textTransform: 'none', fontSize: 16, lineHeight: 1 }}><span style={{ fontWeight: 400, color: 'var(--color-ink-soft)' }}>half</span><span style={{ fontWeight: 900, color: 'var(--color-ink)' }}>Full</span></span>
-            <div className="flex items-center gap-3">
-              <ExitAssessmentButton
-                className="text-[var(--color-ink-soft)]"
-                label="Exit"
-              />
-              <Link href="/start" className="text-[var(--color-ink-soft)]">
-                Start
-              </Link>
-            </div>
+            <Link href="/start" aria-label="Go to start page">
+              <span style={{ fontFamily: 'Archivo, sans-serif', letterSpacing: '-0.02em', textTransform: 'none', fontSize: 16, lineHeight: 1 }}><span style={{ fontWeight: 400, color: 'var(--color-ink-soft)' }}>half</span><span style={{ fontWeight: 900, color: 'var(--color-ink)' }}>Full</span></span>
+            </Link>
+            <button
+              type="button"
+              onClick={handleRestart}
+              className="text-[var(--color-ink-soft)]"
+            >
+              Restart
+            </button>
           </div>
 
           <ProgressBar
@@ -93,7 +98,6 @@ export default function AssessmentPage() {
             total={totalQuestions}
             modules={chapterModules}
             currentModuleTitle={currentQuestion?.moduleTitle}
-            currentModuleIndex={currentModuleIndex}
           />
         </div>
       </header>
@@ -113,6 +117,7 @@ export default function AssessmentPage() {
               value={currentAnswer}
               error={currentQuestion ? currentValidationErrors[currentQuestion.id] : null}
               onChange={(val) => setAnswer(currentQuestion.id, val)}
+              answers={answers}
             />
           )}
         </div>
@@ -127,9 +132,11 @@ export default function AssessmentPage() {
             onBack={goBack}
             onNext={handleNext}
           />
-          <p className="text-center text-[11px] leading-4 text-[var(--color-ink-soft)]">
-            For educational use only. Not a substitute for medical advice.
-          </p>
+          {!hasAnswer && (
+            <p className="text-center text-[11px] leading-4 text-[var(--color-ink-soft)]">
+              Please answer the question above to proceed.
+            </p>
+          )}
         </div>
       </footer>
     </div>
