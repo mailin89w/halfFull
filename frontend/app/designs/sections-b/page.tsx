@@ -66,7 +66,7 @@ export default function SectionsB() {
           {rows.map((row, i) => (
             <div key={i} style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', borderTop: '1px solid rgba(151,166,210,0.16)' }}>
               <div style={{ padding: '14px 20px', display: 'flex', alignItems: 'flex-start', gap: 8 }}>
-                <span style={{ color: C.lime, fontSize: 14, marginTop: 1, background: C.ink, borderRadius: '50%', width: 18, height: 18, display: 'inline-flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, fontSize: 10, fontWeight: 900 }}>✓</span>
+                <span style={{ color: C.lime, marginTop: 1, background: C.ink, borderRadius: '50%', width: 18, height: 18, display: 'inline-flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, fontSize: 10, fontWeight: 900 }}>✓</span>
                 <p style={{ fontSize: 13, fontWeight: 600, color: C.ink, lineHeight: 1.5 }}>{row.halffull}</p>
               </div>
               <div style={{ padding: '14px 20px', borderLeft: '1px solid rgba(151,166,210,0.16)', display: 'flex', alignItems: 'flex-start', gap: 8 }}>
