@@ -106,10 +106,13 @@ This applies both to:
 
 In the `Next steps - Talk to a doctor` section:
 
-- section heading was updated to use a stronger card-title / assessment-like h3 treatment
+- section heading now uses page-section h2 styling on the blue background
+- summary text now sits directly below the title using the same explanatory text style as the conditions section
+- removed the outer white / tinted wrapper around the whole section
 - doctor cards no longer use black circled numbers
 - doctor cards now use specialty-related emojis in the left slot
 - toggle icon changed from `+ / -` to the same chevron treatment used on diagnosis cards
+- doctor cards now use the same width/alignment rhythm as the condition cards to avoid the previous box-in-a-box look
 
 Current specialty emoji mapping:
 
@@ -126,6 +129,16 @@ In the results header:
 - the `halfFull` logo now links to `/start`
 - the `Exit` link was removed
 - the `Review` link remains
+
+### 9. Expanded condition card layout polish
+
+In the expanded condition state:
+
+- `Confidence` and `Urgency` now render side by side instead of stacking vertically
+- horizontal spacing between the two boxes was increased slightly
+- layout remains responsive by falling back gracefully on narrower widths
+
+This reduces vertical length and makes the two status boxes easier to compare at a glance.
 
 ## Things intentionally left unchanged
 
