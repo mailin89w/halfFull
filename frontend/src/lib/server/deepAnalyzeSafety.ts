@@ -6,7 +6,7 @@ const GROQ_MODEL = 'llama-3.1-8b-instant';
 // V7: primary synthesis model; fallback chain: groq-70b → groq-8b → openai-4o-mini
 const GROQ_SYNTHESIS_MODEL = 'llama-3.3-70b-versatile';
 const GROQ_SYNTHESIS_FALLBACK_MODEL = 'llama-3.1-8b-instant';
-const OPENAI_SYNTHESIS_MODEL = 'gpt-4o-mini';
+const OPENAI_SYNTHESIS_MODEL = 'gpt-5-mini';
 const GROQ_MAX_429_RETRIES = 3;
 const GROQ_BACKOFF_BASE_MS = 1000;
 
