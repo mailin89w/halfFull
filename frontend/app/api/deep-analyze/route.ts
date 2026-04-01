@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { createHash } from 'crypto';
 import { formatAnswersV2 } from '@/src/lib/formatAnswers';
 import { writeLog } from '@/src/lib/logger';
 import { ML_THRESHOLD, selectTopConditions } from '@/src/lib/mlConfig';
@@ -47,6 +48,26 @@ const HF_API_URL = process.env.HF_ENDPOINT_URL
   : 'https://router.huggingface.co/v1/chat/completions';
 const EVAL_MODE_SECRET = process.env.EVAL_MODE_SECRET;
 const EVAL_MODE_HEADER = 'x-eval-mode-secret';
+const LLM_CACHE_TTL_MS = 1000 * 60 * 60;
+const LLM_CACHE_MAX_ENTRIES = 512;
+
+type CacheEntry<T> = {
+  value: T;
+  storedAt: number;
+};
+
+const medgemmaGroundingCache = new Map<string, CacheEntry<{
+  groundingResult: MedGemmaGroundingResult;
+  groundingSource:
+    | 'live_medgemma_success'
+    | 'fallback_medgemma_http_error'
+    | 'fallback_medgemma_schema_error'
+    | 'fallback_medgemma_parse_failed'
+    | 'fallback_medgemma_exception'
+    | 'fallback_empty_grounding';
+}>>();
+const synthesisCache = new Map<string, CacheEntry<Awaited<ReturnType<typeof synthesizeNarrativeWithGroqV6>>>>();
+const rewriteCache = new Map<string, CacheEntry<Awaited<ReturnType<typeof rewriteDeepAnalyzeTone>>>>();
 
 type PromptCalibrationSignal = {
   conditionId: string;
@@ -59,6 +80,30 @@ type PromptCalibrationSignal = {
   confidenceSummary: string;
   urgencySummary: string;
 };
+
+function makeCacheKey(parts: unknown[]): string {
+  return createHash('sha256')
+    .update(JSON.stringify(parts))
+    .digest('hex');
+}
+
+function getCachedValue<T>(cache: Map<string, CacheEntry<T>>, key: string): T | null {
+  const entry = cache.get(key);
+  if (!entry) return null;
+  if (Date.now() - entry.storedAt > LLM_CACHE_TTL_MS) {
+    cache.delete(key);
+    return null;
+  }
+  return structuredClone(entry.value);
+}
+
+function setCachedValue<T>(cache: Map<string, CacheEntry<T>>, key: string, value: T): void {
+  if (cache.size >= LLM_CACHE_MAX_ENTRIES) {
+    const oldestKey = cache.keys().next().value;
+    if (oldestKey) cache.delete(oldestKey);
+  }
+  cache.set(key, { value: structuredClone(value), storedAt: Date.now() });
+}
 
 function buildRiskCalibrationText(signals: PromptCalibrationSignal[]): string {
   if (signals.length === 0) {
@@ -253,6 +298,7 @@ function annotateDeepAnalyzeResponse(
     rewriteErrorSnippet?: string;
     hardSafetyCount: number;
     cleanupCount?: number;
+    cacheInfo?: string;
   },
 ): NextResponse {
   response.headers.set('x-deep-analyze-grounding-source', metadata.groundingSource);
@@ -289,6 +335,9 @@ function annotateDeepAnalyzeResponse(
       'x-deep-analyze-rewrite-error-snippet',
       encodeURIComponent(metadata.rewriteErrorSnippet),
     );
+  }
+  if (metadata.cacheInfo) {
+    response.headers.set('x-deep-analyze-cache', metadata.cacheInfo);
   }
   return response;
 }
@@ -426,10 +475,12 @@ export async function POST(req: NextRequest) {
     ? body.confirmedConditions.map((value: unknown) => String(value))
     : [];
   const useKNN: boolean = ENABLE_KNN_LAYER && body.useKNN === true;
+  const cacheHits: string[] = [];
 
   const symptomsText = formatAnswersV2(answers);
   const answeredQuestionsText = buildAnsweredQuestionsText(answers);
   const uploadedLabsText = buildUploadedLabsText(answers);
+  const structuredAnswersJson = JSON.stringify(answers, null, 2);
   const biomarkers = extractBiomarkerSnapshot(answers);
   const fatigueSeverityRaw = answers['dpq040___feeling_tired_or_having_little_energy'];
   const fatigueSeverity = fatigueSeverityRaw === undefined ? null : Number(fatigueSeverityRaw);
@@ -543,7 +594,14 @@ export async function POST(req: NextRequest) {
   if (isAllClear) {
     try {
       const allClearPrompt = buildAllClearPrompt({ symptomsText, answeredQuestionsText, uploadedLabsText });
-      const allClearResult = await synthesizeNarrativeWithGroqV6(allClearPrompt);
+      const allClearSynthesisKey = makeCacheKey(['all_clear_synthesis_v1', allClearPrompt]);
+      const cachedAllClearSynthesis = getCachedValue(synthesisCache, allClearSynthesisKey);
+      const allClearResult = cachedAllClearSynthesis ?? await synthesizeNarrativeWithGroqV6(allClearPrompt);
+      if (cachedAllClearSynthesis) {
+        cacheHits.push('all_clear_synthesis');
+      } else {
+        setCachedValue(synthesisCache, allClearSynthesisKey, allClearResult);
+      }
       if (!allClearResult.data) {
         return annotateDeepAnalyzeResponse(
           NextResponse.json({ error: 'LLM synthesis unavailable for all-clear path' }, { status: 503 }),
@@ -562,7 +620,14 @@ export async function POST(req: NextRequest) {
         ...allClearResult.data,
         summaryPoints: normalizeStructuredSummaryPoints(allClearResult.data.summaryPoints, []),
       };
-      const rewriteResult = await rewriteDeepAnalyzeTone(normalizedAllClear);
+      const allClearRewriteKey = makeCacheKey(['all_clear_rewrite_v1', normalizedAllClear]);
+      const cachedAllClearRewrite = getCachedValue(rewriteCache, allClearRewriteKey);
+      const rewriteResult = cachedAllClearRewrite ?? await rewriteDeepAnalyzeTone(normalizedAllClear);
+      if (cachedAllClearRewrite) {
+        cacheHits.push('all_clear_rewrite');
+      } else {
+        setCachedValue(rewriteCache, allClearRewriteKey, rewriteResult);
+      }
       const { data: safeData, warnings } = applyHardSafetyRules(rewriteResult.data);
       if (warnings.length > 0) {
         await writeLog('deep_analyze_safety_replacements', {
@@ -613,6 +678,7 @@ export async function POST(req: NextRequest) {
           rewriteErrorSnippet: rewriteResult.errorSnippet,
           hardSafetyCount: warnings.length,
           cleanupCount: warnings.filter((warning) => warning.includes('Removed unsupported')).length,
+          cacheInfo: cacheHits.join(','),
         },
       );
     } catch (err) {
@@ -630,7 +696,10 @@ export async function POST(req: NextRequest) {
 
   // Call 1: MedGemma clinical grounding (no PDF labs — structured Q&A only)
   const groundingPrompt = buildMedGemmaGroundingPromptV6({
+    symptomsText,
     answeredQuestionsText,
+    uploadedLabsText,
+    structuredAnswersJson,
     bayesianEvidenceText,
     scoreSummaryJson,
     knnLabText,
@@ -656,87 +725,101 @@ export async function POST(req: NextRequest) {
       | 'fallback_medgemma_parse_failed'
       | 'fallback_medgemma_exception'
       | 'fallback_empty_grounding';
+  const groundingCacheKey = makeCacheKey([
+    'medgemma_grounding_v1',
+    groundingPrompt,
+    HF_MODEL,
+  ]);
+  const cachedGrounding = getCachedValue(medgemmaGroundingCache, groundingCacheKey);
 
-  try {
-    const controller = new AbortController();
-    const timeout = setTimeout(() => controller.abort(), 150_000);
-    const hfResponse = await fetch(HF_API_URL, {
-      method: 'POST',
-      headers: {
-        Authorization: `Bearer ${hfToken}`,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        model: HF_MODEL,
-        messages: [
-          { role: 'system', content: MEDGEMMA_JSON_SYSTEM_V1 },
-          { role: 'user', content: groundingPrompt },
-        ],
-        max_tokens: 1400,
-        temperature: 0.1,
-      }),
-      signal: controller.signal,
-    }).finally(() => clearTimeout(timeout));
+  if (cachedGrounding) {
+    groundingResult = cachedGrounding.groundingResult;
+    groundingSource = cachedGrounding.groundingSource;
+    cacheHits.push('grounding');
+  } else {
+    try {
+      const controller = new AbortController();
+      const timeout = setTimeout(() => controller.abort(), 150_000);
+      const hfResponse = await fetch(HF_API_URL, {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${hfToken}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          model: HF_MODEL,
+          messages: [
+            { role: 'system', content: MEDGEMMA_JSON_SYSTEM_V1 },
+            { role: 'user', content: groundingPrompt },
+          ],
+          max_tokens: 1400,
+          temperature: 0.1,
+        }),
+        signal: controller.signal,
+      }).finally(() => clearTimeout(timeout));
 
-    if (!hfResponse.ok) {
-      const errText = await hfResponse.text();
+      if (!hfResponse.ok) {
+        const errText = await hfResponse.text();
+        await writeLog('medgemma_grounding_error', {
+          anonymousId: privacy?.anonymousId ?? null,
+          status: hfResponse.status,
+          errText,
+          answers,
+          flaggedConditions,
+        });
+        groundingSource = 'fallback_medgemma_http_error';
+      } else {
+        const hfData = await hfResponse.json();
+        const rawContent: string = hfData.choices?.[0]?.message?.content ?? '';
+
+        await writeLog('medgemma_grounding_raw', {
+          anonymousId: privacy?.anonymousId ?? null,
+          answers,
+          mlScores: mlScores ?? {},
+          rawMlScores: rawMlScores ?? {},
+          flaggedConditions,
+          confirmedConditions,
+          groundingPrompt,
+          rawOutput: rawContent,
+        });
+
+        const jsonMatch = rawContent.match(/\{[\s\S]*/);
+        if (jsonMatch) {
+          const parsed = repairAndParseJson(jsonMatch[0]);
+          if (!parsed) {
+            groundingSource = 'fallback_medgemma_parse_failed';
+          } else {
+            const validation = validateMedGemmaGroundingSchema(parsed);
+            if (validation.ok) {
+              groundingSource = 'live_medgemma_success';
+              groundingResult = validation.data;
+            } else {
+              groundingSource = 'fallback_medgemma_schema_error';
+              await writeLog('medgemma_grounding_schema_error', {
+                anonymousId: privacy?.anonymousId ?? null,
+                reason: validation.reason,
+                raw: rawContent,
+              });
+            }
+          }
+        } else {
+          groundingSource = 'fallback_medgemma_parse_failed';
+        }
+      }
+    } catch (err) {
       await writeLog('medgemma_grounding_error', {
-        anonymousId: privacy?.anonymousId ?? null,
-        status: hfResponse.status,
-        errText,
-        answers,
-        flaggedConditions,
-      });
-      groundingSource = 'fallback_medgemma_http_error';
-      // Proceed with empty grounding — Groq synthesis still runs
-    } else {
-      const hfData = await hfResponse.json();
-      const rawContent: string = hfData.choices?.[0]?.message?.content ?? '';
-
-      // Step 5: log full raw MedGemma output before any processing
-      await writeLog('medgemma_grounding_raw', {
         anonymousId: privacy?.anonymousId ?? null,
         answers,
         mlScores: mlScores ?? {},
-        rawMlScores: rawMlScores ?? {},
-        flaggedConditions,
-        confirmedConditions,
-        groundingPrompt,
-        rawOutput: rawContent,
+        error: String(err),
       });
-
-      const jsonMatch = rawContent.match(/\{[\s\S]*/);
-      if (jsonMatch) {
-        const parsed = repairAndParseJson(jsonMatch[0]);
-        if (!parsed) {
-          groundingSource = 'fallback_medgemma_parse_failed';
-        } else {
-          const validation = validateMedGemmaGroundingSchema(parsed);
-          if (validation.ok) {
-            groundingSource = 'live_medgemma_success';
-            groundingResult = validation.data;
-          } else {
-            groundingSource = 'fallback_medgemma_schema_error';
-            await writeLog('medgemma_grounding_schema_error', {
-              anonymousId: privacy?.anonymousId ?? null,
-              reason: validation.reason,
-              raw: rawContent,
-            });
-          }
-        }
-      } else {
-        groundingSource = 'fallback_medgemma_parse_failed';
-      }
+      groundingSource = 'fallback_medgemma_exception';
     }
-  } catch (err) {
-    await writeLog('medgemma_grounding_error', {
-      anonymousId: privacy?.anonymousId ?? null,
-      answers,
-      mlScores: mlScores ?? {},
-      error: String(err),
+
+    setCachedValue(medgemmaGroundingCache, groundingCacheKey, {
+      groundingResult,
+      groundingSource,
     });
-    groundingSource = 'fallback_medgemma_exception';
-    // Continue with empty grounding — Groq synthesis still runs
   }
 
   const groundingIsEmpty =
@@ -816,16 +899,31 @@ export async function POST(req: NextRequest) {
       overallUrgency,
     });
 
-    const synthesisResult = await synthesizeNarrativeWithGroqV6({
+    const synthesisInput = {
       primaryPrompt: synthesisPrompt,
       fallbackPrompt: fallbackSynthesisPrompt,
-    });
+    };
+    const synthesisCacheKey = makeCacheKey(['synthesis_v1', synthesisInput]);
+    const cachedSynthesis = getCachedValue(synthesisCache, synthesisCacheKey);
+    const synthesisResult = cachedSynthesis ?? await synthesizeNarrativeWithGroqV6(synthesisInput);
+    if (cachedSynthesis) {
+      cacheHits.push('synthesis');
+    } else {
+      setCachedValue(synthesisCache, synthesisCacheKey, synthesisResult);
+    }
     if (!synthesisResult.data) {
       const deterministicFallback = buildDeterministicFallbackFromGrounding({
         groundingResult,
         overallUrgency,
       });
-      const rewriteResult = await rewriteDeepAnalyzeTone(deterministicFallback);
+      const fallbackRewriteKey = makeCacheKey(['rewrite_fallback_v1', deterministicFallback]);
+      const cachedFallbackRewrite = getCachedValue(rewriteCache, fallbackRewriteKey);
+      const rewriteResult = cachedFallbackRewrite ?? await rewriteDeepAnalyzeTone(deterministicFallback);
+      if (cachedFallbackRewrite) {
+        cacheHits.push('fallback_rewrite');
+      } else {
+        setCachedValue(rewriteCache, fallbackRewriteKey, rewriteResult);
+      }
       const allowedDiagnosisIds = Array.from(new Set([
         ...topConditions.map(([conditionId]) => conditionId),
         ...confirmedConditions,
@@ -858,6 +956,7 @@ export async function POST(req: NextRequest) {
           rewriteErrorSnippet: rewriteResult.errorSnippet,
           hardSafetyCount: fallbackWarnings.length,
           cleanupCount,
+          cacheInfo: cacheHits.join(','),
         },
       );
     }
@@ -952,7 +1051,14 @@ export async function POST(req: NextRequest) {
       declinedSuspicions: ensureCandidateCoverage(flaggedConditions, synthesisResult.data),
     };
 
-    const rewriteResult = await rewriteDeepAnalyzeTone(coveredResult);
+    const rewriteCacheKey = makeCacheKey(['rewrite_v1', coveredResult]);
+    const cachedRewrite = getCachedValue(rewriteCache, rewriteCacheKey);
+    const rewriteResult = cachedRewrite ?? await rewriteDeepAnalyzeTone(coveredResult);
+    if (cachedRewrite) {
+      cacheHits.push('rewrite');
+    } else {
+      setCachedValue(rewriteCache, rewriteCacheKey, rewriteResult);
+    }
     const allowedDiagnosisIds = Array.from(new Set([
       ...topConditions.map(([conditionId]) => conditionId),
       ...confirmedConditions,
@@ -1029,6 +1135,7 @@ export async function POST(req: NextRequest) {
         rewriteErrorSnippet: rewriteResult.errorSnippet,
         hardSafetyCount: safetyWarnings.length,
         cleanupCount,
+        cacheInfo: cacheHits.join(','),
       },
     );
   } catch (err) {

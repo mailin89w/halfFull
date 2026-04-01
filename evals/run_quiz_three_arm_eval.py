@@ -573,6 +573,19 @@ def score_arm_records(records: list[dict[str, Any]]) -> dict[str, Any]:
         if isinstance(r.get("response_headers"), dict)
         and int(r["response_headers"].get("x-deep-analyze-hard-safety-count", "0") or 0) > 0
     )
+    cache_hit_profiles = sum(
+        1
+        for r in records
+        if isinstance(r.get("response_headers"), dict)
+        and bool((r["response_headers"].get("x-deep-analyze-cache") or "").strip())
+    )
+    cache_stage_counts = Counter()
+    for r in records:
+        if not isinstance(r.get("response_headers"), dict):
+            continue
+        raw_cache = r["response_headers"].get("x-deep-analyze-cache", "") or ""
+        for stage in [part.strip() for part in raw_cache.split(",") if part.strip()]:
+            cache_stage_counts[stage] += 1
     recall_hits = sum(
         1 for r in labeled
         if set(r.get("expected_conditions", [])) & set(r.get("top3_predictions", []))
@@ -621,6 +634,8 @@ def score_arm_records(records: list[dict[str, Any]]) -> dict[str, Any]:
         "grounding_success_rate": round(grounding_successes / len(records), 4) if records else 0.0,
         "cleanup_applied_rate": round(cleanup_applied / len(records), 4) if records else 0.0,
         "safety_replacement_rate": round(safety_replacements / len(records), 4) if records else 0.0,
+        "cache_hit_rate": round(cache_hit_profiles / len(records), 4) if records else 0.0,
+        "cache_stage_counts": dict(cache_stage_counts),
         "recall_at_3": round(recall_at_3, 4),
         "healthy_over_alert_rate": round(healthy_over_alert_rate, 4),
         "mean_false_positive_rate_absent": round(sum(false_positive_rates.values()) / len(false_positive_rates), 4),
@@ -688,15 +703,23 @@ def build_markdown(run_id: str, config: EvalConfig, sample_profiles_list: list[d
     lines.append("")
     lines.append("## MedGemma Route Quality")
     lines.append("")
-    lines.append("| Arm | Parse success | Route failure | Grounding success | Cleanup applied | Safety replacements |")
-    lines.append("|-----|---------------|---------------|-------------------|-----------------|---------------------|")
+    lines.append("| Arm | Parse success | Route failure | Grounding success | Cache hits | Cleanup applied | Safety replacements |")
+    lines.append("|-----|---------------|---------------|-------------------|------------|-----------------|---------------------|")
     for arm_name in ("medgemma_only", "medgemma_plus_bayesian", "hybrid_top5"):
         arm = summary["arms"][arm_name]
         lines.append(
             f"| {arm_name} | {arm['parse_success_rate']:.1%} | {arm['route_failure_rate']:.1%} | "
-            f"{arm['grounding_success_rate']:.1%} | {arm['cleanup_applied_rate']:.1%} | "
+            f"{arm['grounding_success_rate']:.1%} | {arm['cache_hit_rate']:.1%} | {arm['cleanup_applied_rate']:.1%} | "
             f"{arm['safety_replacement_rate']:.1%} |"
         )
+    lines.append("")
+    lines.append("## Cache Reuse")
+    lines.append("")
+    lines.append("| Arm | Cache stage counts |")
+    lines.append("|-----|--------------------|")
+    for arm_name in ("medgemma_only", "medgemma_plus_bayesian", "hybrid_top5"):
+        arm = summary["arms"][arm_name]
+        lines.append(f"| {arm_name} | `{arm['cache_stage_counts']}` |")
     lines.append("")
     lines.append("## Per-Condition Recommendation")
     lines.append("")
@@ -805,6 +828,7 @@ def main() -> int:
                 f"{arm_name}: parse_success={arm_summary['parse_success_rate']:.1%}, "
                 f"route_failure={arm_summary['route_failure_rate']:.1%}, "
                 f"grounding_success={arm_summary['grounding_success_rate']:.1%}, "
+                f"cache_hits={arm_summary['cache_hit_rate']:.1%}, "
                 f"cleanup_applied={arm_summary['cleanup_applied_rate']:.1%}, "
                 f"safety_replacements={arm_summary['safety_replacement_rate']:.1%}"
             )
